@@ -19,8 +19,7 @@ namespace Mammoth.Core
         public BaseObject()
         {
             // Set the unique ID for this object.
-            _id = _nextID;
-            _nextID++;
+            _id = _nextID++;
         }
 
         #region Properties

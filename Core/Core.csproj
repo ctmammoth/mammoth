@@ -54,6 +54,8 @@
     <Compile Include="Controller.cs" />
     <Compile Include="DynamicObject.cs" />
     <Compile Include="BaseObject.cs" />
+    <Compile Include="IProcess.cs" />
+    <Compile Include="Kernel.cs" />
     <Compile Include="StaticObject.cs" />
   </ItemGroup>
 </Project>

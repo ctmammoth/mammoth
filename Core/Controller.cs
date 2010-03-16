@@ -10,13 +10,26 @@ namespace Mammoth.Core
     /// This class encapsulates the idea of a Controller that modifies a DynamicObject.
     /// </summary>
     /// <typeparam name="T">The type of object that the controller modifies.</typeparam>
-    public abstract class Controller<T> where T : DynamicObject<T>
+    public abstract class Controller<T> : IProcess where T : DynamicObject<T>
     {
+        #region Variables
+
+        private static int _nextID = 0;
+        private readonly int _id;
+
+        #endregion
+
+        public Controller()
+        {
+            // Set the unique ID for this controller.
+            _id = _nextID++;
+        }
+
         public abstract void Update(GameTime gameTime);
 
         //TODO: Fill in the bodies for Register() and Unregister() (once we have a kernel class).
-        internal void Register() { }
-        internal void Unregister() { }
+        public void Register() { }
+        public void Unregister() { }
 
         #region Properties
 
@@ -25,6 +38,14 @@ namespace Mammoth.Core
         {
             get;
             set;
+        }
+
+        public int ID
+        {
+            get
+            {
+                return _id;
+            }
         }
 
         #endregion
