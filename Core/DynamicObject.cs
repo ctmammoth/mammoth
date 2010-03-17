@@ -41,6 +41,12 @@ namespace Mammoth.Core
             }
         }
 
+        internal bool IsAlive
+        {
+            get;
+            private set;
+        }
+
         #endregion
     }
 }

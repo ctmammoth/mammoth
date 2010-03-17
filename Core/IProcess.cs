@@ -10,6 +10,10 @@ namespace Mammoth.Core
     {
         void Update(GameTime gameTime);
         void Register();
-        void Unregister();
+
+        bool IsAlive
+        {
+            get;
+        }
     }
 }
