@@ -39,6 +39,10 @@ namespace Mammoth.Core
             {
                 return _controller;
             }
+            protected set
+            {
+                _controller = value;
+            }
         }
 
         internal bool IsAlive
