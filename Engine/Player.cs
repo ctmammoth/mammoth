@@ -3,15 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Mammoth.Core;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Mammoth.Engine
 {
-    abstract class Player<T> : DynamicObject<T> where T : Player<T>
+    public abstract class Player : DrawableGameComponent, IRenderable
     {
-        public Player() : base()
+        public Player(Game game) : base(game)
         {
             
         }
+
+        #region Properties
+
+        public Vector3 Position
+        {
+            get;
+            internal set;
+        }
+
+        public Quaternion Orientation
+        {
+            get;
+            internal set;
+        }
+
+        public Model Model3D
+        {
+            get;
+            internal set;
+        }
+
+        public float Height
+        {
+            get;
+            protected set;
+        }
+
+        #endregion
     }
 }

@@ -1,15 +1,17 @@
 using System;
 
+using Mammoth.Engine;
+
 namespace Mammoth
 {
-    static class Program
+    static class MammothMain
     {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         static void Main(string[] args)
         {
-            using (Mammoth game = new Mammoth())
+            using (Mammoth.Engine.Engine game = Mammoth.Engine.Engine.Instance)
             {
                 game.Run();
             }

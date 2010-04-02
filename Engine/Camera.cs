@@ -5,8 +5,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-using Mammoth.Core;
-
 namespace Mammoth.Engine
 {
     /**
@@ -14,12 +12,10 @@ namespace Mammoth.Engine
      * could be improved so that it stores more information and therefore has to do less calculation each update cycle,
      * but that shouldn't be worried about unless it is deemed to be an issue (by way of profiling).
      */
-    class Camera : DynamicObject<Camera>
+    public class Camera : GameComponent
     {
 
         #region Variables
-
-        private Game _game;
 
         public enum CameraType
         {
@@ -30,50 +26,39 @@ namespace Mammoth.Engine
 
         #endregion
 
-        internal Camera()
+        public Camera(Game game) : base(game)
         {
-            // We need to set the initial projection matrix.
-            UpdateProjection();
-
-            // Need to have this here at the end to create the camera's controller.
-            CreateController();
+            
         }
 
-        /// <summary>
-        /// This method creates the camera's controller, and sets the camera's Controller property to point to
-        /// that new controller.  Finally, it registers the controller with the Kernel so that the camera receives
-        /// updates.
-        /// </summary>
-        protected override void CreateController()
+        public override void Update(GameTime gameTime)
         {
-            base.Controller = new CameraController(this);
-            base.Controller.Register();
+            base.Update(gameTime);
+
+            UpdateView();
         }
 
         /// <summary>
         /// This updates the projection matrix based on the game's aspect ratio.  This should be called whenever
         /// the resolution is changed to ensure that the projection matrix is correct.
         /// </summary>
-        internal void UpdateProjection()
+        public void UpdateProjection()
         {
             this.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
-                                                                  Engine.Instance.Game.GraphicsDevice.Viewport.AspectRatio,
+                                                                  Engine.Instance.GraphicsDevice.Viewport.AspectRatio,
                                                                   0.1f, 10000.0f);
         }
 
-        // TODO: Create a method by which something can change the view matrix.
-        internal void UpdateView()
+        public void UpdateView()
         {
+            LocalPlayer lp = Engine.Instance.LocalPlayer;
 
-        }
-        /**
-         * Warp the cursor to the center of the window.
-         */
-        public void CenterCursor()
-        {
-            GameWindow window = Engine.Instance.Game.Window;
+            Vector3 position = lp.Position + (Vector3.Up * lp.Height / 4.0f);
+            Vector3 forward = Vector3.Transform(Vector3.Forward, lp.Orientation);
 
-            Mouse.SetPosition(window.ClientBounds.Width / 2, window.ClientBounds.Height / 2);
+            //Console.WriteLine("position: " + position + "\nforward: " + forward);
+
+            this.View = Matrix.CreateLookAt(position, position + forward, Vector3.Up);
         }
 
         #region Properties

@@ -9,11 +9,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
-using Mammoth.Core;
-
 namespace Mammoth.Engine
 {
-    class Renderer
+    public class Renderer
     {
         #region Variables
 
@@ -26,23 +24,30 @@ namespace Mammoth.Engine
 
         private Renderer()
         {
-            _content = Engine.Instance.Game.Content;
-            _graphics = Engine.Instance.Game.GraphicsDevice;
+            _content = Engine.Instance.Content;
+            _graphics = Engine.Instance.GraphicsDevice;
 
-            this.Camera = new Camera();
+            this.Camera = Engine.Instance.Camera;
         }
 
         public Model LoadModel(string path)
         {
-            return _content.Load<Model>(path);
+            return _content.Load<Model>("models\\" + path);
         }
 
         public Texture2D LoadTexture(string path)
         {
-            return _content.Load<Texture2D>(path);
+            return _content.Load<Texture2D>("textures\\" + path);
         }
 
-        public void DrawObject(BaseObject obj)
+        public SpriteFont LoadFont(string path)
+        {
+            SpriteFont f = _content.Load<SpriteFont>("fonts\\" + path);
+            
+            return f;
+        }
+
+        public void DrawObject(IRenderable obj)
         {
             Model m = obj.Model3D;
 

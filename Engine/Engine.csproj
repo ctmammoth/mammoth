@@ -60,21 +60,17 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
-    <Compile Include="CameraController.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="IRenderable.cs" />
     <Compile Include="LocalPlayer.cs" />
-    <Compile Include="LocalPlayerController.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Renderer.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj">
-      <Project>{2D2FAEF6-B7D9-4EC6-9011-9E1ED0865828}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
+    <Compile Include="StaticObject.cs" />
   </ItemGroup>
 </Project>

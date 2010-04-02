@@ -1,25 +1,145 @@
-﻿using System;
+﻿#define PHYSX_DEBUG
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
+using StillDesign.PhysX;
+
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Mammoth.Engine
 {
-    class Engine
+    public class Engine : Microsoft.Xna.Framework.Game
     {
-        // Needs a camera instance variable.
-        // Needs a group of methods (or one with an enum) for determining which type of camera to use.
         #region Variables
 
         private static Engine _instance = null;
 
         #endregion
 
-        public Engine(Game game)
+        #region XNA-Game
+
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+
+        /// <summary>
+        /// Allows the game to perform any initialization it needs to before starting to run.
+        /// This is where it can query for any required services and load any non-graphic
+        /// related content.  Calling base.Initialize will enumerate through any components
+        /// and initialize them as well.
+        /// </summary>
+        protected override void Initialize()
         {
-            this.Game = game;
-            _instance = this;
+            // TODO: Add more initialization logic here
+
+            // Create the local player, and have it update first.
+            this.LocalPlayer = new LocalPlayer(this);
+            this.LocalPlayer.UpdateOrder = 1;
+            this.Components.Add(this.LocalPlayer);
+
+            // Create the camera next, and have it update after the player.
+            this.Camera = new Camera(this);
+            this.Camera.UpdateOrder = 2;
+            this.Components.Add(this.Camera);
+
+            // TODO: Design and implement the PhysX interactions.
+            // Let's create the PhysX stuff here.  This needs to be changed though.
+            Core core = new Core(new CoreDescription(), new ConsoleOutputStream());
+            core.SetParameter(PhysicsParameter.VisualizationScale, 2.0f);
+            core.SetParameter(PhysicsParameter.VisualizeCollisionShapes, true);
+
+            SimulationType hworsw = (core.HardwareVersion == HardwareVersion.None ? SimulationType.Software : SimulationType.Hardware);
+            Console.WriteLine("PhysX Acceleration Type: " + hworsw);
+
+            this.Scene = core.CreateScene(new SceneDescription()
+            {
+                GroundPlaneEnabled = true,
+                Gravity = new Vector3(0.0f, -9.81f, 0.0f),
+                SimulationType = hworsw
+            });
+
+            core.Foundation.RemoteDebugger.Connect("localhost");
+
+            base.Initialize();
+        }
+
+        /// <summary>
+        /// LoadContent will be called once per game and is the place to load
+        /// all of your content.
+        /// </summary>
+        protected override void LoadContent()
+        {
+            // Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // TODO: use this.Content to load your game content here
+
+            // Create the renderer here, as we need to give it a graphics device.
+            this.Renderer = Renderer.Instance;
+
+            // We need to set the camera's initial projection matrix.
+            this.Camera.UpdateProjection();
+
+            // Let's create a soldier so we can see something.
+            this.Components.Add(new SoldierObject(this));
+
+            // Let's create a new font so we can draw text on the screen.
+            this.Renderer.LoadFont("Calibri");
+        }
+
+        /// <summary>
+        /// UnloadContent will be called once per game and is the place to unload
+        /// all content.
+        /// </summary>
+        protected override void UnloadContent()
+        {
+            // TODO: Unload any non ContentManager content here
+        }
+
+        /// <summary>
+        /// Allows the game to run logic such as updating the world,
+        /// checking for collisions, gathering input, and playing audio.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        protected override void Update(GameTime gameTime)
+        {
+            // Allows the game to exit
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+                this.Exit();
+
+            // TODO: Add your update logic here
+
+            base.Update(gameTime);
+        }
+
+        /// <summary>
+        /// This is called when the game should draw itself.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            // TODO: Add your drawing code here.
+
+        #if PHYSX_DEBUG
+            this.Renderer.DrawPhysXDebug(this.Scene);
+        #endif
+
+            // Draw all of the objects in the scene.
+            base.Draw(gameTime);
+        }
+
+        #endregion
+
+        private Engine() : base()
+        {
+            graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
         }
 
         #region Properties
@@ -28,11 +148,25 @@ namespace Mammoth.Engine
         {
             get
             {
+                if (_instance == null)
+                    _instance = new Engine();
                 return _instance;
             }
         }
 
-        public Game Game
+        public Renderer Renderer
+        {
+            get;
+            private set;
+        }
+
+        public Scene Scene
+        {
+            get;
+            private set;
+        }
+
+        public Camera Camera
         {
             get;
             private set;
@@ -42,12 +176,6 @@ namespace Mammoth.Engine
         {
             get;
             private set;
-        }
-
-        public bool PhysXDebug
-        {
-            get;
-            set;
         }
 
         #endregion
