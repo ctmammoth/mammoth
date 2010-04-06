@@ -42,9 +42,7 @@ namespace Mammoth.Engine
 
         public SpriteFont LoadFont(string path)
         {
-            SpriteFont f = _content.Load<SpriteFont>("fonts\\" + path);
-            
-            return f;
+            return _content.Load<SpriteFont>("fonts\\" + path);
         }
 
         public void DrawObject(IRenderable obj)

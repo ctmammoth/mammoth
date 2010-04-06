@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Mammoth.Networking">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>Diagrams\Client Subsystems.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Deserializer" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Mammoth.Serialization">
+    <Position X="7.25" Y="1.5" Width="1.5" />
+    <AssociationLine Name="Networking" Type="Mammoth.Networking" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8" Y="1.5" />
+        <Point X="8" Y="1" />
+        <Point X="5.5" Y="1" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Diagrams\Client Subsystems.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Networking" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Mammoth.Deserialization">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <AssociationLine Name="GameState" Type="Mammoth.GameState" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="2" Y="1.958" />
+        <Point X="2.375" Y="1.958" />
+        <Point X="2.375" Y="3.312" />
+        <Point X="4" Y="3.312" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="Objects" Type="Mammoth.Objects" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.25" Y="2.368" />
+        <Point X="1.25" Y="6.486" />
+        <Point X="4" Y="6.486" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAIAA=</HashCode>
+      <FileName>Diagrams\Client Subsystems.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="GameState" />
+      <Property Name="Objects" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Mammoth.GameState">
+    <Position X="4" Y="2.75" Width="1.5" />
+    <AssociationLine Name="Serializer" Type="Mammoth.Serialization" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.5" Y="2.938" />
+        <Point X="7.625" Y="2.938" />
+        <Point X="7.625" Y="2.368" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Diagrams\Client Subsystems.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Serializer" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Mammoth.Objects">
+    <Position X="4" Y="5.75" Width="1.5" />
+    <AssociationLine Name="Serializer" Type="Mammoth.Serialization" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.5" Y="6.75" />
+        <Point X="8.531" Y="6.75" />
+        <Point X="8.531" Y="2.368" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAEAQAAAAAAACAAIAIAAAAAQAAAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>Diagrams\Client Subsystems.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Serializer" />
+      <Property Name="Physics" />
+      <Property Name="Renderer" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Mammoth.Physics">
+    <Position X="1" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Diagrams\Client Subsystems.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Objects" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Mammoth.Content">
+    <Position X="6" Y="7.75" Width="1.5" />
+    <AssociationLine Name="Objects" Type="Mammoth.Objects" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6.75" Y="7.75" />
+        <Point X="6.75" Y="7.188" />
+        <Point X="5.5" Y="7.188" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Diagrams\Client Subsystems.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Objects" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Mammoth.Input">
+    <Position X="6.75" Y="4" Width="1.5" />
+    <AssociationLine Name="GameState" Type="Mammoth.GameState" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6.844" Y="4" />
+        <Point X="6.844" Y="3.375" />
+        <Point X="5.5" Y="3.375" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAIAA=</HashCode>
+      <FileName>Diagrams\Client Subsystems.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Objects" />
+      <Property Name="GameState" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Mammoth.Graphics">
+    <Position X="1.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>Diagrams\Client Subsystems.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mammoth.Interface">
+    <Position X="4.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAEAAACAAAAAAAA=</HashCode>
+      <FileName>Diagrams\Client Subsystems.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Renderer" />
+      <Property Name="Objects" />
+      <Property Name="Input" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

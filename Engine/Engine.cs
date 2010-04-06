@@ -49,8 +49,11 @@ namespace Mammoth.Engine
             // TODO: Design and implement the PhysX interactions.
             // Let's create the PhysX stuff here.  This needs to be changed though.
             Core core = new Core(new CoreDescription(), new ConsoleOutputStream());
+
+        #if PHYSX_DEBUG
             core.SetParameter(PhysicsParameter.VisualizationScale, 2.0f);
             core.SetParameter(PhysicsParameter.VisualizeCollisionShapes, true);
+        #endif
 
             SimulationType hworsw = (core.HardwareVersion == HardwareVersion.None ? SimulationType.Software : SimulationType.Hardware);
             Console.WriteLine("PhysX Acceleration Type: " + hworsw);
@@ -59,10 +62,15 @@ namespace Mammoth.Engine
             {
                 GroundPlaneEnabled = true,
                 Gravity = new Vector3(0.0f, -9.81f, 0.0f),
-                SimulationType = hworsw
+                SimulationType = hworsw,
+                // Use variable timesteps for the simulation to make sure that it's syncing with the refresh rate.
+                // (We might want to change this later.)
+                TimestepMethod = TimestepMethod.Variable
             });
 
+        #if PHYSX_DEBUG
             core.Foundation.RemoteDebugger.Connect("localhost");
+        #endif
 
             base.Initialize();
         }
@@ -108,11 +116,19 @@ namespace Mammoth.Engine
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
             // TODO: Add your update logic here
 
+            // Let's have PhysX update itself.
+            // This might need to be changed/optimized a bit if things are getting slow because they have
+            // to wait for the physics calculations.
+            this.Scene.Simulate((float) gameTime.ElapsedGameTime.TotalSeconds);
+            this.Scene.FlushStream();
+            this.Scene.FetchResults(SimulationStatus.RigidBodyFinished, true);
+
+            // Now we update all of the GameComponents associated with the engine.
             base.Update(gameTime);
         }
 

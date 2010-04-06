@@ -28,7 +28,7 @@ namespace Mammoth.Engine
 
         public Camera(Game game) : base(game)
         {
-            
+            this.Type = CameraType.FIRST_PERSON;
         }
 
         public override void Update(GameTime gameTime)
@@ -52,13 +52,29 @@ namespace Mammoth.Engine
         public void UpdateView()
         {
             LocalPlayer lp = Engine.Instance.LocalPlayer;
-
-            Vector3 position = lp.Position + (Vector3.Up * lp.Height / 4.0f);
             Vector3 forward = Vector3.Transform(Vector3.Forward, lp.Orientation);
 
-            //Console.WriteLine("position: " + position + "\nforward: " + forward);
-
-            this.View = Matrix.CreateLookAt(position, position + forward, Vector3.Up);
+            Vector3 position, look;
+            switch(this.Type)
+            {
+                case CameraType.FIRST_PERSON:
+                    position = lp.Position + (Vector3.Up * lp.Height / 4.0f);
+                    look = position + forward;
+                    break;
+                // TODO: Make sure that the third-person "works".
+                // I don't think it'll look any good, but once we have something drawing for the player, we
+                // should fix it up so that it's somewhat useful for debugging.
+                case CameraType.THIRD_PERSON:
+                    position = lp.Position - forward * 5 - Vector3.Up * 5;
+                    look = lp.Position + Vector3.Up * lp.Height * 3 / 4;
+                    break;
+                default:
+                    position = Vector3.Zero;
+                    look = Vector3.Zero;
+                    break;
+            }
+            
+            this.View = Matrix.CreateLookAt(position, look, Vector3.Up);
         }
 
         #region Properties

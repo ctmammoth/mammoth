@@ -18,7 +18,6 @@ namespace Mammoth.Engine
             /// factory that allows the game to create objects of various types.
 
             this.Position = new Vector3(0.0f, 3.0f, 10.0f);
-            Console.WriteLine("Original position: " + this.Position);
             this.Orientation = Quaternion.Identity;
             this.Height = 6.0f;
         }
@@ -30,16 +29,16 @@ namespace Mammoth.Engine
             CenterCursor();
         }
 
+        // TODO: Add a PhysX character controller to the LocalPlayer update code.
         public override void Update(GameTime gameTime)
         {
             // Get an instance of the game window to calculate new values.
-            GameWindow window = Engine.Instance.Window;
+            GameWindow window = this.Game.Window;
 
             // Get the mouse's offset from the previous position (window center).
             Vector2 mousePosition = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
             Vector2 mouseCenter = new Vector2(window.ClientBounds.Width / 2, window.ClientBounds.Height / 2);
             Vector2 delta = (mousePosition - mouseCenter) * 0.0005f;
-            //Console.WriteLine("delta: " + delta);
             CenterCursor();
 
             // Let's add this new rotation onto the end of the current rotation.
@@ -80,7 +79,6 @@ namespace Mammoth.Engine
 
             // Set the new position of the player.
             this.Position = newPosition;
-            //Console.WriteLine("New Position: " + newPosition);
         }
 
         /**
@@ -88,7 +86,7 @@ namespace Mammoth.Engine
          */
         public void CenterCursor()
         {
-            GameWindow window = Engine.Instance.Window;
+            GameWindow window = this.Game.Window;
             
             Mouse.SetPosition(window.ClientBounds.Width / 2, window.ClientBounds.Height / 2);
         }
