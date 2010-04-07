@@ -34,7 +34,42 @@ namespace Mammoth.Engine
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add more initialization logic here
+            // TODO: Add more initialization logic here.
+
+            // TODO: Design and implement the PhysX interactions.
+            // Let's create the PhysX stuff here.  This needs to be changed though.
+            this.Core = new Core(new CoreDescription(), new ConsoleOutputStream());
+
+        #if PHYSX_DEBUG
+            this.Core.SetParameter(PhysicsParameter.VisualizationScale, 2.0f);
+            this.Core.SetParameter(PhysicsParameter.VisualizeCollisionShapes, true);
+        #endif
+
+            SimulationType hworsw = (this.Core.HardwareVersion == HardwareVersion.None ? SimulationType.Software : SimulationType.Hardware);
+            Console.WriteLine("PhysX Acceleration Type: " + hworsw);
+
+            this.Scene = this.Core.CreateScene(new SceneDescription()
+            {
+                GroundPlaneEnabled = false,
+                Gravity = new Vector3(0.0f, -9.81f, 0.0f),
+                SimulationType = hworsw,
+                // Use variable timesteps for the simulation to make sure that it's syncing with the refresh rate.
+                // (We might want to change this later.)
+                TimestepMethod = TimestepMethod.Variable
+            });
+            
+            // Because I don't trust the ground plane, I'm making my own.
+            ActorDescription boxActorDesc = new ActorDescription();
+            boxActorDesc.Shapes.Add(new BoxShapeDescription()
+            {
+                Size = new Vector3(100.0f, 2.0f, 100.0f),
+                LocalPosition = new Vector3(0.0f, -1.0f, 0.0f)
+            });
+            this.Scene.CreateActor(boxActorDesc);
+
+        #if PHYSX_DEBUG
+            this.Core.Foundation.RemoteDebugger.Connect("localhost");
+        #endif
 
             // Create the local player, and have it update first.
             this.LocalPlayer = new LocalPlayer(this);
@@ -45,32 +80,6 @@ namespace Mammoth.Engine
             this.Camera = new Camera(this);
             this.Camera.UpdateOrder = 2;
             this.Components.Add(this.Camera);
-
-            // TODO: Design and implement the PhysX interactions.
-            // Let's create the PhysX stuff here.  This needs to be changed though.
-            Core core = new Core(new CoreDescription(), new ConsoleOutputStream());
-
-        #if PHYSX_DEBUG
-            core.SetParameter(PhysicsParameter.VisualizationScale, 2.0f);
-            core.SetParameter(PhysicsParameter.VisualizeCollisionShapes, true);
-        #endif
-
-            SimulationType hworsw = (core.HardwareVersion == HardwareVersion.None ? SimulationType.Software : SimulationType.Hardware);
-            Console.WriteLine("PhysX Acceleration Type: " + hworsw);
-
-            this.Scene = core.CreateScene(new SceneDescription()
-            {
-                GroundPlaneEnabled = true,
-                Gravity = new Vector3(0.0f, -9.81f, 0.0f),
-                SimulationType = hworsw,
-                // Use variable timesteps for the simulation to make sure that it's syncing with the refresh rate.
-                // (We might want to change this later.)
-                TimestepMethod = TimestepMethod.Variable
-            });
-
-        #if PHYSX_DEBUG
-            core.Foundation.RemoteDebugger.Connect("localhost");
-        #endif
 
             base.Initialize();
         }
@@ -106,6 +115,10 @@ namespace Mammoth.Engine
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+
+            // This shouldn't be in here, but let's see if this prevents it from crashing.
+            this.Scene.Dispose();
+            this.Core.Dispose();
         }
 
         /// <summary>
@@ -121,15 +134,15 @@ namespace Mammoth.Engine
 
             // TODO: Add your update logic here
 
+            // Now we update all of the GameComponents associated with the engine.
+            base.Update(gameTime);
+
             // Let's have PhysX update itself.
             // This might need to be changed/optimized a bit if things are getting slow because they have
             // to wait for the physics calculations.
-            this.Scene.Simulate((float) gameTime.ElapsedGameTime.TotalSeconds);
+            this.Scene.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds);
             this.Scene.FlushStream();
             this.Scene.FetchResults(SimulationStatus.RigidBodyFinished, true);
-
-            // Now we update all of the GameComponents associated with the engine.
-            base.Update(gameTime);
         }
 
         /// <summary>
@@ -171,6 +184,12 @@ namespace Mammoth.Engine
         }
 
         public Renderer Renderer
+        {
+            get;
+            private set;
+        }
+
+        public Core Core
         {
             get;
             private set;

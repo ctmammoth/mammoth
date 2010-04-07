@@ -47,6 +47,8 @@
       <Name>soldier-low-poly</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.0273</ProcessorParameters_Scale>
+      <ProcessorParameters_RotationY>180</ProcessorParameters_RotationY>
     </Compile>
   </ItemGroup>
   <ItemGroup>

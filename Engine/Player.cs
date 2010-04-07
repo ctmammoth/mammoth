@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using StillDesign.PhysX;
+
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -12,7 +15,7 @@ namespace Mammoth.Engine
     {
         public Player(Game game) : base(game)
         {
-            
+            Player.ControllerManager = Engine.Instance.Scene.CreateControllerManager();
         }
 
         #region Properties
@@ -20,25 +23,51 @@ namespace Mammoth.Engine
         public Vector3 Position
         {
             get;
-            internal set;
+            protected set;
         }
 
         public Quaternion Orientation
         {
             get;
-            internal set;
+            protected set;
+        }
+
+        public Quaternion HeadOrient
+        {
+            get;
+            protected set;
+        }
+
+        // This is the velocity of the player in the player's local coordinate system.
+        public Vector3 Velocity
+        {
+            get;
+            protected set;
         }
 
         public Model Model3D
         {
             get;
-            internal set;
+            protected set;
         }
 
         public float Height
         {
             get;
             protected set;
+        }
+
+        static protected ControllerManager ControllerManager
+        {
+            get;
+            private set;
+        }
+
+        // Not sure what the permissions of this should be.
+        internal Controller Controller
+        {
+            get;
+            set;
         }
 
         #endregion

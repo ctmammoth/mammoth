@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using StillDesign.PhysX;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -17,8 +19,9 @@ namespace Mammoth.Engine
             /// like position and orientation values.  It could then be part of an umbrella
             /// factory that allows the game to create objects of various types.
 
-            this.Position = new Vector3(0.0f, 3.0f, 10.0f);
+            this.Position = new Vector3(0.0f, 0.0f, 10.0f);
             this.Orientation = Quaternion.Identity;
+            this.HeadOrient = Quaternion.Identity;
             this.Height = 6.0f;
         }
 
@@ -26,7 +29,25 @@ namespace Mammoth.Engine
         {
             base.Initialize();
 
+            this.Model3D = Renderer.Instance.LoadModel("soldier-low-poly");
+
+            InitializePhysX();
+
             CenterCursor();
+        }
+
+        // TODO: There has to be a better way to do this.
+        public void InitializePhysX()
+        {
+            ControllerDescription desc = new CapsuleControllerDescription(1, this.Height - 2.0f)
+            {
+                UpDirection = Axis.Y,
+                Position = this.Position + Vector3.UnitY * (this.Height - 1.0f) / 2.0f
+            };
+            this.Controller = Player.ControllerManager.CreateController(desc);
+            this.Controller.SetCollisionEnabled(true);
+            this.Controller.Name = "Local Player Controller";
+            this.Controller.Actor.Name = "Local Player Actor";
         }
 
         // TODO: Add a PhysX character controller to the LocalPlayer update code.
@@ -35,50 +56,67 @@ namespace Mammoth.Engine
             // Get an instance of the game window to calculate new values.
             GameWindow window = this.Game.Window;
 
+            // TODO: At some point, we need to set up the use of a settings/options file, and read controls from there.
+            // We get the current state of the keyboard...
+            KeyboardState states = Keyboard.GetState();
+
             // Get the mouse's offset from the previous position (window center).
             Vector2 mousePosition = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
             Vector2 mouseCenter = new Vector2(window.ClientBounds.Width / 2, window.ClientBounds.Height / 2);
             Vector2 delta = (mousePosition - mouseCenter) * 0.0005f;
             CenterCursor();
 
-            // Let's add this new rotation onto the end of the current rotation.
+            // Let's add this new rotation onto the end of the current rotation.  We only add the yaw as we don't want
+            // the player model to rotate up and down.
             this.Orientation = Quaternion.Concatenate(this.Orientation,
-                                                       Quaternion.CreateFromYawPitchRoll(-delta.X, -delta.Y, 0));
+                                                       Quaternion.CreateFromYawPitchRoll(-delta.X, 0, 0));
 
-            // Now we can get the new look vector.
-            Vector3 newForward = Vector3.Transform(Vector3.Forward, this.Orientation);
-            Vector3 newRight = Vector3.Cross(newForward, Vector3.Up);
+            // Now we deal with the camera.
+            float pitch = (float)Math.Asin(this.HeadOrient.W * this.HeadOrient.Y - this.HeadOrient.X * this.HeadOrient.Z);
+            float newPitch = pitch - delta.Y;
+            // TODO: Edge cases for mouse-look.
+            // We need to make sure that the player can't look down enough that they look backwards.
+            if (newPitch < -1.5f)
+                delta.Y = -1.5f - pitch;
+            if (newPitch > 1.5f)
+                delta.Y = 1.5f - pitch;
+            this.HeadOrient = Quaternion.Concatenate(this.HeadOrient,
+                                                        Quaternion.CreateFromYawPitchRoll(-delta.X, -delta.Y, 0));
 
-            const float speed = 20.0f; // Movement is 20 units per second.
+            float speed = 4.0f; // Movement is 20 units per second.
+
+            // Yay, we can run now!
+            if (states.IsKeyDown(Keys.LeftShift))
+                speed *= 1.5f;
+
+            // Calculate the distance we travel based on speed and elapsed time.
             float distance = speed * (float)gameTime.ElapsedGameTime.TotalSeconds;  // dx = v*t
-
-            // The amount to shift the position by starts at 0.
-            Vector3 translateDirection = Vector3.Zero;
-
-            // TODO: At some point, we need to set up the use of a settings/options file, and read controls from there.
-            // We get the current state of the keyboard...
-            KeyboardState states = Keyboard.GetState();
 
             // And use that to determine which directions to move in.
             if (states.IsKeyDown(Keys.W)) // Forwards?
-                translateDirection += newForward;
+                this.Velocity += Vector3.Forward * distance;
 
             if (states.IsKeyDown(Keys.S)) // Backwards?
-                translateDirection -= newForward;
+                this.Velocity += Vector3.Backward * distance;
 
             if (states.IsKeyDown(Keys.A)) // Left?
-                translateDirection -= newRight;
+                this.Velocity += Vector3.Left * distance;
 
             if (states.IsKeyDown(Keys.D)) // Right?
-                translateDirection += newRight;
+                this.Velocity += Vector3.Right * distance;
 
             // Now we modify the position by the calculated amount.
-            Vector3 newPosition = this.Position;
-            if (translateDirection.LengthSquared() > 0) // Kinda pointless, as it won't ever be less than 0...
-                newPosition += Vector3.Normalize(translateDirection) * distance;
+            Vector3 newPosition = this.Position + Vector3.Transform(this.Velocity, this.Orientation);
 
             // Set the new position of the player.
             this.Position = newPosition;
+
+            // Move the player's controller based on its velocity.
+            ControllerMoveResult result = this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation));
+            //if (result.CollisionFlag == ControllerCollisionFlag.Down)
+                this.Velocity = Vector3.Zero;
+            //else
+            //    this.Velocity += Engine.Instance.Scene.Gravity * (float) gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         /**
@@ -89,6 +127,13 @@ namespace Mammoth.Engine
             GameWindow window = this.Game.Window;
             
             Mouse.SetPosition(window.ClientBounds.Width / 2, window.ClientBounds.Height / 2);
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
+
+            Renderer.Instance.DrawObject(this);
         }
     }
 }

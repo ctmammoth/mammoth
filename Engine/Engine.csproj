@@ -67,10 +67,17 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="IEncodable.cs" />
     <Compile Include="IRenderable.cs" />
+    <Compile Include="IUsable.cs" />
     <Compile Include="LocalPlayer.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="RemotePlayer.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="StaticObject.cs" />
+    <Compile Include="Weapon.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>
