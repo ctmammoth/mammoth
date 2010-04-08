@@ -22,14 +22,33 @@ namespace Mammoth.Engine
 
         public Vector3 Position
         {
+            get
+            {
+                return this.Controller.Position;
+            }
+            protected set
+            {
+                //this.Controller.Actor.MoveGlobalPositionTo(value);
+                this.Controller.Position = value;
+            }
+        }
+
+        public Vector3 PositionOffset
+        {
             get;
             protected set;
         }
 
         public Quaternion Orientation
         {
-            get;
-            protected set;
+            get
+            {
+                return this.Controller.Actor.GlobalOrientationQuat;
+            }
+            protected set
+            {
+                this.Controller.Actor.MoveGlobalOrientationTo(Matrix.CreateFromQuaternion(value));
+            }
         }
 
         public Quaternion HeadOrient

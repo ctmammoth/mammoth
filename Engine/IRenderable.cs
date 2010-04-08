@@ -17,6 +17,11 @@ namespace Mammoth.Engine
             get;
         }
 
+        Vector3 PositionOffset
+        {
+            get;
+        }
+
         Quaternion Orientation
         {
             get;

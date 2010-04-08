@@ -23,6 +23,11 @@ namespace Mammoth.Engine
             get { throw new NotImplementedException(); }
         }
 
+        public Microsoft.Xna.Framework.Vector3 PositionOffset
+        {
+            get { throw new NotImplementedException(); }
+        }
+
         public Microsoft.Xna.Framework.Quaternion Orientation
         {
             get { throw new NotImplementedException(); }

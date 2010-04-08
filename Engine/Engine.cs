@@ -51,7 +51,7 @@ namespace Mammoth.Engine
             this.Scene = this.Core.CreateScene(new SceneDescription()
             {
                 GroundPlaneEnabled = false,
-                Gravity = new Vector3(0.0f, -9.81f, 0.0f),
+                Gravity = new Vector3(0.0f, -9.81f, 0.0f) / 9.81f,
                 SimulationType = hworsw,
                 // Use variable timesteps for the simulation to make sure that it's syncing with the refresh rate.
                 // (We might want to change this later.)
@@ -64,6 +64,15 @@ namespace Mammoth.Engine
             {
                 Size = new Vector3(100.0f, 2.0f, 100.0f),
                 LocalPosition = new Vector3(0.0f, -1.0f, 0.0f)
+            });
+            this.Scene.CreateActor(boxActorDesc);
+
+            // Just to test collisions...
+            boxActorDesc = new ActorDescription();
+            boxActorDesc.Shapes.Add(new BoxShapeDescription()
+            {
+                Size = new Vector3(2.0f, 2.0f, 2.0f),
+                LocalPosition = new Vector3(-3.0f, 3.0f, 0.0f)
             });
             this.Scene.CreateActor(boxActorDesc);
 

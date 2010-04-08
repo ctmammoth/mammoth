@@ -63,7 +63,7 @@ namespace Mammoth.Engine
 
                     effect.View = view;
                     effect.Projection = projection;
-                    effect.World = transforms[mesh.ParentBone.Index] * Matrix.CreateFromQuaternion(obj.Orientation) * Matrix.CreateTranslation(obj.Position);
+                    effect.World = transforms[mesh.ParentBone.Index] * Matrix.CreateFromQuaternion(obj.Orientation) * Matrix.CreateTranslation(obj.Position + obj.PositionOffset);
                 }
 
                 mesh.Draw();

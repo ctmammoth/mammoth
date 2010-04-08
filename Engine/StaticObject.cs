@@ -32,6 +32,12 @@ namespace Mammoth.Engine
             internal set;
         }
 
+        public Vector3 PositionOffset
+        {
+            get;
+            internal set;
+        }
+
         public Quaternion Orientation
         {
             get;
@@ -53,6 +59,7 @@ namespace Mammoth.Engine
         {
             this.Model3D = Renderer.Instance.LoadModel("soldier-low-poly");
             this.Position = Vector3.Zero;
+            this.PositionOffset = Vector3.Zero;
             this.Orientation = Quaternion.Identity;
         }
     }
