@@ -35,6 +35,7 @@ namespace Mammoth.Engine
             this.Orientation = Quaternion.Identity;
             this.HeadOrient = Quaternion.Identity;
             this.CurrentCollision = 0;
+            this.Yaw = 0.0f;
             this.Pitch = 0.0f;
 
             CenterCursor();
@@ -55,7 +56,6 @@ namespace Mammoth.Engine
             this.Controller.Actor.Name = "Local Player Actor";
         }
 
-        // TODO: Add a PhysX character controller to the LocalPlayer update code.
         public override void Update(GameTime gameTime)
         {
             // Get an instance of the game window to calculate new values.
@@ -70,28 +70,21 @@ namespace Mammoth.Engine
             Vector2 mouseCenter = new Vector2(window.ClientBounds.Width / 2, window.ClientBounds.Height / 2);
             Vector2 delta = (mousePosition - mouseCenter) * 0.0005f;
             CenterCursor();
-
-            // Let's add this new rotation onto the end of the current rotation.  We only add the yaw as we don't want
-            // the player model to rotate up and down.
-            this.Orientation *= Quaternion.CreateFromYawPitchRoll(-delta.X, 0, 0);
-
-            // Now we deal with the camera - let's change the pitch based on vertical mouse movement.
-            float oldPitch = this.Pitch;
-            this.Pitch = MathHelper.Clamp(this.Pitch - delta.Y, -MathHelper.PiOver4, MathHelper.PiOver4);
-
-            // TODO: Fix pitch clamping - it doesn't work all the time.  Not sure why.  Rotation screws with stuff.
-            // This could be done by looking at the y component of Vector3.Transform(Vector3.Forward, this.HeadOrient), and
-            // making sure that it doesn't get too large or small.
-            // TODO: We might want to change pi/4 to something else, depends on play-testing.
-
-            // Modify delta.Y if we ended up clamping the pitch.
-            if (this.Pitch == -MathHelper.PiOver4)
-                delta.Y = -MathHelper.PiOver4 - oldPitch;
-            if (this.Pitch == MathHelper.PiOver4)
-                delta.Y = MathHelper.PiOver4 - oldPitch;
             
+            // Now we deal with the camera.
+            // Modify the yaw based on horizontal mouse movement.
+            this.Yaw = MathHelper.WrapAngle(this.Yaw - delta.X);
+            // Modify the pitch based on vertical mouse movement.
+            const float root2over2 = 0.707106f;
+
+            // TODO: There's probably a better (faster) way of doing this...
+            this.Pitch = (float) Math.Asin(MathHelper.Clamp((float) Math.Sin(this.Pitch - delta.Y), -root2over2, root2over2));
+
+            // Set the orientation of the player's body.  We only use the yaw, as we don't want the player model
+            // rotating up and down.
+            this.Orientation = Quaternion.CreateFromYawPitchRoll(this.Yaw, 0, 0);
             // Set the orientation of the player's view (head).
-            this.HeadOrient *= Quaternion.CreateFromYawPitchRoll(-delta.X, -delta.Y, 0);
+            this.HeadOrient = Quaternion.CreateFromYawPitchRoll(this.Yaw, this.Pitch, 0);
             
             // Set the base movement speed.
             const float baseSpeed = 4.0f;
@@ -154,14 +147,22 @@ namespace Mammoth.Engine
                 this.Velocity += Engine.Instance.Scene.Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds - motion;
         }
 
+        /// <summary>
+        /// This helper function is used to determine whether or not the player is colliding with objects in a 
+        /// certain fashion after Controller.Move() is called.  For example, if the player is standing on the ground
+        /// after Move() is called, calling InCollisionState(ControllerCollisionFlag.Down) will return true.
+        /// </summary>
+        /// <param name="flag">The collision state that we're interested in.</param>
+        /// <returns>Whether or not the player is colliding on that "side".</returns>
         private bool InCollisionState(ControllerCollisionFlag flag)
         {
             return ((byte) this.CurrentCollision & (byte) flag) == (byte) flag;
         }
 
-        /**
-         * Warp the cursor to the center of the window.
-         */
+        /// <summary>
+        /// This warps the cursor to the center of the game window.  This is important, as without it, the player's
+        /// mouse would hit the side of the screen and they wouldn't be able to turn any further.
+        /// </summary>
         public void CenterCursor()
         {
             GameWindow window = this.Game.Window;
@@ -183,6 +184,12 @@ namespace Mammoth.Engine
         {
             get;
             private set;
+        }
+
+        private float Yaw
+        {
+            get;
+            set;
         }
 
         private float Pitch
