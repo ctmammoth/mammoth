@@ -86,9 +86,10 @@ namespace Mammoth.Engine
             this.Components.Add(this.LocalPlayer);
 
             // Create the camera next, and have it update after the player.
-            this.Camera = new Camera(this);
-            this.Camera.UpdateOrder = 2;
-            this.Components.Add(this.Camera);
+            Camera cam = new FirstPersonCamera(this);
+            cam.UpdateOrder = 2;
+            this.Components.Add(cam);
+            this.Services.AddService(typeof(ICameraService), cam);
 
             base.Initialize();
         }
@@ -106,9 +107,6 @@ namespace Mammoth.Engine
 
             // Create the renderer here, as we need to give it a graphics device.
             this.Renderer = Renderer.Instance;
-
-            // We need to set the camera's initial projection matrix.
-            this.Camera.UpdateProjection();
 
             // Let's create a soldier so we can see something.
             this.Components.Add(new SoldierObject(this));
@@ -205,12 +203,6 @@ namespace Mammoth.Engine
         }
 
         public Scene Scene
-        {
-            get;
-            private set;
-        }
-
-        public Camera Camera
         {
             get;
             private set;

@@ -26,8 +26,6 @@ namespace Mammoth.Engine
         {
             _content = Engine.Instance.Content;
             _graphics = Engine.Instance.GraphicsDevice;
-
-            this.Camera = Engine.Instance.Camera;
         }
 
         public Model LoadModel(string path)
@@ -47,13 +45,15 @@ namespace Mammoth.Engine
 
         public void DrawObject(IRenderable obj)
         {
+            Camera cam = (Camera) Engine.Instance.Services.GetService(typeof(ICameraService));
+
             Model m = obj.Model3D;
 
             Matrix[] transforms = new Matrix[m.Bones.Count];
             m.CopyAbsoluteBoneTransformsTo(transforms);
 
-            Matrix projection = this.Camera.Projection;
-            Matrix view = this.Camera.View;
+            Matrix projection = cam.Projection;
+            Matrix view = cam.View;
 
             foreach (ModelMesh mesh in m.Meshes)
             {
@@ -78,12 +78,14 @@ namespace Mammoth.Engine
         /// <param name="scene">The PhysX scene that we want to draw debug geometry for.</param>
         public void DrawPhysXDebug(StillDesign.PhysX.Scene scene)
         {
+            Camera cam = (Camera)Engine.Instance.Services.GetService(typeof(ICameraService));
+
             _graphics.VertexDeclaration = new VertexDeclaration(_graphics, VertexPositionColor.VertexElements);
 
             BasicEffect debugEffect = new BasicEffect(_graphics, null);
             debugEffect.World = Matrix.Identity;
-            debugEffect.View = this.Camera.View;
-            debugEffect.Projection = this.Camera.Projection;
+            debugEffect.View = cam.View;
+            debugEffect.Projection = cam.Projection;
 
             DebugRenderable data = scene.GetDebugRenderable();
 
@@ -160,12 +162,6 @@ namespace Mammoth.Engine
                     _instance = new Renderer();
                 return _instance;
             }
-        }
-
-        public Camera Camera
-        {
-            get;
-            private set;
         }
 
         #endregion

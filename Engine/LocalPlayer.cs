@@ -174,7 +174,9 @@ namespace Mammoth.Engine
         {
             base.Draw(gameTime);
 
-            if(Engine.Instance.Camera.Type != Camera.CameraType.FIRST_PERSON)
+            Camera cam = (Camera) this.Game.Services.GetService(typeof(ICameraService));
+
+            if(cam.Type != Camera.CameraType.FIRST_PERSON)
                 Renderer.Instance.DrawObject(this);
         }
 

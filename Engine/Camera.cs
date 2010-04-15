@@ -5,14 +5,33 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+// TODO: Documentation for Camera code.
+
 namespace Mammoth.Engine
 {
-    /**
-     * This is a simple and fairly inefficient camera class taken from the camera class in the PhysX.Net samples.  It
-     * could be improved so that it stores more information and therefore has to do less calculation each update cycle,
-     * but that shouldn't be worried about unless it is deemed to be an issue (by way of profiling).
-     */
-    public class Camera : GameComponent
+    /// <summary>
+    /// This interface encapsulates the idea of a camera service.  This can be used with Game.GetService()
+    /// to get the current camera.
+    /// </summary>
+    public interface ICameraService
+    {
+        Matrix View
+        {
+            get;
+        }
+
+        Matrix Projection
+        {
+            get;
+        }
+
+        Camera.CameraType Type
+        {
+            get;
+        }
+    }
+
+    public abstract class Camera : GameComponent, ICameraService
     {
 
         #region Variables
@@ -28,14 +47,16 @@ namespace Mammoth.Engine
 
         public Camera(Game game) : base(game)
         {
-            this.Type = CameraType.THIRD_PERSON;
+            
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
+        public abstract override void Update(GameTime gameTime);
 
-            UpdateView();
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            UpdateProjection();
         }
 
         /// <summary>
@@ -49,7 +70,7 @@ namespace Mammoth.Engine
                                                                   0.1f, 10000.0f);
         }
 
-        public void UpdateView()
+        /*public void UpdateView()
         {
             LocalPlayer lp = Engine.Instance.LocalPlayer;
             Vector3 forward = Vector3.Transform(Vector3.Forward, lp.HeadOrient);
@@ -75,26 +96,98 @@ namespace Mammoth.Engine
             }
             
             this.View = Matrix.CreateLookAt(position, look, Vector3.Up);
-        }
+        }*/
 
         #region Properties
 
         public Matrix View
         {
             get;
-            private set;
+            protected set;
         }
 
         public Matrix Projection
         {
             get;
-            private set;
+            protected set;
         }
 
-        public CameraType Type
+        public abstract CameraType Type
         {
             get;
-            internal set;
+            protected set;
+        }
+
+        #endregion
+    }
+
+    public class FirstPersonCamera : Camera
+    {
+        #region Variables
+
+        private CameraType _type;
+
+        #endregion
+
+        public FirstPersonCamera(Game game)
+            : base(game)
+        {
+            this.Type = CameraType.FIRST_PERSON;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            LocalPlayer lp = Engine.Instance.LocalPlayer;
+            Vector3 forward = Vector3.Transform(Vector3.Forward, lp.HeadOrient);
+
+            Vector3 position = lp.Position + (Vector3.Up * lp.Height / 4.0f);
+            Vector3 look = position + forward;
+
+            this.View = Matrix.CreateLookAt(position, look, Vector3.Up);
+        }
+
+        #region Properties
+
+        public override CameraType Type
+        {
+            get { return _type; }
+            protected set { _type = value; }
+        }
+
+        #endregion
+    }
+
+    public class ThirdPersonCamera : Camera
+    {
+        #region Variables
+
+        private CameraType _type;
+
+        #endregion
+
+        public ThirdPersonCamera(Game game)
+            : base(game)
+        {
+            this.Type = CameraType.THIRD_PERSON;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            LocalPlayer lp = Engine.Instance.LocalPlayer;
+            Vector3 forward = Vector3.Transform(Vector3.Forward, lp.HeadOrient);
+
+            Vector3 position = lp.Position - forward * 15 + Vector3.Up * 5;
+            Vector3 look = lp.Position + Vector3.Up * lp.Height * 3 / 4;
+
+            this.View = Matrix.CreateLookAt(position, look, Vector3.Up);
+        }
+
+        #region Properties
+
+        public override CameraType Type
+        {
+            get { return _type; }
+            protected set { _type = value; }
         }
 
         #endregion
