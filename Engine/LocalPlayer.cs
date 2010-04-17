@@ -75,10 +75,10 @@ namespace Mammoth.Engine
             // Modify the yaw based on horizontal mouse movement.
             this.Yaw = MathHelper.WrapAngle(this.Yaw - delta.X);
             // Modify the pitch based on vertical mouse movement.
-            const float root2over2 = 0.707106f;
+            const float pitchClamp = 0.9876f;
 
             // TODO: There's probably a better (faster) way of doing this...
-            this.Pitch = (float) Math.Asin(MathHelper.Clamp((float) Math.Sin(this.Pitch - delta.Y), -root2over2, root2over2));
+            this.Pitch = (float) Math.Asin(MathHelper.Clamp((float) Math.Sin(this.Pitch - delta.Y), -pitchClamp, pitchClamp));
 
             // Set the orientation of the player's body.  We only use the yaw, as we don't want the player model
             // rotating up and down.

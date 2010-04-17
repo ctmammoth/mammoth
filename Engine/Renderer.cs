@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Mammoth.Engine
 {
-    public class Renderer
+    public class Renderer : IRenderService
     {
         #region Variables
 
