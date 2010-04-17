@@ -66,11 +66,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
+    <Compile Include="Car.cs" />
+    <Compile Include="Driver.cs" />
+    <Compile Include="Encodable.cs" />
+    <Compile Include="Encoder.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="IEncodable.cs" />
     <Compile Include="IRenderable.cs" />
     <Compile Include="LocalPlayer.cs" />
+    <Compile Include="Networking.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="StaticObject.cs" />
+    <Compile Include="Test.cs" />
+    <Compile Include="XNANetworking.cs" />
   </ItemGroup>
 </Project>
