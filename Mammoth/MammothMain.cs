@@ -11,7 +11,7 @@ namespace Mammoth
         /// </summary>
         static void Main(string[] args)
         {
-            using (Mammoth.Engine.Engine game = Mammoth.Engine.Engine.Instance)
+            using (Mammoth.Engine.Engine game = new Mammoth.Engine.Engine())
             {
                 game.Run();
             }

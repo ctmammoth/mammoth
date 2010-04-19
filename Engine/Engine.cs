@@ -21,6 +21,13 @@ namespace Mammoth.Engine
 
         #endregion
 
+        public Engine()
+            : base()
+        {
+            graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
+        }
+
         #region XNA-Game
 
         GraphicsDeviceManager graphics;
@@ -80,13 +87,17 @@ namespace Mammoth.Engine
             this.Core.Foundation.RemoteDebugger.Connect("localhost");
         #endif
 
+            // Create the renderer, and register it as a service.
+            Renderer r = new Renderer(this);
+            this.Services.AddService(typeof(IRenderService), r);
+
             // Create the local player, and have it update first.
             this.LocalPlayer = new LocalPlayer(this);
             this.LocalPlayer.UpdateOrder = 1;
             this.Components.Add(this.LocalPlayer);
 
             // Create the camera next, and have it update after the player.
-            Camera cam = new FirstPersonCamera(this);
+            Camera cam = new FirstPersonCamera(this, this.LocalPlayer);
             cam.UpdateOrder = 2;
             this.Components.Add(cam);
             this.Services.AddService(typeof(ICameraService), cam);
@@ -105,14 +116,8 @@ namespace Mammoth.Engine
 
             // TODO: use this.Content to load your game content here
 
-            // Create the renderer here, as we need to give it a graphics device.
-            this.Renderer = Renderer.Instance;
-
             // Let's create a soldier so we can see something.
             this.Components.Add(new SoldierObject(this));
-
-            // Let's create a new font so we can draw text on the screen.
-            this.Renderer.LoadFont("Calibri");
         }
 
         /// <summary>
@@ -163,7 +168,8 @@ namespace Mammoth.Engine
             // TODO: Add your drawing code here.
 
         #if PHYSX_DEBUG
-            this.Renderer.DrawPhysXDebug(this.Scene);
+            Renderer r = (Renderer)this.Services.GetService(typeof(IRenderService));
+            r.DrawPhysXDebug(this.Scene);
         #endif
 
             // Draw all of the objects in the scene.
@@ -172,29 +178,7 @@ namespace Mammoth.Engine
 
         #endregion
 
-        private Engine() : base()
-        {
-            graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-        }
-
         #region Properties
-
-        public static Engine Instance
-        {
-            get
-            {
-                if (_instance == null)
-                    _instance = new Engine();
-                return _instance;
-            }
-        }
-
-        public Renderer Renderer
-        {
-            get;
-            private set;
-        }
 
         public Core Core
         {

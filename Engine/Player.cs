@@ -13,9 +13,10 @@ namespace Mammoth.Engine
 {
     public abstract class Player : DrawableGameComponent, IRenderable
     {
-        public Player(Game game) : base(game)
+        public Player(Engine game) : base(game)
         {
-            Player.ControllerManager = Engine.Instance.Scene.CreateControllerManager();
+            // TODO: Change this to use Adam's physics helper functions.
+            Player.ControllerManager = game.Scene.CreateControllerManager();
         }
 
         #region Properties

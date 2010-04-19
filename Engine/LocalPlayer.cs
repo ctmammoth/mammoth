@@ -12,7 +12,7 @@ namespace Mammoth.Engine
 {
     public class LocalPlayer : Player
     {
-        public LocalPlayer(Game game) : base(game)
+        public LocalPlayer(Engine game) : base(game)
         {
             
         }
@@ -21,7 +21,9 @@ namespace Mammoth.Engine
         {
             base.Initialize();
 
-            this.Model3D = Renderer.Instance.LoadModel("soldier-low-poly");
+            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
+
+            this.Model3D = r.LoadModel("soldier-low-poly");
             this.Height = 6.0f;
 
             InitializePhysX();
@@ -144,7 +146,8 @@ namespace Mammoth.Engine
             if(InCollisionState(ControllerCollisionFlag.Down))
                 this.Velocity = Vector3.Zero;
             else
-                this.Velocity += Engine.Instance.Scene.Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds - motion;
+                // TODO: Change this so that it gets the scene from Adam's physics helper code.
+                this.Velocity += ((Engine) this.Game).Scene.Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds - motion;
         }
 
         /// <summary>
@@ -174,10 +177,11 @@ namespace Mammoth.Engine
         {
             base.Draw(gameTime);
 
+            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
             Camera cam = (Camera) this.Game.Services.GetService(typeof(ICameraService));
 
             if(cam.Type != Camera.CameraType.FIRST_PERSON)
-                Renderer.Instance.DrawObject(this);
+                r.DrawObject(this);
         }
 
         #region Properties

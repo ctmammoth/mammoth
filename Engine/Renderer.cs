@@ -22,10 +22,11 @@ namespace Mammoth.Engine
 
         #endregion
 
-        private Renderer()
+        public Renderer(Game game)
         {
-            _content = Engine.Instance.Content;
-            _graphics = Engine.Instance.GraphicsDevice;
+            this.Game = game;
+            _content = game.Content;
+            _graphics = game.GraphicsDevice;
         }
 
         public Model LoadModel(string path)
@@ -45,7 +46,7 @@ namespace Mammoth.Engine
 
         public void DrawObject(IRenderable obj)
         {
-            Camera cam = (Camera) Engine.Instance.Services.GetService(typeof(ICameraService));
+            Camera cam = (Camera) this.Game.Services.GetService(typeof(ICameraService));
 
             Model m = obj.Model3D;
 
@@ -78,7 +79,7 @@ namespace Mammoth.Engine
         /// <param name="scene">The PhysX scene that we want to draw debug geometry for.</param>
         public void DrawPhysXDebug(StillDesign.PhysX.Scene scene)
         {
-            Camera cam = (Camera)Engine.Instance.Services.GetService(typeof(ICameraService));
+            Camera cam = (Camera)this.Game.Services.GetService(typeof(ICameraService));
 
             _graphics.VertexDeclaration = new VertexDeclaration(_graphics, VertexPositionColor.VertexElements);
 
@@ -154,14 +155,10 @@ namespace Mammoth.Engine
 
         #region Properties
 
-        public static Renderer Instance
+        public Game Game
         {
-            get
-            {
-                if (_instance == null)
-                    _instance = new Renderer();
-                return _instance;
-            }
+            get;
+            private set;
         }
 
         #endregion

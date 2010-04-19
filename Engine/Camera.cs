@@ -45,9 +45,9 @@ namespace Mammoth.Engine
 
         #endregion
 
-        public Camera(Game game) : base(game)
+        public Camera(Game game, Player target) : base(game)
         {
-            
+            this.Target = target;
         }
 
         public abstract override void Update(GameTime gameTime);
@@ -66,37 +66,9 @@ namespace Mammoth.Engine
         public void UpdateProjection()
         {
             this.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
-                                                                  Engine.Instance.GraphicsDevice.Viewport.AspectRatio,
+                                                                  this.Game.GraphicsDevice.Viewport.AspectRatio,
                                                                   0.1f, 10000.0f);
         }
-
-        /*public void UpdateView()
-        {
-            LocalPlayer lp = Engine.Instance.LocalPlayer;
-            Vector3 forward = Vector3.Transform(Vector3.Forward, lp.HeadOrient);
-
-            Vector3 position, look;
-            switch(this.Type)
-            {
-                case CameraType.FIRST_PERSON:
-                    position = lp.Position + (Vector3.Up * lp.Height / 4.0f);
-                    look = position + forward;
-                    break;
-                // TODO: Make sure that the third-person "works".
-                // I don't think it'll look any good, but once we have something drawing for the player, we
-                // should fix it up so that it's somewhat useful for debugging.
-                case CameraType.THIRD_PERSON:
-                    position = lp.Position - forward * 15 + Vector3.Up * 5;
-                    look = lp.Position + Vector3.Up * lp.Height * 3 / 4;
-                    break;
-                default:
-                    position = Vector3.Zero;
-                    look = Vector3.Zero;
-                    break;
-            }
-            
-            this.View = Matrix.CreateLookAt(position, look, Vector3.Up);
-        }*/
 
         #region Properties
 
@@ -118,6 +90,15 @@ namespace Mammoth.Engine
             protected set;
         }
 
+        // We might want to change this from Player to some other class, as we might want
+        // the camera to target something other than the player.  Sadly, C# 3.0 doesn't support
+        // variant return types, so there's no clean way to do this.
+        public Player Target
+        {
+            get;
+            private set;
+        }
+
         #endregion
     }
 
@@ -129,18 +110,17 @@ namespace Mammoth.Engine
 
         #endregion
 
-        public FirstPersonCamera(Game game)
-            : base(game)
+        public FirstPersonCamera(Game game, Player target)
+            : base(game, target)
         {
             this.Type = CameraType.FIRST_PERSON;
         }
 
         public override void Update(GameTime gameTime)
         {
-            LocalPlayer lp = Engine.Instance.LocalPlayer;
-            Vector3 forward = Vector3.Transform(Vector3.Forward, lp.HeadOrient);
+            Vector3 forward = Vector3.Transform(Vector3.Forward, this.Target.HeadOrient) * 1000.0f;
 
-            Vector3 position = lp.Position + (Vector3.Up * lp.Height / 4.0f);
+            Vector3 position = this.Target.Position + (Vector3.Up * this.Target.Height / 4.0f);
             Vector3 look = position + forward;
 
             this.View = Matrix.CreateLookAt(position, look, Vector3.Up);
@@ -165,19 +145,18 @@ namespace Mammoth.Engine
 
         #endregion
 
-        public ThirdPersonCamera(Game game)
-            : base(game)
+        public ThirdPersonCamera(Game game, Player target)
+            : base(game, target)
         {
             this.Type = CameraType.THIRD_PERSON;
         }
 
         public override void Update(GameTime gameTime)
         {
-            LocalPlayer lp = Engine.Instance.LocalPlayer;
-            Vector3 forward = Vector3.Transform(Vector3.Forward, lp.HeadOrient);
+            Vector3 forward = Vector3.Transform(Vector3.Forward, this.Target.HeadOrient) * 1000.0f;
 
-            Vector3 position = lp.Position - forward * 15 + Vector3.Up * 5;
-            Vector3 look = lp.Position + Vector3.Up * lp.Height * 3 / 4;
+            Vector3 position = this.Target.Position - forward * 15 + Vector3.Up * 5;
+            Vector3 look = this.Target.Position + Vector3.Up * this.Target.Height * 3 / 4;
 
             this.View = Matrix.CreateLookAt(position, look, Vector3.Up);
         }
