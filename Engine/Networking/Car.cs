@@ -4,7 +4,7 @@ using System.Collections;
 using System.Text;
 using System.IO;
 
-namespace Encoder
+namespace Mammoth.Engine
 {
     class Car : Encodable
     {

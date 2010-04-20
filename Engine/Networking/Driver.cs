@@ -4,7 +4,7 @@ using System.Text;
 using System.IO;
 using System.Collections;
 
-namespace Encoder
+namespace Mammoth.Engine
 {
     class Driver : Encodable
     {
