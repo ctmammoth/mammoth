@@ -51,7 +51,7 @@ namespace Mammoth.Engine
 
         public Networking(Game game) : base(game)
         {
-            
+            game.Components.Add(this);
         }
 
         public override void Initialize()

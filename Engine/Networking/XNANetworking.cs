@@ -5,6 +5,7 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Net;
+using Microsoft.Xna.Framework.GamerServices;
 
 namespace Mammoth.Engine
 {
@@ -18,7 +19,7 @@ namespace Mammoth.Engine
 
         public XNANetworking(Game game) : base(game)
         {
-
+            game.Components.Add(new GamerServicesComponent(game));
         }
 
         public override bool isLANCapable()
@@ -38,7 +39,7 @@ namespace Mammoth.Engine
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
         {
-            throw new NotImplementedException();
+            _session.Update();
         }
     }
 
@@ -47,6 +48,7 @@ namespace Mammoth.Engine
         #region Variables
 
         private LocalNetworkGamer _server;
+        private Queue<DataGram> _toSend;
 
         #endregion
 
@@ -54,6 +56,7 @@ namespace Mammoth.Engine
             : base(game)
         {
             createGame();
+            _toSend = new Queue<DataGram>();
         }
 
         #region IServerNetworking Members
@@ -74,12 +77,16 @@ namespace Mammoth.Engine
 
         public void sendThing(IEncodable toSend, string target)
         {
-            _server.SendData(toSend.encode(), SendDataOptions.None);
+            _toSend.Enqueue(new DataGram(toSend.encode(), target));
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            while (_toSend.Count != 0)
+            {
+                _server.SendData(_toSend.Dequeue().Data, SendDataOptions.None);
+            }
             PacketReader reader = new PacketReader();
             while (_server.IsDataAvailable)
             {
@@ -93,6 +100,18 @@ namespace Mammoth.Engine
         }
 
         #endregion
+
+        private class DataGram
+        {
+            public byte[] Data { get; set;  }
+            public string Recipient { get; set;  }
+
+            public DataGram(byte[] data, string recipient)
+            {
+                Data = data;
+                Recipient = recipient;
+            }
+        }
     }
 
     public class XNAClientNetworking : XNANetworking, IClientNetworking
@@ -100,12 +119,14 @@ namespace Mammoth.Engine
         #region Variables
 
         private LocalNetworkGamer _localGamer;
+        private Queue<byte[]> _toSend;
 
         #endregion
 
         public XNAClientNetworking(Game game)
             : base(game)
         {
+            _toSend = new Queue<byte[]>();
         }
 
         #region IClientNetworking Members
@@ -129,12 +150,16 @@ namespace Mammoth.Engine
 
         public void sendThing(IEncodable toSend)
         {
-            _localGamer.SendData(toSend.encode(), SendDataOptions.None);
+            _toSend.Enqueue(toSend.encode());
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            while(_toSend.Count != 0)
+            {
+                _localGamer.SendData(_toSend.Dequeue(), SendDataOptions.None);
+            }
             PacketReader reader = new PacketReader();
             while (_localGamer.IsDataAvailable)
             {
