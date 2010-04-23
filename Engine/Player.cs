@@ -13,12 +13,21 @@ namespace Mammoth.Engine
 {
     public abstract class Player : DrawableGameComponent, IRenderable
     {
+        public static int next_id;
+
         public Player(Game game) : base(game)
         {
+            ID = next_id++;
             Player.ControllerManager = Engine.Instance.Scene.CreateControllerManager();
         }
 
         #region Properties
+
+        public int ID
+        {
+            get;
+            set;
+        }
 
         public Vector3 Position
         {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Net;
 
 namespace Mammoth.Engine
 {
@@ -15,13 +14,13 @@ namespace Mammoth.Engine
     {
         bool isLANCapable();
         bool isNetCapable();
-        Networking.NetworkingType getType();
+        AbstractNetworking.NetworkingType getType();
         void Update(GameTime gameTime);
     }
 
     public interface IServerNetworking : INetworkingService
     {
-        void sendThing(IEncodable toSend, String target);
+        void sendThing(IEncodable toSend, int target);
         void createSession();
         void endGame();
     }
@@ -36,7 +35,7 @@ namespace Mammoth.Engine
     /**
      * Abstract class which defines a networking system.
      */
-    public abstract class Networking : GameComponent, INetworkingService
+    public abstract class AbstractNetworking : GameComponent, INetworkingService
     {
         public enum NetworkingType
         {
@@ -50,7 +49,7 @@ namespace Mammoth.Engine
 
         public abstract NetworkingType getType();
 
-        public Networking(Game game) : base(game)
+        public AbstractNetworking(Game game) : base(game)
         {
             game.Components.Add(this);
         }
