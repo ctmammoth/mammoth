@@ -15,7 +15,9 @@ namespace Mammoth.Engine
         {
 
             //CAR TEST
-            Car volvo = new Car(100, 10, "Red");
+            Driver ben = new Driver("Ben", 20, false);
+            Driver dave = new Driver("Dave", 100, true);
+            Car volvo = new Car(100, 10, "Red", ben);
 
             Console.WriteLine("Original car: ");
             volvo.Print();
@@ -25,6 +27,7 @@ namespace Mammoth.Engine
             volvo.max_speed = 500;
             volvo.min_speed = -100;
             volvo.color = "Blue";
+            volvo.driver = dave;
 
             Console.WriteLine("Modified car: ");
             volvo.Print();
@@ -37,6 +40,7 @@ namespace Mammoth.Engine
 
             //Keep console open for testing.
             Console.Read();
+            //TestClient();
         }
 
         static void TestServer()
