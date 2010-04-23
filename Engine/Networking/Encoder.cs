@@ -60,7 +60,7 @@ namespace Mammoth.Engine
         /// </summary>
         /// <param name="key">A string representing the name of the property being encoded.</param>
         /// <param name="theobject">The property it self. May be any primitive or Encodable.</param>
-        public void AddElement(string key, Encodable theobject)
+        public void AddElement(string key, IEncodable theobject)
         {
             table.Add(key, theobject);
         }
@@ -87,22 +87,43 @@ namespace Mammoth.Engine
 
 
         /// <summary>
-        /// Serializes the properties and their names and outputs to a stream. This serialization of Byte can be deserialized later.
+        /// Serializes the properties and their names and outputs to a stream. This serialization of byte can be deserialized later.
         /// </summary>
-        public void Serialize(Stream s)
+        /// <returns>a byte array containing the serialized data</returns>
+        public byte[] Serialize()
         {
             //The below code was modified from
             //http://msdn.microsoft.com/en-us/library/system.runtime.serialization.formatters.binary.binaryformatter.deserialize(VS.71).aspx
-            
+
+            //Create memory stream
+            MemoryStream s = new MemoryStream();
+
             //Copy hashtable to be serialized.
             Hashtable tosend = new Hashtable();
             tosend = table;
-            
+
             // Construct a BinaryFormatter and use it to serialize the data to the stream.
             BinaryFormatter formatter = new BinaryFormatter();
             try
             {
+                //serialize hashtable to stream
                 formatter.Serialize(s, tosend);
+
+                //declare byte array to store serialization in
+                byte[] byteArray = new byte[s.Length];
+
+                //set conditions to start at beginning of stream
+                int count = 0;
+                s.Seek(0, SeekOrigin.Begin);
+
+                //read from stream to byte array
+                while (count < s.Length)
+                {
+                    byteArray[count] = Convert.ToByte(s.ReadByte());
+                    count++;
+                }
+
+                return byteArray;
             }
             catch (Exception e)
             {
@@ -137,21 +158,26 @@ namespace Mammoth.Engine
         /// <summary>
         /// Deserializes a stream into a hashtable which can be used to get values sent across a network.
         /// </summary>
-        public static Hashtable Deserialize(Stream s)
+        /// <param name="serialized">a byte array of a serialized hashtable to be deserialized</param>
+        /// <returns>the hashtable obtained from the serialized data</returns>
+        public static Hashtable Deserialize(byte[] serialized)
         {
             //The below code was modified from
             //http://msdn.microsoft.com/en-us/library/system.runtime.serialization.formatters.binary.binaryformatter.deserialize(VS.71).aspx
 
             // Declare the hashtable reference.
             Hashtable recieved = null;
- 
+
             try
             {
-                BinaryFormatter formatter = new BinaryFormatter();
+                //load from byte array to stream
+                MemoryStream s = new MemoryStream(serialized);
 
                 // Deserialize the hashtable from the file and 
                 // assign the reference to the local variable.
+                BinaryFormatter formatter = new BinaryFormatter();
                 recieved = (Hashtable)formatter.Deserialize(s);
+
                 return recieved;
             }
             catch (Exception e)

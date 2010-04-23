@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace Mammoth.Engine
 {
-    class Driver : Encodable
+    class Driver
     {
         public String name;
         public int age;
@@ -17,7 +17,7 @@ namespace Mammoth.Engine
             name = aname; age = hisage; DUI = hasDUI;
         }
 
-        public void Encode(Stream tosend)
+        /*public void Encode(Stream tosend)
         {
             Encoder encode = new Encoder();
 
@@ -35,6 +35,6 @@ namespace Mammoth.Engine
             name = (string)received["name"];
             age = (int)received["age"];
             DUI = (bool)received["DUI"];
-        }
+        }*/
     }
 }

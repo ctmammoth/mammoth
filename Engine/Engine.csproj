@@ -6,7 +6,7 @@
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E80FCA0E-78EC-44C5-B375-894050EEE6CB}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mammoth.Engine</RootNamespace>
     <AssemblyName>Engine</AssemblyName>
@@ -68,7 +68,6 @@
     <Compile Include="Camera.cs" />
     <Compile Include="Networking\Car.cs" />
     <Compile Include="Networking\Driver.cs" />
-    <Compile Include="Networking\Encodable.cs" />
     <Compile Include="Networking\Encoder.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Networking\IEncodable.cs" />
