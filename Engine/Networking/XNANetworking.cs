@@ -92,7 +92,7 @@ namespace Mammoth.Engine
 
         public void sendThing(IEncodable toSend, string target)
         {
-            _toSend.Enqueue(new DataGram(toSend.encode(), target));
+            _toSend.Enqueue(new DataGram(toSend.Encode(), target));
         }
 
         public override void Update(GameTime gameTime)
@@ -167,7 +167,7 @@ namespace Mammoth.Engine
 
         public void sendThing(IEncodable toSend)
         {
-            _toSend.Enqueue(toSend.encode());
+            _toSend.Enqueue(toSend.Encode());
         }
 
         public override void Update(GameTime gameTime)
