@@ -21,7 +21,7 @@ namespace Mammoth.Engine
     public interface IServerNetworking : INetworkingService
     {
         void sendThing(IEncodable toSend, String target);
-        void createGame();
+        void createSession();
         void endGame();
     }
 

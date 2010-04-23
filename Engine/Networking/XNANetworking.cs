@@ -13,6 +13,8 @@ namespace Mammoth.Engine
     {
         #region Variables
 
+        public const int MAX_PLAYERS = 2;
+
         protected NetworkSession _session;
 
         #endregion
@@ -55,24 +57,37 @@ namespace Mammoth.Engine
         public XNAServerNetworking(Game game)
             : base(game)
         {
-            createGame();
+            createSession();
             _toSend = new Queue<DataGram>();
         }
 
         #region IServerNetworking Members
 
-        public void createGame()
+        public void createSession()
         {
-            _session = NetworkSession.Create(NetworkSessionType.SystemLink, 1, 2);
-            _session.AllowHostMigration = true;
-            _session.AllowJoinInProgress = true;
+            _session = NetworkSession.Create(NetworkSessionType.SystemLink, 1, MAX_PLAYERS);
+            _session.AllowHostMigration = false;
+            _session.AllowJoinInProgress = false;
+            _session.GamerJoined += new EventHandler<GamerJoinedEventArgs>(session_GamerJoined);
+            //_session.GamerLeft += new EventHandler<GamerLeftEventArgs>(session_GamerLeft);
+            //_session.GameStarted += new EventHandler<GameStartedEventArgs>(session_GameStarted);
+            //_session.GameEnded += new EventHandler<GameEndedEventArgs>(session_GameEnded);
+            //_session.SessionEnded +=new EventHandler<NetworkSessionEndedEventArgs>(session_SessionEnded);
             _server = _session.LocalGamers[0];
+        }
+
+        void session_GamerJoined(object sender, GamerJoinedEventArgs e)
+        {
+            
         }
 
         public void endGame()
         {
-            _session.EndGame();
-            _session.Update();
+            if (_session != null)
+            {
+                _session.EndGame();
+                _session.Update();
+            }
         }
 
         public void sendThing(IEncodable toSend, string target)
@@ -135,11 +150,13 @@ namespace Mammoth.Engine
         {
             AvailableNetworkSessionCollection availableSessions = 
                 NetworkSession.Find(NetworkSessionType.SystemLink, 1, null);
-            if (availableSessions.Count != 0)
-                _session = NetworkSession.Join(availableSessions[0]);
-            else
+            if (availableSessions.Count == 0)
                 Console.WriteLine("Unable to find game.");
-            _localGamer = _session.LocalGamers[0];
+            else
+            {
+                _session = NetworkSession.Join(availableSessions[0]);
+                _localGamer = _session.LocalGamers[0];
+            }
         }
 
         public void quitGame()
