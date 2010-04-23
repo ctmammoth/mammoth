@@ -20,6 +20,32 @@ namespace Mammoth.Engine
             table = new Hashtable();
         }
 
+        /// <summary>
+        /// Loads serialized data, and makes the objects accessible to Decode() methods in IEncodable objects.
+        /// </summary>
+        /// <param name="serialized">a byte array representing a serialized hashtable</param>
+        public Encoder(byte[] serialized)
+        {
+            //The below code was modified from
+            //http://msdn.microsoft.com/en-us/library/system.runtime.serialization.formatters.binary.binaryformatter.deserialize(VS.71).aspx
+            try
+            {
+                //load from byte array to stream
+                MemoryStream s = new MemoryStream(serialized);
+
+                // Deserialize the hashtable from the file and 
+                // assign the reference to the local variable.
+                BinaryFormatter formatter = new BinaryFormatter();
+
+                //set table to deserialized table
+                table = (Hashtable)formatter.Deserialize(s);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+                throw;
+            }
+        }
 
 
 
@@ -62,13 +88,44 @@ namespace Mammoth.Engine
         /// <param name="theobject">The property it self. May be any primitive or Encodable.</param>
         public void AddElement(string key, IEncodable theobject)
         {
-            table.Add(key, theobject);
+            table.Add(key, theobject.Encode());
         }
 
 
 
 
 
+
+
+
+
+
+
+
+
+        /// <summary>
+        /// Once a byte array has been deserialized, then elements can be accesed through their String key.
+        /// </summary>
+        /// <param name="key">a string that hashes to the parameter to access</param>
+        /// <returns>an object which must be type cast</returns>
+        public object GetElement(string key)
+        {
+            object hashed = table[key];
+            return hashed;
+        }
+
+
+
+        /// <summary>
+        /// Once a byte array has been deserialized, then IEncodable objects can be updated.
+        /// </summary>
+        /// <param name="key">a string that hashes to the parameter to access </param>
+        /// <param name="toupdate">the actual object to update</param>
+        public void UpdateIEncodable(string key, IEncodable toupdate)
+        {
+            byte[] hashed = (byte[])table[key];
+            toupdate.Decode(hashed);
+        }
 
 
 
@@ -155,36 +212,5 @@ namespace Mammoth.Engine
 
 
 
-        /// <summary>
-        /// Deserializes a stream into a hashtable which can be used to get values sent across a network.
-        /// </summary>
-        /// <param name="serialized">a byte array of a serialized hashtable to be deserialized</param>
-        /// <returns>the hashtable obtained from the serialized data</returns>
-        public static Hashtable Deserialize(byte[] serialized)
-        {
-            //The below code was modified from
-            //http://msdn.microsoft.com/en-us/library/system.runtime.serialization.formatters.binary.binaryformatter.deserialize(VS.71).aspx
-
-            // Declare the hashtable reference.
-            Hashtable recieved = null;
-
-            try
-            {
-                //load from byte array to stream
-                MemoryStream s = new MemoryStream(serialized);
-
-                // Deserialize the hashtable from the file and 
-                // assign the reference to the local variable.
-                BinaryFormatter formatter = new BinaryFormatter();
-                recieved = (Hashtable)formatter.Deserialize(s);
-
-                return recieved;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
-                throw;
-            }
-        }
     }
 }

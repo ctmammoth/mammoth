@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace Mammoth.Engine
 {
-    class Driver
+    class Driver : IEncodable
     {
         public String name;
         public int age;
@@ -17,7 +17,7 @@ namespace Mammoth.Engine
             name = aname; age = hisage; DUI = hasDUI;
         }
 
-        /*public void Encode(Stream tosend)
+        public byte[] Encode()
         {
             Encoder encode = new Encoder();
 
@@ -25,16 +25,23 @@ namespace Mammoth.Engine
             encode.AddElement("age", age);
             encode.AddElement("DUI", DUI);
 
-            encode.Serialize(tosend);
+            return encode.Serialize();
         }
 
-        public void Decode(Stream serialized)
+        public void Decode(byte[] serialized)
         {
-            Hashtable received = Encoder.Deserialize(serialized);
+            Encoder e = new Encoder(serialized);
 
-            name = (string)received["name"];
-            age = (int)received["age"];
-            DUI = (bool)received["DUI"];
-        }*/
+            name = (string)e.GetElement("name");
+            age = (int)e.GetElement("age");
+            DUI = (bool)e.GetElement("DUI");
+        }
+
+        public void Print()
+        {
+            Console.WriteLine("Name: " + name);
+            Console.WriteLine("Age: " + age);
+            Console.WriteLine("DUI: " + DUI);
+        }
     }
 }

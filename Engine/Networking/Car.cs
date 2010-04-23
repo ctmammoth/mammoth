@@ -11,13 +11,18 @@ namespace Mammoth.Engine
         public int max_speed;
         public int min_speed;
         public string color;
-        //public Driver driver;
+        public Driver driver;
 
-        //public Car(int maxspeed, int minspeed, string thecolor, Driver driveme)
+        public Car(int maxspeed, int minspeed, string thecolor, Driver driveme)
+        //public Car(int maxspeed, int minspeed, string thecolor)
+        {
+            max_speed = maxspeed; min_speed = minspeed; color = thecolor; driver = driveme;
+            //max_speed = maxspeed; min_speed = minspeed; color = thecolor;
+        }
+
         public Car(int maxspeed, int minspeed, string thecolor)
         {
-            //max_speed = maxspeed; min_speed = minspeed; color = thecolor; driver = driveme;
-            max_speed = maxspeed; min_speed = minspeed; color = thecolor;
+            max_speed = maxspeed; min_speed = minspeed; color = thecolor; driver = null;
         }
 
         public byte[] Encode()
@@ -29,17 +34,19 @@ namespace Mammoth.Engine
             thecode.AddElement("max_speed", max_speed);
             thecode.AddElement("min_speed", min_speed);
             thecode.AddElement("color", color);
+            thecode.AddElement("driver", driver);
 
             return thecode.Serialize();
         }
 
         public void Decode(byte[] serialized)
         {
-            Hashtable received = Encoder.Deserialize(serialized);
+            Encoder e = new Encoder(serialized);
 
-            max_speed = (int)received["max_speed"];
-            min_speed = (int)received["min_speed"];
-            color = (string)received["color"];
+            max_speed = (int)e.GetElement("max_speed");
+            min_speed = (int)e.GetElement("min_speed");
+            color = (string)e.GetElement("color");
+            e.UpdateIEncodable("driver", driver);
         }
 
         public void Print()
@@ -47,6 +54,7 @@ namespace Mammoth.Engine
             Console.WriteLine("Max_speed: " + max_speed);
             Console.WriteLine("Min_speed: " + min_speed);
             Console.WriteLine("Color: " + color);
+            driver.Print();
         }
     }
 }
