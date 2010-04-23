@@ -5,6 +5,8 @@ using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
+using Microsoft.Xna.Framework;
+
 namespace Mammoth.Engine
 {
     class Test
@@ -35,6 +37,22 @@ namespace Mammoth.Engine
 
             //Keep console open for testing.
             Console.Read();
+        }
+
+        static void TestServer()
+        {
+            IServerNetworking server = new XNAServerNetworking(Mammoth.Engine.Engine.Instance);
+            while (true)
+            {
+                server.Update(null);
+            }
+        }
+
+        static void TestClient()
+        {
+            IClientNetworking client = new XNAClientNetworking(Mammoth.Engine.Engine.Instance);
+            Car volvo = new Car(100, 10, "Red");
+            client.sendThing(volvo);
         }
     }
 }

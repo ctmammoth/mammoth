@@ -109,6 +109,7 @@ namespace Mammoth.Engine
                 _server.ReceiveData(reader, out sender);
                 if (!sender.IsLocal)
                 {
+                    Console.WriteLine("Read something");
                     Console.WriteLine(reader.ReadBytes(reader.Length));
                 }
             }

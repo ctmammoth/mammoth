@@ -16,6 +16,7 @@ namespace Mammoth.Engine
         bool isLANCapable();
         bool isNetCapable();
         Networking.NetworkingType getType();
+        void Update(GameTime gameTime);
     }
 
     public interface IServerNetworking : INetworkingService
