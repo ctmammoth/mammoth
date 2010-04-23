@@ -7,7 +7,7 @@ namespace Mammoth.Engine
 {
     public interface IEncodable
     {
-        byte[] encode();
-        void decode(byte[] data);
+        byte[] Encode();
+        void Decode(byte[] serialized);
     }
 }

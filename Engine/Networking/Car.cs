@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Mammoth.Engine
 {
-    class Car : Encodable
+    class Car : IEncodable
     {
         public int max_speed;
         public int min_speed;
@@ -20,7 +20,7 @@ namespace Mammoth.Engine
             max_speed = maxspeed; min_speed = minspeed; color = thecolor;
         }
 
-        public void Encode(Stream tosend)
+        public byte[] Encode()
         {
             //create new encoder
             Encoder thecode = new Encoder();
@@ -30,10 +30,10 @@ namespace Mammoth.Engine
             thecode.AddElement("min_speed", min_speed);
             thecode.AddElement("color", color);
 
-            thecode.Serialize(tosend);
+            return thecode.Serialize();
         }
 
-        public void Decode(Stream serialized)
+        public void Decode(byte[] serialized)
         {
             Hashtable received = Encoder.Deserialize(serialized);
 
