@@ -129,8 +129,11 @@ namespace Mammoth.Engine
         /// <param name="toupdate">the actual object to update</param>
         public void UpdateIEncodable(string key, IEncodable toupdate)
         {
-            byte[] hashed = (byte[])table[key];
-            toupdate.Decode(hashed);
+            if (toupdate != null)
+            {
+                byte[] hashed = (byte[])table[key];
+                toupdate.Decode(hashed);
+            }
         }
 
 
