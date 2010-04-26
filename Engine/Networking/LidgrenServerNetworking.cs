@@ -14,12 +14,14 @@ namespace Mammoth.Engine.Networking
         private NetServer _server;
         private Dictionary<int, NetConnection> _connections;
         private Queue<DataGram> _toSend;
+        private List<byte[]> _data;
 
         public LidgrenServerNetworking(Game game)
             : base(game)
         {
             _toSend = new Queue<DataGram>();
             _connections = new Dictionary<int, NetConnection>();
+            _data = new List<byte[]>();
             createSession();
         }
 
@@ -72,9 +74,15 @@ namespace Mammoth.Engine.Networking
                         Console.WriteLine("Data recieved from " + sender);
                         byte[] data = buffer.ReadBytes(buffer.LengthBytes);
                         Console.WriteLine(data);
+                        _data.Add(data);
                         break;
                 }
             }
+        }
+
+        public List<byte[]> getData()
+        {
+            return _data;
         }
 
         public void createSession()

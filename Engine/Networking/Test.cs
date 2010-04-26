@@ -47,11 +47,17 @@ namespace Mammoth.Engine.Networking
 
         static void TestServer()
         {
-            IServerNetworking server = new LidgrenServerNetworking(Mammoth.Engine.Engine.Instance);
-            while (true)
+            LidgrenServerNetworking server = new LidgrenServerNetworking(Mammoth.Engine.Engine.Instance);
+            while (server.getData().Count != 0)
             {
                 server.Update(null);
             }
+            Car car = new Car(-4, -6, "blah");
+            Console.WriteLine("Old car: ");
+            car.Print();
+            car.Decode(server.getData().ToArray()[0]);
+            Console.WriteLine("New car: ");
+            car.Print();
         }
 
         static void TestClient()
