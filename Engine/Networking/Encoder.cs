@@ -61,10 +61,13 @@ namespace Mammoth.Engine
         /// Adds a property to be encoded. Cannot take anything that is not a primitive or doesn't implement Encodable.
         /// </summary>
         /// <param name="key">A string representing the name of the property being encoded.</param>
-        /// <param name="theobject">The property it self. May be any primitive or Encodable.</param>
+        /// <param name="theobject">The property it self. May be any primitive or Encodable. Will be ignored if property is null.</param>
         public void AddElement(string key, object theobject)
         {
-            table.Add(key, theobject);
+            if (theobject != null)
+            {
+                table.Add(key, theobject);
+            }
         }
 
 
@@ -85,10 +88,13 @@ namespace Mammoth.Engine
         /// Adds a property to be encoded. Cannot take anything that is not a primitive or doesn't implement Encodable.
         /// </summary>
         /// <param name="key">A string representing the name of the property being encoded.</param>
-        /// <param name="theobject">The property it self. May be any primitive or Encodable.</param>
+        /// <param name="theobject">The property it self. May be any primitive or Encodable. Will be ignored if property is null.</param>
         public void AddElement(string key, IEncodable theobject)
         {
-            table.Add(key, theobject.Encode());
+            if (theobject != null)
+            {
+                table.Add(key, theobject.Encode());
+            }
         }
 
 

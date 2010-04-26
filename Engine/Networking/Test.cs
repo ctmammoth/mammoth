@@ -14,7 +14,7 @@ namespace Mammoth.Engine.Networking
         static void Main()
         {
 
-            //////CAR TEST
+            /*////CAR TEST
             //Driver ben = new Driver("Ben", 20, false);
             //Driver dave = new Driver("Dave", 100, true);
             //Car volvo = new Car(100, 10, "Red", ben);
@@ -35,12 +35,14 @@ namespace Mammoth.Engine.Networking
             //volvo.Decode(carArray);
 
             //Console.WriteLine("Restored car: ");
-            //volvo.Print();
+            volvo.Print();*
 
 
             //////Keep console open for testing.
             //Console.Read();
             TestServer();
+             */
+            TestClient();
         }
 
         static void TestServer()
@@ -55,6 +57,7 @@ namespace Mammoth.Engine.Networking
         static void TestClient()
         {
             IClientNetworking client = new LidgrenClientNetworking(Mammoth.Engine.Engine.Instance);
+            Driver ben = new Driver("Ben", 20, false);
             Car volvo = new Car(100, 10, "Red");
             client.sendThing(volvo);
         }
