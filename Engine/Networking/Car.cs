@@ -22,7 +22,7 @@ namespace Mammoth.Engine
 
         public Car(int maxspeed, int minspeed, string thecolor)
         {
-            max_speed = maxspeed; min_speed = minspeed; color = thecolor; driver = null;
+            max_speed = maxspeed; min_speed = minspeed; color = thecolor; driver = new Driver("", 0, 0);
         }
 
         public byte[] Encode()
