@@ -26,6 +26,7 @@ namespace Mammoth.Engine.Networking
 
         public void sendThing(IEncodable toSend)
         {
+            Console.WriteLine("Sending thing");
             _toSend.Enqueue(toSend.Encode());
         }
 
@@ -36,6 +37,7 @@ namespace Mammoth.Engine.Networking
             NetBuffer buffer;
             while (_toSend.Count != 0)
             {
+                Console.WriteLine("Really sending thing");
                 buffer = _client.CreateBuffer();
                 buffer.Write(_toSend.Dequeue());
                 _client.SendMessage(buffer, NetChannel.Unreliable);
@@ -52,6 +54,7 @@ namespace Mammoth.Engine.Networking
                 switch (type)
                 {
                     case NetMessageType.ServerDiscovered:
+                        Console.WriteLine("Discovered network");
                         NetBuffer buf = _client.CreateBuffer();
                         buf.Write(Engine.Instance.LocalPlayer.ID);
                         _client.Connect(buffer.ReadIPEndPoint(), buf.ToArray());

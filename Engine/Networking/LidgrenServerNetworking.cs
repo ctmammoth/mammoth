@@ -34,6 +34,8 @@ namespace Mammoth.Engine.Networking
         {
             base.Update(gameTime);
 
+            //Console.WriteLine("Updating server");
+
             NetBuffer buffer;
 
             while (_toSend.Count != 0)
@@ -67,6 +69,7 @@ namespace Mammoth.Engine.Networking
                         break;
                     case NetMessageType.Data:
                         // A client sent this data!
+                        Console.WriteLine("Data recieved from " + sender);
                         string msg = buffer.ReadString();
 
                         // send to everyone, including sender
