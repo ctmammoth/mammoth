@@ -67,9 +67,11 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="PhysicsManagerService.cs" />
     <Compile Include="IRenderable.cs" />
     <Compile Include="IRenderService.cs" />
     <Compile Include="LocalPlayer.cs" />
+    <Compile Include="PhysicalObject.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="StaticObject.cs" />
