@@ -58,7 +58,8 @@ namespace Mammoth.Engine
             Console.WriteLine("Max_speed: " + max_speed);
             Console.WriteLine("Min_speed: " + min_speed);
             Console.WriteLine("Color: " + color);
-            driver.Print();
+            if(driver != null)
+                driver.Print();
         }
     }
 }

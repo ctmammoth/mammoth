@@ -42,13 +42,13 @@ namespace Mammoth.Engine.Networking
             //Console.Read();
             TestServer();
              */
-            TestClient();
+            TestServer();
         }
 
         static void TestServer()
         {
             LidgrenServerNetworking server = new LidgrenServerNetworking(Mammoth.Engine.Engine.Instance);
-            while (server.getData().Count != 0)
+            while (server.getData().Count == 0)
             {
                 server.Update(null);
             }
