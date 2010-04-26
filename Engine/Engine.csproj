@@ -12,7 +12,7 @@
     <AssemblyName>Engine</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <StartupObject>Mammoth.Engine.Test</StartupObject>
+    <StartupObject>Mammoth.Engine.Networking.Test</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,6 +48,14 @@
   </Target>
   -->
   <ItemGroup>
+    <Reference Include="Lidgren.Network, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Assemblies\Lidgren.Network.dll</HintPath>
+    </Reference>
+    <Reference Include="Lidgren.Network.Xna, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Assemblies\Lidgren.Network.Xna.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86" />
     <Reference Include="StillDesign.PhysX.Net, Version=0.12.0.0, Culture=neutral, processorArchitecture=x86">
@@ -72,11 +80,19 @@
     <Compile Include="Networking\IEncodable.cs" />
     <Compile Include="IRenderable.cs" />
     <Compile Include="LocalPlayer.cs" />
+    <Compile Include="Networking\LidgrenClientNetworking.cs" />
+    <Compile Include="Networking\LidgrenNetworking.cs" />
+    <Compile Include="Networking\LidgrenServerNetworking.cs" />
     <Compile Include="Networking\Networking.cs" />
+    <Compile Include="Networking\XNANetworking.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Player.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="StaticObject.cs" />
     <Compile Include="Networking\Test.cs" />
-    <Compile Include="Networking\XNANetworking.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 </Project>
