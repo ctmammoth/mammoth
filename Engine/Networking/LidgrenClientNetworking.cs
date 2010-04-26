@@ -49,8 +49,9 @@ namespace Mammoth.Engine.Networking
             _client.DiscoverLocalServers(PORT);
             NetBuffer buffer = _client.CreateBuffer();
             NetMessageType type;
-            while (_client.ReadMessage(buffer, out type))
+            while (true)
             {
+                _client.ReadMessage(buffer, out type);
                 switch (type)
                 {
                     case NetMessageType.ServerDiscovered:
