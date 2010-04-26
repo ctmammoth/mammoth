@@ -59,7 +59,9 @@ namespace Mammoth.Engine.Networking
             IClientNetworking client = new LidgrenClientNetworking(Mammoth.Engine.Engine.Instance);
             Driver ben = new Driver("Ben", 20, false);
             Car volvo = new Car(100, 10, "Red");
+            client.joinGame();
             client.sendThing(volvo);
+            client.Update(null);
         }
     }
 }

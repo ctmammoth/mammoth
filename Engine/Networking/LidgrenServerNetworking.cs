@@ -70,14 +70,8 @@ namespace Mammoth.Engine.Networking
                     case NetMessageType.Data:
                         // A client sent this data!
                         Console.WriteLine("Data recieved from " + sender);
-                        string msg = buffer.ReadString();
-
-                        // send to everyone, including sender
-                        NetBuffer sendBuffer = _server.CreateBuffer();
-                        sendBuffer.Write(sender.RemoteEndpoint.ToString() + " wrote: " + msg);
-
-                        // send using ReliableInOrder
-                        _server.SendToAll(sendBuffer, NetChannel.ReliableInOrder1);
+                        byte[] data = buffer.ReadBytes(buffer.LengthBytes);
+                        Console.WriteLine(data);
                         break;
                 }
             }

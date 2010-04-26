@@ -57,8 +57,11 @@ namespace Mammoth.Engine.Networking
                     case NetMessageType.ServerDiscovered:
                         Console.WriteLine("Discovered network");
                         NetBuffer buf = _client.CreateBuffer();
-                        buf.Write(Engine.Instance.LocalPlayer.ID);
+                        //buf.Write(Engine.Instance.LocalPlayer.ID);
+                        buf.Write(42);
                         _client.Connect(buffer.ReadIPEndPoint(), buf.ToArray());
+                        while (_client.Status != NetConnectionStatus.Connected) ;
+                        Console.WriteLine("Connected to server");
                         return;
                 }
             }
