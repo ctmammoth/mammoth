@@ -41,11 +41,15 @@ namespace Mammoth.Engine
 
         public void Decode(byte[] serialized)
         {
+            //create new decoder with overloaded constructor of Encoder
             Encoder e = new Encoder(serialized);
 
+            //get primitives outs
             max_speed = (int)e.GetElement("max_speed");
             min_speed = (int)e.GetElement("min_speed");
             color = (string)e.GetElement("color");
+
+            //update IEncodables
             e.UpdateIEncodable("driver", driver);
         }
 
