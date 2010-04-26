@@ -63,10 +63,6 @@ namespace Mammoth.Engine
             // Get an instance of the game window to calculate new values.
             GameWindow window = this.Game.Window;
 
-            // TODO: At some point, we need to set up the use of a settings/options file, and read controls from there.
-            // We get the current state of the keyboard...
-            KeyboardState states = Keyboard.GetState();
-
             // Get the mouse's offset from the previous position (window center).
             Vector2 mousePosition = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
             Vector2 mouseCenter = new Vector2(window.ClientBounds.Width / 2, window.ClientBounds.Height / 2);
@@ -89,7 +85,7 @@ namespace Mammoth.Engine
             this.HeadOrient = Quaternion.CreateFromYawPitchRoll(this.Yaw, this.Pitch, 0);
             
             // Set the base movement speed.
-            const float baseSpeed = 4.0f;
+            const float baseSpeed = 6.0f;
 
             // Calculate the speed at which we travel based on speed and elapsed time.
             float speed = baseSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;  // dx = v*t
@@ -97,7 +93,7 @@ namespace Mammoth.Engine
             // Yay, we can run now!
             if (InCollisionState(ControllerCollisionFlag.Down))
             {
-                if (states.IsKeyDown(Keys.LeftShift))
+                if (Input.IsKeyDown(Input.EvKeys.KEY_SPRINT))
                     speed *= 1.5f;
             }
             //else
@@ -113,16 +109,16 @@ namespace Mammoth.Engine
             // We only want to take key-presses into account when the player is on the ground.
             //if (InCollisionState(ControllerCollisionFlag.Down))
             //{
-                if (states.IsKeyDown(Keys.W)) // Forwards?
+                if (Input.IsKeyDown(Input.EvKeys.KEY_FORWARD)) // Forwards?
                     motion += Vector3.Forward;
 
-                if (states.IsKeyDown(Keys.S)) // Backwards?
+                if (Input.IsKeyDown(Input.EvKeys.KEY_BACKWARD)) // Backwards?
                     motion += Vector3.Backward;
 
-                if (states.IsKeyDown(Keys.A)) // Left?
+                if (Input.IsKeyDown(Input.EvKeys.KEY_LEFT)) // Left?
                     motion += Vector3.Left;
 
-                if (states.IsKeyDown(Keys.D)) // Right?
+                if (Input.IsKeyDown(Input.EvKeys.KEY_RIGHT)) // Right?
                     motion += Vector3.Right;
             //}
 
@@ -135,11 +131,11 @@ namespace Mammoth.Engine
             this.Velocity += motion;
 
             // If the player presses space (and is on the ground), jump!
-            if (InCollisionState(ControllerCollisionFlag.Down) && states.IsKeyDown(Keys.Space))
+            if (InCollisionState(ControllerCollisionFlag.Down))
+                if(Input.IsKeyDown(Input.EvKeys.KEY_JUMP))
                 this.Velocity += Vector3.Up / 4.0f;
 
             // Move the player's controller based on its velocity.
-            ControllerCollisionFlag prevCollState = this.CurrentCollision;
             this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
             
             // Now, we need to reset parts of the velocity so that we're not compounding it.
@@ -159,29 +155,33 @@ namespace Mammoth.Engine
         /// <returns>Whether or not the player is colliding on that "side".</returns>
         private bool InCollisionState(ControllerCollisionFlag flag)
         {
-            return ((byte) this.CurrentCollision & (byte) flag) == (byte) flag;
+            return (this.CurrentCollision & flag) == flag;
         }
 
         /// <summary>
         /// This warps the cursor to the center of the game window.  This is important, as without it, the player's
-        /// mouse would hit the side of the screen and they wouldn't be able to turn any further.
+        /// mouse would hit the side of the screen and they wouldn't be able to turn any further.  Also, using this
+        /// method, the distance moved by the mouse in each update loop is just the distance from the center of the
+        /// window to the mouse location.
         /// </summary>
         public void CenterCursor()
         {
             GameWindow window = this.Game.Window;
-            
-            Mouse.SetPosition(window.ClientBounds.Width / 2, window.ClientBounds.Height / 2);
+
+            if(ClientState.Instance.CurrentState == ClientState.State.InGame)
+                Mouse.SetPosition(window.ClientBounds.Width / 2, window.ClientBounds.Height / 2);
         }
 
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
 
-            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
-            Camera cam = (Camera) this.Game.Services.GetService(typeof(ICameraService));
+            IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
+            ICameraService cam = (ICameraService)this.Game.Services.GetService(typeof(ICameraService));
 
-            if(cam.Type != Camera.CameraType.FIRST_PERSON)
-                r.DrawObject(this);
+            // If you're using the first-person camera, don't draw your own geometry.
+            if (cam.Type != Camera.CameraType.FIRST_PERSON)
+                r.DrawRenderable(this);
         }
 
         #region Properties

@@ -11,13 +11,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Mammoth.Engine.Interface;
+
 namespace Mammoth.Engine
 {
     public class Engine : Microsoft.Xna.Framework.Game
     {
-        #region Variables
+        #region Fields
 
-        private static Engine _instance = null;
+        private Texture2D _text;
 
         #endregion
 
@@ -31,7 +33,6 @@ namespace Mammoth.Engine
         #region XNA-Game
 
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -45,6 +46,7 @@ namespace Mammoth.Engine
 
             // TODO: Design and implement the PhysX interactions.
             // Let's create the PhysX stuff here.  This needs to be changed though.
+            #region PhysX Code
             this.Core = new Core(new CoreDescription(), new ConsoleOutputStream());
 
         #if PHYSX_DEBUG
@@ -87,6 +89,12 @@ namespace Mammoth.Engine
             this.Core.Foundation.RemoteDebugger.Connect("localhost");
         #endif
 
+            #endregion
+
+            // TODO: At some point, settings should be done in a better way than this.
+            // Load the input settings.
+            Input.LoadSettings();
+
             // Create the renderer, and register it as a service.
             Renderer r = new Renderer(this);
             this.Services.AddService(typeof(IRenderService), r);
@@ -97,10 +105,11 @@ namespace Mammoth.Engine
             this.Components.Add(this.LocalPlayer);
 
             // Create the camera next, and have it update after the player.
-            Camera cam = new FirstPersonCamera(this, this.LocalPlayer);
-            cam.UpdateOrder = 2;
+            Camera cam = new FirstPersonCamera(this, this.LocalPlayer)
+            {
+                UpdateOrder = 2
+            };
             this.Components.Add(cam);
-            this.Services.AddService(typeof(ICameraService), cam);
 
             base.Initialize();
         }
@@ -111,13 +120,14 @@ namespace Mammoth.Engine
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
             // TODO: use this.Content to load your game content here
 
             // Let's create a soldier so we can see something.
             this.Components.Add(new SoldierObject(this));
+
+            Renderer r = (Renderer)this.Services.GetService(typeof(IRenderService));
+            SpriteFont calibri = r.LoadFont("calibri");
+            _text = r.RenderFont("ABC", Vector2.Zero, Color.Maroon, Color.TransparentBlack);
         }
 
         /// <summary>
@@ -166,14 +176,19 @@ namespace Mammoth.Engine
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here.
+            Renderer r = (Renderer)this.Services.GetService(typeof(IRenderService));
 
         #if PHYSX_DEBUG
-            Renderer r = (Renderer)this.Services.GetService(typeof(IRenderService));
             r.DrawPhysXDebug(this.Scene);
         #endif
 
             // Draw all of the objects in the scene.
             base.Draw(gameTime);
+
+            // Test drawing a rectangle.
+            //r.DrawFilledRectangle(new Rectangle(100, 100, 50, 50), Color.DarkMagenta);
+            // Test drawing some text.
+            //r.DrawTexturedRectangle(new Rectangle(110, 110, _text.Width, _text.Height), _text);
         }
 
         #endregion

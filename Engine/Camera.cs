@@ -34,7 +34,7 @@ namespace Mammoth.Engine
     public abstract class Camera : GameComponent, ICameraService
     {
 
-        #region Variables
+        #region Fields
 
         public enum CameraType
         {
@@ -48,6 +48,8 @@ namespace Mammoth.Engine
         public Camera(Game game, Player target) : base(game)
         {
             this.Target = target;
+
+            this.Game.Services.AddService(typeof(ICameraService), this);
         }
 
         public abstract override void Update(GameTime gameTime);
@@ -104,7 +106,7 @@ namespace Mammoth.Engine
 
     public class FirstPersonCamera : Camera
     {
-        #region Variables
+        #region Fields
 
         private CameraType _type;
 
@@ -139,7 +141,7 @@ namespace Mammoth.Engine
 
     public class ThirdPersonCamera : Camera
     {
-        #region Variables
+        #region Fields
 
         private CameraType _type;
 

@@ -5,6 +5,7 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
 namespace Mammoth.Engine
 {
@@ -23,7 +24,7 @@ namespace Mammoth.Engine
 
             Renderer r = (Renderer) this.Game.Services.GetService(typeof(IRenderService));
 
-            r.DrawObject(this);
+            r.DrawRenderable(this);
         }
 
         #region Properties

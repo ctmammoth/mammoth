@@ -66,12 +66,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
+    <Compile Include="ClientState.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Input\Input.cs" />
+    <Compile Include="Interface\ExtensionMethods.cs" />
+    <Compile Include="Interface\TButton.cs" />
+    <Compile Include="Interface\TScreen.cs" />
+    <Compile Include="Interface\TScreenManager.cs" />
+    <Compile Include="Interface\TSimpleButton.cs" />
+    <Compile Include="Interface\TText.cs" />
     <Compile Include="IRenderable.cs" />
     <Compile Include="IRenderService.cs" />
     <Compile Include="LocalPlayer.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="StaticObject.cs" />
+    <Compile Include="Interface\TWidget.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Interface\Interface.cd" />
   </ItemGroup>
 </Project>
