@@ -11,8 +11,10 @@ namespace Mammoth.Engine.Networking
 {
     class Test
     {
+        static Engine _engine = null;
         static void Main()
         {
+            _engine = new Engine();
 
             /*////CAR TEST
             //Driver ben = new Driver("Ben", 20, false);
@@ -47,7 +49,7 @@ namespace Mammoth.Engine.Networking
 
         static void TestServer()
         {
-            LidgrenServerNetworking server = new LidgrenServerNetworking(Mammoth.Engine.Engine.Instance);
+            LidgrenServerNetworking server = new LidgrenServerNetworking(_engine);
             while (server.getData().Count == 0)
             {
                 server.Update(null);
@@ -62,7 +64,7 @@ namespace Mammoth.Engine.Networking
 
         static void TestClient()
         {
-            IClientNetworking client = new LidgrenClientNetworking(Mammoth.Engine.Engine.Instance);
+            IClientNetworking client = new LidgrenClientNetworking(_engine);
             Driver ben = new Driver("Ben", 20, false);
             Car volvo = new Car(100, 10, "Red", ben);
             client.joinGame();

@@ -79,7 +79,9 @@ namespace Mammoth.Engine.Networking
                     case NetMessageType.ServerDiscovered:
                         Console.WriteLine("Discovered network");
                         NetBuffer buf = _client.CreateBuffer();
-                        buf.Write(Engine.Instance.LocalPlayer.ID);
+
+                        // TODO: HACK: Change this so that it actually writes the player's ID.
+                        buf.Write(42);
                         _client.Connect(buffer.ReadIPEndPoint(), buf.ToArray());
                         while (_client.Status != NetConnectionStatus.Connected) ;
                         Console.WriteLine("Connected to server");
