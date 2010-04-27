@@ -23,7 +23,8 @@ namespace Mammoth.Engine
 
         private ClientState()
         {
-            _currentState = State.MainMenu;
+            // TODO: Change this.
+            _currentState = State.InGame;
         }
 
         static ClientState()

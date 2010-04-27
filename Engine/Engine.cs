@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Mammoth.Engine.Input;
 using Mammoth.Engine.Interface;
 
 namespace Mammoth.Engine
@@ -91,23 +92,21 @@ namespace Mammoth.Engine
 
             #endregion
 
-            // TODO: At some point, settings should be done in a better way than this.
-            // Load the input settings.
-            Input.LoadSettings();
-
             // Create the renderer, and register it as a service.
             Renderer r = new Renderer(this);
             this.Services.AddService(typeof(IRenderService), r);
 
-            // Create the local player, and have it update first.
+            this.Components.Add(new LocalInput(this));
+
+            // Create the local player, and have it update after all important components.
             this.LocalPlayer = new LocalPlayer(this);
-            this.LocalPlayer.UpdateOrder = 1;
+            this.LocalPlayer.UpdateOrder = 2;
             this.Components.Add(this.LocalPlayer);
 
             // Create the camera next, and have it update after the player.
             Camera cam = new FirstPersonCamera(this, this.LocalPlayer)
             {
-                UpdateOrder = 2
+                UpdateOrder = 3
             };
             this.Components.Add(cam);
 

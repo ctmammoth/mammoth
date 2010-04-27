@@ -68,7 +68,9 @@
     <Compile Include="Camera.cs" />
     <Compile Include="ClientState.cs" />
     <Compile Include="Engine.cs" />
-    <Compile Include="Input\Input.cs" />
+    <Compile Include="Input\IInputService.cs" />
+    <Compile Include="Input\InputState.cs" />
+    <Compile Include="Input\LocalInput.cs" />
     <Compile Include="Interface\ExtensionMethods.cs" />
     <Compile Include="Interface\TButton.cs" />
     <Compile Include="Interface\TScreen.cs" />

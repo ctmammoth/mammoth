@@ -8,6 +8,8 @@ using StillDesign.PhysX;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
+using Mammoth.Engine.Input;
+
 namespace Mammoth.Engine
 {
     public class LocalPlayer : Player
@@ -90,10 +92,14 @@ namespace Mammoth.Engine
             // Calculate the speed at which we travel based on speed and elapsed time.
             float speed = baseSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;  // dx = v*t
 
+            // Get the current input state.
+            IInputService inputService = (IInputService) this.Game.Services.GetService(typeof(IInputService));
+            InputState input = inputService.State;
+
             // Yay, we can run now!
             if (InCollisionState(ControllerCollisionFlag.Down))
             {
-                if (Input.IsKeyDown(Input.EvKeys.KEY_SPRINT))
+                if (input.IsKeyDown(InputType.Sprint))
                     speed *= 1.5f;
             }
             //else
@@ -109,16 +115,16 @@ namespace Mammoth.Engine
             // We only want to take key-presses into account when the player is on the ground.
             //if (InCollisionState(ControllerCollisionFlag.Down))
             //{
-                if (Input.IsKeyDown(Input.EvKeys.KEY_FORWARD)) // Forwards?
+                if (input.IsKeyDown(InputType.Forward)) // Forwards?
                     motion += Vector3.Forward;
 
-                if (Input.IsKeyDown(Input.EvKeys.KEY_BACKWARD)) // Backwards?
+                if (input.IsKeyDown(InputType.Backward)) // Backwards?
                     motion += Vector3.Backward;
 
-                if (Input.IsKeyDown(Input.EvKeys.KEY_LEFT)) // Left?
+                if (input.IsKeyDown(InputType.Left)) // Left?
                     motion += Vector3.Left;
 
-                if (Input.IsKeyDown(Input.EvKeys.KEY_RIGHT)) // Right?
+                if (input.IsKeyDown(InputType.Right)) // Right?
                     motion += Vector3.Right;
             //}
 
@@ -132,7 +138,7 @@ namespace Mammoth.Engine
 
             // If the player presses space (and is on the ground), jump!
             if (InCollisionState(ControllerCollisionFlag.Down))
-                if(Input.IsKeyDown(Input.EvKeys.KEY_JUMP))
+                if(input.IsKeyDown(InputType.Jump))
                 this.Velocity += Vector3.Up / 4.0f;
 
             // Move the player's controller based on its velocity.
