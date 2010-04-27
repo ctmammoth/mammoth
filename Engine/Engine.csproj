@@ -69,6 +69,7 @@
     <Compile Include="ClientState.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Input\IInputService.cs" />
+    <Compile Include="PhysicsManagerService.cs" />
     <Compile Include="Input\InputState.cs" />
     <Compile Include="Input\LocalInput.cs" />
     <Compile Include="Interface\ExtensionMethods.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="IRenderable.cs" />
     <Compile Include="IRenderService.cs" />
     <Compile Include="LocalPlayer.cs" />
+    <Compile Include="PhysicalObject.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="StaticObject.cs" />
