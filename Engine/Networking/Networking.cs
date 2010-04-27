@@ -21,6 +21,7 @@ namespace Mammoth.Engine.Networking
     public interface IServerNetworking : INetworkingService
     {
         void sendThing(IEncodable toSend, int target);
+        Queue<InputStateUpdate> getInputStateQueue(int playerID);
         void createSession();
         void endGame();
     }
@@ -30,6 +31,34 @@ namespace Mammoth.Engine.Networking
         void sendThing(IEncodable toSend);
         void joinGame();
         void quitGame();
+    }
+
+    public class InputStateUpdate
+    {
+        public uint _bitmask;
+        public double _elapsedTime;
+
+        public InputStateUpdate(uint bitmask, double elapsedTime)
+        {
+            _bitmask = bitmask;
+            _elapsedTime = elapsedTime;
+        }
+
+        public uint Bitmask
+        {
+            get
+            {
+                return _bitmask;
+            }
+        }
+
+        public double ElapsedTime
+        {
+            get
+            {
+                return _elapsedTime;
+            }
+        }
     }
 
     /**

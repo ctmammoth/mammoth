@@ -58,8 +58,7 @@ namespace Mammoth.Engine.Networking
                         //Console.WriteLine("New status for " + sender + ": " + newStatus + " (" + statusMessage + ")");
                         break;
                     case NetMessageType.Data:
-                        // A client sent this data!
-                        Console.WriteLine("Data recieved");
+                        Console.WriteLine("Data received");
                         byte[] data = buffer.ReadBytes(buffer.LengthBytes);
                         Console.WriteLine(data);
                         break;

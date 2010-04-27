@@ -84,13 +84,13 @@
     <Compile Include="Networking\LidgrenNetworking.cs" />
     <Compile Include="Networking\LidgrenServerNetworking.cs" />
     <Compile Include="Networking\Networking.cs" />
-    <Compile Include="Networking\XNANetworking.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Player.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="StaticObject.cs" />
     <Compile Include="Networking\Test.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Networking\Networking.cd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

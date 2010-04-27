@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Mammoth.Engine.Networking.Encoder" Collapsed="true">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAABAABAAAAAAAAAACAAAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>Networking\Encoder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mammoth.Engine.Networking.LidgrenClientNetworking" Collapsed="true">
+    <Position X="3" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAEAAgAAAIAAAAAAAgAAAABAAAAAAAAA=</HashCode>
+      <FileName>Networking\LidgrenClientNetworking.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Mammoth.Engine.Networking.LidgrenNetworking" Collapsed="true">
+    <Position X="1.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQIAAAAAAAAAAAAAAAAQAEAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Networking\LidgrenNetworking.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mammoth.Engine.Networking.LidgrenServerNetworking" Collapsed="true">
+    <Position X="0.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQQAAAABAAAAAAAQAAAIAAAAAgAgAAAABAgAAAAFAA=</HashCode>
+      <FileName>Networking\LidgrenServerNetworking.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Mammoth.Engine.Networking.Networking" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAEAAAQAAAAAAQAEAgQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Networking\Networking.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Mammoth.Engine.Networking.Test" Collapsed="true">
+    <Position X="10" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABABAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Networking\Test.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mammoth.Engine.Networking.InputStateUpdate" Collapsed="true">
+    <Position X="11.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAEAAAAAAAQAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>Networking\Networking.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Mammoth.Engine.Networking.IEncodable" Collapsed="true">
+    <Position X="10" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>Networking\IEncodable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Mammoth.Engine.Networking.INetworkingService" Collapsed="true">
+    <Position X="1.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAQAEAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Networking\Networking.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Mammoth.Engine.Networking.IServerNetworking" Collapsed="true">
+    <Position X="0.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAgAAAAAABAAAAAAEAA=</HashCode>
+      <FileName>Networking\Networking.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Mammoth.Engine.Networking.IClientNetworking" Collapsed="true">
+    <Position X="2.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAIAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Networking\Networking.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="Mammoth.Engine.Networking.ClientToServerMessageType" Collapsed="true">
+    <Position X="10" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Networking\LidgrenNetworking.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

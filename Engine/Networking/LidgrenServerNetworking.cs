@@ -68,6 +68,7 @@ namespace Mammoth.Engine.Networking
                         sender.Approve();
                         sender.Tag = id;
                         _connections.Add(id, sender);
+                        _inputStates[id] = new Queue<InputStateUpdate>();
                         break;
                     case NetMessageType.StatusChanged:
                         string statusMessage = buffer.ReadString();
@@ -84,7 +85,7 @@ namespace Mammoth.Engine.Networking
                                 double elapsedTime = buffer.ReadDouble();
                                 uint inputBitmask = buffer.ReadVariableUInt32();
                                 if (_inputStates[senderID] == null)
-                                    _inputStates[senderID] = new Queue<InputStateUpdate>();
+                                    throw new Exception("Invalid player id: " + senderID);
                                 _inputStates[senderID].Enqueue(new InputStateUpdate(inputBitmask, elapsedTime));
                                 break;
                         }
@@ -99,6 +100,16 @@ namespace Mammoth.Engine.Networking
         public List<byte[]> getData()
         {
             return _data;
+        }
+
+        public Queue<InputStateUpdate> getInputStateQueue(int playerID)
+        {
+            if (_inputStates[playerID] == null)
+            {
+                //TODO add good exceptions
+                throw new Exception("Invalid player id: " + playerID);
+            }
+            return _inputStates[playerID];
         }
 
         public void createSession()
@@ -128,34 +139,6 @@ namespace Mammoth.Engine.Networking
             {
                 Data = data;
                 Recipient = recipient;
-            }
-        }
-    }
-
-    public class InputStateUpdate
-    {
-        public uint _bitmask;
-        public double _elapsedTime;
-
-        public InputStateUpdate(uint bitmask, double elapsedTime)
-        {
-            _bitmask = bitmask;
-            _elapsedTime = elapsedTime;
-        }
-
-        public uint Bitmask
-        {
-            get
-            {
-                return _bitmask;
-            }
-        }
-
-        public double ElapsedTime
-        {
-            get
-            {
-                return _elapsedTime;
             }
         }
     }
