@@ -40,7 +40,30 @@ namespace Mammoth.Engine.Networking
                 Console.WriteLine("Really sending thing");
                 buffer = _client.CreateBuffer();
                 buffer.Write(_toSend.Dequeue());
-                _client.SendMessage(buffer, NetChannel.Unreliable);
+                _client.SendMessage(buffer, NetChannel.ReliableInOrder1);
+            }
+
+            buffer = _client.CreateBuffer();
+            NetMessageType type;
+            while (_client.ReadMessage(buffer, out type))
+            {
+                switch (type)
+                {
+                    case NetMessageType.DebugMessage:
+                        Console.WriteLine(buffer.ReadString());
+                        break;
+                    case NetMessageType.StatusChanged:
+                        //string statusMessage = buffer.ReadString();
+                        //NetConnectionStatus newStatus = (NetConnectionStatus)buffer.ReadByte();
+                        //Console.WriteLine("New status for " + sender + ": " + newStatus + " (" + statusMessage + ")");
+                        break;
+                    case NetMessageType.Data:
+                        // A client sent this data!
+                        Console.WriteLine("Data recieved");
+                        byte[] data = buffer.ReadBytes(buffer.LengthBytes);
+                        Console.WriteLine(data);
+                        break;
+                }
             }
         }
 
@@ -57,8 +80,7 @@ namespace Mammoth.Engine.Networking
                     case NetMessageType.ServerDiscovered:
                         Console.WriteLine("Discovered network");
                         NetBuffer buf = _client.CreateBuffer();
-                        //buf.Write(Engine.Instance.LocalPlayer.ID);
-                        buf.Write(42);
+                        buf.Write(Engine.Instance.LocalPlayer.ID);
                         _client.Connect(buffer.ReadIPEndPoint(), buf.ToArray());
                         while (_client.Status != NetConnectionStatus.Connected) ;
                         Console.WriteLine("Connected to server");

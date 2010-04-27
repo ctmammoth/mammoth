@@ -5,7 +5,7 @@ using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-namespace Mammoth.Engine
+namespace Mammoth.Engine.Networking
 {
     public class Encoder
     {

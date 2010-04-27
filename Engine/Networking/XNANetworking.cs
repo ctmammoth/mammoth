@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.GamerServices;
 
-namespace Mammoth.Engine
+namespace Mammoth.Engine.Networking
 {
-    public abstract class XNANetworking : AbstractNetworking
+    public abstract class XNANetworking : Networking
     {
         #region Variables
 
@@ -34,7 +34,7 @@ namespace Mammoth.Engine
             return false;
         }
 
-        public override AbstractNetworking.NetworkingType getType()
+        public override Networking.NetworkingType getType()
         {
             return NetworkingType.XNA;
         }

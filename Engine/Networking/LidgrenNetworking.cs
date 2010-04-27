@@ -9,7 +9,12 @@ using Lidgren.Network;
 
 namespace Mammoth.Engine.Networking
 {
-    public abstract class LidgrenNetworking : AbstractNetworking
+    public enum ClientToServerMessageType
+    {
+        InputState
+    }
+
+    public abstract class LidgrenNetworking : Networking
     {
         public const int PORT = 3333;
 
@@ -29,7 +34,7 @@ namespace Mammoth.Engine.Networking
             return false;
         }
 
-        public override AbstractNetworking.NetworkingType getType()
+        public override Networking.NetworkingType getType()
         {
             return NetworkingType.LIDGREN;
         }

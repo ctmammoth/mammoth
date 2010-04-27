@@ -4,7 +4,7 @@ using System.Collections;
 using System.Text;
 using System.IO;
 
-namespace Mammoth.Engine
+namespace Mammoth.Engine.Networking
 {
     class Car : IEncodable
     {
@@ -22,7 +22,7 @@ namespace Mammoth.Engine
 
         public Car(int maxspeed, int minspeed, string thecolor)
         {
-            max_speed = maxspeed; min_speed = minspeed; color = thecolor; driver = new Driver("", 0, 0);
+            max_speed = maxspeed; min_speed = minspeed; color = thecolor; driver = new Driver("", 0, false);
         }
 
         public byte[] Encode()
