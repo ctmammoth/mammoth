@@ -10,7 +10,12 @@ namespace Mammoth.Engine.Networking
     class Decoder : GameComponent
     {
         //define short-hand access to the master hashtable of objects
-        public IModelDBService registeredObjects = (IModelDBService) this.Game.Services.GetService(typeof (IModelDBService));
+        public IModelDBService registeredObjects;
+
+        public Decoder(Game game) : base(game)
+        {
+            registeredObjects = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+        }
 
         /// <summary>
         /// Checks if the object described in a packet exists and then performs an action. If the object does exist, the function updates
@@ -62,7 +67,7 @@ namespace Mammoth.Engine.Networking
         /// <param name="properties">A byte array that can be decoded by the IEncodable class of type "type" and contains the properties of the object</param>
         public void UpdateObject(int id, byte[] properties)
         {
-            IEncodable toupdate = registeredObjects.getObject(id);
+            IEncodable toupdate = (IEncodable) registeredObjects.getObject(id);
             toupdate.Decode(properties);
         }
 

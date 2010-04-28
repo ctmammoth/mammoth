@@ -35,9 +35,9 @@ namespace Mammoth.Engine
         {
             Networking.Encoder props = new Networking.Encoder(serialized);
 
-            Position = props.GetElement("Position");
-            Orientation = props.GetElement("Orientation");
-            Velocity = props.GetElement("Velocity");
+            Position = (Vector3) props.GetElement("Position");
+            Orientation = (Quaternion) props.GetElement("Orientation");
+            Velocity = (Vector3) props.GetElement("Velocity");
         }
 
         #region Properties
