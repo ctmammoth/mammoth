@@ -7,13 +7,17 @@ using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine.Networking
 {
-    class Decoder : GameComponent
+    class Decoder : GameComponent, Mammoth.Engine.Networking.IDecoder
     {
         //define short-hand access to the master hashtable of objects
         public IModelDBService registeredObjects;
 
         public Decoder(Game game) : base(game)
         {
+            //add this as a service
+            this.Game.Services.AddService(typeof(IDecoder), this);
+
+            //get list of registered objects
             registeredObjects = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
         }
 

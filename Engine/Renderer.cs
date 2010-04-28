@@ -97,6 +97,7 @@ namespace Mammoth.Engine
             _graphics.SetRenderTarget(0, null);
 
             return target.GetTexture();
+
         }
 
         public void DrawText(string text, Vector2 pos, Color textColor, Color bgColor)

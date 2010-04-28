@@ -83,6 +83,7 @@
     <Compile Include="Networking\Encoder.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Input\IInputService.cs" />
+    <Compile Include="Networking\IDecoder.cs" />
     <Compile Include="Networking\IEncodable.cs" />
     <Compile Include="PhysicsManagerService.cs" />
     <Compile Include="Input\InputState.cs" />

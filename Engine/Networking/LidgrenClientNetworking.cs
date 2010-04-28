@@ -59,8 +59,11 @@ namespace Mammoth.Engine.Networking
                         break;
                     case NetMessageType.Data:
                         Console.WriteLine("Data received");
+                        string type = buffer.ReadString();
+                        int id = buffer.ReadVariableInt32();
                         byte[] data = buffer.ReadBytes(buffer.LengthBytes);
-                        Console.WriteLine(data);
+                        IDecoder decode = (IDecoder) this.Game.Services.GetService(typeof (IDecoder));
+                        decode.AnalyzeObjects(type, id, data);
                         break;
                 }
             }

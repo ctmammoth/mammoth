@@ -13,11 +13,21 @@ namespace Mammoth.Engine
 {
     public abstract class Player : DrawableGameComponent, IRenderable, Networking.IEncodable
     {
-        public Player(Engine game) : base(game)
+        private int ID;
 
+        public Player(Engine game) : base(game)
         {
             // TODO: Change this to use Adam's physics helper functions.
             Player.ControllerManager = game.Scene.CreateControllerManager();
+
+            //Declare ID number
+            IModelDBService mdb = (IModelDBService) this.Game.Services.GetService(typeof(IModelDBService));
+            ID = mdb.getNextOpenID();
+        }
+
+        public int GetID()
+        {
+            return ID;
         }
 
         public byte[] Encode()
