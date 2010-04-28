@@ -98,6 +98,7 @@ namespace Mammoth.Engine
             this.Services.AddService(typeof(IRenderService), r);
 
             this.Components.Add(new LocalInput(this));
+            this.Components.Add(new ModelDatabase(this));
 
             // Create the local player, and have it update after all important components.
             this.LocalPlayer = new LocalPlayer(this);

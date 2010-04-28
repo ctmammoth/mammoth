@@ -80,7 +80,7 @@ namespace Mammoth.Engine.Networking
 
         public Networking(Game game) : base(game)
         {
-            game.Components.Add(this);
+            this.Game.Services.AddService(typeof(INetworkingService), this);
         }
 
         public override void Initialize()
