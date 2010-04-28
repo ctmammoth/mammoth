@@ -11,13 +11,33 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mammoth.Engine
 {
-    public abstract class Player : DrawableGameComponent, IRenderable
+    public abstract class Player : DrawableGameComponent, IRenderable, Networking.IEncodable
     {
         public Player(Engine game) : base(game)
 
         {
             // TODO: Change this to use Adam's physics helper functions.
             Player.ControllerManager = game.Scene.CreateControllerManager();
+        }
+
+        public byte[] Encode()
+        {
+            Networking.Encoder tosend = new Networking.Encoder();
+
+            tosend.AddElement("Position", Position);
+            tosend.AddElement("Orientation", Orientation);
+            tosend.AddElement("Velocity", Velocity);
+
+            return tosend.Serialize();
+        }
+
+        public void Decode(byte[] serialized)
+        {
+            Networking.Encoder props = new Networking.Encoder(serialized);
+
+            Position = props.GetElement("Position");
+            Orientation = props.GetElement("Orientation");
+            Velocity = props.GetElement("Velocity");
         }
 
         #region Properties
