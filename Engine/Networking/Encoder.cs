@@ -22,6 +22,7 @@ namespace Mammoth.Engine.Networking
 
         /// <summary>
         /// Loads serialized data, and makes the objects accessible to Decode() methods in IEncodable objects.
+        /// Throws an error if the byte[] cannot be deserialized.
         /// </summary>
         /// <param name="serialized">a byte array representing a serialized hashtable</param>
         public Encoder(byte[] serialized)
@@ -58,7 +59,7 @@ namespace Mammoth.Engine.Networking
 
 
         /// <summary>
-        /// Adds a property to be encoded. Cannot take anything that is not a primitive or doesn't implement Encodable.
+        /// Adds a property to be encoded. Cannot take anything that is not a primitive or doesn't implement Encodable. Will not add null.
         /// </summary>
         /// <param name="key">A string representing the name of the property being encoded.</param>
         /// <param name="theobject">The property it self. May be any primitive or Encodable. Will be ignored if property is null.</param>
@@ -85,7 +86,7 @@ namespace Mammoth.Engine.Networking
 
 
         /// <summary>
-        /// Adds a property to be encoded. Cannot take anything that is not a primitive or doesn't implement Encodable.
+        /// Adds a property to be encoded. Cannot take anything that is not a primitive or doesn't implement Encodable. Will not add null.
         /// </summary>
         /// <param name="key">A string representing the name of the property being encoded.</param>
         /// <param name="theobject">The property it self. May be any primitive or Encodable. Will be ignored if property is null.</param>
@@ -110,7 +111,7 @@ namespace Mammoth.Engine.Networking
 
 
         /// <summary>
-        /// Once a byte array has been deserialized, then elements can be accesed through their String key.
+        /// Once a byte array has been deserialized, then elements can be accesed through their String key. Returns null if the key could not be hashed.
         /// </summary>
         /// <param name="key">a string that hashes to the parameter to access</param>
         /// <returns>an object which must be type cast</returns>
@@ -123,7 +124,7 @@ namespace Mammoth.Engine.Networking
 
 
         /// <summary>
-        /// Once a byte array has been deserialized, then IEncodable objects can be updated.
+        /// Once a byte array has been deserialized, then IEncodable objects can be updated. Note that if the IEncodable is null, it cannot be updated.
         /// </summary>
         /// <param name="key">a string that hashes to the parameter to access </param>
         /// <param name="toupdate">the actual object to update</param>
@@ -153,7 +154,7 @@ namespace Mammoth.Engine.Networking
 
 
         /// <summary>
-        /// Serializes the properties and their names and outputs to a stream. This serialization of byte can be deserialized later.
+        /// Serializes the properties and their names and outputs to a byte array. This serialization can be deserialized later by an Encoder.
         /// </summary>
         /// <returns>a byte array containing the serialized data</returns>
         public byte[] Serialize()
