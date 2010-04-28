@@ -102,6 +102,7 @@
     <Compile Include="Networking\LidgrenServerNetworking.cs" />
     <Compile Include="Networking\Networking.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="RemotePlayer.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="StaticObject.cs" />
     <Compile Include="Interface\TWidget.cs" />
