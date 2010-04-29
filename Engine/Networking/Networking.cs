@@ -92,13 +92,15 @@ namespace Mammoth.Engine.Networking
 
         public static void CreateClientNetworking(Game game)
         {
-            IClientNetworking client = new LidgrenClientNetworking(game);
+            LidgrenClientNetworking client = new LidgrenClientNetworking(game);
+            game.Components.Add(client);
             client.joinGame();
         }
 
         public static void CreateServerNetworking(Game game)
         {
-            IServerNetworking server = new LidgrenServerNetworking(game);
+            LidgrenServerNetworking server = new LidgrenServerNetworking(game);
+            game.Components.Add(server);
             server.createSession();
         }
     }

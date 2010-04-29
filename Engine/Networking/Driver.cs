@@ -43,5 +43,10 @@ namespace Mammoth.Engine.Networking
             Console.WriteLine("Age: " + age);
             Console.WriteLine("DUI: " + DUI);
         }
+
+        public int GetID()
+        {
+            return 222222;
+        }
     }
 }

@@ -61,5 +61,10 @@ namespace Mammoth.Engine.Networking
             if(driver != null)
                 driver.Print();
         }
+
+        public int GetID()
+        {
+            return 33333333;
+        }
     }
 }

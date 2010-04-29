@@ -11,8 +11,10 @@ namespace Mammoth.Engine
     {
         // TODO: change object to our object class
         bool hasObject(int objectID);
-        object getObject(int objectID);
-        void registerObject(object newObject);
+        Networking.IEncodable getObject(int objectID);
+        void registerObject(Networking.IEncodable newObject);
         bool removeObject(int objectID);
+
+        int getNextOpenID();
     }
 }

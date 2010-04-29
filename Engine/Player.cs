@@ -11,15 +11,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mammoth.Engine
 {
-    public abstract class Player : DrawableGameComponent, IRenderable, Networking.IEncodable
+    public class Player : DrawableGameComponent, IRenderable, Networking.IEncodable
     {
         private int ID;
-
         public Player(Engine game) : base(game)
         {
             // TODO: Change this to use Adam's physics helper functions.
-            Player.ControllerManager = game.Scene.CreateControllerManager();
-
+            // TODO: uncomment this (and add "Engine game" back to params)
+            //Player.ControllerManager = game.Scene.CreateControllerManager();
             //Declare ID number
             IModelDBService mdb = (IModelDBService) this.Game.Services.GetService(typeof(IModelDBService));
             ID = mdb.getNextOpenID();
@@ -58,8 +57,9 @@ namespace Mammoth.Engine
             {
                 return this.Controller.Position;
             }
-            protected set
+            set
             {
+                // TODO: this should be protected
                 //this.Controller.Actor.MoveGlobalPositionTo(value);
                 this.Controller.Position = value;
             }

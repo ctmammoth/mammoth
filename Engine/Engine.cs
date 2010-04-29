@@ -82,7 +82,7 @@ namespace Mammoth.Engine
             boxActorDesc = new ActorDescription();
             boxActorDesc.Shapes.Add(new BoxShapeDescription()
             {
-                Size = new Vector3(2.0f, 2.0f, 2.0f),
+                Size = new Vector3(0.5f, 0.5f, 0.5f),
                 LocalPosition = new Vector3(-3.0f, 3.0f, 0.0f)
             });
             this.Scene.CreateActor(boxActorDesc);
@@ -99,6 +99,7 @@ namespace Mammoth.Engine
 
             this.Components.Add(new LocalInput(this));
             this.Components.Add(new ModelDatabase(this));
+            this.Components.Add(new Networking.LidgrenClientNetworking(this));
 
             // Create the local player, and have it update after all important components.
             this.LocalPlayer = new LocalPlayer(this);
