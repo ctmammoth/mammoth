@@ -94,9 +94,10 @@ namespace Mammoth.Engine.Networking
                         _server.SendMessage(buffer, sender, NetChannel.ReliableInOrder2);
 
                         //TODO: TEST CODE
+                        //TODO: object ID of localplayer should be client ID + 0
                         IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
                         InputPlayer player = new ProxyInputPlayer(this.Game, id);
-                        player.ID = mdb.getNextOpenID();
+                        player.ID = id << 25;
                         mdb.registerObject(player);
 
                         break;
