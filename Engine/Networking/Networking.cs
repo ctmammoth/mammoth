@@ -98,6 +98,7 @@ namespace Mammoth.Engine.Networking
         {
             LidgrenServerNetworking server = new LidgrenServerNetworking(game);
             game.Components.Add(server);
+            server.UpdateOrder = 7;
             server.createSession();
         }
     }

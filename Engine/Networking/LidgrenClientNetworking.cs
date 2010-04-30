@@ -38,6 +38,8 @@ namespace Mammoth.Engine.Networking
 
         public override void Update(GameTime gameTime)
         {
+            if (_client == null || _client.Status != NetConnectionStatus.Connected)
+                return;
             base.Update(gameTime);
 
             IInputService inputServer = (IInputService)this.Game.Services.GetService(typeof(IInputService));

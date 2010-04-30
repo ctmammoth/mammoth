@@ -86,7 +86,8 @@ namespace Mammoth.Engine
             });
 
             // Add the networking service.
-            this.Components.Add(new LidgrenClientNetworking(this)
+            //this.Components.Add(new LidgrenClientNetworking(this));
+            Networking.NetworkComponent.CreateClientNetworking(this);
 
             // Add the model database.
             ModelDatabase modelDB = new ModelDatabase(this)
