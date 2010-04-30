@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
+using Mammoth.Engine.Input;
+
 namespace Mammoth.Engine.Networking
 {
     class Decoder : GameComponent, Mammoth.Engine.Networking.IDecoder
@@ -19,6 +21,13 @@ namespace Mammoth.Engine.Networking
 
             //get list of registered objects
             registeredObjects = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+        }
+
+        public InputState DecodeInputState(byte[] data)
+        {
+            InputState state = new InputState();
+            state.Decode(data);
+            return state;
         }
 
         /// <summary>

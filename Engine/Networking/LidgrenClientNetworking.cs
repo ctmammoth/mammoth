@@ -48,6 +48,8 @@ namespace Mammoth.Engine.Networking
                 buffer.Write(data.Type);
                 if (data.ID >= 0)
                     buffer.WriteVariableInt32(data.ID);
+                buffer.WriteVariableInt32(data.Data.Length);
+                buffer.WritePadBits();
                 buffer.Write(data.Data);
                 _client.SendMessage(buffer, NetChannel.ReliableInOrder1);
             }
@@ -70,7 +72,9 @@ namespace Mammoth.Engine.Networking
                         Console.WriteLine("Data received");
                         string objectType = buffer.ReadString();
                         int id = buffer.ReadVariableInt32();
-                        byte[] data = buffer.ReadBytes(buffer.LengthBytes);
+                        int length = buffer.ReadVariableInt32();
+                        buffer.SkipPadBits();
+                        byte[] data = buffer.ReadBytes(length);
                         IDecoder decode = (IDecoder) this.Game.Services.GetService(typeof (IDecoder));
                         decode.AnalyzeObjects(objectType, id, data);
                         break;

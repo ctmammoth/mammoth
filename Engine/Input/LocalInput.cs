@@ -22,7 +22,7 @@ namespace Mammoth.Engine.Input
             : base(game)
         {
             _keyMappings = new Dictionary<InputType, Keys>(Enum.GetValues(typeof(InputType)).Length);
-            _state = new InputState(InputType.None, InputType.None, Vector2.Zero);
+            _state = new InputState(InputType.None, InputType.None, Vector2.Zero, new GameTime());
 
             game.Services.AddService(typeof(IInputService), this);
         }
@@ -69,7 +69,7 @@ namespace Mammoth.Engine.Input
             this.CenterCursor();
 
             // Set the current state.
-            _state = new InputState(_state.CurrentState, newState, delta);
+            _state = new InputState(_state.CurrentState, newState, delta, gameTime);
         }
 
         private bool IsKeyDown(InputType k)

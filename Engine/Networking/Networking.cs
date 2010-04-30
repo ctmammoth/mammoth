@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 
+using Mammoth.Engine.Input;
+
 namespace Mammoth.Engine.Networking
 {
     /**
@@ -21,7 +23,7 @@ namespace Mammoth.Engine.Networking
     public interface IServerNetworking : INetworkingService
     {
         void sendThing(IEncodable toSend, int target);
-        Queue<InputStateUpdate> getInputStateQueue(int playerID);
+        Queue<InputState> getInputStateQueue(int playerID);
         void createSession();
         void endGame();
     }

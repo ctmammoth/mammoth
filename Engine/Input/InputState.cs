@@ -5,6 +5,8 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 
+using Mammoth.Engine.Networking;
+
 namespace Mammoth.Engine.Input
 {
     [Flags]
@@ -23,20 +25,30 @@ namespace Mammoth.Engine.Input
         Zoom = 0x200
     }
 
-    public class InputState
+    public class InputState : IEncodable
     {
         #region Fields
 
         InputType _curState, _prevState;
         Vector2 _mouseDelta;
+        float _elapsedSeconds;
 
         #endregion
 
-        public InputState(InputType prevState, InputType curState, Vector2 delta)
+        public InputState()
+        {
+            _curState = InputType.None;
+            _prevState = InputType.None;
+            _mouseDelta = Vector2.Zero;
+            _elapsedSeconds = 0.0f;
+        }
+
+        public InputState(InputType prevState, InputType curState, Vector2 delta, GameTime time)
         {
             _curState = curState;
             _prevState = prevState;
             _mouseDelta = delta;
+            _elapsedSeconds = (float) time.ElapsedGameTime.TotalSeconds;
         }
 
         public bool IsKeyDown(InputType input)
@@ -59,6 +71,25 @@ namespace Mammoth.Engine.Input
             return ((_prevState & input) == input) && ((_curState & input) != input);
         }
 
+        #region IEncodable Members
+
+        public byte[] Encode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Decode(byte[] serialized)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int ID
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        #endregion
+
         #region Properties
 
         public InputType CurrentState
@@ -74,6 +105,11 @@ namespace Mammoth.Engine.Input
         public Vector2 MouseDelta
         {
             get { return _mouseDelta; }
+        }
+
+        public float ElapsedSeconds
+        {
+            get { return _elapsedSeconds; }
         }
 
         #endregion

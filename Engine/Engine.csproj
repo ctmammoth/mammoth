@@ -76,6 +76,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="ClientState.cs" />
     <Compile Include="IModelDBService.cs" />
+    <Compile Include="Input\EmulatedInput.cs" />
     <Compile Include="ModelDatabase.cs" />
     <Compile Include="Crate.cs" />
     <Compile Include="Door.cs" />

@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 
 using Microsoft.Xna.Framework;
+
+using Mammoth.Engine.Input;
+
 using Lidgren.Network.Xna;
 using Lidgren.Network;
 
@@ -16,7 +19,7 @@ namespace Mammoth.Engine.Networking
         private NetServer _server;
         private Dictionary<int, NetConnection> _connections;
         private Queue<DataGram> _toSend;
-        private Dictionary<int, Queue<InputStateUpdate>> _inputStates;
+        private Dictionary<int, Queue<InputState>> _inputStates;
 
         private int _nextID;
 
@@ -25,7 +28,7 @@ namespace Mammoth.Engine.Networking
         {
             _toSend = new Queue<DataGram>();
             _connections = new Dictionary<int, NetConnection>();
-            _inputStates = new Dictionary<int, Queue<InputStateUpdate>>();
+            _inputStates = new Dictionary<int, Queue<InputState>>();
             _nextID = 1;
             
             createSession();
@@ -53,11 +56,13 @@ namespace Mammoth.Engine.Networking
                 buffer = _server.CreateBuffer();
                 buffer.Write(message.Type);
                 buffer.WriteVariableInt32(message.ID);
+                buffer.WriteVariableInt32(message.Data.Length);
+                buffer.WritePadBits();
                 buffer.Write(message.Data);
                 _server.SendMessage(buffer, _connections[message.Recipient], NetChannel.Unreliable);
             }
 
-            foreach (Queue<InputStateUpdate> q in _inputStates.Values)
+            foreach (Queue<InputState> q in _inputStates.Values)
                 q.Clear();
 
             buffer = _server.CreateBuffer();
@@ -75,7 +80,7 @@ namespace Mammoth.Engine.Networking
                         sender.Approve();
                         int id = _nextID++;
                         _connections.Add(id, sender);
-                        _inputStates[id] = new Queue<InputStateUpdate>();
+                        _inputStates[id] = new Queue<InputState>();
                         buffer = _server.CreateBuffer();
                         buffer.WriteVariableInt32(id);
                         _server.SendMessage(buffer, sender, NetChannel.ReliableInOrder2);
@@ -92,11 +97,13 @@ namespace Mammoth.Engine.Networking
                         switch (buffer.ReadString())
                         {
                             case "Mammoth.Engine.Input.InputState":
-                                double elapsedTime = buffer.ReadDouble();
-                                uint inputBitmask = buffer.ReadVariableUInt32();
                                 if (_inputStates[senderID] == null)
                                     throw new Exception("Invalid player id: " + senderID);
-                                _inputStates[senderID].Enqueue(new InputStateUpdate(inputBitmask, elapsedTime));
+                                IDecoder decoder = (IDecoder)this.Game.Services.GetService(typeof(IDecoder));
+                                int length = buffer.ReadVariableInt32();
+                                buffer.SkipPadBits();
+                                byte[] data = buffer.ReadBytes(length);
+                                _inputStates[senderID].Enqueue(decoder.DecodeInputState(data));
                                 break;
                         }
                         //byte[] data = buffer.ReadBytes(buffer.LengthBytes);
@@ -107,7 +114,7 @@ namespace Mammoth.Engine.Networking
             }
         }
 
-        public Queue<InputStateUpdate> getInputStateQueue(int playerID)
+        public Queue<InputState> getInputStateQueue(int playerID)
         {
             if (_inputStates[playerID] == null)
             {
