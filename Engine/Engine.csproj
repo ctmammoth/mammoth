@@ -6,7 +6,7 @@
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E80FCA0E-78EC-44C5-B375-894050EEE6CB}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mammoth.Engine</RootNamespace>
     <AssemblyName>Engine</AssemblyName>
@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="Car.cs" />
+    <Compile Include="Crate.cs" />
     <Compile Include="Door.cs" />
     <Compile Include="Driver.cs" />
     <Compile Include="Encodable.cs" />
@@ -77,11 +78,13 @@
     <Compile Include="IRenderable.cs" />
     <Compile Include="LocalPlayer.cs" />
     <Compile Include="Networking.cs" />
+    <Compile Include="Object.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="StaticObject.cs" />
     <Compile Include="Test.cs" />
+    <Compile Include="XmlHandler.cs" />
     <Compile Include="XNANetworking.cs" />
   </ItemGroup>
   <ItemGroup>
