@@ -35,14 +35,14 @@ namespace Mammoth.Engine.Networking
         public void sendThing(IEncodable toSend, int target)
         {
             if (toSend is BaseObject)
-                _toSend.Enqueue(new DataGram(toSend.GetType().ToString(), ((BaseObject)toSend).ID, toSend.Encode(), target));
+                _toSend.Enqueue(new DataGram(((BaseObject)toSend).getObjectType(), ((BaseObject)toSend).ID, toSend.Encode(), target));
         }
 
         public void sendThing(IEncodable toSend)
         {
             // TODO: HACK: Not all things are players
             if (toSend is BaseObject)
-                _toSend.Enqueue(new DataGram("Player", ((BaseObject)toSend).ID, toSend.Encode(), -1));
+                _toSend.Enqueue(new DataGram(((BaseObject)toSend).getObjectType(), ((BaseObject)toSend).ID, toSend.Encode(), -1));
         }
 
         public override void Update(GameTime gameTime)

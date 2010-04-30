@@ -124,6 +124,7 @@ namespace Mammoth.Engine.Networking
                                     byte[] bytes = buffer.PeekBytes(buffer.LengthBytes);
                                     foreach (byte b in bytes)
                                         Console.Write(b + " ");
+                                    //Console.WriteLine(buffer.PeekString());
                                     _clientID = buffer.ReadVariableInt32();
                                     Console.WriteLine("My ID is: " + _clientID);
                                     return;

@@ -161,7 +161,8 @@ namespace Mammoth.Engine
 
         public override string getObjectType()
         {
-            return typeof(InputPlayer).ToString();
+            //return typeof(InputPlayer).ToString();
+            return "Player";
         }
 
         public override void collideWith(PhysicalObject obj)
