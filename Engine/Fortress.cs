@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Mammoth.Engine
 {
-    public class Fortress : Object
+    public class Fortress : BaseObject
     { 
         private double width, height, length, x, y, z;
         private List<Room> roomList;

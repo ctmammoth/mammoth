@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using Lidgren.Network.Xna;
 using Lidgren.Network;
 
+using Mammoth.Engine.Input;
+
 namespace Mammoth.Engine.Networking
 {
     public class LidgrenServerNetworking : LidgrenNetworking, IServerNetworking
@@ -33,8 +35,8 @@ namespace Mammoth.Engine.Networking
 
         public void sendThing(IEncodable toSend, int target)
         {
-            //TODO: get true type correctly
-            _toSend.Enqueue(new DataGram(toSend.GetType().ToString(), toSend.ID, toSend.Encode(), target));
+            if (toSend is BaseObject)
+                _toSend.Enqueue(new DataGram(toSend.GetType().ToString(), ((BaseObject)toSend).ObjectId, toSend.Encode(), target));
         }
 
         public override void Update(GameTime gameTime)
@@ -87,9 +89,9 @@ namespace Mammoth.Engine.Networking
                         // A client sent this data!
                         Console.WriteLine("Data received from " + sender);
                         int senderID = buffer.ReadVariableInt32();
-                        switch ((ClientToServerMessageType)buffer.ReadVariableInt32())
+                        switch (buffer.ReadString())
                         {
-                            case ClientToServerMessageType.InputState:
+                            case "Mammoth.Engine.Input.InputState":
                                 double elapsedTime = buffer.ReadDouble();
                                 uint inputBitmask = buffer.ReadVariableUInt32();
                                 if (_inputStates[senderID] == null)

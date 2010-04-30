@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Mammoth.Engine
 {
-    public abstract class Object
+    public abstract class BaseObject
     {
         private static int nextId = 0;
         private int objectId;

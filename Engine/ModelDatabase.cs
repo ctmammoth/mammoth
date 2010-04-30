@@ -12,12 +12,12 @@ namespace Mammoth.Engine
     {
         private static int nextID = 0;
 
-        private Dictionary<int, IEncodable> _objects;
+        private Dictionary<int, BaseObject> _objects;
 
         public ModelDatabase(Game game) : base(game)
         {
             this.Game.Services.AddService(typeof(IModelDBService), this);
-            _objects = new Dictionary<int, IEncodable>();
+            _objects = new Dictionary<int, BaseObject>();
         }
 
         public override void Update(GameTime gameTime)
@@ -33,14 +33,14 @@ namespace Mammoth.Engine
             return _objects.ContainsKey(objectID);
         }
 
-        public IEncodable getObject(int objectID)
+        public BaseObject getObject(int objectID)
         {
             return _objects[objectID];
         }
 
-        public void registerObject(IEncodable newObject)
+        public void registerObject(BaseObject newObject)
         {
-            _objects.Add(newObject.ID, newObject);
+            _objects.Add(newObject.ObjectId, newObject);
         }
 
         public bool removeObject(int objectID)

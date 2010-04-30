@@ -9,10 +9,9 @@ namespace Mammoth.Engine
 {
     public interface IModelDBService
     {
-        // TODO: change object to our object class
         bool hasObject(int objectID);
-        Networking.IEncodable getObject(int objectID);
-        void registerObject(Networking.IEncodable newObject);
+        BaseObject getObject(int objectID);
+        void registerObject(BaseObject newObject);
         bool removeObject(int objectID);
 
         int getNextOpenID();

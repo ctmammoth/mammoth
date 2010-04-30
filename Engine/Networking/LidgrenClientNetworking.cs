@@ -13,12 +13,12 @@ namespace Mammoth.Engine.Networking
     {
         private int _clientID;
         private NetClient _client;
-        private Queue<byte[]> _toSend;
+        private Queue<DataGram> _toSend;
 
         public LidgrenClientNetworking(Game game)
             : base(game)
         {
-            _toSend = new Queue<byte[]>();
+            _toSend = new Queue<DataGram>();
             NetConfiguration config = new NetConfiguration("Mammoth");
             _client = new NetClient(config);
         }
@@ -28,7 +28,10 @@ namespace Mammoth.Engine.Networking
         public void sendThing(IEncodable toSend)
         {
             Console.WriteLine("Sending thing");
-            _toSend.Enqueue(toSend.Encode());
+            if (toSend is BaseObject)
+                _toSend.Enqueue(new DataGram(toSend.GetType().ToString(), ((BaseObject)toSend).ObjectId, toSend.Encode()));
+            else
+                _toSend.Enqueue(new DataGram(toSend.GetType().ToString(), toSend.Encode()));
         }
 
         public override void Update(GameTime gameTime)
@@ -41,7 +44,11 @@ namespace Mammoth.Engine.Networking
                 Console.WriteLine("Really sending thing");
                 buffer = _client.CreateBuffer();
                 buffer.WriteVariableInt32(_clientID);
-                buffer.Write(_toSend.Dequeue());
+                DataGram data = _toSend.Dequeue();
+                buffer.Write(data.Type);
+                if (data.ID >= 0)
+                    buffer.WriteVariableInt32(data.ID);
+                buffer.Write(data.Data);
                 _client.SendMessage(buffer, NetChannel.ReliableInOrder1);
             }
 
@@ -112,5 +119,26 @@ namespace Mammoth.Engine.Networking
         } 
 
         #endregion
+
+        private class DataGram
+        {
+            public string Type;
+            public int ID;
+            public byte[] Data { get; set; }
+
+            public DataGram(string type, int id, byte[] data)
+            {
+                Type = type;
+                ID = id;
+                Data = data;
+            }
+
+            public DataGram(string type, byte[] data)
+            {
+                Type = type;
+                ID = -1;
+                Data = data;
+            }
+        }
     }
 }

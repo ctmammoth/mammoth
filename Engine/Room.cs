@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Mammoth.Engine
 {
-    public class Room : Object
+    public class Room : BaseObject
     {
         private double width, height, length;
-        private List<Object> objectList;
+        private List<BaseObject> objectList;
         private String roomType;
 
         public override string getObjectType()
@@ -28,7 +28,8 @@ namespace Mammoth.Engine
 
         public void populate()
         {
-            List<Object> objects = XmlHandler.CreateFromXml(roomType);
+            //TODO: fix this?
+            //List<BaseObject> objects = XmlHandler.CreateFromXml(roomType);
         }
 
 

@@ -9,11 +9,6 @@ using Lidgren.Network;
 
 namespace Mammoth.Engine.Networking
 {
-    public enum ClientToServerMessageType
-    {
-        InputState
-    }
-
     public abstract class LidgrenNetworking : NetworkComponent
     {
         public const int PORT = 3333;

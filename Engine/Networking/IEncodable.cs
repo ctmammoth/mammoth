@@ -12,10 +12,10 @@ namespace Mammoth.Engine.Networking
 
         #region Properties
 
-        int ID
-        {
-            get;
-        }
+        //int ID
+        //{
+        //    get;
+        //}
 
         #endregion
     }
