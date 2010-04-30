@@ -95,9 +95,13 @@ namespace Mammoth.Engine.Input
             _elapsedSeconds = (float) getdata.GetElement("_elapsedSeconds");
         }
 
-        public int ID
+        public override string ToString()
         {
-            get { throw new NotImplementedException(); }
+            string toReturn = "INPUT: ";
+            foreach (InputType t in Enum.GetValues(InputType.Forward.GetType()))
+                if (IsKeyDown(t))
+                    toReturn += t.ToString() + " ";
+            return toReturn;
         }
 
         #endregion

@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using Lidgren.Network.Xna;
 using Lidgren.Network;
 
+using Mammoth.Engine.Input;
+
 namespace Mammoth.Engine.Networking
 {
     public class LidgrenClientNetworking : LidgrenNetworking, IClientNetworking
@@ -37,6 +39,10 @@ namespace Mammoth.Engine.Networking
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            IInputService inputServer = (IInputService)this.Game.Services.GetService(typeof(IInputService));
+            InputState state = inputServer.States.Peek();
+            sendThing(state);
 
             NetBuffer buffer;
             while (_toSend.Count != 0)

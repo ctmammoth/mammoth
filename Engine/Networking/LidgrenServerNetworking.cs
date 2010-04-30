@@ -10,8 +10,6 @@ using Mammoth.Engine.Input;
 using Lidgren.Network.Xna;
 using Lidgren.Network;
 
-using Mammoth.Engine.Input;
-
 namespace Mammoth.Engine.Networking
 {
     public class LidgrenServerNetworking : LidgrenNetworking, IServerNetworking
@@ -103,7 +101,9 @@ namespace Mammoth.Engine.Networking
                                 int length = buffer.ReadVariableInt32();
                                 buffer.SkipPadBits();
                                 byte[] data = buffer.ReadBytes(length);
-                                _inputStates[senderID].Enqueue(decoder.DecodeInputState(data));
+                                InputState state = decoder.DecodeInputState(data);
+                                Console.WriteLine(state.ToString());
+                                _inputStates[senderID].Enqueue(state);
                                 break;
                         }
                         //byte[] data = buffer.ReadBytes(buffer.LengthBytes);
