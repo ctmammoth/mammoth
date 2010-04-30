@@ -6,33 +6,84 @@ using System.Xml;
 
 namespace Mammoth.Engine
 {
-    class XmlHandler
+    public class XmlHandler
     {
         public XmlTextReader reader;
+        private String currentPath; 
 
         public void ChangeFile(String path)
         {
+            currentPath = path;
             reader = new XmlTextReader(path);
         }
+        public void GetNextElement()
+        {
+            do
+            {
+                reader.Read();
+            }
+            while (reader.NodeType != XmlNodeType.Element);
+
+        }
+
 
         public String GetNextElementName()
         {
             reader.Read();
+            
             if (reader.NodeType == XmlNodeType.Element)
             {
                 
             }
 
             return null;
+        }
+
+        public bool GetElement(String elementType, String attribute, String value)
+        {
+            ChangeFile(currentPath);
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    if (reader.Name.Equals(elementType))
+                    {
+                        if (reader.HasAttributes)
+                        {
+                            while (reader.MoveToNextAttribute())
+                            {
+                                if (reader.Name.Equals(attribute) && reader.Value.Equals(value))
+                                {
+                                    reader.MoveToElement();
+                                    return true;
+                                }
+                            } 
+                        }
+                    }
+                }
+            }
+            return false;
 
 
         }
+
+        public bool IsClosingTag(String name)
+        {
+            if (reader.NodeType == XmlNodeType.EndElement && reader.Name.Equals(name))
+            {
+                return true;
+            }
+            return false;
+        }
+
 
 
         public static object CreateFromXml(String type, String parameters)
         {
             return null;
         }
+
+        
 
         /* Xml Test
         static void Main(string[] args)
