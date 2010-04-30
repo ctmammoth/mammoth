@@ -12,10 +12,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mammoth.Engine
 {
-    public abstract class Player : DrawableGameComponent, IRenderable, IEncodable
+    public abstract class Player : PhysicalObject, IRenderable, IEncodable
     {
-        public Player(Game game) : base(game)
+        public Player(Game game)
         {
+            this.Game = game;
+
             //Declare ID number
             IModelDBService mdb = (IModelDBService) this.Game.Services.GetService(typeof(IModelDBService));
             ID = mdb.getNextOpenID();
@@ -98,6 +100,12 @@ namespace Mammoth.Engine
         }
 
         public Model Model3D
+        {
+            get;
+            protected set;
+        }
+
+        public Game Game
         {
             get;
             protected set;

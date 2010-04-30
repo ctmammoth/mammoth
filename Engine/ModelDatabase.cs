@@ -22,8 +22,14 @@ namespace Mammoth.Engine
 
         public override void Update(GameTime gameTime)
         {
-            foreach (var obj in _objects)
-                continue;
+            foreach (var obj in _objects.Values)
+                obj.Update(gameTime);
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            foreach (var obj in _objects.Values)
+                obj.Draw(gameTime);
         }
 
         #region IModelDBService Members

@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Mammoth.Engine.Input;
 using Mammoth.Engine.Interface;
 using Mammoth.Engine.Physics;
+using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
@@ -85,18 +86,19 @@ namespace Mammoth.Engine
             });
 
             // Add the networking service.
-            Networking.NetworkComponent.CreateClientNetworking(this);
+            this.Components.Add(new LidgrenClientNetworking(this)
 
             // Add the model database.
-            this.Components.Add(new ModelDatabase(this)
+            ModelDatabase modelDB = new ModelDatabase(this)
             {
                 UpdateOrder = 3
-            });
+            };
+            this.Components.Add(modelDB);
 
-            // Create the local player, and have it update after all important components.
+            // TODO: Remove this, and create the local player when the game screen is initialized.
+            // Create the local player, and add it to the model DB.
             this.LocalPlayer = new LocalPlayer(this);
-            this.LocalPlayer.UpdateOrder = 4;
-            this.Components.Add(this.LocalPlayer);
+            modelDB.registerObject(this.LocalPlayer);
 
             // Create the camera next, and have it update after the player.
             Camera cam = new FirstPersonCamera(this, this.LocalPlayer)

@@ -15,13 +15,6 @@ namespace Mammoth.Engine
     {
         public RemotePlayer(Game game) : base(game)
         {
-            
-        }
-
-        public override void Initialize()
-        {
-            base.Initialize();
-
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
 
             this.Model3D = r.LoadModel("soldier-low-poly");
@@ -56,6 +49,16 @@ namespace Mammoth.Engine
             // If you're using the first-person camera, don't draw your own geometry.
             if (cam.Type != Camera.CameraType.FIRST_PERSON)
                 r.DrawRenderable(this);
+        }
+
+        public override string getObjectType()
+        {
+            return typeof(RemotePlayer).ToString();
+        }
+
+        public override void collideWith(PhysicalObject obj)
+        {
+
         }
     }
 }
