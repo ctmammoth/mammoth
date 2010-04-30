@@ -16,7 +16,7 @@ namespace Mammoth.Engine.Networking
         private Queue<DataGram> _toSend;
         private Dictionary<int, Queue<InputStateUpdate>> _inputStates;
 
-        private List<byte[]> _data;
+        private int _nextID;
 
         public LidgrenServerNetworking(Game game)
             : base(game)
@@ -24,8 +24,8 @@ namespace Mammoth.Engine.Networking
             _toSend = new Queue<DataGram>();
             _connections = new Dictionary<int, NetConnection>();
             _inputStates = new Dictionary<int, Queue<InputStateUpdate>>();
-
-            _data = new List<byte[]>();
+            _nextID = 1;
+            
             createSession();
         }
 
@@ -55,6 +55,9 @@ namespace Mammoth.Engine.Networking
                 _server.SendMessage(buffer, _connections[message.Recipient], NetChannel.Unreliable);
             }
 
+            foreach (Queue<InputStateUpdate> q in _inputStates.Values)
+                q.Clear();
+
             buffer = _server.CreateBuffer();
             NetMessageType type;
             NetConnection sender;
@@ -66,12 +69,14 @@ namespace Mammoth.Engine.Networking
                         Console.WriteLine(buffer.ReadString());
                         break;
                     case NetMessageType.ConnectionApproval:
-                        int id = buffer.ReadVariableInt32();
-                        Console.WriteLine("Approval; id is " + id);
+                        Console.WriteLine("Connection Approval");
                         sender.Approve();
-                        sender.Tag = id;
+                        int id = _nextID++;
                         _connections.Add(id, sender);
                         _inputStates[id] = new Queue<InputStateUpdate>();
+                        buffer = _server.CreateBuffer();
+                        buffer.WriteVariableInt32(id);
+                        _server.SendMessage(buffer, sender, NetChannel.ReliableInOrder2);
                         break;
                     case NetMessageType.StatusChanged:
                         string statusMessage = buffer.ReadString();
@@ -81,10 +86,10 @@ namespace Mammoth.Engine.Networking
                     case NetMessageType.Data:
                         // A client sent this data!
                         Console.WriteLine("Data received from " + sender);
+                        int senderID = buffer.ReadVariableInt32();
                         switch ((ClientToServerMessageType)buffer.ReadVariableInt32())
                         {
                             case ClientToServerMessageType.InputState:
-                                int senderID = (int)sender.Tag;
                                 double elapsedTime = buffer.ReadDouble();
                                 uint inputBitmask = buffer.ReadVariableUInt32();
                                 if (_inputStates[senderID] == null)
@@ -98,11 +103,6 @@ namespace Mammoth.Engine.Networking
                         break;
                 }
             }
-        }
-
-        public List<byte[]> getData()
-        {
-            return _data;
         }
 
         public Queue<InputStateUpdate> getInputStateQueue(int playerID)
