@@ -25,7 +25,7 @@ namespace Mammoth.Engine.Input
 
         public void SetStateByClientID(int clientID)
         {
-            IServerNetworking serverNet = (IServerNetworking)this.Game.Services.GetService(typeof(IServerNetworking));
+            IServerNetworking serverNet = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
 
             _emulatedState = serverNet.getInputStateQueue(clientID);
         }

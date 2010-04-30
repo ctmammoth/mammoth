@@ -125,7 +125,7 @@ namespace Mammoth.Engine.Networking
             _client.Shutdown("Player Quit");
         }
 
-        public int ClientID
+        public override int ClientID
         {
             get { return _clientID; }
         } 

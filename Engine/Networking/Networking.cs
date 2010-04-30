@@ -18,6 +18,11 @@ namespace Mammoth.Engine.Networking
         bool isNetCapable();
         NetworkComponent.NetworkingType getType();
         void Update(GameTime gameTime);
+
+        int ClientID
+        {
+            get;
+        } 
     }
 
     public interface IServerNetworking : INetworkingService
@@ -100,6 +105,11 @@ namespace Mammoth.Engine.Networking
             game.Components.Add(server);
             server.UpdateOrder = 7;
             server.createSession();
+        }
+
+        public abstract int ClientID
+        {
+            get;
         }
     }
 }

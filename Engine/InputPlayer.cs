@@ -17,9 +17,6 @@ namespace Mammoth.Engine
     {
         public InputPlayer(Game game) : base(game)
         {
-            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
-
-            this.Model3D = r.LoadModel("soldier-low-poly");
             this.Height = 6.0f;
 
             InitializePhysX();

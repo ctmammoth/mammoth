@@ -12,7 +12,9 @@ namespace Mammoth.Engine
         public LocalInputPlayer(Game game)
             : base(game)
         {
+            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
 
+            this.Model3D = r.LoadModel("soldier-low-poly");
         }
     }
 }

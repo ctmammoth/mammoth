@@ -8,7 +8,7 @@ using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
-    class ModelDatabase : DrawableGameComponent, IModelDBService
+    public class ModelDatabase : DrawableGameComponent, IModelDBService
     {
         private static int nextID = 0;
 
@@ -56,7 +56,7 @@ namespace Mammoth.Engine
 
         public int getNextOpenID()
         {
-            IClientNetworking net = (IClientNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            INetworkingService net = (INetworkingService)this.Game.Services.GetService(typeof(INetworkingService));
             return net.ClientID << 25 | nextID++;
         }
 

@@ -150,6 +150,11 @@ namespace Mammoth.Engine.Networking
             _server.Shutdown("Game ended.");
         }
 
+        public override int ClientID
+        {
+            get { return 0; }
+        } 
+
         #endregion
 
         private class DataGram
