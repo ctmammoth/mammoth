@@ -80,7 +80,6 @@ namespace Mammoth.Engine.Networking
                         _connections.Add(id, sender);
                         _inputStates[id] = new Queue<InputState>();
                         buffer = _server.CreateBuffer();
-                        buffer.Write("");
                         buffer.WriteVariableInt32(id);
                         _server.SendMessage(buffer, sender, NetChannel.ReliableInOrder2);
 
@@ -111,7 +110,6 @@ namespace Mammoth.Engine.Networking
                                 buffer.SkipPadBits();
                                 byte[] data = buffer.ReadBytes(length);
                                 InputState state = decoder.DecodeInputState(data);
-                                Console.WriteLine(state.ToString());
                                 _inputStates[senderID].Enqueue(state);
                                 break;
                         }
