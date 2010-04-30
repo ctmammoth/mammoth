@@ -90,6 +90,7 @@ namespace Mammoth.Engine.Networking
         {
             LidgrenClientNetworking client = new LidgrenClientNetworking(game);
             game.Components.Add(client);
+            client.UpdateOrder = 7;
             client.joinGame();
         }
 
