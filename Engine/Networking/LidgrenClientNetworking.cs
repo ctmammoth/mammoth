@@ -29,7 +29,7 @@ namespace Mammoth.Engine.Networking
 
         public void sendThing(IEncodable toSend)
         {
-            Console.WriteLine("Sending thing");
+            //Console.WriteLine("Sending thing");
             if (toSend is BaseObject)
                 _toSend.Enqueue(new DataGram(toSend.GetType().ToString(), ((BaseObject)toSend).ObjectId, toSend.Encode()));
             else
@@ -47,7 +47,7 @@ namespace Mammoth.Engine.Networking
             NetBuffer buffer;
             while (_toSend.Count != 0)
             {
-                Console.WriteLine("Really sending thing");
+                //Console.WriteLine("Really sending thing");
                 buffer = _client.CreateBuffer();
                 buffer.WriteVariableInt32(_clientID);
                 DataGram data = _toSend.Dequeue();

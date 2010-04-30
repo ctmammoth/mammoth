@@ -14,7 +14,7 @@ namespace Mammoth.Server
         public Server()
         {
             NetworkComponent.CreateServerNetworking(this);
-
+            this.Services.AddService(typeof(IDecoder), new Mammoth.Engine.Networking.Decoder(this));
 
         }
 

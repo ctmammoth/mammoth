@@ -80,6 +80,7 @@ namespace Mammoth.Engine.Networking
                         _connections.Add(id, sender);
                         _inputStates[id] = new Queue<InputState>();
                         buffer = _server.CreateBuffer();
+                        buffer.Write("");
                         buffer.WriteVariableInt32(id);
                         _server.SendMessage(buffer, sender, NetChannel.ReliableInOrder2);
                         break;
@@ -90,9 +91,9 @@ namespace Mammoth.Engine.Networking
                         break;
                     case NetMessageType.Data:
                         // A client sent this data!
-                        Console.WriteLine("Data received from " + sender);
+                        //Console.WriteLine("Data received from " + sender);
                         int senderID = buffer.ReadVariableInt32();
-                        Console.WriteLine("Sender ID: " + senderID);
+                        //Console.WriteLine("Sender ID: " + senderID);
                         switch (buffer.ReadString())
                         {
                             case "Mammoth.Engine.Input.InputState":
