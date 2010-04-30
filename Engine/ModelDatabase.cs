@@ -8,7 +8,7 @@ using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
-    class ModelDatabase : GameComponent, IModelDBService
+    class ModelDatabase : DrawableGameComponent, IModelDBService
     {
         private static int nextID = 0;
 
@@ -18,6 +18,12 @@ namespace Mammoth.Engine
         {
             this.Game.Services.AddService(typeof(IModelDBService), this);
             _objects = new Dictionary<int, IEncodable>();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            foreach (var obj in _objects)
+                continue;
         }
 
         #region IModelDBService Members
@@ -34,7 +40,7 @@ namespace Mammoth.Engine
 
         public void registerObject(IEncodable newObject)
         {
-            _objects.Add(newObject.GetID(), newObject);
+            _objects.Add(newObject.ID, newObject);
         }
 
         public bool removeObject(int objectID)

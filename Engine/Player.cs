@@ -5,29 +5,30 @@ using System.Text;
 
 using StillDesign.PhysX;
 
+using Mammoth.Engine.Networking;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Mammoth.Engine
 {
-    public class Player : DrawableGameComponent, IRenderable, Networking.IEncodable
+    public abstract class Player : DrawableGameComponent, IRenderable, IEncodable
     {
-        private int ID;
-        public Player(Engine game) : base(game)
+        public Player(Game game) : base(game)
         {
-            // TODO: Change this to use Adam's physics helper functions.
-            // TODO: uncomment this (and add "Engine game" back to params)
-            //Player.ControllerManager = game.Scene.CreateControllerManager();
             //Declare ID number
             IModelDBService mdb = (IModelDBService) this.Game.Services.GetService(typeof(IModelDBService));
             ID = mdb.getNextOpenID();
         }
 
-        public int GetID()
+        public virtual void Spawn(Vector3 pos, Quaternion orient)
         {
-            return ID;
+            this.Position = pos;
+            this.Orientation = orient;
+            this.HeadOrient = orient;
         }
+
+        #region IEncodable Members
 
         public byte[] Encode()
         {
@@ -49,6 +50,8 @@ namespace Mammoth.Engine
             Velocity = (Vector3) props.GetElement("Velocity");
         }
 
+        #endregion
+
         #region Properties
 
         public Vector3 Position
@@ -57,10 +60,8 @@ namespace Mammoth.Engine
             {
                 return this.Controller.Position;
             }
-            set
+            protected set
             {
-                // TODO: this should be protected
-                //this.Controller.Actor.MoveGlobalPositionTo(value);
                 this.Controller.Position = value;
             }
         }
@@ -108,17 +109,17 @@ namespace Mammoth.Engine
             protected set;
         }
 
-        static protected ControllerManager ControllerManager
-        {
-            get;
-            private set;
-        }
-
         // Not sure what the permissions of this should be.
         internal Controller Controller
         {
             get;
             set;
+        }
+
+        public int ID
+        {
+            get;
+            protected set;
         }
 
         #endregion

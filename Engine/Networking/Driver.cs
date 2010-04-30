@@ -44,9 +44,9 @@ namespace Mammoth.Engine.Networking
             Console.WriteLine("DUI: " + DUI);
         }
 
-        public int GetID()
+        public int ID
         {
-            return 222222;
+            get { return 2222; }
         }
     }
 }

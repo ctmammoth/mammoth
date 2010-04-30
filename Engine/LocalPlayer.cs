@@ -9,12 +9,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 using Mammoth.Engine.Input;
+using Mammoth.Engine.Physics;
 
 namespace Mammoth.Engine
 {
     public class LocalPlayer : Player
     {
-        public LocalPlayer(Engine game) : base(game)
+        public LocalPlayer(Game game) : base(game)
         {
             
         }
@@ -30,38 +31,41 @@ namespace Mammoth.Engine
 
             InitializePhysX();
 
-            /// TODO: Change LocalPlayer so that it can be given starting values.
-            /// It's probably best to put a specialized factory in this file and give it things
-            /// like position and orientation values.  It could then be part of an umbrella
-            /// factory that allows the game to create objects of various types.
+            /// TODO: Remove this call - the player will get spawned by the game logic.
+            this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
 
-            this.Position = new Vector3(-3.0f, 10.0f, 0.0f);
-            this.Orientation = Quaternion.Identity;
-            this.HeadOrient = Quaternion.Identity;
             this.CurrentCollision = 0;
-            this.Yaw = 0.0f;
-            this.Pitch = 0.0f;
 
             CenterCursor();
         }
 
-        // TODO: There has to be a better way to do this.
+        public override void Spawn(Vector3 pos, Quaternion orient)
+        {
+            base.Spawn(pos, orient);
+
+            this.Yaw = 0.0f;
+            this.Pitch = 0.0f;
+        }
+
+        // TODO: Clean this up a bit?
         public void InitializePhysX()
         {
+            IPhysicsManagerService physics = (IPhysicsManagerService) this.Game.Services.GetService(typeof(IPhysicsManagerService));
+
             ControllerDescription desc = new CapsuleControllerDescription(1, this.Height - 2.0f)
             {
                 UpDirection = Axis.Y,
                 Position = Vector3.UnitY * (this.Height - 1.0f) / 2.0f
             };
             this.PositionOffset = -1.0f * desc.Position;
-            this.Controller = Player.ControllerManager.CreateController(desc);
-            this.Controller.SetCollisionEnabled(true);
-            this.Controller.Name = "Local Player Controller";
-            this.Controller.Actor.Name = "Local Player Actor";
+
+            this.Controller = physics.CreateController(desc);
         }
 
         public override void Update(GameTime gameTime)
         {
+            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+
             // Get an instance of the game window to calculate new values.
             GameWindow window = this.Game.Window;
 
@@ -148,8 +152,7 @@ namespace Mammoth.Engine
             if(InCollisionState(ControllerCollisionFlag.Down))
                 this.Velocity = Vector3.Zero;
             else
-                // TODO: Change this so that it gets the scene from Adam's physics helper code.
-                this.Velocity += ((Engine) this.Game).Scene.Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds - motion;
+                this.Velocity += physics.Scene.Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds - motion;
         }
 
         /// <summary>

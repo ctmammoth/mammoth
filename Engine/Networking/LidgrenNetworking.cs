@@ -14,7 +14,7 @@ namespace Mammoth.Engine.Networking
         InputState
     }
 
-    public abstract class LidgrenNetworking : Networking
+    public abstract class LidgrenNetworking : NetworkComponent
     {
         public const int PORT = 3333;
 
@@ -34,7 +34,7 @@ namespace Mammoth.Engine.Networking
             return false;
         }
 
-        public override Networking.NetworkingType getType()
+        public override NetworkComponent.NetworkingType getType()
         {
             return NetworkingType.LIDGREN;
         }

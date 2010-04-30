@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine
 {
-    abstract class PhysicalObject
+    public abstract class PhysicalObject
     {
         # region Properties
         public Actor actor

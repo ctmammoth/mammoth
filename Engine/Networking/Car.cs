@@ -62,9 +62,9 @@ namespace Mammoth.Engine.Networking
                 driver.Print();
         }
 
-        public int GetID()
+        public int ID
         {
-            return 33333333;
+            get { return 3333; }
         }
     }
 }

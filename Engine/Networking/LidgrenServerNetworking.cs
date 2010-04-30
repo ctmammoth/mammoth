@@ -34,7 +34,7 @@ namespace Mammoth.Engine.Networking
         public void sendThing(IEncodable toSend, int target)
         {
             //TODO: get true type correctly
-            _toSend.Enqueue(new DataGram(toSend.GetType().ToString(), toSend.GetID(), toSend.Encode(), target));
+            _toSend.Enqueue(new DataGram(toSend.GetType().ToString(), toSend.ID, toSend.Encode(), target));
         }
 
         public override void Update(GameTime gameTime)

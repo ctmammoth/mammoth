@@ -14,12 +14,15 @@ namespace Mammoth.Engine.Physics
     /// 
     /// See the comments for the implementation below for more information.
     /// </summary>
-    interface IPhysicsManagerService
+    public interface IPhysicsManagerService
     {
         Actor CreateActor(ActorDescription aDesc, PhysicalObject owner);
         void RemoveActor(Actor toRemove);
     
         Controller CreateController(ControllerDescription cDesc, PhysicalObject owner);
+        // TODO: Remove this line here as well.
+        Controller CreateController(ControllerDescription cDesc);
+
         void RemoveController(Controller toRemove);
 
         void CreateScene();
@@ -29,6 +32,20 @@ namespace Mammoth.Engine.Physics
         bool FetchResults();
 
         void Dispose();
+
+        #region Properties
+
+        Core Core
+        {
+            get;
+        }
+
+        Scene Scene
+        {
+            get;
+        }
+
+        #endregion
     }
 
     /// <summary>
@@ -142,7 +159,7 @@ namespace Mammoth.Engine.Physics
         /// <param name="owner">The object with which to associate the new Actor.  The new Actor's userdata 
         /// is set to this value.</param>
         /// <returns>The new Actor, or null if there is currently no scene.</returns>
-        Actor IPhysicsManagerService.CreateActor(ActorDescription aDesc, PhysicalObject owner)
+        public Actor CreateActor(ActorDescription aDesc, PhysicalObject owner)
         {
             // Make sure the scene exists
             if (curScene != null)
@@ -163,12 +180,34 @@ namespace Mammoth.Engine.Physics
         }
 
         /// <summary>
+        /// Creates a new Actor in the current scene.
+        /// </summary>
+        /// <param name="aDesc">The Actor description with which to create the new Actor.</param>
+        /// <returns>The new Actor, or null if there is currently no scene.</returns>
+        public Actor CreateActor(ActorDescription aDesc)
+        {
+            // Make sure the scene exists
+            if (curScene != null)
+            {
+                // Test
+                Debug.Assert(aDesc != null);
+
+                // Create the actor in the current scene
+                Actor actor = curScene.CreateActor(aDesc);
+
+                return actor;
+            }
+            else
+                return null;
+        }
+
+        /// <summary>
         /// Removes an Actor from the current scene.  The Actor is not removed immediately: it is added to 
         /// the disposal queue and destroyed after the next called to fetchResults().  
         /// </summary>
         /// <param name="toRemove">The Actor to remove from the current scene.  Must be non-null.  If the
         /// Actor is not in the current scene, it will not be removed.</param>
-        void IPhysicsManagerService.RemoveActor(Actor toRemove)
+        public void RemoveActor(Actor toRemove)
         {
             // Test
             Debug.Assert(toRemove != null);
@@ -192,7 +231,7 @@ namespace Mammoth.Engine.Physics
         /// <param name="owner">The parent object of this controller.  Must be non-null.</param>
         /// <returns>The new controller (with the UserData field set to owner), or null if no scene currently
         /// exists.</returns>
-        Controller IPhysicsManagerService.CreateController(ControllerDescription cDesc, PhysicalObject owner)
+        public Controller CreateController(ControllerDescription cDesc, PhysicalObject owner)
         {
             // Make sure the scene and controller manager exist
             if (curScene != null)
@@ -212,13 +251,32 @@ namespace Mammoth.Engine.Physics
                 return null;
         }
 
+        // TODO: Remove this method and all dependencies on it.
+        public Controller CreateController(ControllerDescription cDesc)
+        {
+            // Make sure the scene and controller manager exist
+            if (curScene != null)
+            {
+                // Test
+                Debug.Assert(controllerManager != null);
+                Debug.Assert(cDesc != null);
+
+                // Create the controller
+                Controller ctrler = controllerManager.CreateController(cDesc);
+
+                return ctrler;
+            }
+            else
+                return null;
+        }
+
         /// <summary>
         /// Removes a character controller from the current scene.  The Controller is not removed immediately:
         /// it's added to a disposal queue and destroyed after the next fetchResults() call.
         /// </summary>
         /// <param name="toRemove">The controller to be removed.  Must be non-null.  If the Controller is
         /// not in the current scene, it will not be removed.</param>
-        void IPhysicsManagerService.RemoveController(Controller toRemove)
+        public void RemoveController(Controller toRemove)
         {
             // Test
             Debug.Assert(toRemove != null);
@@ -241,7 +299,7 @@ namespace Mammoth.Engine.Physics
         /// 
         /// TODO: figure out where to create the terrain using a heightfield.
         /// </summary>
-        void IPhysicsManagerService.CreateScene()
+        public void CreateScene()
         {
             // Make sure no scene exists
             if (curScene == null)
@@ -277,7 +335,7 @@ namespace Mammoth.Engine.Physics
         /// 
         /// TODO: should this be void and just add the actor to a disposal queue (just to be safe)?
         /// </summary>
-        void IPhysicsManagerService.RemoveScene()
+        public void RemoveScene()
         {
             if (curScene != null)
             {
@@ -294,11 +352,8 @@ namespace Mammoth.Engine.Physics
         /// Runs the simulation for a timestep.  Must be followed by a call to fetchResults().
         /// </summary>
         /// <param name="time">The length of the timestep for which to run the simulation.</param>
-        void IPhysicsManagerService.Simulate(float time)
+        public void Simulate(float time)
         {
-            // Test
-            Debug.Assert(time > 0);
-
             curScene.Simulate(time);
             curScene.FlushStream();
         }
@@ -307,7 +362,7 @@ namespace Mammoth.Engine.Physics
         /// Blocks until results have been fetched.  Must be preceded by a call to simulate().
         /// </summary>
         /// <returns>True when results have been fetched.</returns>
-        bool IPhysicsManagerService.FetchResults()
+        public bool FetchResults()
         {
             // Block until rigid body simulations have finished
             bool resultsFetched = curScene.FetchResults(SimulationStatus.RigidBodyFinished, true);
@@ -333,7 +388,7 @@ namespace Mammoth.Engine.Physics
         /// 
         /// TODO: what if this is called during simulate()?
         /// </summary>
-        void IPhysicsManagerService.Dispose()
+        public new void Dispose()
         {
             if (curScene != null)
             {
@@ -343,6 +398,20 @@ namespace Mammoth.Engine.Physics
             actorDisposal.Clear();
             core.Dispose();
         }
+        #endregion
+
+        #region Properties
+
+        public Core Core
+        {
+            get { return core; }
+        }
+
+        public Scene Scene
+        {
+            get { return curScene; }
+        }
+
         #endregion
     }
 }

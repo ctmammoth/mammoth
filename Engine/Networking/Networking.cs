@@ -14,7 +14,7 @@ namespace Mammoth.Engine.Networking
     {
         bool isLANCapable();
         bool isNetCapable();
-        Networking.NetworkingType getType();
+        NetworkComponent.NetworkingType getType();
         void Update(GameTime gameTime);
     }
 
@@ -64,7 +64,7 @@ namespace Mammoth.Engine.Networking
     /**
      * Abstract class which defines a networking system.
      */
-    public abstract class Networking : GameComponent, INetworkingService
+    public abstract class NetworkComponent : GameComponent, INetworkingService
     {
         public enum NetworkingType
         {
@@ -78,17 +78,10 @@ namespace Mammoth.Engine.Networking
 
         public abstract NetworkingType getType();
 
-        public Networking(Game game) : base(game)
+        public NetworkComponent(Game game) : base(game)
         {
             this.Game.Services.AddService(typeof(INetworkingService), this);
         }
-
-        public override void Initialize()
-        {
-            base.Initialize();
-        }
-
-        public abstract override void Update(GameTime gameTime);
 
         public static void CreateClientNetworking(Game game)
         {

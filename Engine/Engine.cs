@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework.GamerServices;
 
 using Mammoth.Engine.Input;
 using Mammoth.Engine.Interface;
+using Mammoth.Engine.Physics;
 
 namespace Mammoth.Engine
 {
@@ -46,29 +47,13 @@ namespace Mammoth.Engine
         {
             // TODO: Add more initialization logic here.
 
-            // TODO: Design and implement the PhysX interactions.
-            // Let's create the PhysX stuff here.  This needs to be changed though.
+            // Let's create/initialize the PhysX subsystem.
+            PhysicsManagerService physics = new PhysicsManagerService(this);
+            this.Components.Add(physics);
+            // TODO: Change this to create a new scene when a game screen is created.
+            physics.CreateScene();
             #region PhysX Code
-            this.Core = new Core(new CoreDescription(), new ConsoleOutputStream());
 
-        #if PHYSX_DEBUG
-            this.Core.SetParameter(PhysicsParameter.VisualizationScale, 2.0f);
-            this.Core.SetParameter(PhysicsParameter.VisualizeCollisionShapes, true);
-        #endif
-
-            SimulationType hworsw = (this.Core.HardwareVersion == HardwareVersion.None ? SimulationType.Software : SimulationType.Hardware);
-            Console.WriteLine("PhysX Acceleration Type: " + hworsw);
-
-            this.Scene = this.Core.CreateScene(new SceneDescription()
-            {
-                GroundPlaneEnabled = false,
-                Gravity = new Vector3(0.0f, -9.81f, 0.0f) / 9.81f,
-                SimulationType = hworsw,
-                // Use variable timesteps for the simulation to make sure that it's syncing with the refresh rate.
-                // (We might want to change this later.)
-                TimestepMethod = TimestepMethod.Variable
-            });
-            
             // Because I don't trust the ground plane, I'm making my own.
             ActorDescription boxActorDesc = new ActorDescription();
             boxActorDesc.Shapes.Add(new BoxShapeDescription()
@@ -76,7 +61,7 @@ namespace Mammoth.Engine
                 Size = new Vector3(100.0f, 2.0f, 100.0f),
                 LocalPosition = new Vector3(0.0f, -1.0f, 0.0f)
             });
-            this.Scene.CreateActor(boxActorDesc);
+            physics.CreateActor(boxActorDesc);
 
             // Just to test collisions...
             boxActorDesc = new ActorDescription();
@@ -85,11 +70,7 @@ namespace Mammoth.Engine
                 Size = new Vector3(0.5f, 0.5f, 0.5f),
                 LocalPosition = new Vector3(-3.0f, 3.0f, 0.0f)
             });
-            this.Scene.CreateActor(boxActorDesc);
-
-        #if PHYSX_DEBUG
-            this.Core.Foundation.RemoteDebugger.Connect("localhost");
-        #endif
+            physics.CreateActor(boxActorDesc);
 
             #endregion
 
@@ -97,19 +78,33 @@ namespace Mammoth.Engine
             Renderer r = new Renderer(this);
             this.Services.AddService(typeof(IRenderService), r);
 
-            this.Components.Add(new LocalInput(this));
-            this.Components.Add(new ModelDatabase(this));
-            this.Components.Add(new Networking.LidgrenClientNetworking(this));
+            // Add the input handler.
+            this.Components.Add(new LocalInput(this)
+            {
+                UpdateOrder = 1
+            });
+
+            // Add the networking service.
+            this.Components.Add(new Networking.LidgrenClientNetworking(this)
+            {
+                UpdateOrder = 2
+            });
+
+            // Add the model database.
+            this.Components.Add(new ModelDatabase(this)
+            {
+                UpdateOrder = 3
+            });
 
             // Create the local player, and have it update after all important components.
             this.LocalPlayer = new LocalPlayer(this);
-            this.LocalPlayer.UpdateOrder = 2;
+            this.LocalPlayer.UpdateOrder = 4;
             this.Components.Add(this.LocalPlayer);
 
             // Create the camera next, and have it update after the player.
             Camera cam = new FirstPersonCamera(this, this.LocalPlayer)
             {
-                UpdateOrder = 3
+                UpdateOrder = 5
             };
             this.Components.Add(cam);
 
@@ -139,10 +134,6 @@ namespace Mammoth.Engine
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
-
-            // This shouldn't be in here, but let's see if this prevents it from crashing.
-            this.Scene.Dispose();
-            this.Core.Dispose();
         }
 
         /// <summary>
@@ -164,9 +155,9 @@ namespace Mammoth.Engine
             // Let's have PhysX update itself.
             // This might need to be changed/optimized a bit if things are getting slow because they have
             // to wait for the physics calculations.
-            this.Scene.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds);
-            this.Scene.FlushStream();
-            this.Scene.FetchResults(SimulationStatus.RigidBodyFinished, true);
+            IPhysicsManagerService physics = (IPhysicsManagerService) this.Services.GetService(typeof(IPhysicsManagerService));
+            physics.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds);
+            physics.FetchResults();
         }
 
         /// <summary>
@@ -181,7 +172,8 @@ namespace Mammoth.Engine
             Renderer r = (Renderer)this.Services.GetService(typeof(IRenderService));
 
         #if PHYSX_DEBUG
-            r.DrawPhysXDebug(this.Scene);
+            IPhysicsManagerService physics = (IPhysicsManagerService) this.Services.GetService(typeof(IPhysicsManagerService));
+            r.DrawPhysXDebug(physics.Scene);
         #endif
 
             // Draw all of the objects in the scene.
@@ -196,18 +188,6 @@ namespace Mammoth.Engine
         #endregion
 
         #region Properties
-
-        public Core Core
-        {
-            get;
-            private set;
-        }
-
-        public Scene Scene
-        {
-            get;
-            private set;
-        }
 
         public LocalPlayer LocalPlayer
         {

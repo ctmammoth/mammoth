@@ -5,15 +5,17 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 
+using StillDesign.PhysX;
+
+using Mammoth.Engine.Physics;
+
 namespace Mammoth.Engine
 {
     class RemotePlayer : Player
     {
-        public RemotePlayer(Engine game) : base(game)
+        public RemotePlayer(Game game) : base(game)
         {
-            game.Components.Add(this);
-            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            mdb.registerObject(this);
+            
         }
 
         public override void Initialize()
@@ -27,14 +29,7 @@ namespace Mammoth.Engine
 
             InitializePhysX();
 
-            /// TODO: Change LocalPlayer so that it can be given starting values.
-            /// It's probably best to put a specialized factory in this file and give it things
-            /// like position and orientation values.  It could then be part of an umbrella
-            /// factory that allows the game to create objects of various types.
-
-            this.Position = new Vector3(-3.0f, 10.0f, 0.0f);
-            this.Orientation = Quaternion.Identity;
-            this.HeadOrient = Quaternion.Identity;
+            this.Spawn(Vector3.Zero, Quaternion.Identity);
         }
 
         // TODO: There has to be a better way to do this.
@@ -46,10 +41,9 @@ namespace Mammoth.Engine
                 Position = Vector3.UnitY * (this.Height - 1.0f) / 2.0f
             };
             this.PositionOffset = -1.0f * desc.Position;
-            this.Controller = Player.ControllerManager.CreateController(desc);
-            this.Controller.SetCollisionEnabled(true);
-            this.Controller.Name = "Local Player Controller";
-            this.Controller.Actor.Name = "Local Player Actor";
+
+            IPhysicsManagerService physics = (IPhysicsManagerService) this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            this.Controller = physics.CreateController(desc);
         }
 
         public override void Draw(GameTime gameTime)
