@@ -13,9 +13,13 @@ namespace Mammoth.Engine.Networking
     {
         //define short-hand access to the master hashtable of objects
         public IModelDBService registeredObjects;
+        public Game game;
 
-        public Decoder(Game game) : base(game)
+        public Decoder(Game dagame) : base(dagame)
         {
+            //get game
+            game = dagame;
+
             //add this as a service
             //this.Game.Services.AddService(typeof(IDecoder), this);
 
@@ -55,16 +59,10 @@ namespace Mammoth.Engine.Networking
         {
             switch (type)
             {
-                case "Car":
-                //do some stuff and get a default
-                //decode properties
-                //register with game
-                break;
-
-                case "Driver":
-                //do some stuff and get a default
-                //decode properties
-                //register with game
+                case "Player":
+                    RemotePlayer p = new RemotePlayer(game);
+                    p.Decode(properties);
+                    registeredObjects.registerObject(p);
                 break;
 
                 default:

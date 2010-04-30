@@ -35,6 +35,7 @@ namespace Mammoth.Engine
             tosend.AddElement("Position", Position);
             tosend.AddElement("Orientation", Orientation);
             tosend.AddElement("Velocity", Velocity);
+            tosend.AddElement("ID", ID);
 
             return tosend.Serialize();
         }
@@ -46,6 +47,7 @@ namespace Mammoth.Engine
             Position = (Vector3) props.GetElement("Position");
             Orientation = (Quaternion) props.GetElement("Orientation");
             Velocity = (Vector3) props.GetElement("Velocity");
+            ID = (int) (props.GetElement("ID");
         }
 
         #endregion
