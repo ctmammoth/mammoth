@@ -75,12 +75,24 @@ namespace Mammoth.Engine.Input
 
         public byte[] Encode()
         {
-            throw new NotImplementedException();
+            Mammoth.Engine.Networking.Encoder tosend = new Mammoth.Engine.Networking.Encoder();
+
+            tosend.AddElement("_curState", _curState);
+            tosend.AddElement("_prevState", _prevState);
+            tosend.AddElement("_mouseDelta", _mouseDelta);
+            tosend.AddElement("_elapsedSeconds", _elapsedSeconds);
+
+            return tosend.Serialize();
         }
 
         public void Decode(byte[] serialized)
         {
-            throw new NotImplementedException();
+            Mammoth.Engine.Networking.Encoder getdata = new Mammoth.Engine.Networking.Encoder(serialized);
+
+            _curState = (InputType) getdata.GetElement("_curState");
+            _prevState = (InputType) getdata.GetElement("_prevState");
+            _mouseDelta = (Vector2) getdata.GetElement("_mouseDelta");
+            _elapsedSeconds = (float) getdata.GetElement("_elapsedSeconds");
         }
 
         public int ID
