@@ -11,7 +11,7 @@ namespace Mammoth.Engine.Networking
 {
     public abstract class LidgrenNetworking : NetworkComponent
     {
-        public const int PORT = 3333;
+        public const int PORT = 5555;
 
         public LidgrenNetworking(Game game)
             : base(game)

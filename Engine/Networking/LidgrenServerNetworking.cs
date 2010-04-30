@@ -28,8 +28,6 @@ namespace Mammoth.Engine.Networking
             _connections = new Dictionary<int, NetConnection>();
             _inputStates = new Dictionary<int, Queue<InputState>>();
             _nextID = 1;
-            
-            createSession();
         }
 
         #region IServerNetworking Members
@@ -76,7 +74,9 @@ namespace Mammoth.Engine.Networking
                     case NetMessageType.ConnectionApproval:
                         Console.WriteLine("Connection Approval");
                         sender.Approve();
+                        while (sender.Status != NetConnectionStatus.Connected) ;
                         int id = _nextID++;
+                        Console.WriteLine("The value of id: " + id);
                         _connections.Add(id, sender);
                         _inputStates[id] = new Queue<InputState>();
                         buffer = _server.CreateBuffer();
@@ -92,10 +92,11 @@ namespace Mammoth.Engine.Networking
                         // A client sent this data!
                         Console.WriteLine("Data received from " + sender);
                         int senderID = buffer.ReadVariableInt32();
+                        Console.WriteLine("Sender ID: " + senderID);
                         switch (buffer.ReadString())
                         {
                             case "Mammoth.Engine.Input.InputState":
-                                if (_inputStates[senderID] == null)
+                                if (!_inputStates.ContainsKey(senderID))
                                     throw new Exception("Invalid player id: " + senderID);
                                 IDecoder decoder = (IDecoder)this.Game.Services.GetService(typeof(IDecoder));
                                 int length = buffer.ReadVariableInt32();
@@ -126,6 +127,7 @@ namespace Mammoth.Engine.Networking
 
         public void createSession()
         {
+            Console.WriteLine("Creating session...");
             NetConfiguration config = new NetConfiguration("Mammoth");
             config.MaxConnections = 32;
             config.Port = PORT;
