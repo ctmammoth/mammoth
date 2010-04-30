@@ -100,6 +100,14 @@ namespace Mammoth.Engine.Networking
                 _client.ReadMessage(buffer, out type);
                 switch (type)
                 {
+                    case NetMessageType.DebugMessage:
+                        Console.WriteLine(buffer.ReadString());
+                        break;
+                    case NetMessageType.StatusChanged:
+                        string statusMessage = buffer.ReadString();
+                        NetConnectionStatus newStatus = (NetConnectionStatus)buffer.ReadByte();
+                        Console.WriteLine("New status: " + newStatus + " (" + statusMessage + ")");
+                        break;
                     case NetMessageType.ServerDiscovered:
                         Console.WriteLine("Discovered network");
                         _client.Connect(buffer.ReadIPEndPoint());
@@ -113,6 +121,9 @@ namespace Mammoth.Engine.Networking
                             switch (type2)
                             {
                                 case NetMessageType.Data:
+                                    byte[] bytes = buffer.PeekBytes(buffer.LengthBytes);
+                                    foreach (byte b in bytes)
+                                        Console.Write(b + " ");
                                     _clientID = buffer.ReadVariableInt32();
                                     Console.WriteLine("My ID is: " + _clientID);
                                     return;
