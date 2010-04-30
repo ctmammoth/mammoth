@@ -50,7 +50,8 @@ namespace Mammoth.Engine
 
         public int getNextOpenID()
         {
-            return nextID++;
+            IClientNetworking net = (IClientNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            return net.ClientID << 25 | nextID++;
         }
 
         #endregion

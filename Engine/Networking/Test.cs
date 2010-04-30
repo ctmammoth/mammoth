@@ -44,32 +44,8 @@ namespace Mammoth.Engine.Networking
             //Console.Read();
             TestServer();
              */
-            TestServer();
+            //TestServer();
         }
 
-        static void TestServer()
-        {
-            LidgrenServerNetworking server = new LidgrenServerNetworking(_engine);
-            while (server.getData().Count == 0)
-            {
-                server.Update(null);
-            }
-            Car car = new Car(-4, -6, "blah");
-            Console.WriteLine("Old car: ");
-            car.Print();
-            car.Decode(server.getData().ToArray()[0]);
-            Console.WriteLine("New car: ");
-            car.Print();
-        }
-
-        static void TestClient()
-        {
-            IClientNetworking client = new LidgrenClientNetworking(_engine);
-            Driver ben = new Driver("Ben", 20, false);
-            Car volvo = new Car(100, 10, "Red", ben);
-            client.joinGame();
-            client.sendThing(volvo);
-            client.Update(null);
-        }
     }
 }

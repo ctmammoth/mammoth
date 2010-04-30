@@ -11,6 +11,7 @@ namespace Mammoth.Engine.Networking
 {
     public class LidgrenClientNetworking : LidgrenNetworking, IClientNetworking
     {
+        private int _clientID;
         private NetClient _client;
         private Queue<byte[]> _toSend;
 
@@ -39,6 +40,7 @@ namespace Mammoth.Engine.Networking
             {
                 Console.WriteLine("Really sending thing");
                 buffer = _client.CreateBuffer();
+                buffer.WriteVariableInt32(_clientID);
                 buffer.Write(_toSend.Dequeue());
                 _client.SendMessage(buffer, NetChannel.ReliableInOrder1);
             }
@@ -81,14 +83,20 @@ namespace Mammoth.Engine.Networking
                 {
                     case NetMessageType.ServerDiscovered:
                         Console.WriteLine("Discovered network");
-                        NetBuffer buf = _client.CreateBuffer();
-
-                        // TODO: HACK: Change this so that it actually writes the player's ID.
-                        buf.Write(42);
-                        _client.Connect(buffer.ReadIPEndPoint(), buf.ToArray());
+                        _client.Connect(buffer.ReadIPEndPoint());
                         while (_client.Status != NetConnectionStatus.Connected) ;
                         Console.WriteLine("Connected to server");
-                        return;
+                        while (true)
+                        {
+                            _client.ReadMessage(buffer, out type);
+                            switch (type)
+                            {
+                                case NetMessageType.Data:
+                                    _clientID = buffer.ReadVariableInt32();
+                                    Console.WriteLine("My ID is: " + _clientID);
+                                    return;
+                            }
+                        }
                 }
             }
         }
@@ -97,6 +105,11 @@ namespace Mammoth.Engine.Networking
         {
             _client.Shutdown("Player Quit");
         }
+
+        public int ClientID
+        {
+            get { return _clientID; }
+        } 
 
         #endregion
     }
