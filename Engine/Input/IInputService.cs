@@ -10,6 +10,14 @@ namespace Mammoth.Engine.Input
 {
     public interface IInputService
     {
+        // HACK HACK HACK HACK HACK HACK HACK: HACK
+        /// <summary>
+        /// This sets the current input state to be the input state of the specified client.  This is
+        /// unsupported for local-based input.
+        /// </summary>
+        /// <param name="clientID">The ID of the client whose state we want to store.</param>
+        void SetStateByClientID(int clientID);
+
         #region Properties
 
         bool IsLocal
@@ -17,7 +25,7 @@ namespace Mammoth.Engine.Input
             get;
         }
 
-        InputState State
+        Queue<InputState> States
         {
             get;
         }

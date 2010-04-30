@@ -22,7 +22,7 @@ namespace Mammoth.Engine.Input
             : base(game)
         {
             _keyMappings = new Dictionary<InputType, Keys>(Enum.GetValues(typeof(InputType)).Length);
-            _state = new InputState(InputType.None, InputType.None);
+            _state = new InputState(InputType.None, InputType.None, Vector2.Zero);
 
             game.Services.AddService(typeof(IInputService), this);
         }
@@ -32,6 +32,8 @@ namespace Mammoth.Engine.Input
             base.Initialize();
 
             LoadSettings();
+
+            CenterCursor();
         }
 
         public void LoadSettings()
@@ -46,19 +48,52 @@ namespace Mammoth.Engine.Input
 
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-
             InputType newState = InputType.None;
 
             foreach(var input in _keyMappings.Where((pair) => IsKeyDown(pair.Key)))
                 newState |= input.Key;
 
-            _state = new InputState(_state.CurrentState, newState);
+            // Add in mouse-based input.
+            MouseState mouseState = Mouse.GetState();
+            if (mouseState.LeftButton == ButtonState.Pressed)
+                newState |= InputType.Shoot;
+            if (mouseState.RightButton == ButtonState.Pressed)
+                newState |= InputType.Zoom;
+
+            // Get the mouse movement.
+            Vector2 mousePosition = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
+            Vector2 mouseCenter = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2);
+            Vector2 delta = (mousePosition - mouseCenter);
+
+            // Reset the mouse cursor to the center.
+            this.CenterCursor();
+
+            // Set the current state.
+            _state = new InputState(_state.CurrentState, newState, delta);
         }
 
         private bool IsKeyDown(InputType k)
         {
             return Keyboard.GetState().IsKeyDown(_keyMappings[k]);
+        }
+
+        /// <summary>
+        /// This warps the cursor to the center of the game window.  This is important, as without it, the player's
+        /// mouse would hit the side of the screen and they wouldn't be able to turn any further.  Also, using this
+        /// method, the distance moved by the mouse in each update loop is just the distance from the center of the
+        /// window to the mouse location.
+        /// </summary>
+        private void CenterCursor()
+        {
+            GameWindow window = this.Game.Window;
+
+            if (ClientState.Instance.CurrentState == ClientState.State.InGame)
+                Mouse.SetPosition(window.ClientBounds.Width / 2, window.ClientBounds.Height / 2);
+        }
+
+        public void SetStateByClientID(int clientID)
+        {
+            throw new NotSupportedException("You cannot set the state for local input!");
         }
 
         #region Properties
@@ -68,9 +103,14 @@ namespace Mammoth.Engine.Input
             get { return true; }
         }
 
-        public InputState State
+        public Queue<InputState> States
         {
-            get { return _state; }
+            get
+            {
+                Queue<InputState> ret = new Queue<InputState>();
+                ret.Enqueue(_state);
+                return ret;
+            }
         }
 
         #endregion

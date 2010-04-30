@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Microsoft.Xna.Framework;
+
 namespace Mammoth.Engine.Input
 {
     [Flags]
@@ -16,7 +18,9 @@ namespace Mammoth.Engine.Input
         Sprint = 0x10,
         Jump = 0x20,
         Crouch = 0x40,
-        Reload = 0x80
+        Reload = 0x80,
+        Shoot = 0x100,
+        Zoom = 0x200
     }
 
     public class InputState
@@ -24,13 +28,15 @@ namespace Mammoth.Engine.Input
         #region Fields
 
         InputType _curState, _prevState;
+        Vector2 _mouseDelta;
 
         #endregion
 
-        public InputState(InputType prevState, InputType curState)
+        public InputState(InputType prevState, InputType curState, Vector2 delta)
         {
             _curState = curState;
             _prevState = prevState;
+            _mouseDelta = delta;
         }
 
         public bool IsKeyDown(InputType input)
@@ -63,6 +69,11 @@ namespace Mammoth.Engine.Input
         public InputType PreviousState
         {
             get { return _prevState; }
+        }
+
+        public Vector2 MouseDelta
+        {
+            get { return _mouseDelta; }
         }
 
         #endregion
