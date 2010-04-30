@@ -33,7 +33,8 @@ namespace Mammoth.Engine.Networking
 
         public void sendThing(IEncodable toSend, int target)
         {
-            _toSend.Enqueue(new DataGram(toSend.Encode(), target));
+            //TODO: get true type correctly
+            _toSend.Enqueue(new DataGram(toSend.GetType().ToString(), toSend.GetID(), toSend.Encode(), target));
         }
 
         public override void Update(GameTime gameTime)
@@ -48,6 +49,8 @@ namespace Mammoth.Engine.Networking
             {
                 DataGram message = _toSend.Dequeue();
                 buffer = _server.CreateBuffer();
+                buffer.Write(message.Type);
+                buffer.WriteVariableInt32(message.ID);
                 buffer.Write(message.Data);
                 _server.SendMessage(buffer, _connections[message.Recipient], NetChannel.Unreliable);
             }
@@ -132,11 +135,15 @@ namespace Mammoth.Engine.Networking
 
         private class DataGram
         {
+            public string Type;
+            public int ID;
             public byte[] Data { get; set;  }
             public int Recipient { get; set;  }
 
-            public DataGram(byte[] data, int recipient)
+            public DataGram(string type, int id, byte[] data, int recipient)
             {
+                Type = type;
+                ID = id;
                 Data = data;
                 Recipient = recipient;
             }
