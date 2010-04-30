@@ -47,7 +47,7 @@ namespace Mammoth.Engine
             Position = (Vector3) props.GetElement("Position");
             Orientation = (Quaternion) props.GetElement("Orientation");
             Velocity = (Vector3) props.GetElement("Velocity");
-            ID = (int) (props.GetElement("ID");
+            ID = (int) props.GetElement("ID");
         }
 
         #endregion

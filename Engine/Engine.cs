@@ -79,6 +79,11 @@ namespace Mammoth.Engine
             Renderer r = new Renderer(this);
             this.Services.AddService(typeof(IRenderService), r);
 
+
+            //add Decoder as a service
+            Mammoth.Engine.Networking.Decoder d = new Mammoth.Engine.Networking.Decoder(this);
+            this.Services.AddService(typeof(IDecoder), d);
+
             // Add the input handler.
             this.Components.Add(new LocalInput(this)
             {
