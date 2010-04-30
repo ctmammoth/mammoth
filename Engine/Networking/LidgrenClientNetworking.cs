@@ -117,7 +117,7 @@ namespace Mammoth.Engine.Networking
                         {
                             buffer = _client.CreateBuffer();
                             NetMessageType type2;
-                            _client.ReadMessage(buffer, out type2);
+                            while (!_client.ReadMessage(buffer, out type2)) ;
                             switch (type2)
                             {
                                 case NetMessageType.Data:
