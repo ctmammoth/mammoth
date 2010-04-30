@@ -13,9 +13,9 @@ using Mammoth.Engine.Physics;
 
 namespace Mammoth.Engine
 {
-    public class LocalPlayer : Player
+    public abstract class InputPlayer : Player
     {
-        public LocalPlayer(Game game) : base(game)
+        public InputPlayer(Game game) : base(game)
         {
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
 
@@ -164,7 +164,7 @@ namespace Mammoth.Engine
 
         public override string getObjectType()
         {
-            return typeof(LocalPlayer).ToString();
+            return typeof(InputPlayer).ToString();
         }
 
         public override void collideWith(PhysicalObject obj)

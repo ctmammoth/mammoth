@@ -17,10 +17,6 @@ namespace Mammoth.Engine
         public Player(Game game)
         {
             this.Game = game;
-
-            //Declare ID number
-            IModelDBService mdb = (IModelDBService) this.Game.Services.GetService(typeof(IModelDBService));
-            ID = mdb.getNextOpenID();
         }
 
         public virtual void Spawn(Vector3 pos, Quaternion orient)
@@ -122,12 +118,6 @@ namespace Mammoth.Engine
         {
             get;
             set;
-        }
-
-        public int ID
-        {
-            get;
-            protected set;
         }
 
         #endregion

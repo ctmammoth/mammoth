@@ -31,7 +31,7 @@ namespace Mammoth.Engine.Networking
         {
             //Console.WriteLine("Sending thing");
             if (toSend is BaseObject)
-                _toSend.Enqueue(new DataGram(toSend.GetType().ToString(), ((BaseObject)toSend).ObjectId, toSend.Encode()));
+                _toSend.Enqueue(new DataGram(toSend.GetType().ToString(), ((BaseObject)toSend).ID, toSend.Encode()));
             else
                 _toSend.Enqueue(new DataGram(toSend.GetType().ToString(), toSend.Encode()));
         }

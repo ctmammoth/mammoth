@@ -46,7 +46,7 @@ namespace Mammoth.Engine
 
         public void registerObject(BaseObject newObject)
         {
-            _objects.Add(newObject.ObjectId, newObject);
+            _objects.Add(newObject.ID, newObject);
         }
 
         public bool removeObject(int objectID)

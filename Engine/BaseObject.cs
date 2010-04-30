@@ -10,22 +10,15 @@ namespace Mammoth.Engine
     public abstract class BaseObject
     {
         private static int nextId = 0;
-        private int objectId;
         private String objectType;
 
         public virtual void Update(GameTime gameTime) { }
         public virtual void Draw(GameTime gameTime) { }
 
-        public int ObjectId
+        public int ID
         {
-            get
-            {
-                return objectId;
-            }
-            set
-            {
-                objectId = value;
-            }
+            get;
+            internal set;
         }
 
         public abstract String getObjectType();

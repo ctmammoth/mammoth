@@ -35,7 +35,7 @@ namespace Mammoth.Engine.Networking
         public void sendThing(IEncodable toSend, int target)
         {
             if (toSend is BaseObject)
-                _toSend.Enqueue(new DataGram(toSend.GetType().ToString(), ((BaseObject)toSend).ObjectId, toSend.Encode(), target));
+                _toSend.Enqueue(new DataGram(toSend.GetType().ToString(), ((BaseObject)toSend).ID, toSend.Encode(), target));
         }
 
         public override void Update(GameTime gameTime)
@@ -83,6 +83,13 @@ namespace Mammoth.Engine.Networking
                         buffer.Write("");
                         buffer.WriteVariableInt32(id);
                         _server.SendMessage(buffer, sender, NetChannel.ReliableInOrder2);
+
+                        //TODO: TEST CODE
+                        IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+                        InputPlayer player = new ProxyInputPlayer(this.Game, id);
+                        player.ID = mdb.getNextOpenID();
+                        mdb.registerObject(player);
+
                         break;
                     case NetMessageType.StatusChanged:
                         string statusMessage = buffer.ReadString();

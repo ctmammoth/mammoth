@@ -98,7 +98,8 @@ namespace Mammoth.Engine
 
             // TODO: Remove this, and create the local player when the game screen is initialized.
             // Create the local player, and add it to the model DB.
-            this.LocalPlayer = new LocalPlayer(this);
+            this.LocalPlayer = new LocalInputPlayer(this);
+            this.LocalPlayer.ID = modelDB.getNextOpenID();
             modelDB.registerObject(this.LocalPlayer);
 
             // Create the camera next, and have it update after the player.
@@ -189,7 +190,7 @@ namespace Mammoth.Engine
 
         #region Properties
 
-        public LocalPlayer LocalPlayer
+        public InputPlayer LocalPlayer
         {
             get;
             private set;
