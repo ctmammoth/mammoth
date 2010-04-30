@@ -6,7 +6,7 @@
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E80FCA0E-78EC-44C5-B375-894050EEE6CB}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mammoth.Engine</RootNamespace>
     <AssemblyName>Engine</AssemblyName>
@@ -77,12 +77,15 @@
     <Compile Include="ClientState.cs" />
     <Compile Include="IModelDBService.cs" />
     <Compile Include="ModelDatabase.cs" />
+    <Compile Include="Crate.cs" />
+    <Compile Include="Door.cs" />
     <Compile Include="Networking\Car.cs" />
     <Compile Include="Networking\Decoder.cs" />
     <Compile Include="Networking\Driver.cs" />
     <Compile Include="Networking\Encoder.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Input\IInputService.cs" />
+    <Compile Include="Fortress.cs" />
     <Compile Include="Networking\IDecoder.cs" />
     <Compile Include="Networking\IEncodable.cs" />
     <Compile Include="Object.cs" />
@@ -100,19 +103,25 @@
     <Compile Include="LocalPlayer.cs" />
     <Compile Include="PhysicalObject.cs" />
     <Compile Include="Networking\LidgrenClientNetworking.cs" />
+    <Compile Include="Object.cs" />
     <Compile Include="Networking\LidgrenNetworking.cs" />
     <Compile Include="Networking\LidgrenServerNetworking.cs" />
     <Compile Include="Networking\Networking.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="RemotePlayer.cs" />
     <Compile Include="Renderer.cs" />
+    <Compile Include="Room.cs" />
     <Compile Include="StaticObject.cs" />
     <Compile Include="Interface\TWidget.cs" />
     <Compile Include="Networking\Test.cs" />
+    <Compile Include="XmlHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Interface\Interface.cd" />
     <None Include="Networking\Networking.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
