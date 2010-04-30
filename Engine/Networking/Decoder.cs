@@ -12,7 +12,7 @@ namespace Mammoth.Engine.Networking
     public class Decoder : GameComponent, Mammoth.Engine.Networking.IDecoder
     {
         //define short-hand access to the master hashtable of objects
-        public IModelDBService registeredObjects;
+        //public IModelDBService registeredObjects;
         public Game game;
 
         public Decoder(Game dagame) : base(dagame)
@@ -24,7 +24,7 @@ namespace Mammoth.Engine.Networking
             //this.Game.Services.AddService(typeof(IDecoder), this);
 
             //get list of registered objects
-            registeredObjects = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            //registeredObjects = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
         }
 
         public InputState DecodeInputState(byte[] data)
@@ -43,7 +43,10 @@ namespace Mammoth.Engine.Networking
         /// <param name="properties">A byte array that can be decoded by the IEncodable class of type "type" and contains the properties of the object</param>
         public void AnalyzeObjects(string type, int id, byte[] properties)
         {
-            if (registeredObjects.hasObject(id) && registeredObjects.getObject(id) is IEncodable)
+            IModelDBService ro = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+
+            //if (registeredObjects.hasObject(id) && registeredObjects.getObject(id) is IEncodable)
+            if (ro.hasObject(id))
                 UpdateObject(id, properties);
             else
                 CreateObject(type, id, properties);
@@ -57,12 +60,14 @@ namespace Mammoth.Engine.Networking
         /// <param name="properties">A byte array that can be decoded by the IEncodable class of type "type" and contains the properties of the object</param>
         public void CreateObject(string type, int id, byte[] properties)
         {
+            IModelDBService ro = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+
             switch (type)
             {
                 case "Player":
                     RemotePlayer p = new RemotePlayer(game);
                     p.Decode(properties);
-                    registeredObjects.registerObject(p);
+                    ro.registerObject(p);
                 break;
 
                 default:
@@ -78,7 +83,8 @@ namespace Mammoth.Engine.Networking
         /// <param name="properties">A byte array that can be decoded by the IEncodable class of type "type" and contains the properties of the object</param>
         public void UpdateObject(int id, byte[] properties)
         {
-            IEncodable toupdate = (IEncodable) registeredObjects.getObject(id);
+            IModelDBService ro = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            IEncodable toupdate = (IEncodable)ro.getObject(id);
             toupdate.Decode(properties);
         }
 

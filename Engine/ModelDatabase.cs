@@ -36,6 +36,7 @@ namespace Mammoth.Engine
 
         public bool hasObject(int objectID)
         {
+            Console.WriteLine("has object?");
             return _objects.ContainsKey(objectID);
         }
 
