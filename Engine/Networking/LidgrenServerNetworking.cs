@@ -38,6 +38,12 @@ namespace Mammoth.Engine.Networking
                 _toSend.Enqueue(new DataGram(toSend.GetType().ToString(), ((BaseObject)toSend).ID, toSend.Encode(), target));
         }
 
+        public void sendThing(IEncodable toSend)
+        {
+            if (toSend is BaseObject)
+                _toSend.Enqueue(new DataGram(toSend.GetType().ToString(), ((BaseObject)toSend).ID, toSend.Encode(), -1));
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -55,7 +61,10 @@ namespace Mammoth.Engine.Networking
                 buffer.WriteVariableInt32(message.Data.Length);
                 buffer.WritePadBits();
                 buffer.Write(message.Data);
-                _server.SendMessage(buffer, _connections[message.Recipient], NetChannel.Unreliable);
+                if (message.Recipient < 0)
+                    _server.SendMessage(buffer, _connections.Values, NetChannel.Unreliable);
+                else
+                    _server.SendMessage(buffer, _connections[message.Recipient], NetChannel.Unreliable);
             }
 
             foreach (Queue<InputState> q in _inputStates.Values)

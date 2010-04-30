@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 
 using Mammoth.Engine.Input;
+using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
@@ -24,6 +25,9 @@ namespace Mammoth.Engine
 
             // Update player using emulated input state.
             base.Update(gameTime);
+
+            IServerNetworking network = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            network.sendThing(this);
         }
 
         #region Properties

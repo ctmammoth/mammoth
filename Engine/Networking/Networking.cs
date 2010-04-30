@@ -28,6 +28,7 @@ namespace Mammoth.Engine.Networking
     public interface IServerNetworking : INetworkingService
     {
         void sendThing(IEncodable toSend, int target);
+        void sendThing(IEncodable toSend);
         Queue<InputState> getInputStateQueue(int playerID);
         void createSession();
         void endGame();
@@ -35,7 +36,6 @@ namespace Mammoth.Engine.Networking
 
     public interface IClientNetworking : INetworkingService
     {
-        int ClientID { get; }
         void sendThing(IEncodable toSend);
         void joinGame();
         void quitGame();
