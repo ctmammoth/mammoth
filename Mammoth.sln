@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mammoth", "Mammoth\Mammoth.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{E80FCA0E-78EC-44C5-B375-894050EEE6CB}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer", "Installer\Installer.vdproj", "{646F9B6A-179C-4FFC-9FB8-45CE144A38B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +62,15 @@ Global
 		{FB90E2DB-F368-411D-BE14-CC0CC045CEBA}.Release|Any CPU.ActiveCfg = Release|x86
 		{FB90E2DB-F368-411D-BE14-CC0CC045CEBA}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{FB90E2DB-F368-411D-BE14-CC0CC045CEBA}.Release|x86.ActiveCfg = Release|x86
+		{646F9B6A-179C-4FFC-9FB8-45CE144A38B3}.Debug|Any CPU.ActiveCfg = Debug
+		{646F9B6A-179C-4FFC-9FB8-45CE144A38B3}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{646F9B6A-179C-4FFC-9FB8-45CE144A38B3}.Debug|x86.ActiveCfg = Debug
+		{646F9B6A-179C-4FFC-9FB8-45CE144A38B3}.PhysX Debug|Any CPU.ActiveCfg = Debug
+		{646F9B6A-179C-4FFC-9FB8-45CE144A38B3}.PhysX Debug|Mixed Platforms.ActiveCfg = Debug
+		{646F9B6A-179C-4FFC-9FB8-45CE144A38B3}.PhysX Debug|x86.ActiveCfg = Debug
+		{646F9B6A-179C-4FFC-9FB8-45CE144A38B3}.Release|Any CPU.ActiveCfg = Release
+		{646F9B6A-179C-4FFC-9FB8-45CE144A38B3}.Release|Mixed Platforms.ActiveCfg = Release
+		{646F9B6A-179C-4FFC-9FB8-45CE144A38B3}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
