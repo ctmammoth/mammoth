@@ -47,7 +47,7 @@ namespace Mammoth.Engine
             };
             this.PositionOffset = -1.0f * desc.Position;
 
-            this.Controller = physics.CreateController(desc);
+            this.Controller = physics.CreateController(desc, this);
         }
 
         public override void Update(GameTime gameTime)

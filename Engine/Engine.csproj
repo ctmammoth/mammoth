@@ -90,7 +90,6 @@
     <Compile Include="Fortress.cs" />
     <Compile Include="Networking\IDecoder.cs" />
     <Compile Include="Networking\IEncodable.cs" />
-    <Compile Include="PhysicsManagerService.cs" />
     <Compile Include="Input\InputState.cs" />
     <Compile Include="Input\LocalInput.cs" />
     <Compile Include="Interface\ExtensionMethods.cs" />
@@ -102,12 +101,13 @@
     <Compile Include="IRenderable.cs" />
     <Compile Include="IRenderService.cs" />
     <Compile Include="InputPlayer.cs" />
-    <Compile Include="PhysicalObject.cs" />
     <Compile Include="Networking\LidgrenClientNetworking.cs" />
     <Compile Include="BaseObject.cs" />
     <Compile Include="Networking\LidgrenNetworking.cs" />
     <Compile Include="Networking\LidgrenServerNetworking.cs" />
     <Compile Include="Networking\Networking.cs" />
+    <Compile Include="Physics\PhysicalObject.cs" />
+    <Compile Include="Physics\PhysicsManagerService.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="ProxyInputPlayer.cs" />
     <Compile Include="RemotePlayer.cs" />

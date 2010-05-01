@@ -36,7 +36,7 @@ namespace Mammoth.Engine
             this.PositionOffset = -1.0f * desc.Position;
 
             IPhysicsManagerService physics = (IPhysicsManagerService) this.Game.Services.GetService(typeof(IPhysicsManagerService));
-            this.Controller = physics.CreateController(desc);
+            this.Controller = physics.CreateController(desc, this);
         }
 
         public override void Draw(GameTime gameTime)

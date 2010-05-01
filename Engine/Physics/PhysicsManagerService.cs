@@ -20,8 +20,6 @@ namespace Mammoth.Engine.Physics
         void RemoveActor(Actor toRemove);
     
         Controller CreateController(ControllerDescription cDesc, PhysicalObject owner);
-        // TODO: Remove this line here as well.
-        Controller CreateController(ControllerDescription cDesc);
 
         void RemoveController(Controller toRemove);
 
@@ -244,25 +242,6 @@ namespace Mammoth.Engine.Physics
                 // Create the controller
                 Controller ctrler = controllerManager.CreateController(cDesc);
                 ctrler.UserData = owner;
-
-                return ctrler;
-            }
-            else
-                return null;
-        }
-
-        // TODO: Remove this method and all dependencies on it.
-        public Controller CreateController(ControllerDescription cDesc)
-        {
-            // Make sure the scene and controller manager exist
-            if (curScene != null)
-            {
-                // Test
-                Debug.Assert(controllerManager != null);
-                Debug.Assert(cDesc != null);
-
-                // Create the controller
-                Controller ctrler = controllerManager.CreateController(cDesc);
 
                 return ctrler;
             }
