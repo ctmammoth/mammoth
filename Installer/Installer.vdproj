@@ -15,12 +15,6 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_0146E39CEE0C4F19A5C53409AF9C8FFB"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_0BC40DC77972482AA363D9597A3201B4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -28,6 +22,30 @@
         "Entry"
         {
         "MsmKey" = "8:_118E54C834394FDEBBA7598A98571262"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1E81C8A4407543848CD6631D503409CF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2D75B3FDB77940899B03FDCB25FB5A73"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2EA092A90B6E4D5899E36155626EC443"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_371353C16B2A49A38A01AFFAE967C7A1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -41,12 +59,6 @@
         {
         "MsmKey" = "8:_4D1DBEFC8D4C40CBB050FD6150529F93"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_4E2A7E01D886E39360ED5D0BDA8AD70B"
-        "OwnerKey" = "8:_6D7BA5E643A5FBC5903E3194E74184F7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -87,7 +99,25 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_E485E6E12ADB4579A639FD1507E35360"
+        "MsmKey" = "8:_A66EF809922C5233BAC1A1C49B518D31"
+        "OwnerKey" = "8:_6D7BA5E643A5FBC5903E3194E74184F7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AFF2DC9429604FB98B28660DF5B3AA32"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CB88F117C9114801BD35A0420CE37728"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EE77B11C5F2A417687C0C2C55E4635D0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -95,24 +125,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_6A54CA6CF7F97717C7DA9EE963945776"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_0146E39CEE0C4F19A5C53409AF9C8FFB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E485E6E12ADB4579A639FD1507E35360"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_4E2A7E01D886E39360ED5D0BDA8AD70B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -151,6 +163,32 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5"
+                    {
+                    "Name" = "8:.NET Framework 3.5"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Xna.Framework.3.1"
+                    {
+                    "Name" = "8:Microsoft XNA Framework Redistributable 3.1"
+                    "ProductCode" = "8:Microsoft.Xna.Framework.3.1"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -196,37 +234,6 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0146E39CEE0C4F19A5C53409AF9C8FFB"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Microsoft.Xna.Framework.Game, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86"
-                "ScatterAssemblies"
-                {
-                    "_0146E39CEE0C4F19A5C53409AF9C8FFB"
-                    {
-                    "Name" = "8:Microsoft.Xna.Framework.Game.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:C:\\Program Files (x86)\\Microsoft XNA\\XNA Game Studio\\v3.1\\References\\Windows\\x86\\Microsoft.Xna.Framework.Game.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_8BF6F48A7370402F995EFE6A0695DA61"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0BC40DC77972482AA363D9597A3201B4"
             {
             "SourcePath" = "8:..\\Assemblies\\PhysXCooking.dll"
@@ -253,6 +260,86 @@
             "TargetName" = "8:PhysXDevice.dll"
             "Tag" = "8:"
             "Folder" = "8:_8BF6F48A7370402F995EFE6A0695DA61"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1E81C8A4407543848CD6631D503409CF"
+            {
+            "SourcePath" = "8:..\\Mammoth\\Content\\models\\toon-soldier.fbx"
+            "TargetName" = "8:toon-soldier.fbx"
+            "Tag" = "8:"
+            "Folder" = "8:_A5487C99DB484638BC2CD971D4DBAD02"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2D75B3FDB77940899B03FDCB25FB5A73"
+            {
+            "SourcePath" = "8:..\\Mammoth\\bin\\x86\\PhysX Debug\\Content\\models\\soldier-low-poly.xnb"
+            "TargetName" = "8:soldier-low-poly.xnb"
+            "Tag" = "8:"
+            "Folder" = "8:_A5487C99DB484638BC2CD971D4DBAD02"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2EA092A90B6E4D5899E36155626EC443"
+            {
+            "SourcePath" = "8:..\\Mammoth\\bin\\x86\\PhysX Debug\\Content\\fonts\\calibri.xnb"
+            "TargetName" = "8:calibri.xnb"
+            "Tag" = "8:"
+            "Folder" = "8:_EC69AD2CD06C43428E6A7E57C6A51CD9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_371353C16B2A49A38A01AFFAE967C7A1"
+            {
+            "SourcePath" = "8:..\\Mammoth\\Content\\fonts\\calibri.spritefont"
+            "TargetName" = "8:calibri.spritefont"
+            "Tag" = "8:"
+            "Folder" = "8:_EC69AD2CD06C43428E6A7E57C6A51CD9"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -305,37 +392,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4E2A7E01D886E39360ED5D0BDA8AD70B"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Lidgren.Network, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_4E2A7E01D886E39360ED5D0BDA8AD70B"
-                    {
-                    "Name" = "8:Lidgren.Network.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Lidgren.Network.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_8BF6F48A7370402F995EFE6A0695DA61"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6A54CA6CF7F97717C7DA9EE963945776"
@@ -451,23 +507,52 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E485E6E12ADB4579A639FD1507E35360"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AFF2DC9429604FB98B28660DF5B3AA32"
             {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Microsoft.Xna.Framework, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86"
-                "ScatterAssemblies"
-                {
-                    "_E485E6E12ADB4579A639FD1507E35360"
-                    {
-                    "Name" = "8:Microsoft.Xna.Framework.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:C:\\Program Files (x86)\\Microsoft XNA\\XNA Game Studio\\v3.1\\References\\Windows\\x86\\Microsoft.Xna.Framework.dll"
-            "TargetName" = "8:"
+            "SourcePath" = "8:..\\Mammoth\\bin\\x86\\PhysX Debug\\Content\\models\\toon-soldier.xnb"
+            "TargetName" = "8:toon-soldier.xnb"
             "Tag" = "8:"
-            "Folder" = "8:_8BF6F48A7370402F995EFE6A0695DA61"
+            "Folder" = "8:_A5487C99DB484638BC2CD971D4DBAD02"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CB88F117C9114801BD35A0420CE37728"
+            {
+            "SourcePath" = "8:..\\Mammoth\\Content\\models\\soldier-low-poly.fbx"
+            "TargetName" = "8:soldier-low-poly.fbx"
+            "Tag" = "8:"
+            "Folder" = "8:_A5487C99DB484638BC2CD971D4DBAD02"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EE77B11C5F2A417687C0C2C55E4635D0"
+            {
+            "SourcePath" = "8:..\\Mammoth\\bin\\x86\\PhysX Debug\\Content\\FBX\\74D1293B\\soldier-low-poly.fbm\\Soldier_D_1024_alt_0.xnb"
+            "TargetName" = "8:Soldier_D_1024_alt_0.xnb"
+            "Tag" = "8:"
+            "Folder" = "8:_DC0B0840499A44A8AC8C3682636970B9"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -497,6 +582,17 @@
             "Property" = "8:ProgramMenuFolder"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_50731B5781E74BF7B63BD8856FF650FA"
+                    {
+                    "Name" = "8:Mammoth"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_B717BF81E3E548349894914A03328833"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_4C17B6268558406594B224CFF2D031A4"
@@ -520,6 +616,72 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_B96AC17C1070483596477F05EA47C316"
+                    {
+                    "Name" = "8:Content"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_64C1A6A4D539422CA7EF338D2252E671"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_37CECFF2C73847BEAF91E9DC8B3CBBEF"
+                            {
+                            "Name" = "8:FBX"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_8AF694B8796940A19E736ECC4EB9108C"
+                                "Folders"
+                                {
+                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_8CCA0E49D4884321B2077C1F794D9BA3"
+                                    {
+                                    "Name" = "8:74D1293B"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_FC673142F540432D9E0CF8C400370489"
+                                        "Folders"
+                                        {
+                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_DC0B0840499A44A8AC8C3682636970B9"
+                                            {
+                                            "Name" = "8:soldier-low-poly.fbm"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "Property" = "8:_3169700FE054423083C58C168B13C22F"
+                                                "Folders"
+                                                {
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_A5487C99DB484638BC2CD971D4DBAD02"
+                            {
+                            "Name" = "8:models"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_7B857FA40E57495495CF6A58D50856FE"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_EC69AD2CD06C43428E6A7E57C6A51CD9"
+                            {
+                            "Name" = "8:fonts"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_0B6B87F58B1741869267FB7952EF47CB"
+                                "Folders"
+                                {
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -537,9 +699,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Installer"
+        "ProductName" = "8:Capture the Mammoth"
         "ProductCode" = "8:{8D693A82-1BAF-4B5B-8B3A-20D2A66B0ADD}"
-        "PackageCode" = "8:{DB827C13-0452-4F3B-B604-BEB52DC7C14C}"
+        "PackageCode" = "8:{C6EDCF7D-5E2B-407B-B31F-C076915678DA}"
         "UpgradeCode" = "8:{73649DF4-78BD-4078-8D08-C6F4D46A9E66}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -658,6 +820,62 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_19ECD0DDD139478196E7A3DDFE94D5D3"
+            {
+            "Name" = "8:MammothClient"
+            "Arguments" = "8:client"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_57D7C6CF14CE4E91971CDE023C8520A8"
+            "Folder" = "8:_50731B5781E74BF7B63BD8856FF650FA"
+            "WorkingFolder" = "8:_8BF6F48A7370402F995EFE6A0695DA61"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_692A4E537B2A4512BB9A1294E4CA2072"
+            {
+            "Name" = "8:MammothClient"
+            "Arguments" = "8:client"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_57D7C6CF14CE4E91971CDE023C8520A8"
+            "Folder" = "8:_8BF6F48A7370402F995EFE6A0695DA61"
+            "WorkingFolder" = "8:_8BF6F48A7370402F995EFE6A0695DA61"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_6969B3AF5A5E48DD9C726680189891BA"
+            {
+            "Name" = "8:MammothServer"
+            "Arguments" = "8:server"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_57D7C6CF14CE4E91971CDE023C8520A8"
+            "Folder" = "8:_8BF6F48A7370402F995EFE6A0695DA61"
+            "WorkingFolder" = "8:_8BF6F48A7370402F995EFE6A0695DA61"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_AAA983079BBF46A7B204E7CFDCB19980"
+            {
+            "Name" = "8:MammothServer"
+            "Arguments" = "8:server"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_57D7C6CF14CE4E91971CDE023C8520A8"
+            "Folder" = "8:_50731B5781E74BF7B63BD8856FF650FA"
+            "WorkingFolder" = "8:_8BF6F48A7370402F995EFE6A0695DA61"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
@@ -1057,6 +1275,34 @@
         }
         "ProjectOutput"
         {
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_19E84E6486EE49CCB3F9505969113B03"
+            {
+            "SourcePath" = "8:"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_8BF6F48A7370402F995EFE6A0695DA61"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:ContentFiles"
+            "OutputProjectGuid" = "8:{78CEE2B0-9278-4CC0-8085-3506F109ABB3}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_57D7C6CF14CE4E91971CDE023C8520A8"
             {
             "SourcePath" = "8:..\\Mammoth\\obj\\x86\\PhysX Debug\\Mammoth.exe"
@@ -1079,34 +1325,6 @@
             "ProjectOutputGroupRegister" = "3:1"
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{78CEE2B0-9278-4CC0-8085-3506F109ABB3}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_F5D1C325CFC3455C80A8BBE76CDD4616"
-            {
-            "SourcePath" = "8:"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_8BF6F48A7370402F995EFE6A0695DA61"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:ContentFiles"
             "OutputProjectGuid" = "8:{78CEE2B0-9278-4CC0-8085-3506F109ABB3}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
