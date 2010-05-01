@@ -127,6 +127,12 @@ namespace Mammoth.Engine.Networking
                                         Console.Write(b + " ");
                                     Console.WriteLine();
                                     //Console.WriteLine(buffer.PeekString());
+                                    string messageType = buffer.ReadString();
+                                    if (!messageType.Equals("ClientID"))
+                                    {
+                                        Console.WriteLine("Non client id message");
+                                        break;
+                                    }
                                     int id = buffer.ReadVariableInt32();
                                     //if (id > 0)
                                         _clientID = id;

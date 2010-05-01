@@ -90,6 +90,7 @@ namespace Mammoth.Engine.Networking
                         _connections.Add(id, sender);
                         _inputStates[id] = new Queue<InputState>();
                         buffer = _server.CreateBuffer();
+                        buffer.Write("ClientID");
                         buffer.WriteVariableInt32(id);
                         _server.SendMessage(buffer, sender, NetChannel.ReliableInOrder2);
 
