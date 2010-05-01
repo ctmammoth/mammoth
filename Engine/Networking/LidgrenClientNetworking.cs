@@ -117,23 +117,25 @@ namespace Mammoth.Engine.Networking
                         {
                             buffer = _client.CreateBuffer();
                             NetMessageType type2;
-                            while (!_client.ReadMessage(buffer, out type2)) ;
+                            while (!_client.ReadMessage(buffer, out type2))
+                                Console.WriteLine("No message");
                             switch (type2)
                             {
                                 case NetMessageType.Data:
                                     byte[] bytes = buffer.PeekBytes(buffer.LengthBytes);
                                     foreach (byte b in bytes)
                                         Console.Write(b + " ");
+                                    Console.WriteLine();
                                     //Console.WriteLine(buffer.PeekString());
                                     int id = buffer.ReadVariableInt32();
-                                    if (id > 0)
+                                    //if (id > 0)
                                         _clientID = id;
-                                    else
-                                    {
-                                        //TODO: hack
-                                        Console.WriteLine("Ignoring negative ID");
-                                        break;
-                                    }
+                                    //else
+                                    //{
+                                    //    //TODO: hack
+                                    //    Console.WriteLine("Ignoring negative ID");
+                                    //    break;
+                                    //}
                                     Console.WriteLine("My ID is: " + _clientID);
                                     return;
                             }
