@@ -71,6 +71,7 @@ namespace Mammoth.Engine.Networking
                 }
             }
 
+            Console.WriteLine("Things to send: " + _toSend.Count);
             while (_toSend.Count != 0)
             {
                 DataGram message = _toSend.Dequeue();

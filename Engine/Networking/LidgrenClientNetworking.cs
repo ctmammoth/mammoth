@@ -53,6 +53,7 @@ namespace Mammoth.Engine.Networking
 
             IInputService inputServer = (IInputService)this.Game.Services.GetService(typeof(IInputService));
             InputState state = inputServer.States.Peek();
+            //Console.WriteLine(state.ToString());
             sendThing(state);
             NetBuffer buffer;
 
@@ -92,7 +93,7 @@ namespace Mammoth.Engine.Networking
                         }
                         break;
                     case NetMessageType.Data:
-                        //Console.WriteLine("Data received");
+                        Console.WriteLine("Data received");
                         string objectType = buffer.ReadString();
                         int id = buffer.ReadVariableInt32();
                         int length = buffer.ReadVariableInt32();
