@@ -44,6 +44,11 @@ namespace Mammoth.Engine.Networking
                 return;
             base.Update(gameTime);
 
+            IInputService inputServer = (IInputService)this.Game.Services.GetService(typeof(IInputService));
+            InputState state = inputServer.States.Peek();
+            sendThing(state);
+
+            IDecoder decode = (IDecoder)this.Game.Services.GetService(typeof(IDecoder));
             NetBuffer buffer = _client.CreateBuffer();
             NetMessageType type;
             while (_client.ReadMessage(buffer, out type))
@@ -70,15 +75,10 @@ namespace Mammoth.Engine.Networking
                         int length = buffer.ReadVariableInt32();
                         buffer.SkipPadBits();
                         byte[] data = buffer.ReadBytes(length);
-                        IDecoder decode = (IDecoder)this.Game.Services.GetService(typeof(IDecoder));
                         decode.AnalyzeObjects(objectType, id, data);
                         break;
                 }
             }
-
-            IInputService inputServer = (IInputService)this.Game.Services.GetService(typeof(IInputService));
-            InputState state = inputServer.States.Peek();
-            sendThing(state);
 
             while (_toSend.Count != 0)
             {

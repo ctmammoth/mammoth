@@ -49,7 +49,6 @@ namespace Mammoth.Engine.Networking
         {
             base.Update(gameTime);
 
-            int senderID;
             NetBuffer buffer = _server.CreateBuffer();
             NetMessageType type;
             NetConnection sender;
@@ -61,57 +60,13 @@ namespace Mammoth.Engine.Networking
                         Console.WriteLine(buffer.ReadString());
                         break;
                     case NetMessageType.ConnectionApproval:
-                        Console.WriteLine("Connection Approval");
-                        sender.Approve();
-                        while (sender.Status != NetConnectionStatus.Connected) ;
-                        int id = _nextID++;
-                        Console.WriteLine("The value of id: " + id);
-                        _connections.Add(id, sender);
-                        _inputStates[id] = new Queue<InputState>();
-                        buffer = _server.CreateBuffer();
-                        buffer.Write("ClientID");
-                        buffer.WriteVariableInt32(id);
-                        _server.SendMessage(buffer, sender, NetChannel.ReliableInOrder2);
-
-                        //TODO: TEST CODE
-                        //TODO: object ID of localplayer should be client ID + 0
-                        IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-                        InputPlayer player = new ProxyInputPlayer(this.Game, id);
-                        player.ID = id << 25;
-                        mdb.registerObject(player);
-
+                        acceptClient(buffer, sender);
                         break;
                     case NetMessageType.StatusChanged:
-                        senderID = int.Parse(buffer.ReadString());
-                        NetConnectionStatus newStatus = (NetConnectionStatus)buffer.ReadByte();
-                        Console.WriteLine("New status for client " + senderID + " (" + sender + "): " + newStatus);
-                        if (newStatus == NetConnectionStatus.Disconnected || newStatus == NetConnectionStatus.Disconnecting)
-                        {
-                            Console.WriteLine("Client " + senderID + " has disconnected.");
-                            _connections.Remove(senderID);
-                        }
+                        handleStatusChange(buffer, sender);
                         break;
                     case NetMessageType.Data:
-                        // A client sent this data!
-                        //Console.WriteLine("Data received from " + sender);
-                        senderID = buffer.ReadVariableInt32();
-                        //Console.WriteLine("Sender ID: " + senderID);
-                        switch (buffer.ReadString())
-                        {
-                            case "Mammoth.Engine.Input.InputState":
-                                if (!_inputStates.ContainsKey(senderID))
-                                    throw new Exception("Invalid player id: " + senderID);
-                                IDecoder decoder = (IDecoder)this.Game.Services.GetService(typeof(IDecoder));
-                                int length = buffer.ReadVariableInt32();
-                                buffer.SkipPadBits();
-                                byte[] data = buffer.ReadBytes(length);
-                                InputState state = decoder.DecodeInputState(data);
-                                _inputStates[senderID].Enqueue(state);
-                                break;
-                        }
-                        //byte[] data = buffer.ReadBytes(buffer.LengthBytes);
-                        //Console.WriteLine(data);
-                        //_data.Add(data);
+                        handleData(buffer, sender);
                         break;
                 }
             }
@@ -133,6 +88,68 @@ namespace Mammoth.Engine.Networking
 
             foreach (Queue<InputState> q in _inputStates.Values)
                 q.Clear();
+        }
+
+        private void acceptClient(NetBuffer buffer, NetConnection sender)
+        {
+            Console.WriteLine("Connection Approval");
+            sender.Approve();
+            while (sender.Status != NetConnectionStatus.Connected) ;
+            int id = _nextID++;
+            Console.WriteLine("The value of id: " + id);
+            _connections.Add(id, sender);
+            _inputStates[id] = new Queue<InputState>();
+            buffer = _server.CreateBuffer();
+            buffer.Write("ClientID");
+            buffer.WriteVariableInt32(id);
+            _server.SendMessage(buffer, sender, NetChannel.ReliableInOrder2);
+
+            //TODO: TEST CODE
+            //TODO: object ID of localplayer should be client ID + 0
+            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            InputPlayer player = new ProxyInputPlayer(this.Game, id);
+            player.ID = id << 25;
+            mdb.registerObject(player);
+        }
+
+        private void handleStatusChange(NetBuffer buffer, NetConnection sender)
+        {
+            String message = buffer.ReadString();
+            NetConnectionStatus newStatus = (NetConnectionStatus)buffer.ReadByte();
+            int senderID = -1;
+            if (int.TryParse(message, out senderID));
+            
+            if (senderID == -1)
+                Console.WriteLine("New status for " + sender + ": " + newStatus);
+            if (newStatus == NetConnectionStatus.Disconnected || newStatus == NetConnectionStatus.Disconnecting)
+            {
+                Console.WriteLine("Client " + senderID + " has disconnected.");
+                _connections.Remove(senderID);
+            }
+        }
+
+        private void handleData(NetBuffer buffer, NetConnection sender)
+        {
+            // A client sent this data!
+            //Console.WriteLine("Data received from " + sender);
+            int senderID = buffer.ReadVariableInt32();
+            //Console.WriteLine("Sender ID: " + senderID);
+            switch (buffer.ReadString())
+            {
+                case "Mammoth.Engine.Input.InputState":
+                    if (!_inputStates.ContainsKey(senderID))
+                        throw new Exception("Invalid player id: " + senderID);
+                    IDecoder decoder = (IDecoder)this.Game.Services.GetService(typeof(IDecoder));
+                    int length = buffer.ReadVariableInt32();
+                    buffer.SkipPadBits();
+                    byte[] data = buffer.ReadBytes(length);
+                    InputState state = decoder.DecodeInputState(data);
+                    _inputStates[senderID].Enqueue(state);
+                    break;
+            }
+            //byte[] data = buffer.ReadBytes(buffer.LengthBytes);
+            //Console.WriteLine(data);
+            //_data.Add(data);
         }
 
         public Queue<InputState> getInputStateQueue(int playerID)
