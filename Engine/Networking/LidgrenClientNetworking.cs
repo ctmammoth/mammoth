@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Net;
 
 using Microsoft.Xna.Framework;
 using Lidgren.Network.Xna;
@@ -15,6 +16,7 @@ namespace Mammoth.Engine.Networking
     {
         private int _clientID;
         private NetClient _client;
+        private NetConnection _serverConnection;
         private Queue<DataGram> _toSend;
 
         public LidgrenClientNetworking(Game game)
@@ -42,11 +44,42 @@ namespace Mammoth.Engine.Networking
                 return;
             base.Update(gameTime);
 
+            NetBuffer buffer = _client.CreateBuffer();
+            NetMessageType type;
+            while (_client.ReadMessage(buffer, out type))
+            {
+                switch (type)
+                {
+                    case NetMessageType.DebugMessage:
+                        Console.WriteLine(buffer.ReadString());
+                        break;
+                    case NetMessageType.StatusChanged:
+                        string statusMessage = buffer.ReadString();
+                        NetConnectionStatus newStatus = (NetConnectionStatus)buffer.ReadByte();
+                        Console.WriteLine("New status for the server: " + newStatus + " (" + statusMessage + ")");
+                        if (newStatus == NetConnectionStatus.Disconnecting || newStatus == NetConnectionStatus.Disconnected)
+                        {
+                            Console.WriteLine("Server has disconnected.");
+                            quitGame();
+                        }
+                        break;
+                    case NetMessageType.Data:
+                        //Console.WriteLine("Data received");
+                        string objectType = buffer.ReadString();
+                        int id = buffer.ReadVariableInt32();
+                        int length = buffer.ReadVariableInt32();
+                        buffer.SkipPadBits();
+                        byte[] data = buffer.ReadBytes(length);
+                        IDecoder decode = (IDecoder)this.Game.Services.GetService(typeof(IDecoder));
+                        decode.AnalyzeObjects(objectType, id, data);
+                        break;
+                }
+            }
+
             IInputService inputServer = (IInputService)this.Game.Services.GetService(typeof(IInputService));
             InputState state = inputServer.States.Peek();
             sendThing(state);
 
-            NetBuffer buffer;
             while (_toSend.Count != 0)
             {
                 //Console.WriteLine("Really sending thing");
@@ -60,33 +93,6 @@ namespace Mammoth.Engine.Networking
                 buffer.WritePadBits();
                 buffer.Write(data.Data);
                 _client.SendMessage(buffer, NetChannel.ReliableInOrder1);
-            }
-
-            buffer = _client.CreateBuffer();
-            NetMessageType type;
-            while (_client.ReadMessage(buffer, out type))
-            {
-                switch (type)
-                {
-                    case NetMessageType.DebugMessage:
-                        Console.WriteLine(buffer.ReadString());
-                        break;
-                    case NetMessageType.StatusChanged:
-                        //string statusMessage = buffer.ReadString();
-                        //NetConnectionStatus newStatus = (NetConnectionStatus)buffer.ReadByte();
-                        //Console.WriteLine("New status for " + sender + ": " + newStatus + " (" + statusMessage + ")");
-                        break;
-                    case NetMessageType.Data:
-                        //Console.WriteLine("Data received");
-                        string objectType = buffer.ReadString();
-                        int id = buffer.ReadVariableInt32();
-                        int length = buffer.ReadVariableInt32();
-                        buffer.SkipPadBits();
-                        byte[] data = buffer.ReadBytes(length);
-                        IDecoder decode = (IDecoder) this.Game.Services.GetService(typeof (IDecoder));
-                        decode.AnalyzeObjects(objectType, id, data);
-                        break;
-                }
             }
         }
 
@@ -152,7 +158,7 @@ namespace Mammoth.Engine.Networking
 
         public void quitGame()
         {
-            _client.Shutdown("Player Quit");
+            _client.Shutdown(_clientID.ToString());
         }
 
         public override int ClientID

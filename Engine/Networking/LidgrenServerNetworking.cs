@@ -49,29 +49,8 @@ namespace Mammoth.Engine.Networking
         {
             base.Update(gameTime);
 
-            //Console.WriteLine("Updating server");
-
-            NetBuffer buffer;
-
-            while (_toSend.Count != 0)
-            {
-                DataGram message = _toSend.Dequeue();
-                buffer = _server.CreateBuffer();
-                buffer.Write(message.Type);
-                buffer.WriteVariableInt32(message.ID);
-                buffer.WriteVariableInt32(message.Data.Length);
-                buffer.WritePadBits();
-                buffer.Write(message.Data);
-                if (message.Recipient < 0)
-                    _server.SendMessage(buffer, _connections.Values, NetChannel.Unreliable);
-                else
-                    _server.SendMessage(buffer, _connections[message.Recipient], NetChannel.Unreliable);
-            }
-
-            foreach (Queue<InputState> q in _inputStates.Values)
-                q.Clear();
-
-            buffer = _server.CreateBuffer();
+            int senderID;
+            NetBuffer buffer = _server.CreateBuffer();
             NetMessageType type;
             NetConnection sender;
             while (_server.ReadMessage(buffer, out type, out sender))
@@ -103,14 +82,19 @@ namespace Mammoth.Engine.Networking
 
                         break;
                     case NetMessageType.StatusChanged:
-                        string statusMessage = buffer.ReadString();
+                        senderID = int.Parse(buffer.ReadString());
                         NetConnectionStatus newStatus = (NetConnectionStatus)buffer.ReadByte();
-                        Console.WriteLine("New status for " + sender + ": " + newStatus + " (" + statusMessage + ")");
+                        Console.WriteLine("New status for client " + senderID + " (" + sender + "): " + newStatus);
+                        if (newStatus == NetConnectionStatus.Disconnected || newStatus == NetConnectionStatus.Disconnecting)
+                        {
+                            Console.WriteLine("Client " + senderID + " has disconnected.");
+                            _connections.Remove(senderID);
+                        }
                         break;
                     case NetMessageType.Data:
                         // A client sent this data!
                         //Console.WriteLine("Data received from " + sender);
-                        int senderID = buffer.ReadVariableInt32();
+                        senderID = buffer.ReadVariableInt32();
                         //Console.WriteLine("Sender ID: " + senderID);
                         switch (buffer.ReadString())
                         {
@@ -131,6 +115,24 @@ namespace Mammoth.Engine.Networking
                         break;
                 }
             }
+
+            while (_toSend.Count != 0)
+            {
+                DataGram message = _toSend.Dequeue();
+                buffer = _server.CreateBuffer();
+                buffer.Write(message.Type);
+                buffer.WriteVariableInt32(message.ID);
+                buffer.WriteVariableInt32(message.Data.Length);
+                buffer.WritePadBits();
+                buffer.Write(message.Data);
+                if (message.Recipient < 0)
+                    _server.SendMessage(buffer, _connections.Values, NetChannel.Unreliable);
+                else
+                    _server.SendMessage(buffer, _connections[message.Recipient], NetChannel.Unreliable);
+            }
+
+            foreach (Queue<InputState> q in _inputStates.Values)
+                q.Clear();
         }
 
         public Queue<InputState> getInputStateQueue(int playerID)

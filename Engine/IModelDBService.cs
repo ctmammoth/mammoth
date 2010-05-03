@@ -13,6 +13,7 @@ namespace Mammoth.Engine
         BaseObject getObject(int objectID);
         void registerObject(BaseObject newObject);
         bool removeObject(int objectID);
+        bool isVisibleToPlayer(int objectID, int playerID);
 
         int getNextOpenID();
     }
