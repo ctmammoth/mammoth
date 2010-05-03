@@ -74,6 +74,8 @@ namespace Mammoth.Engine.Networking
             while (_toSend.Count != 0)
             {
                 DataGram message = _toSend.Dequeue();
+                if (!_connections.ContainsKey(message.Recipient))
+                    continue;
                 if (_connections[message.Recipient].Status == NetConnectionStatus.Disconnected)
                     _connections.Remove(message.Recipient);
                 else if (_connections[message.Recipient].Status != NetConnectionStatus.Connected)
