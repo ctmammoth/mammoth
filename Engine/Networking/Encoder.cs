@@ -44,7 +44,7 @@ namespace Mammoth.Engine.Networking
             catch (Exception e)
             {
                 Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
-                throw;
+                table = new Hashtable();
             }
         }
 
