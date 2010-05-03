@@ -16,7 +16,6 @@ namespace Mammoth.Engine.Networking
     {
         private int _clientID;
         private NetClient _client;
-        private NetConnection _serverConnection;
         private Queue<DataGram> _toSend;
 
         public LidgrenClientNetworking(Game game)
@@ -43,6 +42,14 @@ namespace Mammoth.Engine.Networking
             if (_client == null || _client.Status != NetConnectionStatus.Connected)
                 return;
             base.Update(gameTime);
+
+            if (_client.ServerConnection.Status == NetConnectionStatus.Disconnected)
+            {
+                Console.WriteLine("Server disconnected.");
+                quitGame();
+            }
+            else if (_client.ServerConnection.Status != NetConnectionStatus.Connected)
+                return;
 
             IInputService inputServer = (IInputService)this.Game.Services.GetService(typeof(IInputService));
             InputState state = inputServer.States.Peek();

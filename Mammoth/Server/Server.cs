@@ -88,6 +88,10 @@ namespace Mammoth.Server
         {
             base.Dispose(disposing);
             Console.WriteLine("Disposing");
+            IPhysicsManagerService physics = (IPhysicsManagerService)this.Services.GetService(typeof(IPhysicsManagerService));
+            physics.Dispose();
+            IServerNetworking net = (IServerNetworking)this.Services.GetService(typeof(INetworkingService));
+            net.endGame();
         }
     }
 }
