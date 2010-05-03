@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine
 {
-    public abstract class BaseObject
+    public abstract class BaseObject : Networking.IEncodable
     {
         private static int nextId = 0;
         private String objectType;
@@ -23,6 +23,10 @@ namespace Mammoth.Engine
 
         public abstract String getObjectType();
 
+        public abstract void InitializeDefault(int id);
+
+        public abstract byte[] Encode();
+        public abstract void Decode(byte[] serialized);
 
 
         
