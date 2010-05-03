@@ -14,9 +14,22 @@ namespace Mammoth.Engine
 {
     public abstract class Player : PhysicalObject, IRenderable, IEncodable
     {
+        [Flags]
+        public enum EncodableProperties
+        {
+            None = 0x00,
+            Position = 0x01,
+            Orientation = 0x02,
+            Velocity = 0x04
+        }
+
+        EncodableProperties dirty;
+
         public Player(Game game)
         {
             this.Game = game;
+            dirty = EncodableProperties.None;
+
         }
 
         public virtual void Spawn(Vector3 pos, Quaternion orient)
@@ -32,10 +45,17 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-            tosend.AddElement("Position", Position);
-            tosend.AddElement("Orientation", Orientation);
-            tosend.AddElement("Velocity", Velocity);
+            if((dirty & EncodableProperties.Position) == dirty)
+                tosend.AddElement("Position", Position);
+            if((dirty & EncodableProperties.Orientation) == dirty)
+                tosend.AddElement("Orientation", Orientation);
+            if ((dirty & EncodableProperties.Velocity) == dirty)
+                tosend.AddElement("Velocity", Velocity);
+
             tosend.AddElement("ID", ID);
+
+            //reset DIRTY
+            dirty = EncodableProperties.None;
 
             return tosend.Serialize();
         }
@@ -44,10 +64,10 @@ namespace Mammoth.Engine
         {
             Networking.Encoder props = new Networking.Encoder(serialized);
 
-            Position = (Vector3) props.GetElement("Position");
-            Orientation = (Quaternion) props.GetElement("Orientation");
-            Velocity = (Vector3) props.GetElement("Velocity");
-            ID = (int) props.GetElement("ID");
+            Position = (Vector3) props.GetElement("Position", Position);
+            Orientation = (Quaternion) props.GetElement("Orientation", Orientation);
+            Velocity = (Vector3) props.GetElement("Velocity", Velocity);
+            ID = (int) props.GetElement("ID", ID);
         }
 
         #endregion
@@ -63,6 +83,7 @@ namespace Mammoth.Engine
             protected set
             {
                 this.Controller.Position = value;
+                dirty |= EncodableProperties.Position;
             }
         }
 
@@ -81,6 +102,7 @@ namespace Mammoth.Engine
             protected set
             {
                 this.Controller.Actor.MoveGlobalOrientationTo(Matrix.CreateFromQuaternion(value));
+                dirty |= EncodableProperties.Orientation;
             }
         }
 
@@ -91,12 +113,20 @@ namespace Mammoth.Engine
         }
 
         // This is the velocity of the player in the player's local coordinate system.
+        Vector3 _velocity;
         public Vector3 Velocity
         {
-            get;
-            protected set;
-        }
+            get
+            {
+                return _velocity;
+            }
 
+            protected set
+            {
+                dirty |= EncodableProperties.Velocity;
+                _velocity = value;
+            }
+        }
         public Model Model3D
         {
             get;

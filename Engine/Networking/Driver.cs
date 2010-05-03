@@ -32,9 +32,9 @@ namespace Mammoth.Engine.Networking
         {
             Encoder e = new Encoder(serialized);
 
-            name = (string)e.GetElement("name");
-            age = (int)e.GetElement("age");
-            DUI = (bool)e.GetElement("DUI");
+            name = (string)e.GetElement("name", name);
+            age = (int)e.GetElement("age", age);
+            DUI = (bool)e.GetElement("DUI", DUI);
         }
 
         public void Print()

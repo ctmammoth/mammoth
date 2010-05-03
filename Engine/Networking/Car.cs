@@ -45,9 +45,9 @@ namespace Mammoth.Engine.Networking
             Encoder e = new Encoder(serialized);
 
             //get primitives outs
-            max_speed = (int)e.GetElement("max_speed");
-            min_speed = (int)e.GetElement("min_speed");
-            color = (string)e.GetElement("color");
+            max_speed = (int)e.GetElement("max_speed", max_speed);
+            min_speed = (int)e.GetElement("min_speed", min_speed);
+            color = (string)e.GetElement("color", color);
 
             //update IEncodables
             e.UpdateIEncodable("driver", driver);
