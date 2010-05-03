@@ -54,9 +54,25 @@ namespace Mammoth.Engine.Networking
             IInputService inputServer = (IInputService)this.Game.Services.GetService(typeof(IInputService));
             InputState state = inputServer.States.Peek();
             sendThing(state);
+            NetBuffer buffer;
+
+            while (_toSend.Count != 0)
+            {
+                //Console.WriteLine("Really sending thing");
+                buffer = _client.CreateBuffer();
+                buffer.WriteVariableInt32(_clientID);
+                DataGram data = _toSend.Dequeue();
+                buffer.Write(data.Type);
+                if (data.ID >= 0)
+                    buffer.WriteVariableInt32(data.ID);
+                buffer.WriteVariableInt32(data.Data.Length);
+                buffer.WritePadBits();
+                buffer.Write(data.Data);
+                _client.SendMessage(buffer, NetChannel.ReliableInOrder1);
+            }
 
             IDecoder decode = (IDecoder)this.Game.Services.GetService(typeof(IDecoder));
-            NetBuffer buffer = _client.CreateBuffer();
+            buffer = _client.CreateBuffer();
             NetMessageType type;
             while (_client.ReadMessage(buffer, out type))
             {
@@ -85,21 +101,6 @@ namespace Mammoth.Engine.Networking
                         decode.AnalyzeObjects(objectType, id, data);
                         break;
                 }
-            }
-
-            while (_toSend.Count != 0)
-            {
-                //Console.WriteLine("Really sending thing");
-                buffer = _client.CreateBuffer();
-                buffer.WriteVariableInt32(_clientID);
-                DataGram data = _toSend.Dequeue();
-                buffer.Write(data.Type);
-                if (data.ID >= 0)
-                    buffer.WriteVariableInt32(data.ID);
-                buffer.WriteVariableInt32(data.Data.Length);
-                buffer.WritePadBits();
-                buffer.Write(data.Data);
-                _client.SendMessage(buffer, NetChannel.ReliableInOrder1);
             }
         }
 
@@ -165,6 +166,7 @@ namespace Mammoth.Engine.Networking
 
         public void quitGame()
         {
+            Console.WriteLine("Quitting the game, my id is: " + _clientID.ToString());
             _client.Shutdown(_clientID.ToString());
         }
 

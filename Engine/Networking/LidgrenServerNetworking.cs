@@ -121,6 +121,7 @@ namespace Mammoth.Engine.Networking
         private void handleStatusChange(NetBuffer buffer, NetConnection sender)
         {
             String message = buffer.ReadString();
+            Console.WriteLine("Message: " + message);
             NetConnectionStatus newStatus = (NetConnectionStatus)buffer.ReadByte();
             int senderID = -1;
             if (int.TryParse(message, out senderID));

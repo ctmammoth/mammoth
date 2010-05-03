@@ -24,6 +24,7 @@ namespace Mammoth.Engine
         }
 
         EncodableProperties dirty;
+        long counter = 0;
 
         public Player(Game game)
         {
@@ -45,8 +46,12 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-            if((dirty & EncodableProperties.Position) == dirty)
+            if ((dirty & EncodableProperties.Position) == dirty)
+            {
+                Console.WriteLine("Sending updated position, " + counter++ + "; ");
+                Console.Write(Position.ToString());
                 tosend.AddElement("Position", Position);
+            }
             if((dirty & EncodableProperties.Orientation) == dirty)
                 tosend.AddElement("Orientation", Orientation);
             if ((dirty & EncodableProperties.Velocity) == dirty)
