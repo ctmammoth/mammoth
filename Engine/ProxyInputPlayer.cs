@@ -27,7 +27,7 @@ namespace Mammoth.Engine
             base.Update(gameTime);
 
             IServerNetworking network = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
-            Console.WriteLine("sending proxy player");
+            //Console.WriteLine("sending proxy player");
             network.sendThing(this);
         }
 

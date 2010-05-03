@@ -50,6 +50,32 @@ namespace Mammoth.Engine.Networking
             base.Update(gameTime);
 
             NetBuffer buffer = _server.CreateBuffer();
+
+            //Console.WriteLine("Things to send: " + _toSend.Count);
+            while (_toSend.Count != 0)
+            {
+                DataGram message = _toSend.Dequeue();
+                if (message.Recipient >= 0)
+                {
+                    if (!_connections.ContainsKey(message.Recipient))
+                        continue;
+                    if (_connections[message.Recipient].Status == NetConnectionStatus.Disconnected)
+                        _connections.Remove(message.Recipient);
+                    else if (_connections[message.Recipient].Status != NetConnectionStatus.Connected)
+                        continue;
+                }
+                buffer = _server.CreateBuffer();
+                buffer.Write(message.Type);
+                buffer.WriteVariableInt32(message.ID);
+                buffer.WriteVariableInt32(message.Data.Length);
+                buffer.WritePadBits();
+                buffer.Write(message.Data);
+                if (message.Recipient < 0)
+                    _server.SendMessage(buffer, _connections.Values, NetChannel.Unreliable);
+                else
+                    _server.SendMessage(buffer, _connections[message.Recipient], NetChannel.Unreliable);
+            }
+
             NetMessageType type;
             NetConnection sender;
             while (_server.ReadMessage(buffer, out type, out sender))
@@ -69,28 +95,6 @@ namespace Mammoth.Engine.Networking
                         handleData(buffer, sender);
                         break;
                 }
-            }
-
-            Console.WriteLine("Things to send: " + _toSend.Count);
-            while (_toSend.Count != 0)
-            {
-                DataGram message = _toSend.Dequeue();
-                if (!_connections.ContainsKey(message.Recipient))
-                    continue;
-                if (_connections[message.Recipient].Status == NetConnectionStatus.Disconnected)
-                    _connections.Remove(message.Recipient);
-                else if (_connections[message.Recipient].Status != NetConnectionStatus.Connected)
-                    continue;
-                buffer = _server.CreateBuffer();
-                buffer.Write(message.Type);
-                buffer.WriteVariableInt32(message.ID);
-                buffer.WriteVariableInt32(message.Data.Length);
-                buffer.WritePadBits();
-                buffer.Write(message.Data);
-                if (message.Recipient < 0)
-                    _server.SendMessage(buffer, _connections.Values, NetChannel.Unreliable);
-                else
-                    _server.SendMessage(buffer, _connections[message.Recipient], NetChannel.Unreliable);
             }
 
             foreach (Queue<InputState> q in _inputStates.Values)
