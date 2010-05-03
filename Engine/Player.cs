@@ -46,7 +46,7 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-            if ((dirty & EncodableProperties.Position) == dirty)
+            if ((dirty & EncodableProperties.Position) == EncodableProperties.Position)
             {
                 Console.WriteLine("Sending updated position, " + counter++ + "; ");
                 Console.Write(Position.ToString());
@@ -87,8 +87,8 @@ namespace Mammoth.Engine
             }
             protected set
             {
-                this.Controller.Position = value;
                 dirty |= EncodableProperties.Position;
+                this.Controller.Position = value;
             }
         }
 
@@ -106,8 +106,8 @@ namespace Mammoth.Engine
             }
             protected set
             {
-                this.Controller.Actor.MoveGlobalOrientationTo(Matrix.CreateFromQuaternion(value));
                 dirty |= EncodableProperties.Orientation;
+                this.Controller.Actor.MoveGlobalOrientationTo(Matrix.CreateFromQuaternion(value));
             }
         }
 
