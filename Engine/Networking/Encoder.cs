@@ -124,9 +124,10 @@ namespace Mammoth.Engine.Networking
             }
             catch (Exception e)
             {
-                return orig;
+                return (object) orig;
             }
         }
+
 
 
 

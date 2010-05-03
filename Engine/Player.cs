@@ -45,11 +45,11 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-            //if((dirty & EncodableProperties.Position) == dirty)
+            if((dirty & EncodableProperties.Position) == dirty)
                 tosend.AddElement("Position", Position);
-            //if((dirty & EncodableProperties.Orientation) == dirty)
+            if((dirty & EncodableProperties.Orientation) == dirty)
                 tosend.AddElement("Orientation", Orientation);
-            //if ((dirty & EncodableProperties.Velocity) == dirty)
+            if ((dirty & EncodableProperties.Velocity) == dirty)
                 tosend.AddElement("Velocity", Velocity);
 
             tosend.AddElement("ID", ID);
