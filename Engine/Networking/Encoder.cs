@@ -117,15 +117,14 @@ namespace Mammoth.Engine.Networking
         /// <returns>an object which must be type cast</returns>
         public object GetElement(string key, object orig)
         {
-            try
-            {
                 object hashed = table[key];
-                return hashed;
-            }
-            catch (Exception e)
-            {
-                return (object) orig;
-            }
+
+                if (hashed != null)
+                    return hashed;
+                else
+                {
+                    return (object)orig;
+                }
         }
 
 
