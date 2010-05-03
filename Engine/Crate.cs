@@ -5,8 +5,12 @@ using System.Text;
 
 namespace Mammoth.Engine
 {
-    class Crate
+    public class Crate : PhysicalObject
     {
         private int width, height, length, x, y, z;
+
+        public override void CollideWith(PhysicalObject obj)
+        {
+        }
     }
 }

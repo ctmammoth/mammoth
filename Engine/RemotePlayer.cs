@@ -53,7 +53,7 @@ namespace Mammoth.Engine
             return typeof(RemotePlayer).ToString();
         }
 
-        public override void collideWith(PhysicalObject obj)
+        public override void CollideWith(PhysicalObject obj)
         {
 
         }

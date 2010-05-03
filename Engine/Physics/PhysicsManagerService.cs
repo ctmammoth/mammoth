@@ -97,9 +97,9 @@ namespace Mammoth.Engine.Physics
                 Debug.Assert(contactInformation != null);
 
                 // Collide the objects with each other
-                ((PhysicalObject)contactInformation.ActorA.UserData).collideWith(
+                ((PhysicalObject)contactInformation.ActorA.UserData).CollideWith(
                     (PhysicalObject)contactInformation.ActorB.UserData);
-                ((PhysicalObject)contactInformation.ActorB.UserData).collideWith(
+                ((PhysicalObject)contactInformation.ActorB.UserData).CollideWith(
                     (PhysicalObject)contactInformation.ActorA.UserData);
             }
         }

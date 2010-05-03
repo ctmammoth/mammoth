@@ -12,11 +12,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mammoth.Engine
 {
-    public abstract class Player : PhysicalObject, IRenderable, IEncodable
+    public abstract class Player : PhysicalObject, IRenderable, IEncodable, IDestructable
     {
+        #region Variables
+        public float health;
+        #endregion
+
         public Player(Game game)
         {
             this.Game = game;
+            health = 100.0f;
         }
 
         public virtual void Spawn(Vector3 pos, Quaternion orient)
@@ -24,6 +29,15 @@ namespace Mammoth.Engine
             this.Position = pos;
             this.Orientation = orient;
             this.HeadOrient = orient;
+        }
+
+        /// <summary>
+        /// Causes the player to take damage.
+        /// </summary>
+        /// <param name="damage">The amount of damage to deal to the player.</param>
+        protected void TakeDamage(float damage)
+        {
+            health -= damage;
         }
 
         #region IEncodable Members
@@ -36,6 +50,7 @@ namespace Mammoth.Engine
             tosend.AddElement("Orientation", Orientation);
             tosend.AddElement("Velocity", Velocity);
             tosend.AddElement("ID", ID);
+            tosend.AddElement("Health", health);
 
             return tosend.Serialize();
         }
@@ -121,6 +136,12 @@ namespace Mammoth.Engine
             get;
             set;
         }
+
+        #endregion
+
+        #region IDestructable Members
+
+        public abstract void Die();
 
         #endregion
     }
