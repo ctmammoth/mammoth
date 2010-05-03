@@ -12,7 +12,10 @@ namespace Mammoth.Engine
         public static BaseObject CreateObjectFromNetwork(String type, int id, Byte[] data)
         {
             BaseObject theObject = CreateObject(type,id,null);
-            theObject.Decode(data);
+            if (data != null)
+            {
+                theObject.Decode(data);
+            }            
             return theObject;
         }
 

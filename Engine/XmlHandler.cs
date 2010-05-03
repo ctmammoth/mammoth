@@ -26,6 +26,12 @@ namespace Mammoth.Engine
 
         }
 
+        public String GetElementName()
+        {
+            return reader.Name;
+        }
+
+
 
         public String GetNextElementName()
         {
@@ -82,6 +88,19 @@ namespace Mammoth.Engine
         {
             return null;
         }
+
+        public ObjectParameters getAttributes()
+        {         
+            ObjectParamters parameters = new ObjectParameters();
+            for (int i = 0; i < reader.AttributeCount; i++)
+            {
+                reader.MoveToAttribute(i);
+                parameters.AddAttribute(reader.Name,reader.Value);
+                
+            }
+
+        }
+
 
         
 
