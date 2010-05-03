@@ -61,6 +61,12 @@ namespace Mammoth.Engine
             return net.ClientID << 25 | nextID++;
         }
 
+        public bool isVisibleToPlayer(int objectID, int playerID)
+        {
+            //TODO: make this do something
+            return true;
+        }
+
         #endregion
     }
 }

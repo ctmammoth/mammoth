@@ -89,10 +89,10 @@ namespace Mammoth.Engine.Input
         {
             Mammoth.Engine.Networking.Encoder getdata = new Mammoth.Engine.Networking.Encoder(serialized);
 
-            _curState = (InputType) getdata.GetElement("_curState");
-            _prevState = (InputType) getdata.GetElement("_prevState");
-            _mouseDelta = (Vector2) getdata.GetElement("_mouseDelta");
-            _elapsedSeconds = (float) getdata.GetElement("_elapsedSeconds");
+            _curState = (InputType) getdata.GetElement("_curState", _curState);
+            _prevState = (InputType) getdata.GetElement("_prevState", _prevState);
+            _mouseDelta = (Vector2) getdata.GetElement("_mouseDelta", _mouseDelta);
+            _elapsedSeconds = (float) getdata.GetElement("_elapsedSeconds", _elapsedSeconds);
         }
 
         public override string ToString()

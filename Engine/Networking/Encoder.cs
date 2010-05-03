@@ -115,10 +115,17 @@ namespace Mammoth.Engine.Networking
         /// </summary>
         /// <param name="key">a string that hashes to the parameter to access</param>
         /// <returns>an object which must be type cast</returns>
-        public object GetElement(string key)
+        public object GetElement(string key, object orig)
         {
-            object hashed = table[key];
-            return hashed;
+            try
+            {
+                object hashed = table[key];
+                return hashed;
+            }
+            catch (Exception e)
+            {
+                return orig;
+            }
         }
 
 
@@ -130,10 +137,17 @@ namespace Mammoth.Engine.Networking
         /// <param name="toupdate">the actual object to update</param>
         public void UpdateIEncodable(string key, IEncodable toupdate)
         {
-            if (toupdate != null)
+            try
             {
-                byte[] hashed = (byte[])table[key];
-                toupdate.Decode(hashed);
+                if (toupdate != null)
+                {
+                    byte[] hashed = (byte[])table[key];
+                    toupdate.Decode(hashed);
+                }
+            }
+            catch (Exception e)
+            {
+                
             }
         }
 
