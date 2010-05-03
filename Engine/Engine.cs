@@ -192,6 +192,16 @@ namespace Mammoth.Engine
             //r.DrawTexturedRectangle(new Rectangle(110, 110, _text.Width, _text.Height), _text);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            Console.WriteLine("Disposing");
+            IPhysicsManagerService physics = (IPhysicsManagerService)this.Services.GetService(typeof(IPhysicsManagerService));
+            physics.Dispose();
+            IClientNetworking net = (IClientNetworking)this.Services.GetService(typeof(INetworkingService));
+            net.quitGame();
+        }
+
         #endregion
 
         #region Properties

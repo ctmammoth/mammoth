@@ -73,8 +73,6 @@ namespace Mammoth.Server
 
         protected override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-
             // Now we update all of the GameComponents associated with the engine.
             base.Update(gameTime);
 
@@ -84,6 +82,12 @@ namespace Mammoth.Server
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Services.GetService(typeof(IPhysicsManagerService));
             physics.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds);
             physics.FetchResults();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            Console.WriteLine("Disposing");
         }
     }
 }
