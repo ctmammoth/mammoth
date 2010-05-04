@@ -166,7 +166,9 @@ namespace Mammoth.Engine
         // TODO: MAKE THIS LEGITIMATE
         protected void Throw()
         {
-            Bullet bullet = new Bullet(Game, Position, Orientation);
+            Console.WriteLine("Throwing...");
+            Bullet bullet = new Bullet(Game, Vector3.Zero, new Quaternion());
+            Console.WriteLine("Thrown.");
         }
 
         /// <summary>

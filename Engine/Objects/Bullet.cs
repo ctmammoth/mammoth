@@ -21,6 +21,7 @@ namespace Mammoth.Engine
         public Bullet(Game game, Vector3 position, Quaternion orientation)
             : base(game)
         {
+            Console.WriteLine("Constructing a bullet...");
             InitialVelocityMagnitude = 2.0f;
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
@@ -45,14 +46,15 @@ namespace Mammoth.Engine
 
             // Add this to the model DB
             IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            Console.WriteLine("Adding bullet to model DB");
             modelDB.registerObject(this);
         }
 
         public override void Update(GameTime gameTime)
         {
             // Send the bullet
-            IServerNetworking network = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
-            network.sendThing(this);
+            //IServerNetworking network = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            //network.sendThing(this);
         }
 
 
