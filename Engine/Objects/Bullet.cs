@@ -17,19 +17,16 @@ namespace Mammoth.Engine
         /// direction of the vector obtained by taking Vector3.Transform(Vector3.UnitZ, orientation).
         /// </summary>
         /// <param name="position">The location at which to spawn the bullet.</param>
-        /// <param name="orientation">The direction in which to shoot the bullet.</param>
-        public Bullet(Game game, Vector3 position, Quaternion orientation)
+        /// <param name="forward">A vector pointing in the direction in which to shoot the bullet.</param>
+        public Bullet(Game game, Vector3 position, Vector3 forward)
             : base(game)
         {
             Console.WriteLine("Constructing a bullet...");
             InitialVelocityMagnitude = 10.0f;
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
-            
-            // TODO: get orientation from player
-            Vector3 tempVelocity = Vector3.Transform(Vector3.UnitZ, orientation);
-            InitialVelocity = Vector3.Multiply(tempVelocity, InitialVelocityMagnitude);
 
+            // Make the bullet's actor description
             ActorDescription bulletActorDesc = new ActorDescription()
             {
                 Shapes = { new SphereShapeDescription(){ Radius = 1.0f, LocalPosition = position } },
@@ -38,6 +35,8 @@ namespace Mammoth.Engine
             };
 
             // Set the body's initial velocity
+            forward.Normalize();
+            InitialVelocity = Vector3.Multiply(forward, InitialVelocityMagnitude);
             bulletActorDesc.BodyDescription.LinearVelocity = InitialVelocity;
 
             // Create the actor

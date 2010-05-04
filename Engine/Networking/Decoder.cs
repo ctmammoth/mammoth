@@ -71,7 +71,7 @@ namespace Mammoth.Engine.Networking
                 break;
 
                 case "Bullet":
-                Bullet b = new Bullet(game, Vector3.Zero, Quaternion.Identity);
+                Bullet b = new Bullet(game, Vector3.Zero, Vector3.Zero);
                 b.Decode(properties);
                 ro.registerObject(b);
                 break;
