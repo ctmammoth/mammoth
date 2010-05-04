@@ -11,7 +11,7 @@ namespace Mammoth.Engine
 {
     public class Crate : BaseObject
     {
-        private Vector3 position, dimensions;
+        private Vector3 position, dimensions; ///
         
         
 
