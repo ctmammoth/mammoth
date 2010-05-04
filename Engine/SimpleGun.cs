@@ -36,24 +36,13 @@ namespace Mammoth.Engine
 
         #region IWeapon Members
 
-        public void Shoot(Vector3 position, Quaternion orientation)
+        void IWeapon.Shoot(Quaternion orientation)
         {
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
 
         }
 
-        public void Reload()
-        {
-
-        }
-
         #endregion
-
-        public override void InitializeDefault(int id)
-        {
-            AmmoLeft = 0;
-            MaxAmmo = 0;
-        }
 
         public override string getObjectType()
         {
