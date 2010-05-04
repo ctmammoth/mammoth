@@ -41,11 +41,6 @@ namespace Mammoth.Engine
 
             // Create the actor
             this.Actor = physics.CreateActor(bulletActorDesc, this);
-
-            // TODO: hack-- how do we decide whether or not to send based on whether we're on the server?
-            INetworkingService net = (INetworkingService)this.Game.Services.GetService(typeof(INetworkingService));
-            if (net is IServerNetworking)
-                ((IServerNetworking)net).sendThing(this);
         }
 
         public override void InitializeDefault(int id)
