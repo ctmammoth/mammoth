@@ -11,14 +11,18 @@ namespace Mammoth
         /// </summary>
         static void Main(string[] args)
         {
-            if (args.Length != 1)
+            if (!(args.Length == 1 || args.Length == 2))
             {
                 Console.WriteLine("Usage: add 'server' or 'client' to indicate mode.");
                 return;
             }
             if (args[0].Equals("client"))
             {
-                Mammoth.Engine.Engine game = new Mammoth.Engine.Engine();
+                Mammoth.Engine.Engine game;
+                if (args.Length == 2)
+                    game = new Mammoth.Engine.Engine(false);
+                else
+                    game = new Mammoth.Engine.Engine(true);
                 game.Run();
             }
             else if (args[0].Equals("server"))

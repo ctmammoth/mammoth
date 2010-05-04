@@ -100,6 +100,13 @@ namespace Mammoth.Engine.Networking
             client.joinGame();
         }
 
+        public static void CreateDummyClient(Game game)
+        {
+            DummyClientNetworking client = new DummyClientNetworking(game);
+            game.Components.Add(client);
+            client.UpdateOrder = 7;
+        }
+
         public static void CreateServerNetworking(Game game)
         {
             LidgrenServerNetworking server = new LidgrenServerNetworking(game);

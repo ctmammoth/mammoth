@@ -24,14 +24,16 @@ namespace Mammoth.Engine
         #region Fields
 
         private Texture2D _text;
+        private bool _usingNetworking;
 
         #endregion
 
-        public Engine()
+        public Engine(bool useNetworking)
             : base()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            _usingNetworking = useNetworking;
         }
 
         #region XNA-Game
@@ -92,7 +94,10 @@ namespace Mammoth.Engine
 
             // Add the networking service.
             //this.Components.Add(new LidgrenClientNetworking(this));
-            Networking.NetworkComponent.CreateClientNetworking(this);
+            if (_usingNetworking)
+                Networking.NetworkComponent.CreateClientNetworking(this);
+            else
+                Networking.NetworkComponent.CreateDummyClient(this);
 
             // Add the model database.
             ModelDatabase modelDB = new ModelDatabase(this)

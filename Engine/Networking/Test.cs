@@ -14,7 +14,7 @@ namespace Mammoth.Engine.Networking
         static Engine _engine = null;
         static void Main()
         {
-            _engine = new Engine();
+            _engine = new Engine(false);
 
             /*////CAR TEST
             //Driver ben = new Driver("Ben", 20, false);
