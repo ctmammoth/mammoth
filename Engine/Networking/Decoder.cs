@@ -67,12 +67,14 @@ namespace Mammoth.Engine.Networking
                 case "Player":
                     RemotePlayer p = new RemotePlayer(game);
                     p.Decode(properties);
+                    p.ID = id;
                     ro.registerObject(p);
                 break;
 
                 case "Bullet":
                 Bullet b = new Bullet(game, Vector3.Zero, Vector3.Zero);
                 b.Decode(properties);
+                b.ID = id;
                 ro.registerObject(b);
                 break;
 
