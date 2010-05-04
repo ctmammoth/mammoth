@@ -22,13 +22,12 @@ namespace Mammoth.Engine
             : base(game)
         {
             Console.WriteLine("Constructing a bullet...");
-            InitialVelocityMagnitude = 2.0f;
+            InitialVelocityMagnitude = 10.0f;
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             
             // TODO: get orientation from player
-            Vector3 tempVelocity = Vector3.UnitZ;
-            tempVelocity = Vector3.Transform(tempVelocity, orientation);
+            Vector3 tempVelocity = Vector3.Transform(Vector3.UnitZ, orientation);
             InitialVelocity = Vector3.Multiply(tempVelocity, InitialVelocityMagnitude);
 
             ActorDescription bulletActorDesc = new ActorDescription()

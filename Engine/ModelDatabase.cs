@@ -10,7 +10,8 @@ namespace Mammoth.Engine
 {
     public class ModelDatabase : DrawableGameComponent, IModelDBService
     {
-        private static int nextID = 0;
+        // This must not be zero since the player will have nextID = 0!
+        private static int nextID = 1;
         // Used to avoid modifying _objects during an Update() call
         // TODO: may need to do something similar when removing objects
         private bool isUpdating;
@@ -38,6 +39,7 @@ namespace Mammoth.Engine
             // Currently updating
             isUpdating = true;
 
+            // Update all objects
             foreach (var obj in _objects.Values)
                 obj.Update(gameTime);
 
@@ -47,8 +49,6 @@ namespace Mammoth.Engine
             // Add objects that are waiting to be registered
             while (toRegister.Count > 0)
                 registerObject(toRegister.Dequeue());
-
-            toRegister.Clear();
         }
 
         public override void Draw(GameTime gameTime)
@@ -86,6 +86,7 @@ namespace Mammoth.Engine
         public int getNextOpenID()
         {
             INetworkingService net = (INetworkingService)this.Game.Services.GetService(typeof(INetworkingService));
+            Console.WriteLine("ID = " + (net.ClientID << 25 | (nextID + 1)));
             return net.ClientID << 25 | nextID++;
         }
 

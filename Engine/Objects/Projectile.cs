@@ -48,7 +48,7 @@ namespace Mammoth.Engine
             IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
 
             // Give this projectile an ID
-            ID = modelDB.getNextOpenID();
+            this.ID = modelDB.getNextOpenID();
 
             // Add this to the model DB
             modelDB.registerObject(this);
