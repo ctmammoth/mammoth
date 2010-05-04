@@ -167,9 +167,9 @@ namespace Mammoth.Engine
         protected void Throw()
         {
             // Make sure the bullet isn't spawned in the player: shift it by a bit
-            Vector3 offset = Vector3.Transform(Vector3.UnitZ, orientation);
+            Vector3 offset = Vector3.Transform(Vector3.Multiply(Vector3.UnitZ, -1), Orientation);
             offset.Normalize();
-            Bullet bullet = new Bullet(Game, Vector3.Add(offset, Position), Orientation);
+            Bullet bullet = new Bullet(Game, Vector3.Multiply(Vector3.Add(offset, Position), -1), Orientation);
         }
 
         /// <summary>
