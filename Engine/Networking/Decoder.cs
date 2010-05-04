@@ -76,6 +76,7 @@ namespace Mammoth.Engine.Networking
                 b.Decode(properties);
                 b.ID = id;
                 ro.registerObject(b);
+                Console.WriteLine("Bullet recieved");
                 break;
 
                 default:
