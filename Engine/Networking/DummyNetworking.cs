@@ -89,6 +89,11 @@ namespace Mammoth.Engine.Networking
             return;
         }
 
+        public void sendToAllBut(IEncodable toSend, int excludeTarget)
+        {
+            return;
+        }
+
         public Queue<Mammoth.Engine.Input.InputState> getInputStateQueue(int playerID)
         {
             return null;

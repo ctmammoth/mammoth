@@ -33,6 +33,14 @@ namespace Mammoth.Engine
             network.sendThing(this);
         }
 
+        protected override Bullet Throw()
+        {
+            Bullet bullet = base.Throw();
+            IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            net.sendToAllBut(bullet, ClientID);
+            return bullet;
+        }
+
         #region Properties
 
         public int ClientID

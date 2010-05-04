@@ -166,7 +166,7 @@ namespace Mammoth.Engine
         }
 
         // TODO: MAKE THIS LEGITIMATE
-        protected void Throw()
+        protected virtual Bullet Throw()
         {
             Vector3 forward = Vector3.Transform(Vector3.Forward, HeadOrient) * 1000.0f;
             forward.Normalize();
@@ -174,7 +174,7 @@ namespace Mammoth.Engine
             position = Vector3.Add(position, forward);
 
             // Make sure the bullet isn't spawned in the player: shift it by a bit
-            Bullet bullet = new Bullet(Game, position, forward);
+            return new Bullet(Game, position, forward);
         }
 
         /// <summary>

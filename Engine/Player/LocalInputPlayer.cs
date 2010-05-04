@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Mammoth.Engine.Networking;
 using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine
@@ -21,6 +22,14 @@ namespace Mammoth.Engine
         {
             base.Update(gameTime);
             Console.WriteLine("Health: " + this.Health);
+        }
+
+        protected override Bullet Throw()
+        {
+            Bullet bullet = base.Throw();
+            IClientNetworking net = (IClientNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            net.sendThing(bullet);
+            return bullet;
         }
     }
 }

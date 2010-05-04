@@ -46,6 +46,13 @@ namespace Mammoth.Engine.Networking
                     ((BaseObject)toSend).ID, toSend.Encode(), -1));
         }
 
+        public void sendToAllBut(IEncodable toSend, int excludeTarget)
+        {
+            if (toSend is BaseObject)
+                _toSend.Enqueue(new DataGram(((BaseObject)toSend).getObjectType(),
+                    ((BaseObject)toSend).ID, toSend.Encode(), -1, excludeTarget));
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -103,9 +110,9 @@ namespace Mammoth.Engine.Networking
             buffer.Write(message.Data);
             if (message.Recipient < 0)
             {
-                foreach (NetConnection c in _connections.Values)
-                    if (c.Status == NetConnectionStatus.Connected)
-                        _server.SendMessage(buffer, c, NetChannel.Unreliable);
+                foreach (int target in _connections.Keys)
+                    if (target != message.Exclude && _connections[target].Status == NetConnectionStatus.Connected)
+                        _server.SendMessage(buffer, _connections[target], NetChannel.Unreliable);
             }
             else
                 _server.SendMessage(buffer, _connections[message.Recipient], NetChannel.Unreliable);
@@ -225,6 +232,7 @@ namespace Mammoth.Engine.Networking
         {
             public string ObjectType;
             public int ID;
+            public int Exclude;
             public byte[] Data { get; set; }
             public int Recipient { get; set; }
 
@@ -234,6 +242,16 @@ namespace Mammoth.Engine.Networking
                 ID = id;
                 Data = data;
                 Recipient = recipient;
+                Exclude = -1;
+            }
+
+            public DataGram(string objectType, int id, byte[] data, int recipient, int exclude)
+            {
+                ObjectType = objectType;
+                ID = id;
+                Data = data;
+                Recipient = recipient;
+                Exclude = exclude;
             }
         }
     }
