@@ -9,18 +9,26 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Mammoth.Engine.Networking;
 
+
+
 namespace Mammoth.Engine
 {
-    public class Crate : BaseObject, IEncodable, IRenderable
+    public class Crate : PhysicalObject, IEncodable, IRenderable
     {
         private Vector3 Position, dimensions; ///
-        
-        
 
 
-        public Crate(int id, ObjectParameters parameters)
+
+        public Game Game
         {
-            this.ID = id;            
+            get;
+            protected set;
+        }
+
+        public Crate(int id, ObjectParameters parameters, Game game)
+        {
+            this.ID = id;
+            this.Game = game;
             foreach (String attribute in parameters.GetAttributes()) 
             {
                 switch(attribute) 
@@ -40,6 +48,12 @@ namespace Mammoth.Engine
 
                 }
             }
+        }
+
+        public Crate(int id, Game game)
+        {
+            this.Game = game;
+            InitializeDefault(id);
         }
 
             private void Specialize(String attribute) 
@@ -117,7 +131,7 @@ namespace Mammoth.Engine
                             dimensions.Y = (float) parameters.GetDoubleValue(attribute);
                             break;
                         case "LENGTH":
-                            dimensions.X = (float) parameters.GetDoubleValue(attribute);
+                            dimensions.Z = (float) parameters.GetDoubleValue(attribute);
                             break;
                     }
                 }                
@@ -125,7 +139,9 @@ namespace Mammoth.Engine
 
             private void HandleModel(XmlHandler handler)
             {
-                String modelPath = handler.reader.ReadContentAsString();
+                String modelPath = handler.reader.ReadElementContentAsString();
+                Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
+                this.Model3D = r.LoadModel(modelPath);
                 //TODO: Actually make this a model
             }
 
@@ -154,9 +170,15 @@ namespace Mammoth.Engine
 
             public Model Model3D
             {
-                get { throw new NotImplementedException(); }
+                get;
+                set;
             }
 
             #endregion
+
+            public override void collideWith(PhysicalObject obj)
+            {
+                throw new NotImplementedException();
+            }
     }
 } ///////

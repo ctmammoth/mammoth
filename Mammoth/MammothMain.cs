@@ -26,6 +26,11 @@ namespace Mammoth
                 Server.Server server = new Mammoth.Server.Server();
                 server.Run();
             }
+            else if (args[0].Equals("content_test"))
+            {
+                Mammoth.Engine.Engine game = new Mammoth.Engine.Engine();
+                ObjectFactories.content_test();
+            }
             else
             {
                 Console.WriteLine("Usage: add 'server' or 'client' to indicate mode.");
