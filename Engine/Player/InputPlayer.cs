@@ -168,7 +168,7 @@ namespace Mammoth.Engine
         // TODO: MAKE THIS LEGITIMATE
         protected virtual Bullet Throw()
         {
-            Vector3 forward = Vector3.Transform(Vector3.Forward, Orientation) * 1000.0f;
+            Vector3 forward = Vector3.Transform(Vector3.Forward, HeadOrient) * 1000.0f;
             forward.Normalize();
             Vector3 position = Position + (Vector3.Up * Height / 4.0f);
             position = Vector3.Add(position, forward);
