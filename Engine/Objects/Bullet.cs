@@ -42,21 +42,16 @@ namespace Mammoth.Engine
 
             // Create the actor
             this.Actor = physics.CreateActor(bulletActorDesc, this);
+
+            INetworkingService net = (INetworkingService)this.Game.Services.GetService(typeof(INetworkingService));
+            if (net is IServerNetworking)
+                ((IServerNetworking)net).sendThing(this);
         }
 
         public override void InitializeDefault(int id)
         {
             this.ID = id;
             InitialVelocityMagnitude = 10.0f;
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-
-            INetworkingService net = (INetworkingService)this.Game.Services.GetService(typeof (INetworkingService));
-            if (net is IServerNetworking)
-                ((IServerNetworking)net).sendThing(this);
         }
 
         // TODO
