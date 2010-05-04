@@ -42,6 +42,10 @@ namespace Mammoth.Engine
 
             // Create the actor
             this.Actor = physics.CreateActor(bulletActorDesc, this);
+
+            // Add this to the model DB
+            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            modelDB.registerObject(this);
         }
 
         public void Update(GameTime gameTime)

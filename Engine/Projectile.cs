@@ -44,8 +44,7 @@ namespace Mammoth.Engine
         protected Projectile(Game game)
         {
             Game = game;
-            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            modelDB.registerObject(this);
+            // Projectile subclasses should add themselves to the model DB
         }
 
         #region IDamager Members

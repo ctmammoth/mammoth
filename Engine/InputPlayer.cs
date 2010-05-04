@@ -169,7 +169,6 @@ namespace Mammoth.Engine
             Bullet bullet = new Bullet(Game, Position, Orientation);
         }
 
-
         /// <summary>
         /// This helper function is used to determine whether or not the player is colliding with objects in a 
         /// certain fashion after Controller.Move() is called.  For example, if the player is standing on the ground
