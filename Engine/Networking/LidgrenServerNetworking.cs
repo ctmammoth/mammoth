@@ -81,6 +81,19 @@ namespace Mammoth.Engine.Networking
 
         private void sendMessage(DataGram message)
         {
+            if (message.Recipient >= 0)
+            {
+                NetConnectionStatus status = _connections[message.Recipient].Status;
+                if (status != NetConnectionStatus.Connected)
+                {
+                    Console.WriteLine("Removing disconnected client " + message.Recipient);
+                    _connections.Remove(message.Recipient);
+                    IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+                    if (mdb.hasObject(message.Recipient << 25))
+                        mdb.removeObject(message.Recipient << 25);
+                    return;
+                }
+            }
             NetBuffer buffer = _server.CreateBuffer();
             buffer.WriteVariableInt32((int)MessageType.ENCODABLE);
             buffer.Write(message.ObjectType);
@@ -89,7 +102,11 @@ namespace Mammoth.Engine.Networking
             buffer.WritePadBits();
             buffer.Write(message.Data);
             if (message.Recipient < 0)
-                _server.SendMessage(buffer, _connections.Values, NetChannel.Unreliable);
+            {
+                foreach (NetConnection c in _connections.Values)
+                    if (c.Status == NetConnectionStatus.Connected)
+                        _server.SendMessage(buffer, c, NetChannel.Unreliable);
+            }
             else
                 _server.SendMessage(buffer, _connections[message.Recipient], NetChannel.Unreliable);
         }
@@ -130,7 +147,20 @@ namespace Mammoth.Engine.Networking
             {
                 case MessageType.ENCODABLE:
                     handleEncodable(buffer, senderID);
-                break;
+                    break;
+                case MessageType.STATUS_CHANGE:
+                    switch (buffer.ReadString())
+                    {
+                        case "CLIENT_QUIT":
+                            int clientID = buffer.ReadVariableInt32();
+                            Console.WriteLine("Client " + clientID + " has quit.");
+                            _connections.Remove(clientID);
+                            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+                            if (mdb.hasObject(clientID << 25))
+                                mdb.removeObject(clientID << 25);
+                            break;
+                    }
+                    break;
             }
         }
 
@@ -139,6 +169,7 @@ namespace Mammoth.Engine.Networking
             string objectType = buffer.ReadString();
             switch (objectType)
             {
+                    //TODO: change input state's getType?
                 case "Mammoth.Engine.Input.InputState":
                     if (!_inputStates.ContainsKey(senderID))
                         throw new Exception("Invalid player id: " + senderID);
@@ -176,6 +207,10 @@ namespace Mammoth.Engine.Networking
 
         public void endGame()
         {
+            NetBuffer buffer = _server.CreateBuffer();
+            buffer.WriteVariableInt32((int)MessageType.STATUS_CHANGE);
+            buffer.Write("SERVER_QUIT");
+            _server.SendMessage(buffer, _connections.Values, NetChannel.ReliableInOrder1);
             _server.Shutdown("Game ended.");
         }
 

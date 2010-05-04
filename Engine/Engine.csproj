@@ -84,6 +84,7 @@
     <Compile Include="Networking\Car.cs" />
     <Compile Include="Networking\Decoder.cs" />
     <Compile Include="Networking\Driver.cs" />
+    <Compile Include="Networking\DummyNetworking.cs" />
     <Compile Include="Networking\Encoder.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Input\IInputService.cs" />

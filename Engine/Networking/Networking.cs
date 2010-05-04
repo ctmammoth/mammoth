@@ -77,7 +77,8 @@ namespace Mammoth.Engine.Networking
         public enum NetworkingType
         {
             XNA,
-            LIDGREN
+            LIDGREN,
+            DUMMY
         }
 
         public abstract bool isLANCapable();

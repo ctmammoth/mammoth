@@ -84,9 +84,9 @@ namespace Mammoth.Engine.Networking
 
         private void handleStatusChange(NetBuffer buffer)
         {
-            //string statusMessage = buffer.ReadString();
-            //NetConnectionStatus newStatus = (NetConnectionStatus)buffer.ReadByte();
-            //Console.WriteLine("New status for " + sender + ": " + newStatus + " (" + statusMessage + ")");
+            string statusMessage = buffer.ReadString();
+            NetConnectionStatus newStatus = (NetConnectionStatus)buffer.ReadByte();
+            Console.WriteLine("New status for the server: " + newStatus + " (" + statusMessage + ").");
         }
 
         private void handleData(NetBuffer buffer)
@@ -103,6 +103,15 @@ namespace Mammoth.Engine.Networking
                     byte[] data = buffer.ReadBytes(length);
                     IDecoder decode = (IDecoder)this.Game.Services.GetService(typeof(IDecoder));
                     decode.AnalyzeObjects(objectType, id, data);
+                    break;
+                case MessageType.STATUS_CHANGE:
+                    switch (buffer.ReadString())
+                    {
+                        case "SERVER_QUIT":
+                            Console.WriteLine("The server has quit.");
+                            _client.Shutdown("The server quit.");
+                            break;
+                    }
                     break;
             }
         }
@@ -153,6 +162,11 @@ namespace Mammoth.Engine.Networking
 
         public void quitGame()
         {
+            Console.WriteLine("Quitting game.");
+            NetBuffer buffer = _client.CreateBuffer();
+            buffer.WriteVariableInt32((int)MessageType.STATUS_CHANGE);
+            buffer.Write("CLIENT_QUIT");
+            buffer.WriteVariableInt32(_clientID);
             _client.Shutdown("Player Quit");
         }
 
