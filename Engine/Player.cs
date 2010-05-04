@@ -14,6 +14,10 @@ namespace Mammoth.Engine
 {
     public abstract class Player : PhysicalObject, IRenderable, IEncodable
     {
+        #region Variables
+        protected bool Dead;
+        #endregion
+
         [Flags]
         public enum EncodableProperties
         {

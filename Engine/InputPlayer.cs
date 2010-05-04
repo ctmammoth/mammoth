@@ -13,9 +13,14 @@ using Mammoth.Engine.Physics;
 
 namespace Mammoth.Engine
 {
-    public abstract class InputPlayer : Player
+    public abstract class InputPlayer : Player, IDestructable
     {
         public InputPlayer(Game game) : base(game)
+        {
+            Init();
+        }
+
+        protected void Init()
         {
             this.Height = 6.0f;
 
@@ -26,6 +31,7 @@ namespace Mammoth.Engine
 
             this.CurrentCollision = 0;
         }
+
 
         public override void Spawn(Vector3 pos, Quaternion orient)
         {
@@ -50,8 +56,26 @@ namespace Mammoth.Engine
             this.Controller = physics.CreateController(desc, this);
         }
 
+        public void Die()
+        {
+            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+
+            // Remove the physx controller
+            physics.RemoveController(this.Controller);
+            // Remove the model
+            modelDB.removeObject(this.ID);
+        }
+
         public override void Update(GameTime gameTime)
         {
+            // Check whether the player is dead
+            if (Dead)
+            {
+                Die();
+                return;
+            }
+
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             IInputService inputService = (IInputService)this.Game.Services.GetService(typeof(IInputService));
 
@@ -165,7 +189,7 @@ namespace Mammoth.Engine
             return "Player";
         }
 
-        public override void collideWith(PhysicalObject obj)
+        public override void CollideWith(PhysicalObject obj)
         {
 
         }

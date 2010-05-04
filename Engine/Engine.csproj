@@ -73,10 +73,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bullet.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="ClientState.cs" />
+    <Compile Include="IDamager.cs" />
+    <Compile Include="IDestructable.cs" />
     <Compile Include="IModelDBService.cs" />
     <Compile Include="Input\EmulatedInput.cs" />
+    <Compile Include="IWeapon.cs" />
+    <Compile Include="ObjectFactories.cs" />
+    <Compile Include="Projectile.cs" />
     <Compile Include="LocalInputPlayer.cs" />
     <Compile Include="ModelDatabase.cs" />
     <Compile Include="Crate.cs" />
@@ -113,6 +119,7 @@
     <Compile Include="RemotePlayer.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="Room.cs" />
+    <Compile Include="SimpleGun.cs" />
     <Compile Include="StaticObject.cs" />
     <Compile Include="Interface\TWidget.cs" />
     <Compile Include="Networking\Test.cs" />
