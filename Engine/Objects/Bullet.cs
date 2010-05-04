@@ -46,13 +46,15 @@ namespace Mammoth.Engine
             // Add this to the model DB
             IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
             modelDB.registerObject(this);
+
+            Console.WriteLine("Making bullet");
         }
 
         public override void Update(GameTime gameTime)
         {
             // Send the bullet
-            IServerNetworking network = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
-            network.sendThing(this);
+            //IServerNetworking network = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            //network.sendThing(this);
         }
 
 
