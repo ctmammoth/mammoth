@@ -21,14 +21,14 @@ namespace Mammoth.Engine
         public Bullet(Game game, Vector3 position, Quaternion orientation)
             : base(game)
         {
-            InitialVelocity = 2.0f;
+            InitialVelocityMagnitude = 2.0f;
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             
             // TODO: get orientation from player
-            Vector3 velocity = Vector3.UnitZ;
+            Vector3 tempVelocity = Vector3.UnitZ;
             //velocity = Vector3.Transform(velocity, orientation);
-            velocity = Vector3.Multiply(velocity, InitialVelocity);
+            InitialVelocity = Vector3.Multiply(tempVelocity, InitialVelocityMagnitude);
 
             ActorDescription bulletActorDesc = new ActorDescription()
             {
@@ -36,6 +36,9 @@ namespace Mammoth.Engine
                 // Add a body so the bullet moves
                 BodyDescription = new BodyDescription(10.0f)
             };
+
+            // Set the body's initial velocity
+            bulletActorDesc.BodyDescription.LinearVelocity = InitialVelocity;
 
             // Create the actor
             this.Actor = physics.CreateActor(bulletActorDesc, this);

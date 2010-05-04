@@ -35,7 +35,9 @@ namespace Mammoth.Engine
         #endregion
 
         #region Variables
-        protected float InitialVelocity;
+        protected float InitialVelocityMagnitude;
+
+        public Vector3 InitialVelocity;
         #endregion
 
         // Default
