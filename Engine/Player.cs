@@ -52,8 +52,8 @@ namespace Mammoth.Engine
 
             if ((dirty & EncodableProperties.Position) == EncodableProperties.Position)
             {
-                Console.WriteLine("Sending updated position, " + counter++ + "; ");
-                Console.Write(Position.ToString());
+                Console.Write("Sending updated position, " + counter++ + "; ");
+                Console.WriteLine(Position.ToString());
                 tosend.AddElement("Position", Position);
             }
             //if((dirty & EncodableProperties.Orientation) == dirty)
