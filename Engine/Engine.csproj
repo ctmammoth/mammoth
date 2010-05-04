@@ -96,6 +96,7 @@
     <Compile Include="Objects\Fortress.cs" />
     <Compile Include="Networking\IDecoder.cs" />
     <Compile Include="Networking\IEncodable.cs" />
+    <Compile Include="ObjectParameters.cs" />
     <Compile Include="Input\InputState.cs" />
     <Compile Include="Input\LocalInput.cs" />
     <Compile Include="Interface\ExtensionMethods.cs" />
