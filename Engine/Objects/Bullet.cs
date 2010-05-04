@@ -28,12 +28,12 @@ namespace Mammoth.Engine
             
             // TODO: get orientation from player
             Vector3 tempVelocity = Vector3.UnitZ;
-            //velocity = Vector3.Transform(velocity, orientation);
+            tempVelocity = Vector3.Transform(tempVelocity, orientation);
             InitialVelocity = Vector3.Multiply(tempVelocity, InitialVelocityMagnitude);
 
             ActorDescription bulletActorDesc = new ActorDescription()
             {
-                Shapes = { new SphereShapeDescription(){ Radius = 1.0f, LocalPosition = Position } },
+                Shapes = { new SphereShapeDescription(){ Radius = 1.0f, LocalPosition = position } },
                 // Add a body so the bullet moves
                 BodyDescription = new BodyDescription(10.0f)
             };
@@ -43,11 +43,6 @@ namespace Mammoth.Engine
 
             // Create the actor
             this.Actor = physics.CreateActor(bulletActorDesc, this);
-
-            // Add this to the model DB
-            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            Console.WriteLine("Adding bullet to model DB");
-            modelDB.registerObject(this);
         }
 
         /*public override void Update(GameTime gameTime)
