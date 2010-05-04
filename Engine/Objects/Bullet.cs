@@ -54,8 +54,9 @@ namespace Mammoth.Engine
         {
             base.Update(gameTime);
 
-            IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof (INetworkingService));
-            net.sendThing(this);
+            INetworkingService net = (INetworkingService)this.Game.Services.GetService(typeof (INetworkingService));
+            if (net is IServerNetworking)
+                ((IServerNetworking)net).sendThing(this);
         }
 
         // TODO
