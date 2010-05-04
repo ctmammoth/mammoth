@@ -18,19 +18,6 @@ namespace Mammoth.Engine
     public abstract class Projectile : PhysicalObject, IDamager
     {
         #region Properties
-        // The projectile's velocity in the global coordinate system
-        public Vector3 GlobalVelocity
-        {
-            get
-            {
-                return Actor.LinearVelocity;
-            }
-            protected set
-            {
-                Actor.LinearVelocity = value;
-            }
-        }
-
         // Not needed for sufficiently fast-moving projectiles
         public Model Model3D
         {
@@ -43,27 +30,24 @@ namespace Mammoth.Engine
             get;
             protected set;
         }
+        #endregion
 
+        #region Variables
         protected float InitialVelocity;
         #endregion
 
-        // TODO
-        public override void CollideWith(PhysicalObject obj)
+        // Default
+        protected Projectile(Game game)
         {
-            throw new NotImplementedException();
-        }
-
-        // TODO
-        public override string getObjectType()
-        {
-            throw new NotImplementedException();
+            Game = game;
         }
 
         #region IDamager Members
 
+        // Default
         float IDamager.GetDamage()
         {
-            throw new NotImplementedException();
+            return 0.0f;
         }
 
         #endregion
