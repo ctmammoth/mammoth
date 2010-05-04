@@ -13,9 +13,14 @@ using Mammoth.Engine.Physics;
 
 namespace Mammoth.Engine
 {
-    public abstract class InputPlayer : Player
+    public abstract class InputPlayer : Player, IDestructable
     {
         public InputPlayer(Game game) : base(game)
+        {
+            Init();
+        }
+
+        protected void Init()
         {
             this.Height = 6.0f;
 
@@ -25,7 +30,10 @@ namespace Mammoth.Engine
             this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
 
             this.CurrentCollision = 0;
+
+            this.Health = 100;
         }
+
 
         public override void Spawn(Vector3 pos, Quaternion orient)
         {
@@ -50,8 +58,28 @@ namespace Mammoth.Engine
             this.Controller = physics.CreateController(desc, this);
         }
 
+        public void Die()
+        {
+            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+
+            // Remove the physx controller
+            physics.RemoveController(this.Controller);
+            // Remove the model
+            modelDB.removeObject(this.ID);
+        }
+
         public override void Update(GameTime gameTime)
         {
+            // Check whether the player is dead
+            if (Dead)
+            {
+                Die();
+                return;
+            }
+
+            Console.WriteLine("Health: " + Health);
+
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             IInputService inputService = (IInputService)this.Game.Services.GetService(typeof(IInputService));
 
@@ -124,6 +152,10 @@ namespace Mammoth.Engine
                     if (input.IsKeyDown(InputType.Jump))
                         this.Velocity += Vector3.Up / 4.0f;
 
+                // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
+                if (input.KeyPressed(InputType.Shoot))
+                    this.Throw();
+
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
 
@@ -133,6 +165,16 @@ namespace Mammoth.Engine
                 else
                     this.Velocity += physics.Scene.Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds - motion;
             }
+        }
+
+        // TODO: MAKE THIS LEGITIMATE
+        protected void Throw()
+        {
+            // Make sure the bullet isn't spawned in the player: shift it by a bit
+            Vector3 offset = Vector3.Transform(Vector3.UnitY, Orientation);
+            offset.Normalize();
+            offset = Vector3.Add(offset, new Vector3(0.0f, this.Height, 0.0f));
+            Bullet bullet = new Bullet(Game, Vector3.Add(offset, Position), Orientation);
         }
 
         /// <summary>
@@ -165,9 +207,39 @@ namespace Mammoth.Engine
             return "Player";
         }
 
-        public override void collideWith(PhysicalObject obj)
+        public override void CollideWith(PhysicalObject obj)
         {
+            if (obj is IDamager)
+                TakeDamage(((IDamager)obj).GetDamage());
+        }
 
+        private void TakeDamage(float damage)
+        {
+            Health -= damage;
+        }
+
+        public override byte[] Encode()
+        {
+            Networking.Encoder tosend = new Networking.Encoder();
+
+            tosend.AddElement("Position", Position);
+            tosend.AddElement("Orientation", Orientation);
+            tosend.AddElement("Velocity", Velocity);
+            tosend.AddElement("Health", Health);
+            tosend.AddElement("ID", ID);
+
+            return tosend.Serialize();
+        }
+
+        public override void Decode(byte[] serialized)
+        {
+            Networking.Encoder props = new Networking.Encoder(serialized);
+
+            Position = (Vector3)props.GetElement("Position", Position);
+            Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
+            Velocity = (Vector3)props.GetElement("Velocity", Velocity);
+            Health = (float)props.GetElement("Health", Health);
+            ID = (int)props.GetElement("ID", ID);
         }
 
         #region Properties
@@ -185,6 +257,12 @@ namespace Mammoth.Engine
         }
 
         private float Pitch
+        {
+            get;
+            set;
+        }
+
+        private float Health
         {
             get;
             set;

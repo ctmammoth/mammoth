@@ -7,39 +7,39 @@ namespace Mammoth.Engine
     public abstract class PhysicalObject : BaseObject
     {
         # region Properties
-        public Actor actor
+        public Actor Actor
         {
             get;
             protected set;
         }
 
-        public Vector3 position
+        public virtual Vector3 Position
         {
             get
             {
-                return actor.GlobalPosition;
+                return Actor.GlobalPosition;
             }
 
             protected set
             {
-                actor.GlobalPosition = value;
+                Actor.GlobalPosition = value;
             }
         }
 
-        public Quaternion orientation
+        public virtual Quaternion Orientation
         {
             get
             {
-                return actor.GlobalOrientationQuat;
+                return Actor.GlobalOrientationQuat;
             }
 
             protected set
             {
-                actor.GlobalOrientationQuat = value;
+                Actor.GlobalOrientationQuat = value;
             }
         }
         # endregion
 
-        public abstract void collideWith(PhysicalObject obj);
+        public virtual void CollideWith(PhysicalObject obj) { }
     }
 }

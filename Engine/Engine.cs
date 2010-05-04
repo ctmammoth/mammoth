@@ -55,6 +55,7 @@ namespace Mammoth.Engine
             this.Components.Add(physics);
             // TODO: Change this to create a new scene when a game screen is created.
             physics.CreateScene();
+
             #region PhysX Code
 
             // Because I don't trust the ground plane, I'm making my own.

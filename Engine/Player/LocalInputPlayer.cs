@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 namespace Mammoth.Engine
 {
     public class LocalInputPlayer : InputPlayer
-    {
+    {       
         public LocalInputPlayer(Game game)
             : base(game)
         {

@@ -14,6 +14,10 @@ namespace Mammoth.Engine
 {
     public abstract class Player : PhysicalObject, IRenderable, IEncodable
     {
+        #region Variables
+        protected bool Dead;
+        #endregion
+
         [Flags]
         public enum EncodableProperties
         {
@@ -40,9 +44,14 @@ namespace Mammoth.Engine
             this.HeadOrient = orient;
         }
 
+        public override void InitializeDefault(int id)
+        {
+            
+        }
+
         #region IEncodable Members
 
-        public byte[] Encode()
+        public virtual byte[] Encode()
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
@@ -65,7 +74,7 @@ namespace Mammoth.Engine
             return tosend.Serialize();
         }
 
-        public void Decode(byte[] serialized)
+        public virtual void Decode(byte[] serialized)
         {
             Networking.Encoder props = new Networking.Encoder(serialized);
 
@@ -75,16 +84,11 @@ namespace Mammoth.Engine
             ID = (int) props.GetElement("ID", ID);
         }
 
-        public override void InitializeDefault(int id)
-        {
-        }
-
-
         #endregion
 
         #region Properties
 
-        public Vector3 Position
+        public override Vector3 Position
         {
             get
             {
@@ -103,7 +107,7 @@ namespace Mammoth.Engine
             protected set;
         }
 
-        public Quaternion Orientation
+        public override Quaternion Orientation
         {
             get
             {
