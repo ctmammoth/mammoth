@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Net;
 
 using Microsoft.Xna.Framework;
 using Lidgren.Network.Xna;
@@ -43,20 +42,11 @@ namespace Mammoth.Engine.Networking
                 return;
             base.Update(gameTime);
 
-            if (_client.ServerConnection.Status == NetConnectionStatus.Disconnected)
-            {
-                Console.WriteLine("Server disconnected.");
-                quitGame();
-            }
-            else if (_client.ServerConnection.Status != NetConnectionStatus.Connected)
-                return;
-
             IInputService inputServer = (IInputService)this.Game.Services.GetService(typeof(IInputService));
             InputState state = inputServer.States.Peek();
-            //Console.WriteLine(state.ToString());
             sendThing(state);
-            NetBuffer buffer;
 
+            NetBuffer buffer;
             while (_toSend.Count != 0)
             {
                 //Console.WriteLine("Really sending thing");
@@ -72,7 +62,6 @@ namespace Mammoth.Engine.Networking
                 _client.SendMessage(buffer, NetChannel.ReliableInOrder1);
             }
 
-            IDecoder decode = (IDecoder)this.Game.Services.GetService(typeof(IDecoder));
             buffer = _client.CreateBuffer();
             NetMessageType type;
             while (_client.ReadMessage(buffer, out type))
@@ -83,22 +72,18 @@ namespace Mammoth.Engine.Networking
                         Console.WriteLine(buffer.ReadString());
                         break;
                     case NetMessageType.StatusChanged:
-                        string statusMessage = buffer.ReadString();
-                        NetConnectionStatus newStatus = (NetConnectionStatus)buffer.ReadByte();
-                        Console.WriteLine("New status for the server: " + newStatus + " (" + statusMessage + ")");
-                        if (newStatus == NetConnectionStatus.Disconnecting || newStatus == NetConnectionStatus.Disconnected)
-                        {
-                            Console.WriteLine("Server has disconnected.");
-                            quitGame();
-                        }
+                        //string statusMessage = buffer.ReadString();
+                        //NetConnectionStatus newStatus = (NetConnectionStatus)buffer.ReadByte();
+                        //Console.WriteLine("New status for " + sender + ": " + newStatus + " (" + statusMessage + ")");
                         break;
                     case NetMessageType.Data:
-                        Console.WriteLine("Data received");
+                        //Console.WriteLine("Data received");
                         string objectType = buffer.ReadString();
                         int id = buffer.ReadVariableInt32();
                         int length = buffer.ReadVariableInt32();
                         buffer.SkipPadBits();
                         byte[] data = buffer.ReadBytes(length);
+                        IDecoder decode = (IDecoder)this.Game.Services.GetService(typeof(IDecoder));
                         decode.AnalyzeObjects(objectType, id, data);
                         break;
                 }
@@ -150,7 +135,7 @@ namespace Mammoth.Engine.Networking
                                     }
                                     int id = buffer.ReadVariableInt32();
                                     //if (id > 0)
-                                        _clientID = id;
+                                    _clientID = id;
                                     //else
                                     //{
                                     //    //TODO: hack
@@ -167,14 +152,13 @@ namespace Mammoth.Engine.Networking
 
         public void quitGame()
         {
-            Console.WriteLine("Quitting the game, my id is: " + _clientID.ToString());
-            _client.Shutdown(_clientID.ToString());
+            _client.Shutdown("Player Quit");
         }
 
         public override int ClientID
         {
             get { return _clientID; }
-        } 
+        }
 
         #endregion
 
