@@ -22,7 +22,7 @@ namespace Mammoth.Engine
             : base(game)
         {
             Console.WriteLine("Constructing a bullet...");
-            InitialVelocityMagnitude = 10.0f;
+            InitialVelocityMagnitude = 500.0f;
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
 
