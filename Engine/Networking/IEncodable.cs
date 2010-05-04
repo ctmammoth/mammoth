@@ -10,6 +10,8 @@ namespace Mammoth.Engine.Networking
         byte[] Encode();
         void Decode(byte[] serialized);
 
+        
+
         #region Properties
 
         //int ID

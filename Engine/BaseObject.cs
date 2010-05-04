@@ -23,9 +23,9 @@ namespace Mammoth.Engine
 
         public abstract String getObjectType();
 
+        public abstract void InitializeDefault(int id);
 
-
-        
+       
 
 
 
