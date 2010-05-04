@@ -16,5 +16,11 @@ namespace Mammoth.Engine
 
             this.Model3D = r.LoadModel("soldier-low-poly");
         }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            Console.WriteLine("Health: " + this.Health);
+        }
     }
 }

@@ -78,8 +78,6 @@ namespace Mammoth.Engine
                 return;
             }
 
-            Console.WriteLine("Health: " + Health);
-
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             IInputService inputService = (IInputService)this.Game.Services.GetService(typeof(IInputService));
 
@@ -265,7 +263,7 @@ namespace Mammoth.Engine
             set;
         }
 
-        private float Health
+        public float Health
         {
             get;
             set;

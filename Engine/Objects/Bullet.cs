@@ -50,6 +50,15 @@ namespace Mammoth.Engine
             InitialVelocityMagnitude = 10.0f;
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            INetworkingService net = (INetworkingService)this.Game.Services.GetService(typeof (INetworkingService));
+            if (net is IServerNetworking)
+                ((IServerNetworking)net).sendThing(this);
+        }
+
         // TODO
         public override void CollideWith(PhysicalObject obj)
         {
