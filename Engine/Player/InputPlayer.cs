@@ -167,9 +167,10 @@ namespace Mammoth.Engine
         protected void Throw()
         {
             // Make sure the bullet isn't spawned in the player: shift it by a bit
-            Vector3 offset = Vector3.Transform(Vector3.Multiply(Vector3.UnitZ, -1), Orientation);
+            Vector3 offset = Vector3.Transform(Vector3.UnitY, Orientation);
             offset.Normalize();
-            Bullet bullet = new Bullet(Game, Vector3.Multiply(Vector3.Add(offset, Position), -1), Orientation);
+            offset = Vector3.Add(offset, new Vector3(0.0f, this.Height, 0.0f));
+            Bullet bullet = new Bullet(Game, Vector3.Add(offset, Position), Orientation);
         }
 
         /// <summary>
@@ -204,7 +205,6 @@ namespace Mammoth.Engine
 
         public override void CollideWith(PhysicalObject obj)
         {
-
         }
 
         #region Properties

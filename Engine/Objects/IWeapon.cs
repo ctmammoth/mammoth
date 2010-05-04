@@ -9,6 +9,7 @@ namespace Mammoth.Engine
 {
     public interface IWeapon
     {
-        void Shoot(Quaternion orientation);
+        void Shoot(Vector3 position, Quaternion orientation);
+        void Reload();
     }
 }
