@@ -47,7 +47,7 @@ namespace Mammoth.Engine
         public override void InitializeDefault(int id)
         {
             this.ID = id;
-            InitialVelocity = 10.0f;
+            InitialVelocityMagnitude = 10.0f;
         }
 
         // TODO
