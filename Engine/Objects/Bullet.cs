@@ -42,6 +42,7 @@ namespace Mammoth.Engine
             // Create the actor
             this.Actor = physics.CreateActor(bulletActorDesc, this);
 
+            // Send the Bullet over the network after it's constructed
             INetworkingService net = (INetworkingService)this.Game.Services.GetService(typeof(INetworkingService));
             if (net is IServerNetworking)
                 ((IServerNetworking)net).sendThing(this);
