@@ -70,6 +70,12 @@ namespace Mammoth.Engine.Networking
                     ro.registerObject(p);
                 break;
 
+                case "Bullet":
+                Bullet b = new Bullet(game, Vector3.Zero, Quaternion.Identity);
+                b.Decode(properties);
+                ro.registerObject(b);
+                break;
+
                 default:
                 Console.WriteLine("Object type was not recognized");
                 break;

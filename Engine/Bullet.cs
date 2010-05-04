@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using Mammoth.Engine.Networking;
 using StillDesign.PhysX;
 using Microsoft.Xna.Framework;
 
@@ -10,7 +10,7 @@ using Mammoth.Engine.Physics;
 
 namespace Mammoth.Engine
 {
-    public class Bullet : Projectile
+    public class Bullet : Projectile, IEncodable
     {
         /// <summary>
         /// Creates a new bullet at the specified position and gives it the required initial velocity.  It moves in the
@@ -51,6 +51,24 @@ namespace Mammoth.Engine
         public override string getObjectType()
         {
             return "Bullet";
+        }
+
+        public byte[] Encode()
+        {
+            Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder();
+
+            e.AddElement("Position", Position);
+            e.AddElement("InitialVelocity", InitialVelocity);
+
+            return e.Serialize();
+        }
+
+        public void Decode(byte[] serialized)
+        {
+            Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder(serialized);
+
+            Position = (Vector3)e.GetElement("Position", Position);
+            InitialVelocity = (Vector3)e.GetElement("InitialVelocity", InitialVelocity);
         }
 
         #region IDamager Members
