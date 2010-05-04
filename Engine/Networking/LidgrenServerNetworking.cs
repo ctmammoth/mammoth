@@ -84,14 +84,11 @@ namespace Mammoth.Engine.Networking
             if (message.Recipient >= 0)
             {
                 NetConnectionStatus status = _connections[message.Recipient].Status;
-                if (status == NetConnectionStatus.Disconnected || status == NetConnectionStatus.Disconnected)
+                if (status != NetConnectionStatus.Connected)
                 {
-                    _connections.Remove(message.Recipient);
+                    Console.WriteLine("Ignoring disconnected client " + message.Recipient);
                     return;
                 }
-                else if (status != NetConnectionStatus.Connected)
-                    return;
-                
             }
             NetBuffer buffer = _server.CreateBuffer();
             buffer.WriteVariableInt32((int)MessageType.ENCODABLE);

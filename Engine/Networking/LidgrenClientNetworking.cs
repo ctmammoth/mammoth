@@ -162,6 +162,7 @@ namespace Mammoth.Engine.Networking
 
         public void quitGame()
         {
+            Console.WriteLine("Quitting game.");
             NetBuffer buffer = _client.CreateBuffer();
             buffer.WriteVariableInt32((int)MessageType.STATUS_CHANGE);
             buffer.Write("CLIENT_QUIT");

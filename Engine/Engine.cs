@@ -152,7 +152,11 @@ namespace Mammoth.Engine
         {
             // Allows the game to exit
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                this.Dispose();
                 this.Exit();
+                return;
+            }
 
             // TODO: Add your update logic here
 
