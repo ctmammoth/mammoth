@@ -37,13 +37,14 @@ namespace Mammoth.Engine
         {
             // Currently updating
             isUpdating = true;
+            toRegister.Clear();
 
             foreach (var obj in _objects.Values)
                 obj.Update(gameTime);
 
             // Add objects that are waiting to be registered
-            foreach (var obj in toRegister)
-                this.registerObject(obj);
+            while (toRegister.Count > 0)
+                registerObject(toRegister.Dequeue());
 
             // Done updating
             isUpdating = false;
