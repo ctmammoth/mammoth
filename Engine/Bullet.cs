@@ -44,6 +44,13 @@ namespace Mammoth.Engine
             this.Actor = physics.CreateActor(bulletActorDesc, this);
         }
 
+        public void Update(GameTime gameTime)
+        {
+            // Send the bullet
+            IServerNetworking network = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            network.sendThing(this);
+        }
+
 
         // TODO
         public override void CollideWith(PhysicalObject obj)
@@ -56,6 +63,7 @@ namespace Mammoth.Engine
             return "Bullet";
         }
 
+        #region IEncodeable members
         public byte[] Encode()
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder();
@@ -73,6 +81,7 @@ namespace Mammoth.Engine
             Position = (Vector3)e.GetElement("Position", Position);
             InitialVelocity = (Vector3)e.GetElement("InitialVelocity", InitialVelocity);
         }
+        #endregion
 
         #region IDamager Members
 

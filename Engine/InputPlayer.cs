@@ -148,6 +148,10 @@ namespace Mammoth.Engine
                     if (input.IsKeyDown(InputType.Jump))
                         this.Velocity += Vector3.Up / 4.0f;
 
+                // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
+                if (input.IsKeyDown(InputType.Shoot))
+                    this.Throw();
+
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
 
@@ -158,6 +162,13 @@ namespace Mammoth.Engine
                     this.Velocity += physics.Scene.Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds - motion;
             }
         }
+
+        // TODO: MAKE THIS LEGITIMATE
+        protected void Throw()
+        {
+            Bullet bullet = new Bullet(Game, Position, Orientation);
+        }
+
 
         /// <summary>
         /// This helper function is used to determine whether or not the player is colliding with objects in a 
