@@ -12,7 +12,7 @@ namespace Mammoth.Engine
 {
     public class Crate : PhysicalObject, IEncodable, IRenderable
     {
-        private Vector3 Position, dimensions; ///
+        private Vector3 dimensions; ///
 
 
 
@@ -142,11 +142,6 @@ namespace Mammoth.Engine
         }
 
         public Vector3 PositionOffset
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public Quaternion Orientation
         {
             get { throw new NotImplementedException(); }
         }

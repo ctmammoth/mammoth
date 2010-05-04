@@ -13,7 +13,7 @@ namespace Mammoth.Engine
             protected set;
         }
 
-        public Vector3 Position
+        public virtual Vector3 Position
         {
             get
             {
@@ -26,7 +26,7 @@ namespace Mammoth.Engine
             }
         }
 
-        public Quaternion Orientation
+        public virtual Quaternion Orientation
         {
             get
             {
@@ -40,6 +40,6 @@ namespace Mammoth.Engine
         }
         # endregion
 
-        public abstract void CollideWith(PhysicalObject obj);
+        public virtual void CollideWith(PhysicalObject obj) { }
     }
 }
