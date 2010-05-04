@@ -17,8 +17,12 @@ namespace Mammoth.Engine
 
         public bool AddAttribute(String attribute, String value)
         {
+            String output = null;
+            parameters.TryGetValue(attribute, out output);
+            
+ 
             // There should only be one value for each attribute value
-            if (parameters.ContainsKey(attribute) && parameters.TryGetValue(attribute) != null)
+            if (parameters.ContainsKey(attribute) && output != null)
             {
                 return false;
             }
@@ -38,11 +42,15 @@ namespace Mammoth.Engine
 
         public double GetDoubleValue(String attribute)
         {
-            return Double.Parse(parameters.TryGetValue(attribute));
+            String output = null;
+            parameters.TryGetValue(attribute, out output);
+            return Double.Parse(output);
         }
         public String GetStringValue(String attribute)
         {
-            return parameters.TryGetValue(attribute);
+            String output = null;
+            parameters.TryGetValue(attribute, out output);
+            return output;
         }
 
 

@@ -75,6 +75,11 @@ namespace Mammoth.Engine
             ID = (int) props.GetElement("ID", ID);
         }
 
+        public override void InitializeDefault(int id)
+        {
+        }
+
+
         #endregion
 
         #region Properties

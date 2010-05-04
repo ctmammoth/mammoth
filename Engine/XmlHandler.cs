@@ -89,15 +89,16 @@ namespace Mammoth.Engine
             return null;
         }
 
-        public ObjectParameters getAttributes()
+        public ObjectParameters GetAttributes()
         {         
-            ObjectParamters parameters = new ObjectParameters();
+            ObjectParameters parameters = new ObjectParameters();
             for (int i = 0; i < reader.AttributeCount; i++)
             {
                 reader.MoveToAttribute(i);
                 parameters.AddAttribute(reader.Name,reader.Value);
                 
             }
+            return parameters;
 
         }
 

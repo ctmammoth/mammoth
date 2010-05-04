@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Mammoth.Engine.Networking;
+
 namespace Mammoth.Engine
 {
-    public class Fortress : BaseObject
+    public class Fortress : BaseObject, IEncodable
     { 
         private double width, height, length, x, y, z;
         private List<Room> roomList;
         private Room[][][] roomGrid;
+
+        
+
 
         public override void InitializeDefault(int id)
         {
@@ -17,13 +22,13 @@ namespace Mammoth.Engine
             throw new NotImplementedException();
         }
 
-        public override Byte[] Encode()
+        public Byte[] Encode()
         {
             // TODO: Implement this
             throw new NotImplementedException();
         }
 
-        public override void Decode(Byte[] data)
+        public void Decode(Byte[] data)
         {
             // TODO: Implement this
             throw new NotImplementedException();

@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Mammoth.Engine.Networking;
+
 namespace Mammoth.Engine
 {
-    public class Room : BaseObject
+    public class Room : BaseObject, IEncodable
     {
         private double width, height, length;
+        private double x, y, z;
         private List<BaseObject> objectList;
         private String roomType;
 
@@ -22,13 +25,13 @@ namespace Mammoth.Engine
             throw new NotImplementedException();
         }
 
-        public override Byte[] Encode()
+        public Byte[] Encode()
         {
             // TODO: Implement this
             throw new NotImplementedException();
         }
 
-        public override void Decode (Byte[] data)
+        public void Decode (Byte[] data)
         {
             // TODO: Implement this
             throw new NotImplementedException();
@@ -36,13 +39,13 @@ namespace Mammoth.Engine
 
         public Room(int id, ObjectParameters parameters)
         {
-            this.objectId = id;            
+            this.ID = id;            
             foreach (String attribute in parameters.GetAttributes()) 
             {
                 switch(attribute) 
                 {
                     case "X":
-                        x = parameters.GetDoubleValue(attribute);
+                         x = parameters.GetDoubleValue(attribute);
                         break;
                     case "Y":
                         y = parameters.GetDoubleValue(attribute);
@@ -51,7 +54,8 @@ namespace Mammoth.Engine
                         z = parameters.GetDoubleValue(attribute);
                         break;
                     case "Room_Type":
-                        specialize(parameters.GetStringValue(attribute));
+                        Specialize(parameters.GetStringValue(attribute));
+                        break;
                 }
             }
         }
@@ -64,7 +68,7 @@ namespace Mammoth.Engine
             while (!handler.IsClosingTag("ROOM"))
             {
                 handler.GetNextElement();
-                String name = handler.GetName();
+                String name = handler.GetElementName();
                 switch (name)
                 {
                     case "ITEMS":
@@ -78,6 +82,16 @@ namespace Mammoth.Engine
 
             }
 
+        }
+
+        private void HandleItems(XmlHandler handler)
+        {
+            // TODO: Handle those items
+        }
+
+        private void HandleParameters(XmlHandler handler)
+        {
+            // TODO: Handle those parameters
         }
 
         public void initialize()
@@ -100,7 +114,7 @@ namespace Mammoth.Engine
 
             private void AddObject(XmlHandler handler)
             {
-                ObjectParameters attributes = handler.getAttributes();
+                ObjectParameters attributes = handler.GetAttributes();
 
             }
 
