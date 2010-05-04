@@ -169,6 +169,7 @@ namespace Mammoth.Engine.Networking
             string objectType = buffer.ReadString();
             switch (objectType)
             {
+                    //TODO: change input state's getType?
                 case "Mammoth.Engine.Input.InputState":
                     if (!_inputStates.ContainsKey(senderID))
                         throw new Exception("Invalid player id: " + senderID);
