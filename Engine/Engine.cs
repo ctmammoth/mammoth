@@ -132,7 +132,8 @@ namespace Mammoth.Engine
             Renderer r = (Renderer)this.Services.GetService(typeof(IRenderService));
             SpriteFont calibri = r.LoadFont("calibri");
 
-            ObjectFactories.content_test(this);
+            // ObjectFactories.content_test(this);
+
             //_text = r.RenderFont("ABC", Vector2.Zero, Color.Maroon, Color.TransparentBlack);
         }
 
