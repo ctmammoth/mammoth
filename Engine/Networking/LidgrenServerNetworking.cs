@@ -81,6 +81,18 @@ namespace Mammoth.Engine.Networking
 
         private void sendMessage(DataGram message)
         {
+            if (message.Recipient >= 0)
+            {
+                NetConnectionStatus status = _connections[message.Recipient].Status;
+                if (status == NetConnectionStatus.Disconnected || status == NetConnectionStatus.Disconnected)
+                {
+                    _connections.Remove(message.Recipient);
+                    return;
+                }
+                else if (status != NetConnectionStatus.Connected)
+                    return;
+                
+            }
             NetBuffer buffer = _server.CreateBuffer();
             buffer.WriteVariableInt32((int)MessageType.ENCODABLE);
             buffer.Write(message.ObjectType);
@@ -130,7 +142,17 @@ namespace Mammoth.Engine.Networking
             {
                 case MessageType.ENCODABLE:
                     handleEncodable(buffer, senderID);
-                break;
+                    break;
+                case MessageType.STATUS_CHANGE:
+                    switch (buffer.ReadString())
+                    {
+                        case "CLIENT_QUIT":
+                            int clientID = buffer.ReadVariableInt32();
+                            Console.WriteLine("Client " + clientID + " has quit.");
+                            _connections.Remove(clientID);
+                            break;
+                    }
+                    break;
             }
         }
 
@@ -176,6 +198,10 @@ namespace Mammoth.Engine.Networking
 
         public void endGame()
         {
+            NetBuffer buffer = _server.CreateBuffer();
+            buffer.WriteVariableInt32((int)MessageType.STATUS_CHANGE);
+            buffer.Write("SERVER_QUIT");
+            _server.SendMessage(buffer, _connections.Values, NetChannel.ReliableInOrder1);
             _server.Shutdown("Game ended.");
         }
 
