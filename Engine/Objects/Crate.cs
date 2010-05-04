@@ -20,18 +20,19 @@ namespace Mammoth.Engine
         public Crate(int id, ObjectParameters parameters)
         {
             this.ID = id;
+            Vector3 temp = Vector3.Zero;
             foreach (String attribute in parameters.GetAttributes())
             {
                 switch (attribute)
                 {
                     case "X":
-                        Position.X = (float)parameters.GetDoubleValue(attribute);
+                        temp.X = (float)parameters.GetDoubleValue(attribute);
                         break;
                     case "Y":
-                        Position.Y = (float)parameters.GetDoubleValue(attribute);
+                        temp.Y = (float)parameters.GetDoubleValue(attribute);
                         break;
                     case "Z":
-                        Position.Z = (float)parameters.GetDoubleValue(attribute);
+                        temp.Z = (float)parameters.GetDoubleValue(attribute);
                         break;
                     case "Crate_Type":
                         Specialize(parameters.GetStringValue(attribute));
@@ -39,6 +40,7 @@ namespace Mammoth.Engine
 
                 }
             }
+            this.Position = temp;
         }
 
         private void Specialize(String attribute)
@@ -68,9 +70,7 @@ namespace Mammoth.Engine
         public override void InitializeDefault(int id)
         {
             ID = id;
-            Position.X = 0;
-            Position.Y = 0;
-            Position.Z = 0;
+            Position = Vector3.Zero;
             dimensions.X = 0;
             dimensions.Y = 0;
             dimensions.Z = 0;
