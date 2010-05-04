@@ -39,4 +39,9 @@ namespace Mammoth.Engine.Networking
             return;
         }
     }
+
+    public enum MessageType
+    {
+        ENCODABLE, STATUS_CHANGE, CLIENT_ID
+    }
 }

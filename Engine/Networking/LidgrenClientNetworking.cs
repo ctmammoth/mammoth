@@ -46,23 +46,10 @@ namespace Mammoth.Engine.Networking
             InputState state = inputServer.States.Peek();
             sendThing(state);
 
-            NetBuffer buffer;
             while (_toSend.Count != 0)
-            {
-                //Console.WriteLine("Really sending thing");
-                buffer = _client.CreateBuffer();
-                buffer.WriteVariableInt32(_clientID);
-                DataGram data = _toSend.Dequeue();
-                buffer.Write(data.Type);
-                if (data.ID >= 0)
-                    buffer.WriteVariableInt32(data.ID);
-                buffer.WriteVariableInt32(data.Data.Length);
-                buffer.WritePadBits();
-                buffer.Write(data.Data);
-                _client.SendMessage(buffer, NetChannel.ReliableInOrder1);
-            }
+                sendMessage(_toSend.Dequeue());
 
-            buffer = _client.CreateBuffer();
+            NetBuffer buffer = _client.CreateBuffer();
             NetMessageType type;
             while (_client.ReadMessage(buffer, out type))
             {
@@ -72,21 +59,51 @@ namespace Mammoth.Engine.Networking
                         Console.WriteLine(buffer.ReadString());
                         break;
                     case NetMessageType.StatusChanged:
-                        //string statusMessage = buffer.ReadString();
-                        //NetConnectionStatus newStatus = (NetConnectionStatus)buffer.ReadByte();
-                        //Console.WriteLine("New status for " + sender + ": " + newStatus + " (" + statusMessage + ")");
+                        handleStatusChange(buffer);
                         break;
                     case NetMessageType.Data:
-                        //Console.WriteLine("Data received");
-                        string objectType = buffer.ReadString();
-                        int id = buffer.ReadVariableInt32();
-                        int length = buffer.ReadVariableInt32();
-                        buffer.SkipPadBits();
-                        byte[] data = buffer.ReadBytes(length);
-                        IDecoder decode = (IDecoder)this.Game.Services.GetService(typeof(IDecoder));
-                        decode.AnalyzeObjects(objectType, id, data);
+                        handleData(buffer);
                         break;
                 }
+            }
+        }
+
+        private void sendMessage(DataGram message)
+        {
+            NetBuffer buffer = _client.CreateBuffer();
+            buffer.WriteVariableInt32(_clientID);
+            buffer.WriteVariableInt32((int)MessageType.ENCODABLE);
+            buffer.Write(message.ObjectType);
+            if (message.ID >= 0)
+                buffer.WriteVariableInt32(message.ID);
+            buffer.WriteVariableInt32(message.Data.Length);
+            buffer.WritePadBits();
+            buffer.Write(message.Data);
+            _client.SendMessage(buffer, NetChannel.ReliableInOrder1);
+        }
+
+        private void handleStatusChange(NetBuffer buffer)
+        {
+            //string statusMessage = buffer.ReadString();
+            //NetConnectionStatus newStatus = (NetConnectionStatus)buffer.ReadByte();
+            //Console.WriteLine("New status for " + sender + ": " + newStatus + " (" + statusMessage + ")");
+        }
+
+        private void handleData(NetBuffer buffer)
+        {
+            //Console.WriteLine("Data received");
+            MessageType type = (MessageType)buffer.ReadVariableInt32();
+            switch (type) 
+            {
+                case MessageType.ENCODABLE:
+                    string objectType = buffer.ReadString();
+                    int id = buffer.ReadVariableInt32();
+                    int length = buffer.ReadVariableInt32();
+                    buffer.SkipPadBits();
+                    byte[] data = buffer.ReadBytes(length);
+                    IDecoder decode = (IDecoder)this.Game.Services.GetService(typeof(IDecoder));
+                    decode.AnalyzeObjects(objectType, id, data);
+                    break;
             }
         }
 
@@ -117,31 +134,15 @@ namespace Mammoth.Engine.Networking
                         {
                             buffer = _client.CreateBuffer();
                             NetMessageType type2;
-                            while (!_client.ReadMessage(buffer, out type2))
-                                Console.WriteLine("No message");
+                            while (!_client.ReadMessage(buffer, out type2)) ;
                             switch (type2)
                             {
                                 case NetMessageType.Data:
-                                    byte[] bytes = buffer.PeekBytes(buffer.LengthBytes);
-                                    foreach (byte b in bytes)
-                                        Console.Write(b + " ");
-                                    Console.WriteLine();
-                                    //Console.WriteLine(buffer.PeekString());
-                                    string messageType = buffer.ReadString();
-                                    if (!messageType.Equals("ClientID"))
-                                    {
-                                        Console.WriteLine("Non client id message");
+                                    MessageType messageType = (MessageType)buffer.ReadVariableInt32();
+                                    if (messageType != MessageType.CLIENT_ID)
                                         break;
-                                    }
                                     int id = buffer.ReadVariableInt32();
-                                    //if (id > 0)
                                     _clientID = id;
-                                    //else
-                                    //{
-                                    //    //TODO: hack
-                                    //    Console.WriteLine("Ignoring negative ID");
-                                    //    break;
-                                    //}
                                     Console.WriteLine("My ID is: " + _clientID);
                                     return;
                             }
@@ -164,20 +165,20 @@ namespace Mammoth.Engine.Networking
 
         private class DataGram
         {
-            public string Type;
+            public string ObjectType;
             public int ID;
             public byte[] Data { get; set; }
 
-            public DataGram(string type, int id, byte[] data)
+            public DataGram(string objectType, int id, byte[] data)
             {
-                Type = type;
+                ObjectType = objectType;
                 ID = id;
                 Data = data;
             }
 
-            public DataGram(string type, byte[] data)
+            public DataGram(string objectType, byte[] data)
             {
-                Type = type;
+                ObjectType = objectType;
                 ID = -1;
                 Data = data;
             }
