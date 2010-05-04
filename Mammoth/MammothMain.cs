@@ -32,8 +32,11 @@ namespace Mammoth
             }
             else if (args[0].Equals("content_test"))
             {
-                Mammoth.Engine.Engine game = new Mammoth.Engine.Engine();
-                ObjectFactories.content_test();
+                int x = 0;
+                Mammoth.Engine.Engine game;
+                game = new Mammoth.Engine.Engine(false);
+                game.Run();
+                // ObjectFactories.content_test(game);
             }
             else
             {

@@ -17,6 +17,15 @@ namespace Mammoth.Engine
     {
         private Vector3 Position, dimensions; ///
 
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
+
+            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
+
+            r.DrawRenderable(this);
+        }
+
 
 
         public Game Game
@@ -52,7 +61,7 @@ namespace Mammoth.Engine
 
         public Crate(int id, Game game)
         {
-            this.Game = game;
+            // this.Game = game;
             InitializeDefault(id);
         }
 

@@ -39,15 +39,15 @@ namespace Mammoth.Engine
 
         }
 
-        public static int content_test()
+        public static int content_test(Game game)
         {
             ObjectParameters parameters = new ObjectParameters();
             parameters.AddAttribute("X","666");
             parameters.AddAttribute("Y", "420");
             parameters.AddAttribute("Z", "69");
             parameters.AddAttribute("Crate_Type", "SMALL");
-            Crate testCrate = (Crate)CreateObject("Crate", 69, null, null);
-            Crate testCrate2 = (Crate)CreateObject("Crate", 631, parameters, null);
+            Crate testCrate = (Crate)CreateObject("Crate", 69, null, game);
+            Crate testCrate2 = (Crate)CreateObject("Crate", 631, parameters, game);
             int i = 0;
             return 0;
             
