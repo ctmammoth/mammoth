@@ -149,7 +149,7 @@ namespace Mammoth.Engine
                         this.Velocity += Vector3.Up / 4.0f;
 
                 // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
-                if (input.IsKeyDown(InputType.Shoot))
+                if (input.KeyPressed(InputType.Shoot))
                     this.Throw();
 
                 // Move the player's controller based on its velocity.
@@ -167,7 +167,7 @@ namespace Mammoth.Engine
         protected void Throw()
         {
             Console.WriteLine("Throwing...");
-            Bullet bullet = new Bullet(Game, Vector3.Zero, new Quaternion());
+            Bullet bullet = new Bullet(Game, Vector3.Add(new Vector3(1.0f, 1.0f, 1.0f), Position), new Quaternion());
             Console.WriteLine("Thrown.");
         }
 

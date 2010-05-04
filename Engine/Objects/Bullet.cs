@@ -33,7 +33,7 @@ namespace Mammoth.Engine
 
             ActorDescription bulletActorDesc = new ActorDescription()
             {
-                Shapes = { new SphereShapeDescription(2.0f) },
+                Shapes = { new SphereShapeDescription(){ Radius = 1.0f, LocalPosition = Position } },
                 // Add a body so the bullet moves
                 BodyDescription = new BodyDescription(10.0f)
             };
@@ -48,17 +48,14 @@ namespace Mammoth.Engine
             IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
             Console.WriteLine("Adding bullet to model DB");
             modelDB.registerObject(this);
-
-            Console.WriteLine("Making bullet");
         }
 
-        public override void Update(GameTime gameTime)
+        /*public override void Update(GameTime gameTime)
         {
             // Send the bullet
-            //IServerNetworking network = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
-            //network.sendThing(this);
-        }
-
+            IServerNetworking network = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            network.sendThing(this);
+        }*/
 
         // TODO
         public override void CollideWith(PhysicalObject obj)

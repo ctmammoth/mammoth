@@ -37,17 +37,18 @@ namespace Mammoth.Engine
         {
             // Currently updating
             isUpdating = true;
-            toRegister.Clear();
 
             foreach (var obj in _objects.Values)
                 obj.Update(gameTime);
+
+            // Done updating
+            isUpdating = false;
 
             // Add objects that are waiting to be registered
             while (toRegister.Count > 0)
                 registerObject(toRegister.Dequeue());
 
-            // Done updating
-            isUpdating = false;
+            toRegister.Clear();
         }
 
         public override void Draw(GameTime gameTime)
