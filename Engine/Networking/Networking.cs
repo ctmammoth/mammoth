@@ -77,7 +77,8 @@ namespace Mammoth.Engine.Networking
         public enum NetworkingType
         {
             XNA,
-            LIDGREN
+            LIDGREN,
+            DUMMY
         }
 
         public abstract bool isLANCapable();
@@ -97,6 +98,13 @@ namespace Mammoth.Engine.Networking
             game.Components.Add(client);
             client.UpdateOrder = 7;
             client.joinGame();
+        }
+
+        public static void CreateDummyClient(Game game)
+        {
+            DummyClientNetworking client = new DummyClientNetworking(game);
+            game.Components.Add(client);
+            client.UpdateOrder = 7;
         }
 
         public static void CreateServerNetworking(Game game)
