@@ -44,9 +44,14 @@ namespace Mammoth.Engine
             this.HeadOrient = orient;
         }
 
+        public override void InitializeDefault(int id)
+        {
+            
+        }
+
         #region IEncodable Members
 
-        public byte[] Encode()
+        public virtual byte[] Encode()
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
@@ -69,7 +74,7 @@ namespace Mammoth.Engine
             return tosend.Serialize();
         }
 
-        public void Decode(byte[] serialized)
+        public virtual void Decode(byte[] serialized)
         {
             Networking.Encoder props = new Networking.Encoder(serialized);
 
@@ -83,7 +88,7 @@ namespace Mammoth.Engine
 
         #region Properties
 
-        public Vector3 Position
+        public override Vector3 Position
         {
             get
             {
@@ -102,7 +107,7 @@ namespace Mammoth.Engine
             protected set;
         }
 
-        public Quaternion Orientation
+        public override Quaternion Orientation
         {
             get
             {

@@ -30,6 +30,8 @@ namespace Mammoth.Engine
             this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
 
             this.CurrentCollision = 0;
+
+            this.Health = 100;
         }
 
 
@@ -75,6 +77,8 @@ namespace Mammoth.Engine
                 Die();
                 return;
             }
+
+            Console.WriteLine("Health: " + Health);
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             IInputService inputService = (IInputService)this.Game.Services.GetService(typeof(IInputService));
@@ -167,9 +171,10 @@ namespace Mammoth.Engine
         protected void Throw()
         {
             // Make sure the bullet isn't spawned in the player: shift it by a bit
-            Vector3 offset = Vector3.Transform(Vector3.Multiply(Vector3.UnitZ, -1), Orientation);
+            Vector3 offset = Vector3.Transform(Vector3.UnitY, Orientation);
             offset.Normalize();
-            Bullet bullet = new Bullet(Game, Vector3.Multiply(Vector3.Add(offset, Position), -1), Orientation);
+            offset = Vector3.Add(offset, new Vector3(0.0f, this.Height, 0.0f));
+            Bullet bullet = new Bullet(Game, Vector3.Add(offset, Position), Orientation);
         }
 
         /// <summary>
@@ -204,7 +209,37 @@ namespace Mammoth.Engine
 
         public override void CollideWith(PhysicalObject obj)
         {
+            if (obj is IDamager)
+                TakeDamage(((IDamager)obj).GetDamage());
+        }
 
+        private void TakeDamage(float damage)
+        {
+            Health -= damage;
+        }
+
+        public override byte[] Encode()
+        {
+            Networking.Encoder tosend = new Networking.Encoder();
+
+            tosend.AddElement("Position", Position);
+            tosend.AddElement("Orientation", Orientation);
+            tosend.AddElement("Velocity", Velocity);
+            tosend.AddElement("Health", Health);
+            tosend.AddElement("ID", ID);
+
+            return tosend.Serialize();
+        }
+
+        public override void Decode(byte[] serialized)
+        {
+            Networking.Encoder props = new Networking.Encoder(serialized);
+
+            Position = (Vector3)props.GetElement("Position", Position);
+            Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
+            Velocity = (Vector3)props.GetElement("Velocity", Velocity);
+            Health = (float)props.GetElement("Health", Health);
+            ID = (int)props.GetElement("ID", ID);
         }
 
         #region Properties
@@ -222,6 +257,12 @@ namespace Mammoth.Engine
         }
 
         private float Pitch
+        {
+            get;
+            set;
+        }
+
+        private float Health
         {
             get;
             set;

@@ -16,6 +16,7 @@ namespace Mammoth.Engine
         // TODO: may need to do something similar when removing objects
         private bool isUpdating;
         private Queue<BaseObject> toRegister;
+        private Queue<int> toRemove;
         // The objects in this database
         private Dictionary<int, BaseObject> _objects;
 
@@ -24,6 +25,7 @@ namespace Mammoth.Engine
             // Not updating initially
             isUpdating = false;
             toRegister = new Queue<BaseObject>();
+            toRemove = new Queue<int>();
 
             // Add this service to the game
             this.Game.Services.AddService(typeof(IModelDBService), this);
@@ -49,6 +51,9 @@ namespace Mammoth.Engine
             // Add objects that are waiting to be registered
             while (toRegister.Count > 0)
                 registerObject(toRegister.Dequeue());
+
+            while (toRemove.Count > 0)
+                removeObject(toRemove.Dequeue());
         }
 
         public override void Draw(GameTime gameTime)
@@ -80,7 +85,17 @@ namespace Mammoth.Engine
 
         public bool removeObject(int objectID)
         {
-            return _objects.Remove(objectID);
+            if (isUpdating)
+            {
+                if (_objects.ContainsKey(objectID))
+                {
+                    toRemove.Enqueue(objectID);
+                    return true;
+                }
+                return false;
+            }
+            else
+                return _objects.Remove(objectID);
         }
 
         public int getNextOpenID()
