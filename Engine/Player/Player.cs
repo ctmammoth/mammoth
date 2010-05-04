@@ -50,12 +50,12 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-            if ((dirty & EncodableProperties.Position) == EncodableProperties.Position)
-            {
-                Console.Write("Sending updated position, " + counter++ + "; ");
-                Console.WriteLine(Position.ToString());
+            //if ((dirty & EncodableProperties.Position) == EncodableProperties.Position)
+            //{
+                //Console.Write("Sending updated position, " + counter++ + "; ");
+                //Console.WriteLine(Position.ToString());
                 tosend.AddElement("Position", Position);
-            }
+            //}
             //if((dirty & EncodableProperties.Orientation) == dirty)
                 tosend.AddElement("Orientation", Orientation);
             //if ((dirty & EncodableProperties.Velocity) == dirty)

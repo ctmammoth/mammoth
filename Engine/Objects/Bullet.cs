@@ -48,6 +48,8 @@ namespace Mammoth.Engine
             IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
             Console.WriteLine("Adding bullet to model DB");
             modelDB.registerObject(this);
+
+            Console.WriteLine("Making bullet");
         }
 
         public override void Update(GameTime gameTime)
