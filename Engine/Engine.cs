@@ -74,8 +74,6 @@ namespace Mammoth.Engine
             });
             physics.CreateActor(boxActorDesc);
 
-            Bullet bullet = new Bullet(this, Vector3.Zero, new Quaternion());
-
             #endregion
 
             // Create the renderer, and register it as a service.
@@ -109,6 +107,7 @@ namespace Mammoth.Engine
             this.LocalPlayer = new LocalInputPlayer(this);
             IClientNetworking net = (IClientNetworking)this.Services.GetService(typeof(INetworkingService));
             this.LocalPlayer.ID = net.ClientID << 25;
+            modelDB.registerObject(this.LocalPlayer);
 
             // Create the camera next, and have it update after the player.
             Camera cam = new FirstPersonCamera(this, this.LocalPlayer)

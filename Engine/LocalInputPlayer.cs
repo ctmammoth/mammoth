@@ -26,8 +26,6 @@ namespace Mammoth.Engine
             : base(game)
         {
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
-            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            modelDB.registerObject(this);
 
             this.Model3D = r.LoadModel("soldier-low-poly");
         }

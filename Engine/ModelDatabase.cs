@@ -11,19 +11,42 @@ namespace Mammoth.Engine
     public class ModelDatabase : DrawableGameComponent, IModelDBService
     {
         private static int nextID = 0;
-
+        // Used to avoid modifying _objects during an Update() call
+        // TODO: may need to do something similar when removing objects
+        private bool isUpdating;
+        private Queue<BaseObject> toRegister;
+        // The objects in this database
         private Dictionary<int, BaseObject> _objects;
 
         public ModelDatabase(Game game) : base(game)
         {
+            // Not updating initially
+            isUpdating = false;
+            toRegister = new Queue<BaseObject>();
+
+            // Add this service to the game
             this.Game.Services.AddService(typeof(IModelDBService), this);
             _objects = new Dictionary<int, BaseObject>();
         }
 
+        /// <summary>
+        /// Updates all objects in the database.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
+            // Currently updating
+            isUpdating = true;
+
             foreach (var obj in _objects.Values)
                 obj.Update(gameTime);
+
+            // Add objects that are waiting to be registered
+            foreach (var obj in toRegister)
+                this.registerObject(obj);
+
+            // Done updating
+            isUpdating = false;
         }
 
         public override void Draw(GameTime gameTime)
@@ -47,7 +70,10 @@ namespace Mammoth.Engine
 
         public void registerObject(BaseObject newObject)
         {
-            _objects.Add(newObject.ID, newObject);
+            if (isUpdating)
+                toRegister.Enqueue(newObject);
+            else
+                _objects.Add(newObject.ID, newObject);
         }
 
         public bool removeObject(int objectID)

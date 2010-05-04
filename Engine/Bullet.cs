@@ -48,7 +48,7 @@ namespace Mammoth.Engine
             modelDB.registerObject(this);
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             // Send the bullet
             IServerNetworking network = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
