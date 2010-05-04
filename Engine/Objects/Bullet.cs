@@ -54,6 +54,10 @@ namespace Mammoth.Engine
         // TODO
         public override void CollideWith(PhysicalObject obj)
         {
+            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof (IModelDBService));
+            mdb.removeObject(ID);
+            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            physics.RemoveActor(Actor);
         }
 
         // TODO

@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Microsoft.Xna.Framework;
+using Mammoth.Engine.Networking;
+using Microsoft.Xna.Framework.Graphics;
+
 namespace Mammoth.Engine
 {
     public class Crate : PhysicalObject, IEncodable, IRenderable
     {
-        private Vector3 Position, dimensions; ///
+        private Vector3 dimensions; ///
 
 
 
@@ -137,11 +141,6 @@ namespace Mammoth.Engine
         }
 
         public Vector3 PositionOffset
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public Quaternion Orientation
         {
             get { throw new NotImplementedException(); }
         }

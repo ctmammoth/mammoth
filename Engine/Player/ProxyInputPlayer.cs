@@ -17,6 +17,7 @@ namespace Mammoth.Engine
         {
             this.ClientID = clientID;
         }
+
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
         {
             // Get the input state.
