@@ -18,6 +18,7 @@ namespace Mammoth.Engine
     public abstract class Projectile : PhysicalObject, IDamager
     {
         #region Properties
+
         // Not needed for sufficiently fast-moving projectiles
         public Model Model3D
         {
@@ -30,6 +31,7 @@ namespace Mammoth.Engine
             get;
             protected set;
         }
+
         #endregion
 
         #region Variables
