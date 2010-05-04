@@ -12,5 +12,10 @@ namespace Mammoth.Engine
         public override void CollideWith(PhysicalObject obj)
         {
         }
+
+        public override string getObjectType()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

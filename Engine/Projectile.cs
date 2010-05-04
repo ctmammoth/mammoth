@@ -15,7 +15,7 @@ namespace Mammoth.Engine
     /// <summary>
     /// Represents any projectile in the game.
     /// </summary>
-    public class Projectile : PhysicalObject, IDamager
+    public abstract class Projectile : PhysicalObject, IDamager
     {
         #region Properties
         // The projectile's velocity in the global coordinate system
@@ -43,6 +43,29 @@ namespace Mammoth.Engine
             get;
             protected set;
         }
+
+        protected float InitialVelocity;
+        #endregion
+
+        // TODO
+        public override void CollideWith(PhysicalObject obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        // TODO
+        public override string getObjectType()
+        {
+            throw new NotImplementedException();
+        }
+
+        #region IDamager Members
+
+        float IDamager.GetDamage()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

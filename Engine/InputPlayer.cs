@@ -13,7 +13,7 @@ using Mammoth.Engine.Physics;
 
 namespace Mammoth.Engine
 {
-    public abstract class InputPlayer : Player
+    public abstract class InputPlayer : Player, IDestructable
     {
         public InputPlayer(Game game) : base(game)
         {
@@ -56,10 +56,10 @@ namespace Mammoth.Engine
             this.Controller = physics.CreateController(desc, this);
         }
 
-        public override void Die()
+        public void Die()
         {
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
-            ModelDatabase modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
 
             // Remove the physx controller
             physics.RemoveController(this.Controller);
@@ -70,7 +70,7 @@ namespace Mammoth.Engine
         public override void Update(GameTime gameTime)
         {
             // Check whether the player is dead
-            if (health <= 0.0f)
+            if (Dead)
             {
                 Die();
                 return;

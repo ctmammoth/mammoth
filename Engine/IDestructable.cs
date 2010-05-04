@@ -17,6 +17,6 @@ namespace Mammoth.Engine
         /// <summary>
         /// Peforms any tasks necessary to destroy this object.
         /// </summary>
-        public void Die();
+        void Die();
     }
 }

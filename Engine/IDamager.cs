@@ -15,6 +15,6 @@ namespace Mammoth.Engine
         /// </summary>
         /// <returns>The amount of damage dealt by this object.  A positive value indicates damage being dealt
         /// whereas a negative value indicates health being given back to an object.</returns>
-        public float GetDamage();
+        float GetDamage();
     }
 }
