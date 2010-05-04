@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using Mammoth.Engine.Networking;
+
 namespace Mammoth.Engine
 {
     public class Crate : PhysicalObject, IEncodable, IRenderable

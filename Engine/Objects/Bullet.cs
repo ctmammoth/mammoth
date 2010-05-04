@@ -44,12 +44,11 @@ namespace Mammoth.Engine
             this.Actor = physics.CreateActor(bulletActorDesc, this);
         }
 
-        /*public override void Update(GameTime gameTime)
+        public override void InitializeDefault(int id)
         {
-            // Send the bullet
-            IServerNetworking network = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
-            network.sendThing(this);
-        }*/
+            this.ID = id;
+            InitialVelocity = 10.0f;
+        }
 
         // TODO
         public override void CollideWith(PhysicalObject obj)
