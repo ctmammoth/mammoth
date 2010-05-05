@@ -85,14 +85,7 @@ namespace Mammoth.Engine
             this.Components.Add(new LocalInput(this)
             {
                 UpdateOrder = 1
-            });
-
-            // Add the networking service.
-            //this.Components.Add(new LidgrenClientNetworking(this));
-            if (_usingNetworking)
-                Networking.NetworkComponent.CreateClientNetworking(this);
-            else
-                Networking.NetworkComponent.CreateDummyClient(this);
+            }); 
 
             // Add the model database.
             ModelDatabase modelDB = new ModelDatabase(this)
@@ -104,10 +97,17 @@ namespace Mammoth.Engine
             // TODO: Remove this, and create the local player when the game screen is initialized.
             // Create the local player, and add it to the model DB.
             this.LocalPlayer = new LocalInputPlayer(this);
+
+            // Add the networking service.
+            //this.Components.Add(new LidgrenClientNetworking(this));
+            if (_usingNetworking)
+                Networking.NetworkComponent.CreateClientNetworking(this);
+            else
+                Networking.NetworkComponent.CreateDummyClient(this, (LocalInputPlayer)this.LocalPlayer);
+
             IClientNetworking net = (IClientNetworking)this.Services.GetService(typeof(INetworkingService));
             this.LocalPlayer.ID = net.ClientID << 25;
             modelDB.registerObject(this.LocalPlayer);
-            modelDB.LocalPlayer = (LocalInputPlayer)this.LocalPlayer;
 
             // Create the camera next, and have it update after the player.
             Camera cam = new FirstPersonCamera(this, this.LocalPlayer)

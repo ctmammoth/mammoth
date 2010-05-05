@@ -112,19 +112,6 @@ namespace Mammoth.Engine
             return true;
         }
 
-        public LocalInputPlayer LocalPlayer
-        {
-            get
-            {
-                return _localPlayer;
-            }
-            set
-            {
-                if (_localPlayer == null)
-                    _localPlayer = value;
-            }
-        }
-
         #endregion
     }
 }
