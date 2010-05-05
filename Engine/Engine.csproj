@@ -82,6 +82,7 @@
     <Compile Include="IModelDBService.cs" />
     <Compile Include="Input\EmulatedInput.cs" />
     <Compile Include="Objects\IWeapon.cs" />
+    <Compile Include="Objects\MinimalPhysicalObject.cs" />
     <Compile Include="Objects\Projectile.cs" />
     <Compile Include="Player\LocalInputPlayer.cs" />
     <Compile Include="ModelDatabase.cs" />

@@ -43,7 +43,8 @@ namespace Mammoth.Engine
             {
                 Shapes = { new SphereShapeDescription() { Radius = 1.0f } },
                 // Add a body so the bullet moves
-                BodyDescription = bodyDesc
+                BodyDescription = bodyDesc,
+                UserData = this
             };
 
             // Set the body's initial velocity
@@ -141,7 +142,8 @@ namespace Mammoth.Engine
             {
                 Shapes = { new SphereShapeDescription() { Radius = 1.0f } },
                 // Add a body so the bullet moves
-                BodyDescription = bodyDesc
+                BodyDescription = bodyDesc,
+                UserData = this
             };
 
             InitialVelocity = (Vector3)e.GetElement("InitialVelocity", InitialVelocity);
