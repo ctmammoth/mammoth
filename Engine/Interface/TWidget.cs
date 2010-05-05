@@ -40,12 +40,6 @@ namespace Mammoth.Engine.Interface
 
         #endregion
 
-        #region Events
-
-        public event EventHandler OnClick;
-
-        #endregion
-
         public TWidget(Game game)
             : base(game)
         {
@@ -54,6 +48,18 @@ namespace Mammoth.Engine.Interface
 
             _bounds = Rectangle.Empty;
             _children = new List<TWidget>();
+        }
+
+        public override void Initialize()
+        {
+            foreach (TWidget wid in _children)
+                wid.Initialize();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            foreach (TWidget wid in _children)
+                wid.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
@@ -178,10 +184,7 @@ namespace Mammoth.Engine.Interface
             return _children.Find((w) => w.Name == name);
         }
 
-        protected virtual void Paint(GameTime gameTime)
-        {
-
-        }
+        protected virtual void Paint(GameTime gameTime) { }
 
         public bool IsAligned(AlignmentFlags flag)
         {

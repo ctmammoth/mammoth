@@ -1,6 +1,4 @@
-﻿#define PHYSX_DEBUG
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -79,7 +77,6 @@ namespace Mammoth.Engine
             Renderer r = new Renderer(this);
             this.Services.AddService(typeof(IRenderService), r);
 
-
             //add Decoder as a service
             Mammoth.Engine.Networking.Decoder d = new Mammoth.Engine.Networking.Decoder(this);
             this.Services.AddService(typeof(IDecoder), d);
@@ -92,28 +89,34 @@ namespace Mammoth.Engine
 
             // Add the networking service.
             //this.Components.Add(new LidgrenClientNetworking(this));
-            Networking.NetworkComponent.CreateClientNetworking(this);
+            //Networking.NetworkComponent.CreateClientNetworking(this);
 
             // Add the model database.
-            ModelDatabase modelDB = new ModelDatabase(this)
+            /*ModelDatabase modelDB = new ModelDatabase(this)
             {
                 UpdateOrder = 3
             };
-            this.Components.Add(modelDB);
+            this.Components.Add(modelDB);*/
 
             // TODO: Remove this, and create the local player when the game screen is initialized.
             // Create the local player, and add it to the model DB.
-            this.LocalPlayer = new LocalInputPlayer(this);
-            IClientNetworking net = (IClientNetworking)this.Services.GetService(typeof(INetworkingService));
-            this.LocalPlayer.ID = net.ClientID << 25;
-            modelDB.registerObject(this.LocalPlayer);
+            //this.LocalPlayer = new LocalInputPlayer(this);
+            //IClientNetworking net = (IClientNetworking)this.Services.GetService(typeof(INetworkingService));
+            //this.LocalPlayer.ID = net.ClientID << 25;
+            //modelDB.registerObject(this.LocalPlayer);
 
             // Create the camera next, and have it update after the player.
-            Camera cam = new FirstPersonCamera(this, this.LocalPlayer)
+            /*Camera cam = new FirstPersonCamera(this, this.LocalPlayer)
             {
                 UpdateOrder = 5
             };
-            this.Components.Add(cam);
+            this.Components.Add(cam);*/
+
+            // Let's test the screen manager.
+            TScreenManager screenManager = new TScreenManager(this);
+            this.Components.Add(screenManager);
+
+            screenManager.AddScreen(new MainMenuScreen(this));
 
             base.Initialize();
         }
@@ -127,7 +130,7 @@ namespace Mammoth.Engine
             // TODO: use this.Content to load your game content here
 
             // Let's create a soldier so we can see something.
-            this.Components.Add(new SoldierObject(this));
+            //this.Components.Add(new SoldierObject(this));
 
             Renderer r = (Renderer)this.Services.GetService(typeof(IRenderService));
             SpriteFont calibri = r.LoadFont("calibri");
@@ -153,6 +156,8 @@ namespace Mammoth.Engine
             // Allows the game to exit
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
+
+            this.IsMouseVisible = true;
 
             // TODO: Add your update logic here
 

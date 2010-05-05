@@ -43,6 +43,8 @@ namespace Mammoth.Engine.Interface
         {
             base.Update(gameTime);
 
+            Console.WriteLine("updating...");
+
             if (!this.Enabled)
                 this.BgColor = this.DisabledColor;
             else
@@ -62,11 +64,8 @@ namespace Mammoth.Engine.Interface
                         break;
                 }
             }
-        }
 
-        public override void Draw(GameTime gameTime)
-        {
-            base.Draw(gameTime);
+            Console.WriteLine(this.CurrentState);
         }
 
         #region Properties

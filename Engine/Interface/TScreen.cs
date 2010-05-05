@@ -30,11 +30,14 @@ namespace Mammoth.Engine.Interface
 
         #endregion
 
+        public TScreen(Game game)
+        {
+            this.Game = game;
+        }
+
         public virtual void Initialize() { }
 
         public virtual void LoadContent() { }
-
-        public virtual void HandleInput() { }
 
         public virtual void Update(GameTime gameTime, bool hasFocus, bool visible)
         {
@@ -218,6 +221,15 @@ namespace Mammoth.Engine.Interface
         }
 
         TScreenManager screenManager;
+
+        /// <summary>
+        /// Stores the Game.  Useful for stuff like getting window/viewport dimensions.
+        /// </summary>
+        public Game Game
+        {
+            get;
+            private set;
+        }
 
         #endregion
     }

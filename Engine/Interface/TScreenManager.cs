@@ -24,7 +24,7 @@ namespace Mammoth.Engine.Interface
         public TScreenManager(Game game)
             : base(game)
         {
-            
+            this.Game.Services.AddService(typeof(TScreenManager), this);
         }
 
         /// <summary>
@@ -86,14 +86,9 @@ namespace Mammoth.Engine.Interface
                 if (screen.ScreenState == ScreenState.Active ||
                     screen.ScreenState == ScreenState.TransitionOn)
                 {
-                    // If this is the top-most screen, have it handle input.
+                    // If this is the top-most screen, make sure lower screens don't receive input events.
                     if (hasFocus)
-                    {
-                        screen.HandleInput();
-
-                        // Make sure that no other screens get input events.
-                        hasFocus = false;
-                    }
+                        input.InputHandled = true;
 
                     // If this screen is active and not a popup, let the rest
                     // of the screens know that they are covered up.

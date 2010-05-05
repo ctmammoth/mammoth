@@ -42,6 +42,12 @@ namespace Mammoth.Engine.Input
             get { return _emulatedState; }
         }
 
+        public bool InputHandled
+        {
+            get { return false; }
+            set { }
+        }
+
         #endregion
     }
 }

@@ -66,10 +66,13 @@ namespace Mammoth.Engine.Input
             Vector2 delta = (mousePosition - mouseCenter);
 
             // Reset the mouse cursor to the center.
-            this.CenterCursor();
+            //this.CenterCursor();
 
             // Set the current state.
             _state = new InputState(_state.CurrentState, newState, delta, gameTime);
+
+            // Reset the handled flag.
+            this.InputHandled = false;
         }
 
         private bool IsKeyDown(InputType k)
@@ -111,6 +114,12 @@ namespace Mammoth.Engine.Input
                 ret.Enqueue(_state);
                 return ret;
             }
+        }
+
+        public bool InputHandled
+        {
+            get;
+            set;
         }
 
         #endregion
