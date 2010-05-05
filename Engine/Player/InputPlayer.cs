@@ -245,7 +245,10 @@ namespace Mammoth.Engine
             Networking.Encoder tosend = new Networking.Encoder();
 
             if ((dirty & EncodableProperties.Position) == EncodableProperties.Position)
+            {
                 tosend.AddElement("Position", Position);
+                Console.WriteLine("Sending new pos: " + Position);
+            }
             if ((dirty & EncodableProperties.Orientation) == EncodableProperties.Orientation)
                 tosend.AddElement("Orientation", Orientation);
             if ((dirty & EncodableProperties.Velocity) == EncodableProperties.Velocity)
@@ -264,7 +267,10 @@ namespace Mammoth.Engine
             Networking.Encoder props = new Networking.Encoder(serialized);
 
             if (props.UpdatesFor("Position"))
+            {
                 Position = (Vector3)props.GetElement("Position", Position);
+                Console.WriteLine("Received new pos: " + Position);
+            }
             if (props.UpdatesFor("Orientation"))
                 Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
             if (props.UpdatesFor("Velocity"))
