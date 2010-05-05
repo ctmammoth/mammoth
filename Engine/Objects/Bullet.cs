@@ -11,8 +11,9 @@ using Mammoth.Engine.Physics;
 namespace Mammoth.Engine
 {
     //TODO: Make bullet drawable
-    public class Bullet : Projectile, IEncodable
+    public class Bullet : Projectile, IEncodable, IRenderable
     {
+
         /// <summary>
         /// Creates a new bullet at the specified position and gives it the required initial velocity.  It moves in the
         /// direction of the vector obtained by taking Vector3.Transform(Vector3.UnitZ, orientation).
@@ -27,10 +28,15 @@ namespace Mammoth.Engine
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
 
+            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
+
+            this.Model3D = r.LoadModel("soldier-low-poly");
+            this.PositionOffset = Vector3.Zero;
+
             // Make the bullet's actor description
             ActorDescription bulletActorDesc = new ActorDescription()
             {
-                Shapes = { new SphereShapeDescription(){ Radius = 1.0f } },
+                Shapes = { new SphereShapeDescription(){ Radius = 1.0f} },
                 // Add a body so the bullet moves
                 BodyDescription = new BodyDescription(10.0f)
             };
@@ -42,8 +48,16 @@ namespace Mammoth.Engine
 
             // Create the actor
             this.Actor = physics.CreateActor(bulletActorDesc, this);
-
             Position = position;
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
+
+            IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
+
+            r.DrawRenderable(this);
         }
 
         public override void InitializeDefault(int id)
@@ -67,6 +81,13 @@ namespace Mammoth.Engine
             return "Bullet";
         }
 
+        public Vector3 PositionOffset
+        {
+            get;
+            set;
+        }
+
+
         #region IEncodeable members
         public byte[] Encode()
         {
@@ -81,10 +102,7 @@ namespace Mammoth.Engine
         public void Decode(byte[] serialized)
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder(serialized);
-            Vector3 pos = (Vector3)e.GetElement("Position", Position); 
-            Vector3 initV = (Vector3)e.GetElement("InitialVelocity", InitialVelocity);
-            Console.WriteLine("Remote bullet pos: " + pos);
-            Console.WriteLine("Remote bullet initV: " + initV);
+
             Position = (Vector3)e.GetElement("Position", Position);
             InitialVelocity = (Vector3)e.GetElement("InitialVelocity", InitialVelocity);
         }
