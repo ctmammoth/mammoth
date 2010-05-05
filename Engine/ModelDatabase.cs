@@ -19,6 +19,7 @@ namespace Mammoth.Engine
         private Queue<int> toRemove;
         // The objects in this database
         private Dictionary<int, BaseObject> _objects;
+        private LocalInputPlayer _localPlayer;
 
         public ModelDatabase(Game game) : base(game)
         {
@@ -109,6 +110,19 @@ namespace Mammoth.Engine
         {
             //TODO: make this do something
             return true;
+        }
+
+        public LocalInputPlayer LocalPlayer
+        {
+            get
+            {
+                return _localPlayer;
+            }
+            set
+            {
+                if (_localPlayer == null)
+                    _localPlayer = value;
+            }
         }
 
         #endregion

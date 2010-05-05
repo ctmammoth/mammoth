@@ -16,5 +16,7 @@ namespace Mammoth.Engine
         bool isVisibleToPlayer(int objectID, int playerID);
 
         int getNextOpenID();
+
+        LocalInputPlayer LocalPlayer { get; set; }
     }
 }

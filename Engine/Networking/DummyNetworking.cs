@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Microsoft.Xna.Framework;
+using Mammoth.Engine.Input;
 
 namespace Mammoth.Engine.Networking
 {
@@ -54,6 +55,31 @@ namespace Mammoth.Engine.Networking
         public void sendThing(IEncodable toSend)
         {
             return;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            IInputService inputServer = (IInputService)this.Game.Services.GetService(typeof(IInputService));
+            InputState state = inputServer.States.Peek();
+
+            if (state.KeyPressed(InputType.Shoot))
+            {
+                IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+                LocalInputPlayer player = modelDB.LocalPlayer;
+                Vector3 forward = Vector3.Transform(Vector3.Forward, player.HeadOrient) * 1000.0f;
+                forward.Normalize();
+                Vector3 position = player.Position + (Vector3.Up * player.Height / 4.0f);
+                Vector3 offset = Vector3.Multiply(forward, 2.0f);
+                position = Vector3.Add(position, offset);
+
+                Bullet b = new Bullet(Game, position, forward);
+
+                // Give this projectile an ID
+                b.ID = modelDB.getNextOpenID();
+                modelDB.registerObject(b);
+            }
         }
 
         public void joinGame()
