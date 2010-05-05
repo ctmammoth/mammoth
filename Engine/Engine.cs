@@ -28,13 +28,7 @@ namespace Mammoth.Engine
 
         #endregion
 
-        public Engine(bool useNetworking)
-            : base()
-        {
-            graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            _usingNetworking = useNetworking;
-        }
+        
 
         #region XNA-Game
 
@@ -122,6 +116,7 @@ namespace Mammoth.Engine
             this.Components.Add(cam);
 
             base.Initialize();
+            
         }
 
         /// <summary>
@@ -133,10 +128,13 @@ namespace Mammoth.Engine
             // TODO: use this.Content to load your game content here
 
             // Let's create a soldier so we can see something.
-            this.Components.Add(new SoldierObject(this));
-
+               this.Components.Add(new SoldierObject(this));
+            
             Renderer r = (Renderer)this.Services.GetService(typeof(IRenderService));
             SpriteFont calibri = r.LoadFont("calibri");
+
+            // ObjectFactories.content_test(this);
+
             //_text = r.RenderFont("ABC", Vector2.Zero, Color.Maroon, Color.TransparentBlack);
         }
 
@@ -213,13 +211,24 @@ namespace Mammoth.Engine
         }
 
         #endregion
-
+        
         #region Properties
 
         public InputPlayer LocalPlayer
         {
             get;
             private set;
+        }
+
+
+        public Engine(bool useNetworking)
+            : base()
+        {
+            graphics = new GraphicsDeviceManager(this);
+            
+            Content.RootDirectory = "Content";
+            _usingNetworking = useNetworking;
+            //Initialize();
         }
 
         #endregion

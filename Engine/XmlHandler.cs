@@ -22,7 +22,7 @@ namespace Mammoth.Engine
             {
                 reader.Read();
             }
-            while (reader.NodeType != XmlNodeType.Element);
+            while (!(reader.NodeType == XmlNodeType.Element || reader.NodeType == XmlNodeType.EndElement));
 
         }
 
@@ -35,10 +35,10 @@ namespace Mammoth.Engine
 
         public String GetNextElementName()
         {
-            reader.Read();
-            
+            reader.Read();            
             if (reader.NodeType == XmlNodeType.Element)
             {
+                return reader.Name;
                 
             }
 
@@ -75,10 +75,13 @@ namespace Mammoth.Engine
 
         public bool IsClosingTag(String name)
         {
-            if (reader.NodeType == XmlNodeType.EndElement && reader.Name.Equals(name))
+            if (reader.NodeType == XmlNodeType.EndElement)
             {
-                return true;
-            }
+                if (reader.Name.Equals(name)) 
+                {
+                    return true;                   
+                }
+            }            
             return false;
         }
 

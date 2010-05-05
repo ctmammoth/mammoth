@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mammoth.Engine
 {
-    interface IRenderService
+    public interface IRenderService
     {
         void DrawFilledRectangle(Rectangle rect, Color color);
         void DrawTexturedRectangle(Vector2 pos, Texture2D tex);

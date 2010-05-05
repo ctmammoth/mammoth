@@ -63,6 +63,7 @@ namespace Mammoth.Engine
         {
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
 
+            
             this.Model3D = r.LoadModel("soldier-low-poly");
             this.Position = Vector3.Zero;
             this.PositionOffset = Vector3.Zero;
