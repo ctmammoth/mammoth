@@ -30,15 +30,19 @@ namespace Mammoth.Engine
 
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
 
-            //this.Model3D = r.LoadModel("soldier-low-poly");
+            this.Model3D = r.LoadModel("soldier-low-poly");
             this.PositionOffset = Vector3.Zero;
 
             // Make the bullet's actor description
+            BodyDescription bodyDesc = new BodyDescription()
+            {
+                BodyFlags = BodyFlag.Kinematic
+            };
             ActorDescription bulletActorDesc = new ActorDescription()
             {
-                Shapes = { new SphereShapeDescription(){ Radius = 1.0f} },
+                Shapes = { new SphereShapeDescription() { Radius = 1.0f } },
                 // Add a body so the bullet moves
-                BodyDescription = new BodyDescription(10.0f)
+                BodyDescription = bodyDesc
             };
 
             // Set the body's initial velocity
