@@ -22,10 +22,8 @@ namespace Mammoth.Engine
 
             protected set
             {
-                if (Actor.IsDynamic)
-                    Actor.CenterOfMassGlobalPosition(value);
-                else
-                    Actor.MoveGlobalPositionTo(value);
+                //Actor.MoveGlobalPositionTo(value);
+                Actor.GlobalPosition = value;
             }
         }
 
@@ -38,7 +36,11 @@ namespace Mammoth.Engine
 
             protected set
             {
-                Actor.MoveGlobalOrientationTo(value);
+                //Actor.MoveGlobalOrientationTo(value);
+                if (Actor.IsDynamic)
+                    Actor.GlobalOrientationQuat = value;
+                else
+                    Actor.MoveGlobalOrientationTo(value);
             }
         }
         # endregion

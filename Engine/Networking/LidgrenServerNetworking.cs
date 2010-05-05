@@ -88,6 +88,7 @@ namespace Mammoth.Engine.Networking
 
         private void sendMessage(DataGram message)
         {
+            //Console.WriteLine("sending message: " + message.ObjectType + " id: " + message.ID);
             if (message.Recipient >= 0)
             {
                 NetConnectionStatus status = _connections[message.Recipient].Status;

@@ -51,6 +51,7 @@ namespace Mammoth.Engine
             Console.WriteLine("Throwing bullet with position: " + b.Position);
             Console.WriteLine("Player position: " + Position);
             IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            //Console.WriteLine("Sending bullet (in throw)");
             net.sendThing(b);
         }
 
