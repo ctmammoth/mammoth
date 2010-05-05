@@ -16,6 +16,7 @@ namespace Mammoth.Engine.Physics
     /// </summary>
     public interface IPhysicsManagerService
     {
+        Actor CreateActor(ActorDescription aDesc);
         Actor CreateActor(ActorDescription aDesc, PhysicalObject owner);
         void RemoveActor(Actor toRemove);
     
@@ -177,11 +178,13 @@ namespace Mammoth.Engine.Physics
                 return null;
         }
 
+
         /// <summary>
         /// Creates a new Actor in the current scene.
         /// </summary>
         /// <param name="aDesc">The Actor description with which to create the new Actor.</param>
-        /// <returns>The new Actor, or null if there is currently no scene.</returns>
+        /// <param name="owner">The object with which to associate the new Actor.  The new Actor's userdata 
+        /// is set to this value.</param>
         public Actor CreateActor(ActorDescription aDesc)
         {
             // Make sure the scene exists
