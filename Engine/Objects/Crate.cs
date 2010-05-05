@@ -12,7 +12,7 @@ namespace Mammoth.Engine
 {
     public class Crate : PhysicalObject, IEncodable, IRenderable
     {
-        private Vector3 dimensions; ///
+        private Vector3 dimensions; //////
 
 
 

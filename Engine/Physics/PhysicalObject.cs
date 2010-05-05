@@ -41,5 +41,7 @@ namespace Mammoth.Engine
         # endregion
 
         public virtual void CollideWith(PhysicalObject obj) { }
+
+
     }
 }
