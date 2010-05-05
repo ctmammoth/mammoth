@@ -116,7 +116,7 @@ namespace Mammoth.Engine
             TScreenManager screenManager = new TScreenManager(this);
             this.Components.Add(screenManager);
 
-            screenManager.AddScreen(new MainMenuScreen(this));
+            //screenManager.AddScreen(new MainMenuScreen(this));
 
             base.Initialize();
         }

@@ -71,10 +71,24 @@ namespace Mammoth.Engine
             _spriteBatch.End();
         }
 
+        public void DrawTexturedRectangle(Vector2 pos, Texture2D tex, Color tint)
+        {
+            _spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
+            _spriteBatch.Draw(tex, pos, tint);
+            _spriteBatch.End();
+        }
+
         public void DrawTexturedRectangle(Rectangle rect, Texture2D tex)
         {
             _spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
             _spriteBatch.Draw(tex, rect, Color.White);
+            _spriteBatch.End();
+        }
+
+        public void DrawTexturedRectangle(Rectangle rect, Texture2D tex, Color tint)
+        {
+            _spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
+            _spriteBatch.Draw(tex, rect, tint);
             _spriteBatch.End();
         }
 

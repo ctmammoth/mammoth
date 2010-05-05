@@ -56,6 +56,9 @@ namespace Mammoth.Engine.Interface
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
+            // Mark the cursor as visible.  If the game is running, it can turn this off in its update call.
+            this.Game.IsMouseVisible = true;
+
             // Get the input service.
             IInputService input = (IInputService)this.Game.Services.GetService(typeof(IInputService));
 

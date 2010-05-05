@@ -10,7 +10,7 @@ using Mammoth.Engine.ExtensionMethods;
 
 namespace Mammoth.Engine.Interface
 {
-    class TSimpleButton : TButton
+    public class TSimpleButton : TButton
     {
         #region Variables
 
@@ -43,8 +43,6 @@ namespace Mammoth.Engine.Interface
         {
             base.Update(gameTime);
 
-            Console.WriteLine("updating...");
-
             if (!this.Enabled)
                 this.BgColor = this.DisabledColor;
             else
@@ -64,8 +62,6 @@ namespace Mammoth.Engine.Interface
                         break;
                 }
             }
-
-            Console.WriteLine(this.CurrentState);
         }
 
         #region Properties
