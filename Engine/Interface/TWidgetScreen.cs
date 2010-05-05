@@ -32,7 +32,10 @@ namespace Mammoth.Engine.Interface
         {
             base.Update(gameTime, hasFocus, visible);
 
-            _baseWidget.Update(gameTime);
+            // TODO: Change TWidget's update so that it can update and deal with input events separately.
+            // This involves making TWidgets NOT DrawableGameComponents, but emulating some of that functionality.
+            if(visible && hasFocus)
+                _baseWidget.Update(gameTime);
         }
 
         public override void Draw(Microsoft.Xna.Framework.GameTime gameTime)

@@ -30,6 +30,9 @@ namespace Mammoth
 
             // Set the root directory from which to load game content files.
             Content.RootDirectory = "Content";
+
+            // Register the exiting handler with the Exiting event.
+            this.Exiting += new EventHandler(Client_Exiting);
         }
 
         protected override void Initialize()
@@ -74,15 +77,30 @@ namespace Mammoth
             // Clear the backbuffer - set it to a nice sky blue.
             this.GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // Only do this stuff if we're drawing PhysX debug geometry.
-        #if PHYSX_DEBUG
-            Renderer r = (Renderer)this.Services.GetService(typeof(IRenderService));
-            IPhysicsManagerService physics = (IPhysicsManagerService) this.Services.GetService(typeof(IPhysicsManagerService));
-            r.DrawPhysXDebug(physics.Scene);
-        #endif
-
             // Draw all of this game's drawable components.
             base.Draw(gameTime);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            Console.WriteLine("Disposing");
+            IPhysicsManagerService physics = (IPhysicsManagerService)this.Services.GetService(typeof(IPhysicsManagerService));
+            physics.Dispose();
+            IClientNetworking net = (IClientNetworking)this.Services.GetService(typeof(INetworkingService));
+            net.quitGame();
+        }
+
+        #region Event Handlers
+
+        /// <summary>
+        /// Handle the Exiting event thrown before the game exits.
+        /// </summary>
+        void Client_Exiting(object sender, EventArgs e)
+        {
+            this.Dispose();
+        }
+
+        #endregion
     }
 }

@@ -26,7 +26,15 @@ namespace Mammoth.Engine
 
         #endregion
 
-        
+        public Engine(bool useNetworking)
+            : base()
+        {
+            graphics = new GraphicsDeviceManager(this);
+
+            Content.RootDirectory = "Content";
+            _usingNetworking = useNetworking;
+            //Initialize();
+        }
 
         #region XNA-Game
 
@@ -92,31 +100,24 @@ namespace Mammoth.Engine
                 Networking.NetworkComponent.CreateDummyClient(this);
 
             // Add the model database.
-            /*ModelDatabase modelDB = new ModelDatabase(this)
+            ModelDatabase modelDB = new ModelDatabase(this)
             {
                 UpdateOrder = 3
             };
-            this.Components.Add(modelDB);*/
+            this.Components.Add(modelDB);
 
             // TODO: Remove this, and create the local player when the game screen is initialized.
             // Create the local player, and add it to the model DB.
-            //this.LocalPlayer = new LocalInputPlayer(this);
-            //IClientNetworking net = (IClientNetworking)this.Services.GetService(typeof(INetworkingService));
-            //this.LocalPlayer.ID = net.ClientID << 25;
-            //modelDB.registerObject(this.LocalPlayer);
+            IClientNetworking net = (IClientNetworking)this.Services.GetService(typeof(INetworkingService));
+            this.LocalPlayer = new LocalInputPlayer(this, net.ClientID);
+            modelDB.registerObject(this.LocalPlayer);
 
             // Create the camera next, and have it update after the player.
-            /*Camera cam = new FirstPersonCamera(this, this.LocalPlayer)
+            Camera cam = new FirstPersonCamera(this, this.LocalPlayer)
             {
                 UpdateOrder = 5
             };
-            this.Components.Add(cam);*/
-
-            // Let's test the screen manager.
-            TScreenManager screenManager = new TScreenManager(this);
-            this.Components.Add(screenManager);
-
-            //screenManager.AddScreen(new MainMenuScreen(this));
+            this.Components.Add(cam);
 
             base.Initialize();
             
@@ -223,17 +224,6 @@ namespace Mammoth.Engine
         {
             get;
             private set;
-        }
-
-
-        public Engine(bool useNetworking)
-            : base()
-        {
-            graphics = new GraphicsDeviceManager(this);
-            
-            Content.RootDirectory = "Content";
-            _usingNetworking = useNetworking;
-            //Initialize();
         }
 
         #endregion

@@ -10,10 +10,12 @@ namespace Mammoth.Engine
 {
     public class LocalInputPlayer : InputPlayer
     {       
-        public LocalInputPlayer(Game game)
+        public LocalInputPlayer(Game game, int clientID)
             : base(game)
         {
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
+
+            this.ID = clientID << 25;
 
             this.Model3D = r.LoadModel("soldier-low-poly");
         }

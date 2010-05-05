@@ -38,13 +38,7 @@ namespace Mammoth.Engine
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            // Currently updating
-            isUpdating = true;
-
-            // Update all objects
-            foreach (var obj in _objects.Values)
-                obj.Update(gameTime);
-
+            // Kinda hackish (because the name no longer really applies), but can be fixed later if necessary.
             // Done updating
             isUpdating = false;
 
@@ -54,6 +48,13 @@ namespace Mammoth.Engine
 
             while (toRemove.Count > 0)
                 removeObject(toRemove.Dequeue());
+
+            // Currently updating
+            isUpdating = true;
+
+            // Update all objects
+            foreach (var obj in _objects.Values)
+                obj.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)

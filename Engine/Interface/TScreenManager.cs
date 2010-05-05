@@ -71,7 +71,7 @@ namespace Mammoth.Engine.Interface
 
             // Keep track of whether screens have focus (and should handle input).  If the game isn't active, all
             // screens are out of focus.
-            bool hasFocus = !this.Game.IsActive;
+            bool hasFocus = this.Game.IsActive;
             // Keep track of whether screens are visible or not.  The topmost screen is visible, so we initialize
             // this to true.
             bool visible = true;
@@ -85,13 +85,17 @@ namespace Mammoth.Engine.Interface
                 // Have the screen update its state.
                 screen.Update(gameTime, hasFocus, visible);
 
-                // If the screen is shown on-screen...
+                // If the screen is visible on-screen... (game screen, not monitor screen - we don't care
+                // if it's obscured by another window right now).
                 if (screen.ScreenState == ScreenState.Active ||
                     screen.ScreenState == ScreenState.TransitionOn)
                 {
                     // If this is the top-most screen, make sure lower screens don't receive input events.
                     if (hasFocus)
+                    {
+                        hasFocus = false;
                         input.InputHandled = true;
+                    }
 
                     // If this screen is active and not a popup, let the rest
                     // of the screens know that they are covered up.

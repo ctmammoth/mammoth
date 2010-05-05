@@ -52,7 +52,7 @@ namespace Mammoth.Engine.Interface
                 if (!UpdateTransition(gameTime, transitionOffTime, 1))
                 {
                     // When the transition's done, remove the screen.
-                    // TODO: Remove the screen.
+                    this.ScreenManager.RemoveScreen(this);
                 }
             }
             else if (!visible)
@@ -166,7 +166,7 @@ namespace Mammoth.Engine.Interface
 
 
         /// <summary>
-        /// The current alpha value for the transition (based on 
+        /// The current alpha value for the transition (based on TransitionPosition).
         /// </summary>
         public byte TransitionAlpha
         {
