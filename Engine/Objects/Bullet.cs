@@ -144,13 +144,13 @@ namespace Mammoth.Engine
                 BodyDescription = bodyDesc
             };
 
+            InitialVelocity = (Vector3)e.GetElement("InitialVelocity", InitialVelocity);
             bulletActorDesc.BodyDescription.LinearVelocity = InitialVelocity;
 
             // Create the actor
             this.Actor = physics.CreateActor(bulletActorDesc, this);
 
-            Position = (Vector3)e.GetElement("Position", Position);
-            InitialVelocity = (Vector3)e.GetElement("InitialVelocity", InitialVelocity);
+            Position = (Vector3)e.GetElement("Position", Position);          
 
             Console.WriteLine("Bullet position received: " + Position);
             Console.WriteLine("Initial Velocity received: " + InitialVelocity);
