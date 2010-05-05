@@ -3,44 +3,89 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using StillDesign.PhysX;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.GamerServices;
 
+using Mammoth.Engine.Input;
+using Mammoth.Engine.Interface;
+using Mammoth.Engine.Physics;
 using Mammoth.Engine.Networking;
+
+
 
 namespace Mammoth.Engine
 {
     public class Crate : PhysicalObject, IEncodable, IRenderable
     {
-        private Vector3 dimensions; //////
+        private Vector3 dimensions, localPosition; ///
+
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
+
+            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
+
+            r.DrawRenderable(this);
+        }
 
 
 
+        public Game Game
+        {
+            get;
+            protected set;
+        }
 
-        public Crate(int id, ObjectParameters parameters)
+        public Crate(int id, ObjectParameters parameters, Game game)
         {
             this.ID = id;
-            Vector3 temp = Vector3.Zero;
+            this.Game = game;
+            Vector3 pos = new Vector3();
             foreach (String attribute in parameters.GetAttributes())
             {
+                
                 switch (attribute)
                 {
                     case "X":
-                        temp.X = (float)parameters.GetDoubleValue(attribute);
+                        pos.X = (float)parameters.GetDoubleValue(attribute);
                         break;
                     case "Y":
-                        temp.Y = (float)parameters.GetDoubleValue(attribute);
+                        pos.Y = (float)parameters.GetDoubleValue(attribute);
                         break;
                     case "Z":
-                        temp.Z = (float)parameters.GetDoubleValue(attribute);
+                        pos.Z = (float)parameters.GetDoubleValue(attribute);
                         break;
                     case "Crate_Type":
                         Specialize(parameters.GetStringValue(attribute));
                         break;
 
                 }
+                
             }
-            this.Position = temp;
+
+            PhysicsManagerService physics = (PhysicsManagerService) this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            this.PositionOffset = new Vector3(0.0f, 0.0f, 0.0f);
+
+            ActorDescription boxActorDesc = new ActorDescription();
+            boxActorDesc.Shapes.Add(new BoxShapeDescription()
+            {
+                Size = new Vector3(dimensions.X, dimensions.Y, dimensions.Z),
+                LocalPosition = localPosition
+            });
+
+            
+            this.Actor = physics.CreateActor(boxActorDesc);
+            this.Position = pos;
+            // this.
+        }
+
+        public Crate(int id, Game game)
+        {
+            // this.Game = game;
+            InitializeDefault(id);
         }
 
         private void Specialize(String attribute)
@@ -60,6 +105,9 @@ namespace Mammoth.Engine
                     case "MODEL":
                         HandleModel(handler);
                         break;
+                    case "LOCAL_POSITION":
+                        HandleLocalPosition(handler);
+                        break;
 
                 }
 
@@ -70,7 +118,9 @@ namespace Mammoth.Engine
         public override void InitializeDefault(int id)
         {
             ID = id;
-            Position = Vector3.Zero;
+            //pos.X = 0;
+            //Position.Y = 0;
+            //Position.Z = 0;
             dimensions.X = 0;
             dimensions.Y = 0;
             dimensions.Z = 0;
@@ -116,7 +166,28 @@ namespace Mammoth.Engine
                         dimensions.Y = (float)parameters.GetDoubleValue(attribute);
                         break;
                     case "LENGTH":
-                        dimensions.X = (float)parameters.GetDoubleValue(attribute);
+                        dimensions.Z = (float)parameters.GetDoubleValue(attribute);
+                        break;
+                }
+            }
+        }
+
+        private void HandleLocalPosition(XmlHandler handler)
+        {
+            localPosition = new Vector3();
+            ObjectParameters parameters = handler.GetAttributes();
+            foreach (String attribute in parameters.GetAttributes())
+            {
+                switch (attribute)
+                {
+                    case "X":
+                        localPosition.X = (float)parameters.GetDoubleValue(attribute);
+                        break;
+                    case "Y":
+                        localPosition.Y = (float)parameters.GetDoubleValue(attribute);
+                        break;
+                    case "Z":
+                        localPosition.Z = (float)parameters.GetDoubleValue(attribute);
                         break;
                 }
             }
@@ -124,7 +195,9 @@ namespace Mammoth.Engine
 
         private void HandleModel(XmlHandler handler)
         {
-            String modelPath = handler.reader.ReadContentAsString();
+            String modelPath = handler.reader.ReadElementContentAsString();
+            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
+            this.Model3D = r.LoadModel(modelPath);
             //TODO: Actually make this a model
         }
 
@@ -138,19 +211,33 @@ namespace Mammoth.Engine
 
         Vector3 IRenderable.Position
         {
-            get { throw new NotImplementedException(); }
+            get { return this.Position; }
         }
+
+        Vector3 positionOffset = new Vector3();
 
         public Vector3 PositionOffset
         {
-            get { throw new NotImplementedException(); }
+            get { return positionOffset; }
+            set {positionOffset = value;}
+        }
+
+        public Quaternion Orientation
+        {
+            get { return new Quaternion(); }
         }
 
         public Model Model3D
         {
-            get { throw new NotImplementedException(); }
+            get;
+            set;
         }
 
         #endregion
+
+        public override void CollideWith(PhysicalObject obj)
+        {
+            throw new NotImplementedException();
+        }
     }
-}
+} ///////

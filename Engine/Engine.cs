@@ -67,6 +67,7 @@ namespace Mammoth.Engine
             {
                 Size = new Vector3(0.5f, 0.5f, 0.5f),
                 LocalPosition = new Vector3(-3.0f, 3.0f, 0.0f)
+                //LocalPosition = new Vector3(-0.0f, 0.0f, 0.0f)
             });
             physics.CreateActor(boxActorDesc);
 
@@ -132,6 +133,54 @@ namespace Mammoth.Engine
             
             Renderer r = (Renderer)this.Services.GetService(typeof(IRenderService));
             SpriteFont calibri = r.LoadFont("calibri");
+
+            IModelDBService modelDB = (IModelDBService)this.Services.GetService(typeof(IModelDBService));
+
+            
+            ObjectParameters parameters = new ObjectParameters();
+            parameters.AddAttribute("X", "8");
+            parameters.AddAttribute("Y", "0");
+            parameters.AddAttribute("Z", "0");
+            parameters.AddAttribute("Crate_Type", "SMALL");
+            
+            
+            ObjectParameters parameters2 = new ObjectParameters();
+            parameters2.AddAttribute("X", "8");
+            parameters2.AddAttribute("Y", "3.85");
+            parameters2.AddAttribute("Z", "0");
+            parameters2.AddAttribute("Crate_Type", "SMALL");
+
+            ObjectParameters parameters3 = new ObjectParameters();
+            parameters3.AddAttribute("X", "8");
+            parameters3.AddAttribute("Y", "7.7");
+            parameters3.AddAttribute("Z", "0");
+            parameters3.AddAttribute("Crate_Type", "SMALL");
+
+            ObjectParameters parameters4 = new ObjectParameters();
+            parameters4.AddAttribute("X", "11.85");
+            parameters4.AddAttribute("Y", "0");
+            parameters4.AddAttribute("Z", "0");
+            parameters4.AddAttribute("Crate_Type", "SMALL");
+
+
+
+            int crateId = modelDB.getNextOpenID();
+            Crate crate1 = (Crate)ObjectFactories.CreateObject("Crate", crateId, parameters, this);
+            modelDB.registerObject(crate1);
+            Console.WriteLine(crate1.Position);
+            
+            
+            crateId = modelDB.getNextOpenID();
+            Crate crate2 = (Crate)ObjectFactories.CreateObject("Crate", crateId, parameters2, this);
+            modelDB.registerObject(crate2);
+
+            crateId = modelDB.getNextOpenID();
+            Crate crate3 = (Crate)ObjectFactories.CreateObject("Crate", crateId, parameters3, this);
+            modelDB.registerObject(crate3);
+
+            crateId = modelDB.getNextOpenID();
+            Crate crate4 = (Crate)ObjectFactories.CreateObject("Crate", crateId, parameters4, this);
+            modelDB.registerObject(crate4);
 
             // ObjectFactories.content_test(this);
 
