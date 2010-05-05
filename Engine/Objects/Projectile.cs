@@ -45,13 +45,6 @@ namespace Mammoth.Engine
         {
             Game = game;
 
-            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-
-            // Give this projectile an ID
-            this.ID = modelDB.getNextOpenID();
-
-            // Add this to the model DB
-            modelDB.registerObject(this);
         }
 
         #region IDamager Members

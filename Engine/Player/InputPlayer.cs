@@ -174,7 +174,12 @@ namespace Mammoth.Engine
             position = Vector3.Add(position, forward);
 
             // Make sure the bullet isn't spawned in the player: shift it by a bit
-            return new Bullet(Game, position, forward);
+            Bullet b = new Bullet(Game, position, forward);
+
+            // Give this projectile an ID
+            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            b.ID = modelDB.getNextOpenID();
+            modelDB.registerObject(b);
         }
 
         /// <summary>
