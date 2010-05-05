@@ -97,11 +97,25 @@ namespace Mammoth.Engine.Physics
                 // Test
                 Debug.Assert(contactInformation != null);
 
+                // AHHH WHY ISN'T THIS WORKING
                 // Collide the objects with each other
-                ((PhysicalObject)contactInformation.ActorA.UserData).CollideWith(
-                    (PhysicalObject)contactInformation.ActorB.UserData);
-                ((PhysicalObject)contactInformation.ActorB.UserData).CollideWith(
-                    (PhysicalObject)contactInformation.ActorA.UserData);
+                if (contactInformation.ActorA != null && contactInformation.ActorA.UserData != null)
+                {
+                    ((PhysicalObject)contactInformation.ActorA.UserData).CollideWith(
+                        (PhysicalObject)contactInformation.ActorB.UserData);
+                    Console.WriteLine("A = " + ((PhysicalObject)contactInformation.ActorA.UserData).getObjectType());
+                }
+                else
+                    Console.WriteLine("ActorA has no data or is null");
+
+                if (contactInformation.ActorB != null && contactInformation.ActorB.UserData != null)
+                {
+                    ((PhysicalObject)contactInformation.ActorB.UserData).CollideWith(
+                        (PhysicalObject)contactInformation.ActorA.UserData);
+                    Console.WriteLine("B = " + ((PhysicalObject)contactInformation.ActorB.UserData).getObjectType());
+                }
+                else
+                    Console.WriteLine("ActorB has no data or is null");
             }
         }
 
@@ -305,6 +319,9 @@ namespace Mammoth.Engine.Physics
                     // Hardware or software simulation
                     SimulationType = hworsw
                 });
+
+                // Enable collisions for all objects
+                curScene.SetActorGroupPairFlags(0, 0, ContactPairFlag.All);
 
                 // Create the controller manager
                 controllerManager = curScene.CreateControllerManager();
