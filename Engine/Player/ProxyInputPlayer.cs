@@ -33,13 +33,25 @@ namespace Mammoth.Engine
             network.sendThing(this);
         }
 
-        protected override Bullet Throw()
+        protected override void Throw()
         {
-            Bullet bullet = base.Throw();
+            Vector3 forward = Vector3.Transform(Vector3.Forward, HeadOrient) * 1000.0f;
+            forward.Normalize();
+            Vector3 position = Position + (Vector3.Up * Height / 4.0f);
+            position = Vector3.Add(position, forward);
+
+            // Make sure the bullet isn't spawned in the player: shift it by a bit
+            Bullet b = new Bullet(Game, position, forward);
+
+            // Give this projectile an ID
+            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            b.ID = modelDB.getNextOpenID();
+            modelDB.registerObject(b);
+            Console.WriteLine("Position vec: " + position);
+            Console.WriteLine("Throwing bullet with position: " + b.Position);
+            Console.WriteLine("Player position: " + Position);
             IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
-            //TODO: Figure out why this is still being sent to the player who created it
-            net.sendToAllBut(bullet, ClientID);
-            return bullet;
+            net.sendThing(b);
         }
 
         #region Properties

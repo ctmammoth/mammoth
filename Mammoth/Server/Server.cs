@@ -20,7 +20,7 @@ namespace Mammoth.Server
         {
             new GraphicsDeviceManager(this);
             // Set the content directory
-            //Content.RootDirectory = "Content";
+            Content.RootDirectory = "Content";
         }
 
         protected override void Initialize()
@@ -30,8 +30,8 @@ namespace Mammoth.Server
             PhysicsManagerService physics = new PhysicsManagerService(this);
             this.Components.Add(physics);
             // Give the server a renderer
-            //Renderer r = new Renderer(this);
-            //this.Services.AddService(typeof(IRenderService), r);
+            Renderer r = new Renderer(this);
+            this.Services.AddService(typeof(IRenderService), r);
             // TODO: Change this to create a new scene when a game screen is created.
             physics.CreateScene();
             #region PhysX Code

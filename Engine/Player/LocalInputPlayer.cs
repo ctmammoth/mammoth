@@ -23,13 +23,5 @@ namespace Mammoth.Engine
             base.Update(gameTime);
             //Console.WriteLine("Health: " + this.Health);
         }
-
-        protected override Bullet Throw()
-        {
-            Bullet bullet = base.Throw();
-            IClientNetworking net = (IClientNetworking)this.Game.Services.GetService(typeof(INetworkingService));
-            net.sendThing(bullet);
-            return bullet;
-        }
     }
 }
