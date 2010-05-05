@@ -22,7 +22,10 @@ namespace Mammoth.Engine
 
             protected set
             {
-                Actor.MoveGlobalPositionTo(value);
+                if (Actor.IsDynamic)
+                    Actor.CenterOfMassGlobalPosition(value);
+                else
+                    Actor.MoveGlobalPositionTo(value);
             }
         }
 
