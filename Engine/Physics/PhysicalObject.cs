@@ -22,8 +22,10 @@ namespace Mammoth.Engine
 
             protected set
             {
-                //Actor.MoveGlobalPositionTo(value);
-                Actor.GlobalPosition = value;
+                if (Actor.IsDynamic)
+                    Actor.GlobalPosition = value;
+                else
+                    Actor.MoveGlobalPositionTo(value);
             }
         }
 
@@ -36,7 +38,6 @@ namespace Mammoth.Engine
 
             protected set
             {
-                //Actor.MoveGlobalOrientationTo(value);
                 if (Actor.IsDynamic)
                     Actor.GlobalOrientationQuat = value;
                 else

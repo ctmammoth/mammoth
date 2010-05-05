@@ -38,7 +38,8 @@ namespace Mammoth.Engine
             Vector3 forward = Vector3.Transform(Vector3.Forward, HeadOrient) * 1000.0f;
             forward.Normalize();
             Vector3 position = Position + (Vector3.Up * Height / 4.0f);
-            position = Vector3.Add(position, forward);
+            Vector3 offset = Vector3.Multiply(forward, 2.0f);
+            position = Vector3.Add(position, offset);
 
             // Make sure the bullet isn't spawned in the player: shift it by a bit
             Bullet b = new Bullet(Game, position, forward);
