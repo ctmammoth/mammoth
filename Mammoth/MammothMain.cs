@@ -18,12 +18,11 @@ namespace Mammoth
             }
             if (args[0].Equals("client"))
             {
-                Mammoth.Engine.Engine game;
-                if (args.Length == 2)
-                    game = new Mammoth.Engine.Engine(false);
-                else
-                    game = new Mammoth.Engine.Engine(true);
+                Mammoth.Engine.Engine game = new Mammoth.Engine.Engine();
                 game.Run();
+                //Client client = new Client();
+                //client.Run();
+                    game = new Mammoth.Engine.Engine(true);
             }
             else if (args[0].Equals("server"))
             {

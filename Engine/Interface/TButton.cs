@@ -21,6 +21,12 @@ namespace Mammoth.Engine.Interface
 
         #endregion
 
+        #region Events
+
+        public event EventHandler OnClick;
+
+        #endregion
+
         public TButton(Game game)
             : base(game)
         {
@@ -35,8 +41,12 @@ namespace Mammoth.Engine.Interface
 
             if(this.Bounds.Contains(new Point(mouse.X, mouse.Y)))
             {
-                if(mouse.LeftButton == ButtonState.Pressed)
+                if (mouse.LeftButton == ButtonState.Pressed)
+                {
+                    if (this.OnClick != null)
+                        this.OnClick(this, new EventArgs());
                     this.CurrentState = State.Down;
+                }
                 else
                     this.CurrentState = State.Hover;
             }

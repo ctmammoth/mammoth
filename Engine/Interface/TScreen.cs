@@ -24,6 +24,96 @@ namespace Mammoth.Engine.Interface
     /// </summary>
     public abstract class TScreen
     {
+        #region Widget Code
+
+        GameComponentCollection _components = new GameComponentCollection();
+
+        #endregion
+
+        public TScreen(Game game)
+        {
+            this.Game = game;
+        }
+
+        public virtual void Initialize() { }
+
+        public virtual void LoadContent() { }
+
+        public virtual void Update(GameTime gameTime, bool hasFocus, bool visible)
+        {
+            // Keep track of whether this screen has focus or not.
+            this.otherScreenHasFocus = !hasFocus;
+
+            if (isExiting)
+            {
+                // Exiting involves transitioning off.
+                screenState = ScreenState.TransitionOff;
+
+                if (!UpdateTransition(gameTime, transitionOffTime, 1))
+                {
+                    // When the transition's done, remove the screen.
+                    // TODO: Remove the screen.
+                }
+            }
+            else if (!visible)
+            {
+                // If the screen is covered up, it should transition off-screen.
+                screenState = ScreenState.TransitionOff;
+
+                if (!UpdateTransition(gameTime, transitionOffTime, 1))
+                {
+                    // Once the transition's done, this screen's hidden.
+                    screenState = ScreenState.Hidden;
+                }
+            }
+            else
+            {
+                // The screen is therefore uncovered, and should transition on.
+                if (UpdateTransition(gameTime, transitionOnTime, -1))
+                {
+                    // Keep transitioning.
+                    screenState = ScreenState.TransitionOn;
+                }
+                else
+                {
+                    // We're done transitioning!
+                    screenState = ScreenState.Active;
+                }
+            }
+        }
+
+        /// <summary>
+        /// A helper function to determine whether we're still transitioning or have finished already.
+        /// </summary>
+        /// <param name="gameTime">The length of this update step.</param>
+        /// <param name="time">The total time that this transition takes.</param>
+        /// <param name="direction">The direction in which we're transitioning.</param>
+        /// <returns>True if we're still transitioning, false otherwise.</returns>
+        private bool UpdateTransition(GameTime gameTime, TimeSpan time, int direction)
+        {
+            // Calculate how much to move by.
+            float delta;
+            if (time == TimeSpan.Zero)
+                delta = 1;
+            else
+                delta = (float)(gameTime.ElapsedGameTime.TotalMilliseconds /
+                                    time.TotalMilliseconds);
+
+            transitionPosition += delta * direction;
+
+            // Check to see if we're done transitioning yet.
+            if ((direction < 0) && (transitionPosition <= 0) ||
+                (direction > 0) && (transitionPosition >= 1))
+            {
+                transitionPosition = MathHelper.Clamp(transitionPosition, 0, 1);
+                return false;
+            }
+            else
+                return true;
+        }
+
+        public virtual void Draw(GameTime gameTime) { }
+
         #region Properties
 
         /// <summary>
@@ -121,7 +211,6 @@ namespace Mammoth.Engine.Interface
 
         bool otherScreenHasFocus;
 
-
         /// <summary>
         /// This returns the TScreenManager that this screen belongs to.
         /// </summary>
@@ -133,79 +222,15 @@ namespace Mammoth.Engine.Interface
 
         TScreenManager screenManager;
 
-        #endregion
-
-        public virtual void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
-        {
-            // Keep track of whether this screen has focus or not.
-            this.otherScreenHasFocus = otherScreenHasFocus;
-
-            if (isExiting)
-            {
-                // Exiting involves transitioning off.
-                screenState = ScreenState.TransitionOff;
-
-                if (!UpdateTransition(gameTime, transitionOffTime, 1))
-                {
-                    // When the transition's done, remove the screen.
-                    // TODO: Remove the screen.
-                }
-            }
-            else if (coveredByOtherScreen)
-            {
-                // If the screen is covered up, it should transition off-screen.
-                screenState = ScreenState.TransitionOff;
-
-                if (!UpdateTransition(gameTime, transitionOffTime, 1))
-                {
-                    // Once the transition's done, this screen's hidden.
-                    screenState = ScreenState.Hidden;
-                }
-            }
-            else
-            {
-                // The screen is therefore uncovered, and should transition on.
-                if (UpdateTransition(gameTime, transitionOnTime, -1))
-                {
-                    // Keep transitioning.
-                    screenState = ScreenState.TransitionOn;
-                }
-                else
-                {
-                    // We're done transitioning!
-                    screenState = ScreenState.Active;
-                }
-            }
-        }
-
         /// <summary>
-        /// A helper function to determine whether we're still transitioning or have finished already.
+        /// Stores the Game.  Useful for stuff like getting window/viewport dimensions.
         /// </summary>
-        /// <param name="gameTime">The length of this update step.</param>
-        /// <param name="time">The total time that this transition takes.</param>
-        /// <param name="direction">The direction in which we're transitioning.</param>
-        /// <returns>True if we're still transitioning, false otherwise.</returns>
-        private bool UpdateTransition(GameTime gameTime, TimeSpan time, int direction)
+        public Game Game
         {
-            // Calculate how much to move by.
-            float delta;
-            if (time == TimeSpan.Zero)
-                delta = 1;
-            else
-                delta = (float)(gameTime.ElapsedGameTime.TotalMilliseconds /
-                                    time.TotalMilliseconds);
-
-            transitionPosition += delta * direction;
-
-            // Check to see if we're done transitioning yet.
-            if ((direction < 0) && (transitionPosition <= 0) ||
-                (direction > 0) && (transitionPosition >= 1))
-            {
-                transitionPosition = MathHelper.Clamp(transitionPosition, 0, 1);
-                return false;
-            }
-            else
-                return true;
+            get;
+            private set;
         }
+
+        #endregion
     }
 }

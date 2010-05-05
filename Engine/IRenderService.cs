@@ -9,7 +9,9 @@ namespace Mammoth.Engine
     {
         void DrawFilledRectangle(Rectangle rect, Color color);
         void DrawTexturedRectangle(Vector2 pos, Texture2D tex);
+        void DrawTexturedRectangle(Vector2 pos, Texture2D tex, Color tint);
         void DrawTexturedRectangle(Rectangle rect, Texture2D tex);
+        void DrawTexturedRectangle(Rectangle rect, Texture2D tex, Color tint);
         Texture2D RenderFont(string text, Vector2 pos, Color textColor, Color bgColor);
         Texture2D RenderFont(string text, Vector2 pos, Color textColor, Color bgColor, SpriteFont font);
         void DrawText(string text, Vector2 pos, Color textColor, Color bgColor);

@@ -10,7 +10,7 @@ using Mammoth.Engine.ExtensionMethods;
 
 namespace Mammoth.Engine.Interface
 {
-    class TSimpleButton : TButton
+    public class TSimpleButton : TButton
     {
         #region Variables
 
@@ -62,11 +62,6 @@ namespace Mammoth.Engine.Interface
                         break;
                 }
             }
-        }
-
-        public override void Draw(GameTime gameTime)
-        {
-            base.Draw(gameTime);
         }
 
         #region Properties

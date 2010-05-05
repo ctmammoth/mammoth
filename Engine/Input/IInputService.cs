@@ -30,6 +30,12 @@ namespace Mammoth.Engine.Input
             get;
         }
 
+        bool InputHandled
+        {
+            get;
+            set;
+        }
+
         #endregion
     }
 }
