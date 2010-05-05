@@ -181,25 +181,7 @@ namespace Mammoth.Engine
         }
 
         // TODO: MAKE THIS LEGITIMATE
-        protected virtual Bullet Throw()
-        {
-            Vector3 forward = Vector3.Transform(Vector3.Forward, HeadOrient) * 1000.0f;
-            forward.Normalize();
-            Vector3 position = Position + (Vector3.Up * Height / 4.0f);
-            position = Vector3.Add(position, forward);
-
-            // Make sure the bullet isn't spawned in the player: shift it by a bit
-            Bullet b = new Bullet(Game, position, forward);
-
-            // Give this projectile an ID
-            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            b.ID = modelDB.getNextOpenID();
-            modelDB.registerObject(b);
-            Console.WriteLine("Position vec: " + position);
-            Console.WriteLine("Throwing bullet with position: " + b.Position);
-            Console.WriteLine("Player position: " + Position);
-            return b;
-        }
+        protected virtual void Throw() { }
 
         /// <summary>
         /// This helper function is used to determine whether or not the player is colliding with objects in a 
