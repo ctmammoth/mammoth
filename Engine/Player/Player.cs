@@ -55,18 +55,18 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-            //if ((dirty & EncodableProperties.Position) == EncodableProperties.Position)
-            //{
-                //Console.Write("Sending updated position, " + counter++ + "; ");
-                //Console.WriteLine(Position.ToString());
+            if ((dirty & EncodableProperties.Position) == EncodableProperties.Position)
+            {
+                Console.Write("Sending updated position, " + counter++ + "; ");
+                Console.WriteLine(Position.ToString());
                 tosend.AddElement("Position", Position);
-            //}
-            //if((dirty & EncodableProperties.Orientation) == dirty)
+            }
+            if((dirty & EncodableProperties.Orientation) == EncodableProperties.Orientation)
                 tosend.AddElement("Orientation", Orientation);
-            //if ((dirty & EncodableProperties.Velocity) == dirty)
+            if ((dirty & EncodableProperties.Velocity) == EncodableProperties.Velocity)
                 tosend.AddElement("Velocity", Velocity);
 
-            tosend.AddElement("ID", ID);
+            //tosend.AddElement("ID", ID);
 
             //reset DIRTY
             dirty = EncodableProperties.None;
@@ -78,10 +78,13 @@ namespace Mammoth.Engine
         {
             Networking.Encoder props = new Networking.Encoder(serialized);
 
-            Position = (Vector3) props.GetElement("Position", Position);
-            Orientation = (Quaternion) props.GetElement("Orientation", Orientation);
-            Velocity = (Vector3) props.GetElement("Velocity", Velocity);
-            ID = (int) props.GetElement("ID", ID);
+            if(props.UpdatesFor("Position"))
+                Position = (Vector3) props.GetElement("Position", Position);
+            if (props.UpdatesFor("Velocity"))
+                Orientation = (Quaternion) props.GetElement("Orientation", Orientation);
+            if (props.UpdatesFor("Orientation"))
+                Velocity = (Vector3) props.GetElement("Velocity", Velocity);
+            //ID = (int) props.GetElement("ID", ID);
         }
 
         #endregion

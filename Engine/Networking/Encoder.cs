@@ -154,8 +154,15 @@ namespace Mammoth.Engine.Networking
 
 
 
-
-
+        /// <summary>
+        /// Checks if there is an update for the given key.
+        /// </summary>
+        /// <param name="key">The string key that wants to be checked.</param>
+        /// <returns>True if there is indeed an update.</returns>
+        public bool UpdatesFor(string key)
+        {
+            return table.ContainsKey(key);
+        }
 
 
 
