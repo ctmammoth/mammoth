@@ -30,7 +30,7 @@ namespace Mammoth.Engine
 
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
 
-            this.Model3D = r.LoadModel("soldier-low-poly");
+            //this.Model3D = r.LoadModel("soldier-low-poly");
             this.PositionOffset = Vector3.Zero;
 
             // Make the bullet's actor description

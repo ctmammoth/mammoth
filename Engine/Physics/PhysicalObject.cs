@@ -22,7 +22,7 @@ namespace Mammoth.Engine
 
             protected set
             {
-                Actor.GlobalPosition = value;
+                Actor.MoveGlobalPositionTo(value);
             }
         }
 
@@ -35,7 +35,7 @@ namespace Mammoth.Engine
 
             protected set
             {
-                Actor.GlobalOrientationQuat = value;
+                Actor.MoveGlobalOrientationTo(value);
             }
         }
         # endregion
