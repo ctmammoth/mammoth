@@ -198,6 +198,8 @@ namespace Mammoth.Engine
             Console.WriteLine("Position vec: " + position);
             Console.WriteLine("Throwing bullet with position: " + b.Position);
             Console.WriteLine("Player position: " + Position);
+
+            // ObjectFactories.
             return b;
         }
 
