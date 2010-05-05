@@ -66,8 +66,6 @@ namespace Mammoth.Engine
             if ((dirty & EncodableProperties.Velocity) == EncodableProperties.Velocity)
                 tosend.AddElement("Velocity", Velocity);
 
-            //tosend.AddElement("ID", ID);
-
             //reset DIRTY
             dirty = EncodableProperties.None;
 
@@ -84,7 +82,6 @@ namespace Mammoth.Engine
                 Orientation = (Quaternion) props.GetElement("Orientation", Orientation);
             if (props.UpdatesFor("Orientation"))
                 Velocity = (Vector3) props.GetElement("Velocity", Velocity);
-            //ID = (int) props.GetElement("ID", ID);
         }
 
         #endregion

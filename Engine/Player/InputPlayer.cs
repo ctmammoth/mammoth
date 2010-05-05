@@ -180,6 +180,8 @@ namespace Mammoth.Engine
             IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
             b.ID = modelDB.getNextOpenID();
             modelDB.registerObject(b);
+
+            return b;
         }
 
         /// <summary>
