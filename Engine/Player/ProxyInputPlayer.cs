@@ -37,6 +37,7 @@ namespace Mammoth.Engine
         {
             Bullet bullet = base.Throw();
             IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            //TODO: Figure out why this is still being sent to the player who created it
             net.sendToAllBut(bullet, ClientID);
             return bullet;
         }

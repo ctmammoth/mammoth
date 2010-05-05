@@ -110,9 +110,17 @@ namespace Mammoth.Engine.Networking
             buffer.Write(message.Data);
             if (message.Recipient < 0)
             {
+                //if (message.Exclude >= 0)
+                    //Console.WriteLine("Excluding " + message.Exclude);
                 foreach (int target in _connections.Keys)
+                {
                     if (target != message.Exclude && _connections[target].Status == NetConnectionStatus.Connected)
+                    {
+                        //if (message.Exclude >= 0)
+                            //Console.WriteLine("Sending to " + target);
                         _server.SendMessage(buffer, _connections[target], NetChannel.Unreliable);
+                    }
+                }
             }
             else
                 _server.SendMessage(buffer, _connections[message.Recipient], NetChannel.Unreliable);

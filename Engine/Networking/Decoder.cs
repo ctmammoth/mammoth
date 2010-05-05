@@ -72,11 +72,11 @@ namespace Mammoth.Engine.Networking
                 break;
 
                 case "Bullet":
-                Bullet b = new Bullet(game, Vector3.Zero, Vector3.Zero);
-                b.Decode(properties);
-                b.ID = id;
-                ro.registerObject(b);
-                Console.WriteLine("Bullet recieved");
+                    Bullet b = new Bullet(game, Vector3.Zero, Vector3.Zero);
+                    b.Decode(properties);
+                    b.ID = id;
+                    ro.registerObject(b);
+                    Console.WriteLine("Bullet received");
                 break;
 
                 default:

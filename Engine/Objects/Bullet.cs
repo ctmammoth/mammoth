@@ -10,6 +10,7 @@ using Mammoth.Engine.Physics;
 
 namespace Mammoth.Engine
 {
+    //TODO: Make bullet drawable
     public class Bullet : Projectile, IEncodable
     {
         /// <summary>
