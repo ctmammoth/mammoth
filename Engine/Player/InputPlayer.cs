@@ -15,9 +15,24 @@ namespace Mammoth.Engine
 {
     public abstract class InputPlayer : Player, IDestructable
     {
+
+        [Flags]
+        public enum EncodableProperties
+        {
+            None = 0x00,
+            Position = 0x01,
+            Orientation = 0x02,
+            Velocity = 0x04,
+            Health = 0x08
+        }
+
+
+        EncodableProperties dirty;
+
         public InputPlayer(Game game) : base(game)
         {
             Init();
+            dirty = EncodableProperties.None;
         }
 
         protected void Init()
@@ -229,11 +244,17 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-            tosend.AddElement("Position", Position);
-            tosend.AddElement("Orientation", Orientation);
-            tosend.AddElement("Velocity", Velocity);
-            tosend.AddElement("Health", Health);
-            tosend.AddElement("ID", ID);
+            if ((dirty & EncodableProperties.Position) == EncodableProperties.Position)
+                tosend.AddElement("Position", Position);
+            if ((dirty & EncodableProperties.Orientation) == EncodableProperties.Orientation)
+                tosend.AddElement("Orientation", Orientation);
+            if ((dirty & EncodableProperties.Velocity) == EncodableProperties.Velocity)
+                tosend.AddElement("Velocity", Velocity);
+            if ((dirty & EncodableProperties.Health) == EncodableProperties.Health)
+                tosend.AddElement("Health", Velocity);
+
+            //reset DIRTY
+            dirty = EncodableProperties.None;
 
             return tosend.Serialize();
         }
@@ -242,11 +263,14 @@ namespace Mammoth.Engine
         {
             Networking.Encoder props = new Networking.Encoder(serialized);
 
-            Position = (Vector3)props.GetElement("Position", Position);
-            Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
-            Velocity = (Vector3)props.GetElement("Velocity", Velocity);
-            Health = (float)props.GetElement("Health", Health);
-            ID = (int)props.GetElement("ID", ID);
+            if (props.UpdatesFor("Position"))
+                Position = (Vector3)props.GetElement("Position", Position);
+            if (props.UpdatesFor("Orientation"))
+                Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
+            if (props.UpdatesFor("Velocity"))
+                Velocity = (Vector3)props.GetElement("Velocity", Velocity);
+            if (props.UpdatesFor("Health"))
+                Velocity = (Vector3)props.GetElement("Health", Velocity);
         }
 
         #region Properties
@@ -269,10 +293,18 @@ namespace Mammoth.Engine
             set;
         }
 
+        float _health;
         public float Health
         {
-            get;
-            set;
+            get
+            {
+                return _health;
+            }
+            set
+            {
+                dirty |= EncodableProperties.Health;
+                _health = value;
+            }
         }
 
         #endregion

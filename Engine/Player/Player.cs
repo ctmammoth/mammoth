@@ -18,22 +18,11 @@ namespace Mammoth.Engine
         protected bool Dead;
         #endregion
 
-        [Flags]
-        public enum EncodableProperties
-        {
-            None = 0x00,
-            Position = 0x01,
-            Orientation = 0x02,
-            Velocity = 0x04
-        }
-
-        EncodableProperties dirty;
-        long counter = 0;
+        
 
         public Player(Game game)
         {
             this.Game = game;
-            dirty = EncodableProperties.None;
 
         }
 
@@ -55,19 +44,12 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-            if ((dirty & EncodableProperties.Position) == EncodableProperties.Position)
-            {
-                Console.Write("Sending updated position, " + counter++ + "; ");
-                Console.WriteLine(Position.ToString());
                 tosend.AddElement("Position", Position);
-            }
-            if((dirty & EncodableProperties.Orientation) == EncodableProperties.Orientation)
+            
                 tosend.AddElement("Orientation", Orientation);
-            if ((dirty & EncodableProperties.Velocity) == EncodableProperties.Velocity)
+
                 tosend.AddElement("Velocity", Velocity);
 
-            //reset DIRTY
-            dirty = EncodableProperties.None;
 
             return tosend.Serialize();
         }
@@ -96,7 +78,6 @@ namespace Mammoth.Engine
             }
             protected set
             {
-                dirty |= EncodableProperties.Position;
                 this.Controller.Position = value;
             }
         }
@@ -115,7 +96,6 @@ namespace Mammoth.Engine
             }
             protected set
             {
-                dirty |= EncodableProperties.Orientation;
                 this.Controller.Actor.MoveGlobalOrientationTo(Matrix.CreateFromQuaternion(value));
             }
         }
@@ -137,7 +117,6 @@ namespace Mammoth.Engine
 
             protected set
             {
-                dirty |= EncodableProperties.Velocity;
                 _velocity = value;
             }
         }
