@@ -30,7 +30,7 @@ namespace Mammoth.Engine
             // Make the bullet's actor description
             ActorDescription bulletActorDesc = new ActorDescription()
             {
-                Shapes = { new SphereShapeDescription(){ Radius = 1.0f } },
+                Shapes = { new SphereShapeDescription(){ Radius = 1.0f, LocalPosition = position} },
                 // Add a body so the bullet moves
                 BodyDescription = new BodyDescription(10.0f)
             };
@@ -43,7 +43,7 @@ namespace Mammoth.Engine
             // Create the actor
             this.Actor = physics.CreateActor(bulletActorDesc, this);
 
-            Position = position;
+            //Position = position;
         }
 
         public override void InitializeDefault(int id)
