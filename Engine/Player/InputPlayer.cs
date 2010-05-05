@@ -16,7 +16,7 @@ namespace Mammoth.Engine
     public abstract class InputPlayer : Player, IDestructable
     {
 
-        [Flags]
+        /*[Flags]
         public enum EncodableProperties
         {
             None = 0x00,
@@ -24,15 +24,15 @@ namespace Mammoth.Engine
             Orientation = 0x02,
             Velocity = 0x04,
             Health = 0x08
-        }
+        }*/
 
 
-        EncodableProperties dirty;
+        //EncodableProperties dirty;
 
         public InputPlayer(Game game) : base(game)
         {
             Init();
-            dirty = EncodableProperties.None;
+            //dirty = EncodableProperties.None;
         }
 
         protected void Init()
@@ -244,20 +244,20 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-            if ((dirty & EncodableProperties.Position) == EncodableProperties.Position)
-            {
+            //if ((dirty & EncodableProperties.Position) == EncodableProperties.Position)
+            //{
                 tosend.AddElement("Position", Position);
-                Console.WriteLine("Sending new pos: " + Position);
-            }
-            if ((dirty & EncodableProperties.Orientation) == EncodableProperties.Orientation)
+                //Console.WriteLine("Sending new pos: " + Position);
+            //}
+            //if ((dirty & EncodableProperties.Orientation) == EncodableProperties.Orientation)
                 tosend.AddElement("Orientation", Orientation);
-            if ((dirty & EncodableProperties.Velocity) == EncodableProperties.Velocity)
+            //if ((dirty & EncodableProperties.Velocity) == EncodableProperties.Velocity)
                 tosend.AddElement("Velocity", Velocity);
-            if ((dirty & EncodableProperties.Health) == EncodableProperties.Health)
+            //if ((dirty & EncodableProperties.Health) == EncodableProperties.Health)
                 tosend.AddElement("Health", Velocity);
 
             //reset DIRTY
-            dirty = EncodableProperties.None;
+            //dirty = EncodableProperties.None;
 
             return tosend.Serialize();
         }
@@ -269,7 +269,7 @@ namespace Mammoth.Engine
             if (props.UpdatesFor("Position"))
             {
                 Position = (Vector3)props.GetElement("Position", Position);
-                Console.WriteLine("Received new pos: " + Position);
+                //Console.WriteLine("Received new pos: " + Position);
             }
             if (props.UpdatesFor("Orientation"))
                 Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
@@ -308,7 +308,7 @@ namespace Mammoth.Engine
             }
             set
             {
-                dirty |= EncodableProperties.Health;
+                //dirty |= EncodableProperties.Health;
                 _health = value;
             }
         }

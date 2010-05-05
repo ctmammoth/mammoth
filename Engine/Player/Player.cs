@@ -44,11 +44,9 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-                tosend.AddElement("Position", Position);
-            
-                tosend.AddElement("Orientation", Orientation);
-
-                tosend.AddElement("Velocity", Velocity);
+            tosend.AddElement("Position", Position);
+            tosend.AddElement("Orientation", Orientation);
+            tosend.AddElement("Velocity", Velocity);
 
 
             return tosend.Serialize();
