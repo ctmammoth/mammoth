@@ -23,6 +23,7 @@ namespace Mammoth.Engine
         public Bullet(Game game, Vector3 position, Vector3 forward)
             : base(game)
         {
+            Console.WriteLine("Constructing a bullet...");
             InitialVelocityMagnitude = 500.0f;
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
@@ -35,8 +36,8 @@ namespace Mammoth.Engine
             // Make the bullet's actor description
             BodyDescription bodyDesc = new BodyDescription()
             {
-                Mass = 1.0f//,
-                //BodyFlags = BodyFlag.Kinematic
+                //BodyFlags = BodyFlag.Kinematic,
+                Mass = 1.0f
             };
             ActorDescription bulletActorDesc = new ActorDescription()
             {
@@ -52,9 +53,14 @@ namespace Mammoth.Engine
 
             // Create the actor
             this.Actor = physics.CreateActor(bulletActorDesc, this);
-            Console.Write("Constructing a bullet: position = " + position);
+
             Position = position;
-            Console.WriteLine("; my position is now " + Position);
+        }
+
+        public Bullet(Game game)
+            : base(game)
+        {
+            InitializeDefault(0);
         }
 
         public override void Draw(GameTime gameTime)
@@ -68,8 +74,14 @@ namespace Mammoth.Engine
 
         public override void InitializeDefault(int id)
         {
-            this.ID = id;
             InitialVelocityMagnitude = 10.0f;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            //Console.WriteLine("Actor exists? " + (Actor != null));
+            //Console.WriteLine("Bullet pos: " + Position);
         }
 
         // TODO
@@ -109,8 +121,39 @@ namespace Mammoth.Engine
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder(serialized);
 
-            Position = (Vector3)e.GetElement("Position", Position);
+            Console.WriteLine("Constructing a bullet...");
+            InitialVelocityMagnitude = 500.0f;
+
+            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+
+            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
+
+            this.Model3D = r.LoadModel("soldier-low-poly");
+            this.PositionOffset = Vector3.Zero;
+
+            // Make the bullet's actor description
+            BodyDescription bodyDesc = new BodyDescription()
+            {
+                //BodyFlags = BodyFlag.Kinematic,
+                Mass = 1.0f
+            };
+            ActorDescription bulletActorDesc = new ActorDescription()
+            {
+                Shapes = { new SphereShapeDescription() { Radius = 1.0f } },
+                // Add a body so the bullet moves
+                BodyDescription = bodyDesc
+            };
+
             InitialVelocity = (Vector3)e.GetElement("InitialVelocity", InitialVelocity);
+            bulletActorDesc.BodyDescription.LinearVelocity = InitialVelocity;
+
+            // Create the actor
+            this.Actor = physics.CreateActor(bulletActorDesc, this);
+
+            Position = (Vector3)e.GetElement("Position", Position);          
+
+            Console.WriteLine("Bullet position received: " + Position);
+            Console.WriteLine("Initial Velocity received: " + InitialVelocity);
         }
         #endregion
 

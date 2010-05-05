@@ -77,7 +77,7 @@ namespace Mammoth.Engine
         {
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-
+            this.Dead = true;
             // Remove the physx controller
             physics.RemoveController(this.Controller);
             // Remove the model
@@ -95,6 +95,9 @@ namespace Mammoth.Engine
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             IInputService inputService = (IInputService)this.Game.Services.GetService(typeof(IInputService));
+
+            //Console.WriteLine("Position in update: " + Position);
+            //Console.WriteLine("Position in update (actor): " + Actor.GlobalPosition);
 
             foreach (var input in inputService.States)
             {
@@ -165,23 +168,34 @@ namespace Mammoth.Engine
                     if (input.IsKeyDown(InputType.Jump))
                         this.Velocity += Vector3.Up / 4.0f;
 
+                //Console.WriteLine("Position before throw: " + Position);
                 // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
                 if (input.KeyPressed(InputType.Shoot))
                     this.Throw();
+                //Console.WriteLine("Position after throw: " + Position);
+                //Console.WriteLine("Orientation after throw: " + Orientation);
 
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
+                //Console.WriteLine("Collision: " + this.CurrentCollision);
 
                 // Now, we need to reset parts of the velocity so that we're not compounding it.
                 if (InCollisionState(ControllerCollisionFlag.Down))
                     this.Velocity = Vector3.Zero;
                 else
                     this.Velocity += physics.Scene.Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds - motion;
+
+                //Console.WriteLine("Velocity: " + Velocity);
+                //Console.WriteLine("Motion: " + motion);
+                //Console.WriteLine("Position before exiting: " + Position);
+                //Console.WriteLine("Orientation before exiting: " + Orientation);
             }
         }
 
         // TODO: MAKE THIS LEGITIMATE
-        protected virtual void Throw() { }
+        protected virtual void Throw() {
+            Console.WriteLine("Throwing");
+        }
 
         /// <summary>
         /// This helper function is used to determine whether or not the player is colliding with objects in a 
@@ -256,7 +270,10 @@ namespace Mammoth.Engine
                 //Console.WriteLine("Received new pos: " + Position);
             }
             if (props.UpdatesFor("Orientation"))
+            {
                 Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
+                //Console.WriteLine("Received new orientation: " + Orientation);
+            }
             if (props.UpdatesFor("Velocity"))
                 Velocity = (Vector3)props.GetElement("Velocity", Velocity);
             if (props.UpdatesFor("Health"))
