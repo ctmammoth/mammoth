@@ -14,22 +14,15 @@ namespace Mammoth.Engine
 {
     public abstract class Player : PhysicalObject, IRenderable, IEncodable
     {
-        [Flags]
-        public enum EncodableProperties
-        {
-            None = 0x00,
-            Position = 0x01,
-            Orientation = 0x02,
-            Velocity = 0x04
-        }
+        #region Variables
+        protected bool Dead;
+        #endregion
 
-        EncodableProperties dirty;
-        long counter = 0;
+        
 
         public Player(Game game)
         {
             this.Game = game;
-            dirty = EncodableProperties.None;
 
         }
 
@@ -40,51 +33,42 @@ namespace Mammoth.Engine
             this.HeadOrient = orient;
         }
 
+        public override void InitializeDefault(int id)
+        {
+            
+        }
+
         #region IEncodable Members
 
-        public byte[] Encode()
+        public virtual byte[] Encode()
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-            //if ((dirty & EncodableProperties.Position) == EncodableProperties.Position)
-            //{
-                //Console.Write("Sending updated position, " + counter++ + "; ");
-                //Console.WriteLine(Position.ToString());
-                tosend.AddElement("Position", Position);
-            //}
-            //if((dirty & EncodableProperties.Orientation) == dirty)
-                tosend.AddElement("Orientation", Orientation);
-            //if ((dirty & EncodableProperties.Velocity) == dirty)
-                tosend.AddElement("Velocity", Velocity);
+            tosend.AddElement("Position", Position);
+            tosend.AddElement("Orientation", Orientation);
+            tosend.AddElement("Velocity", Velocity);
 
-            tosend.AddElement("ID", ID);
-
-            //reset DIRTY
-            dirty = EncodableProperties.None;
 
             return tosend.Serialize();
         }
 
-        public void Decode(byte[] serialized)
+        public virtual void Decode(byte[] serialized)
         {
             Networking.Encoder props = new Networking.Encoder(serialized);
 
-            Position = (Vector3) props.GetElement("Position", Position);
-            Orientation = (Quaternion) props.GetElement("Orientation", Orientation);
-            Velocity = (Vector3) props.GetElement("Velocity", Velocity);
-            ID = (int) props.GetElement("ID", ID);
+            if(props.UpdatesFor("Position"))
+                Position = (Vector3) props.GetElement("Position", Position);
+            if (props.UpdatesFor("Velocity"))
+                Orientation = (Quaternion) props.GetElement("Orientation", Orientation);
+            if (props.UpdatesFor("Orientation"))
+                Velocity = (Vector3) props.GetElement("Velocity", Velocity);
         }
-
-        public override void InitializeDefault(int id)
-        {
-        }
-
 
         #endregion
 
         #region Properties
 
-        public Vector3 Position
+        public override Vector3 Position
         {
             get
             {
@@ -92,7 +76,6 @@ namespace Mammoth.Engine
             }
             protected set
             {
-                dirty |= EncodableProperties.Position;
                 this.Controller.Position = value;
             }
         }
@@ -103,7 +86,7 @@ namespace Mammoth.Engine
             protected set;
         }
 
-        public Quaternion Orientation
+        public override Quaternion Orientation
         {
             get
             {
@@ -111,7 +94,6 @@ namespace Mammoth.Engine
             }
             protected set
             {
-                dirty |= EncodableProperties.Orientation;
                 this.Controller.Actor.MoveGlobalOrientationTo(Matrix.CreateFromQuaternion(value));
             }
         }
@@ -133,7 +115,6 @@ namespace Mammoth.Engine
 
             protected set
             {
-                dirty |= EncodableProperties.Velocity;
                 _velocity = value;
             }
         }

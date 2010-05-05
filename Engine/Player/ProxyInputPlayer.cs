@@ -17,6 +17,7 @@ namespace Mammoth.Engine
         {
             this.ClientID = clientID;
         }
+
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
         {
             // Get the input state.
@@ -30,6 +31,15 @@ namespace Mammoth.Engine
             //Console.WriteLine("sending proxy player");
             //Console.WriteLine(this.Position);
             network.sendThing(this);
+        }
+
+        protected override Bullet Throw()
+        {
+            Bullet bullet = base.Throw();
+            IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            //TODO: Figure out why this is still being sent to the player who created it
+            net.sendToAllBut(bullet, ClientID);
+            return bullet;
         }
 
         #region Properties

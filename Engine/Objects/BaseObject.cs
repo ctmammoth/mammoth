@@ -8,7 +8,10 @@ using Microsoft.Xna.Framework;
 namespace Mammoth.Engine
 {
     public abstract class BaseObject
-    {   
+    {
+        private static int nextId = 0;
+        private String objectType;
+
         public virtual void Update(GameTime gameTime) { }
         public virtual void Draw(GameTime gameTime) { }
 
@@ -20,9 +23,9 @@ namespace Mammoth.Engine
 
         public abstract String getObjectType();
 
+        public abstract void InitializeDefault(int id);
 
-
-        
+       
 
 
 

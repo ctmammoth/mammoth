@@ -13,9 +13,29 @@ using Mammoth.Engine.Physics;
 
 namespace Mammoth.Engine
 {
-    public abstract class InputPlayer : Player
+    public abstract class InputPlayer : Player, IDestructable
     {
+
+        /*[Flags]
+        public enum EncodableProperties
+        {
+            None = 0x00,
+            Position = 0x01,
+            Orientation = 0x02,
+            Velocity = 0x04,
+            Health = 0x08
+        }*/
+
+
+        //EncodableProperties dirty;
+
         public InputPlayer(Game game) : base(game)
+        {
+            Init();
+            //dirty = EncodableProperties.None;
+        }
+
+        protected void Init()
         {
             this.Height = 6.0f;
 
@@ -25,7 +45,10 @@ namespace Mammoth.Engine
             this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
 
             this.CurrentCollision = 0;
+
+            this.Health = 100;
         }
+
 
         public override void Spawn(Vector3 pos, Quaternion orient)
         {
@@ -50,8 +73,26 @@ namespace Mammoth.Engine
             this.Controller = physics.CreateController(desc, this);
         }
 
+        public void Die()
+        {
+            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+
+            // Remove the physx controller
+            physics.RemoveController(this.Controller);
+            // Remove the model
+            modelDB.removeObject(this.ID);
+        }
+
         public override void Update(GameTime gameTime)
         {
+            // Check whether the player is dead
+            if (Dead)
+            {
+                Die();
+                return;
+            }
+
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             IInputService inputService = (IInputService)this.Game.Services.GetService(typeof(IInputService));
 
@@ -124,6 +165,10 @@ namespace Mammoth.Engine
                     if (input.IsKeyDown(InputType.Jump))
                         this.Velocity += Vector3.Up / 4.0f;
 
+                // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
+                if (input.KeyPressed(InputType.Shoot))
+                    this.Throw();
+
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
 
@@ -133,6 +178,27 @@ namespace Mammoth.Engine
                 else
                     this.Velocity += physics.Scene.Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds - motion;
             }
+        }
+
+        // TODO: MAKE THIS LEGITIMATE
+        protected virtual Bullet Throw()
+        {
+            Vector3 forward = Vector3.Transform(Vector3.Forward, HeadOrient) * 1000.0f;
+            forward.Normalize();
+            Vector3 position = Position + (Vector3.Up * Height / 4.0f);
+            position = Vector3.Add(position, forward);
+
+            // Make sure the bullet isn't spawned in the player: shift it by a bit
+            Bullet b = new Bullet(Game, position, forward);
+
+            // Give this projectile an ID
+            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            b.ID = modelDB.getNextOpenID();
+            modelDB.registerObject(b);
+            Console.WriteLine("Position vec: " + position);
+            Console.WriteLine("Throwing bullet with position: " + b.Position);
+            Console.WriteLine("Player position: " + Position);
+            return b;
         }
 
         /// <summary>
@@ -165,9 +231,54 @@ namespace Mammoth.Engine
             return "Player";
         }
 
-        public override void collideWith(PhysicalObject obj)
+        public override void CollideWith(PhysicalObject obj)
         {
+            if (obj is IDamager)
+                TakeDamage(((IDamager)obj).GetDamage());
+        }
 
+        private void TakeDamage(float damage)
+        {
+            Health -= damage;
+        }
+
+        public override byte[] Encode()
+        {
+            Networking.Encoder tosend = new Networking.Encoder();
+
+            //if ((dirty & EncodableProperties.Position) == EncodableProperties.Position)
+            //{
+                tosend.AddElement("Position", Position);
+                //Console.WriteLine("Sending new pos: " + Position);
+            //}
+            //if ((dirty & EncodableProperties.Orientation) == EncodableProperties.Orientation)
+                tosend.AddElement("Orientation", Orientation);
+            //if ((dirty & EncodableProperties.Velocity) == EncodableProperties.Velocity)
+                tosend.AddElement("Velocity", Velocity);
+            //if ((dirty & EncodableProperties.Health) == EncodableProperties.Health)
+                tosend.AddElement("Health", Velocity);
+
+            //reset DIRTY
+            //dirty = EncodableProperties.None;
+
+            return tosend.Serialize();
+        }
+
+        public override void Decode(byte[] serialized)
+        {
+            Networking.Encoder props = new Networking.Encoder(serialized);
+
+            if (props.UpdatesFor("Position"))
+            {
+                Position = (Vector3)props.GetElement("Position", Position);
+                //Console.WriteLine("Received new pos: " + Position);
+            }
+            if (props.UpdatesFor("Orientation"))
+                Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
+            if (props.UpdatesFor("Velocity"))
+                Velocity = (Vector3)props.GetElement("Velocity", Velocity);
+            if (props.UpdatesFor("Health"))
+                Velocity = (Vector3)props.GetElement("Health", Velocity);
         }
 
         #region Properties
@@ -188,6 +299,20 @@ namespace Mammoth.Engine
         {
             get;
             set;
+        }
+
+        float _health;
+        public float Health
+        {
+            get
+            {
+                return _health;
+            }
+            set
+            {
+                //dirty |= EncodableProperties.Health;
+                _health = value;
+            }
         }
 
         #endregion
