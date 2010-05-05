@@ -88,6 +88,11 @@ namespace Mammoth.Engine
         // TODO
         public override void CollideWith(PhysicalObject obj)
         {
+            // Check whether obj is damageable
+            if (obj is IDamageable)
+                ((IDamageable)obj).TakeDamage(GetDamage());
+
+            // Destroy this bullet on impact
             IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof (IModelDBService));
             mdb.removeObject(ID);
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));

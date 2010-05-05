@@ -49,6 +49,7 @@ Global
 		{E80FCA0E-78EC-44C5-B375-894050EEE6CB}.PhysX Debug|Mixed Platforms.ActiveCfg = PhysX Debug|Any CPU
 		{E80FCA0E-78EC-44C5-B375-894050EEE6CB}.PhysX Debug|Mixed Platforms.Build.0 = PhysX Debug|Any CPU
 		{E80FCA0E-78EC-44C5-B375-894050EEE6CB}.PhysX Debug|x86.ActiveCfg = PhysX Debug|Any CPU
+		{E80FCA0E-78EC-44C5-B375-894050EEE6CB}.PhysX Debug|x86.Build.0 = PhysX Debug|Any CPU
 		{E80FCA0E-78EC-44C5-B375-894050EEE6CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E80FCA0E-78EC-44C5-B375-894050EEE6CB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E80FCA0E-78EC-44C5-B375-894050EEE6CB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU

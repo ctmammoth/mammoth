@@ -13,7 +13,7 @@ using Mammoth.Engine.Physics;
 
 namespace Mammoth.Engine
 {
-    public abstract class InputPlayer : Player, IDestructable
+    public abstract class InputPlayer : Player, IDamageable
     {
 
         /*[Flags]
@@ -71,17 +71,6 @@ namespace Mammoth.Engine
             this.PositionOffset = -1.0f * desc.Position;
 
             this.Controller = physics.CreateController(desc, this);
-        }
-
-        public void Die()
-        {
-            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
-            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            this.Dead = true;
-            // Remove the physx controller
-            physics.RemoveController(this.Controller);
-            // Remove the model
-            modelDB.removeObject(this.ID);
         }
 
         public override void Update(GameTime gameTime)
@@ -229,13 +218,6 @@ namespace Mammoth.Engine
 
         public override void CollideWith(PhysicalObject obj)
         {
-            if (obj is IDamager)
-                TakeDamage(((IDamager)obj).GetDamage());
-        }
-
-        private void TakeDamage(float damage)
-        {
-            Health -= damage;
         }
 
         public override byte[] Encode()
@@ -312,6 +294,26 @@ namespace Mammoth.Engine
                 //dirty |= EncodableProperties.Health;
                 _health = value;
             }
+        }
+
+        #endregion
+
+        #region IDamageable Members
+
+        public void Die()
+        {
+            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            this.Dead = true;
+            // Remove the physx controller
+            physics.RemoveController(this.Controller);
+            // Remove the model
+            modelDB.removeObject(this.ID);
+        }
+
+        public void TakeDamage(float damage)
+        {
+            Health -= damage;
         }
 
         #endregion

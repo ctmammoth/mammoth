@@ -97,22 +97,30 @@ namespace Mammoth.Engine.Physics
                 // Test
                 Debug.Assert(contactInformation != null);
 
-                // AHHH WHY ISN'T THIS WORKING
-                // Collide the objects with each other
+                // Collide the objects with each other: make sure ActorA is not null and has userdata
                 if (contactInformation.ActorA != null && contactInformation.ActorA.UserData != null)
                 {
-                    ((PhysicalObject)contactInformation.ActorA.UserData).CollideWith(
-                        (PhysicalObject)contactInformation.ActorB.UserData);
-                    Console.WriteLine("A = " + ((PhysicalObject)contactInformation.ActorA.UserData).getObjectType());
+                    // Make sure ActorB is not null and has userdata
+                    if (contactInformation.ActorB != null && contactInformation.ActorB.UserData != null)
+                    {
+                        ((PhysicalObject)contactInformation.ActorA.UserData).CollideWith(
+                            (PhysicalObject)contactInformation.ActorB.UserData);
+                        Console.WriteLine("A = " + ((PhysicalObject)contactInformation.ActorA.UserData).getObjectType());
+                    }
                 }
                 else
                     Console.WriteLine("ActorA has no data or is null");
 
+                // Make sure ActorB is not null and has userdata
                 if (contactInformation.ActorB != null && contactInformation.ActorB.UserData != null)
                 {
-                    ((PhysicalObject)contactInformation.ActorB.UserData).CollideWith(
+                    // Make sure ActorA is not null and has userdata
+                    if (contactInformation.ActorA != null && contactInformation.ActorA.UserData != null)
+                    {
+                        ((PhysicalObject)contactInformation.ActorB.UserData).CollideWith(
                         (PhysicalObject)contactInformation.ActorA.UserData);
-                    Console.WriteLine("B = " + ((PhysicalObject)contactInformation.ActorB.UserData).getObjectType());
+                        Console.WriteLine("B = " + ((PhysicalObject)contactInformation.ActorB.UserData).getObjectType());
+                    }
                 }
                 else
                     Console.WriteLine("ActorB has no data or is null");
@@ -321,6 +329,7 @@ namespace Mammoth.Engine.Physics
                 });
 
                 // Enable collisions for all objects
+                // TODO: is this right?
                 curScene.SetActorGroupPairFlags(0, 0, ContactPairFlag.All);
 
                 // Create the controller manager
