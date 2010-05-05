@@ -195,7 +195,9 @@ namespace Mammoth.Engine
             IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
             b.ID = modelDB.getNextOpenID();
             modelDB.registerObject(b);
-
+            Console.WriteLine("Position vec: " + position);
+            Console.WriteLine("Throwing bullet with position: " + b.Position);
+            Console.WriteLine("Player position: " + Position);
             return b;
         }
 

@@ -30,7 +30,7 @@ namespace Mammoth.Engine
             // Make the bullet's actor description
             ActorDescription bulletActorDesc = new ActorDescription()
             {
-                Shapes = { new SphereShapeDescription(){ Radius = 1.0f, LocalPosition = position } },
+                Shapes = { new SphereShapeDescription(){ Radius = 1.0f } },
                 // Add a body so the bullet moves
                 BodyDescription = new BodyDescription(10.0f)
             };
@@ -42,6 +42,8 @@ namespace Mammoth.Engine
 
             // Create the actor
             this.Actor = physics.CreateActor(bulletActorDesc, this);
+
+            Position = position;
         }
 
         public override void InitializeDefault(int id)
@@ -79,7 +81,10 @@ namespace Mammoth.Engine
         public void Decode(byte[] serialized)
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder(serialized);
-
+            Vector3 pos = (Vector3)e.GetElement("Position", Position); 
+            Vector3 initV = (Vector3)e.GetElement("InitialVelocity", InitialVelocity);
+            Console.WriteLine("Remote bullet pos: " + pos);
+            Console.WriteLine("Remote bullet initV: " + initV);
             Position = (Vector3)e.GetElement("Position", Position);
             InitialVelocity = (Vector3)e.GetElement("InitialVelocity", InitialVelocity);
         }
