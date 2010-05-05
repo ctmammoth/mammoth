@@ -136,6 +136,8 @@ namespace Mammoth.Engine
 
             IModelDBService modelDB = (IModelDBService)this.Services.GetService(typeof(IModelDBService));
 
+
+            /*
             
             ObjectParameters parameters = new ObjectParameters();
             parameters.AddAttribute("X", "8");
@@ -146,23 +148,25 @@ namespace Mammoth.Engine
             
             ObjectParameters parameters2 = new ObjectParameters();
             parameters2.AddAttribute("X", "8");
-            parameters2.AddAttribute("Y", "3.85");
+            parameters2.AddAttribute("Y", "3.6");
             parameters2.AddAttribute("Z", "0");
             parameters2.AddAttribute("Crate_Type", "SMALL");
 
             ObjectParameters parameters3 = new ObjectParameters();
             parameters3.AddAttribute("X", "8");
-            parameters3.AddAttribute("Y", "7.7");
+            parameters3.AddAttribute("Y", "7.2");
             parameters3.AddAttribute("Z", "0");
             parameters3.AddAttribute("Crate_Type", "SMALL");
 
             ObjectParameters parameters4 = new ObjectParameters();
-            parameters4.AddAttribute("X", "11.85");
+            parameters4.AddAttribute("X", "11.6");
             parameters4.AddAttribute("Y", "0");
             parameters4.AddAttribute("Z", "0");
             parameters4.AddAttribute("Crate_Type", "SMALL");
 
 
+
+            
 
             int crateId = modelDB.getNextOpenID();
             Crate crate1 = (Crate)ObjectFactories.CreateObject("Crate", crateId, parameters, this);
@@ -180,7 +184,117 @@ namespace Mammoth.Engine
 
             crateId = modelDB.getNextOpenID();
             Crate crate4 = (Crate)ObjectFactories.CreateObject("Crate", crateId, parameters4, this);
-            modelDB.registerObject(crate4);
+            modelDB.registerObject(crate4); */
+
+
+
+            ObjectParameters parameters = new ObjectParameters();
+            for (int i = 0; i < 25; i++)
+            {
+                parameters = new ObjectParameters();
+                Double number1 = (3.6 * (i / 5));
+                Double number2 = (3.6 * (i % 5));
+
+
+                parameters.AddAttribute("X", number1.ToString());
+                parameters.AddAttribute("Y", number2.ToString());
+                parameters.AddAttribute("Z", "0.0");
+                parameters.AddAttribute("Crate_Type", "SMALL");
+
+
+                if ((!(i > 9 && i < 12)))
+                {
+                    int crateId = modelDB.getNextOpenID();
+                    Crate crate1 = (Crate)ObjectFactories.CreateObject("Crate", crateId, parameters, this);
+                    modelDB.registerObject(crate1);
+                }
+
+            }
+
+            for (int i = 0; i < 25; i++)
+            {
+                parameters = new ObjectParameters();
+                Double number1 = (3.6 * (i / 5));
+                Double number2 = (3.6 * (i % 5));
+
+
+                parameters.AddAttribute("X", number1.ToString());
+                parameters.AddAttribute("Y", number2.ToString());
+                parameters.AddAttribute("Z", "14.4");
+                parameters.AddAttribute("Crate_Type", "SMALL");
+
+
+                if ((!(i > 9 && i < 12)))
+                {
+                    int crateId = modelDB.getNextOpenID();
+                    Crate crate1 = (Crate)ObjectFactories.CreateObject("Crate", crateId, parameters, this);
+                    modelDB.registerObject(crate1);
+                }
+
+            }
+
+            for (int i = 0; i < 25; i++)
+            {
+                parameters = new ObjectParameters();
+                Double number1 = (3.6 * (i / 5));
+                Double number2 = (3.6 * (i % 5));
+
+
+                parameters.AddAttribute("Z", number1.ToString());
+                parameters.AddAttribute("Y", number2.ToString());
+                parameters.AddAttribute("X", "0.0");
+                parameters.AddAttribute("Crate_Type", "SMALL");
+
+
+                if ((!(i > 9 && i < 12)))
+                {
+                    int crateId = modelDB.getNextOpenID();
+                    Crate crate1 = (Crate)ObjectFactories.CreateObject("Crate", crateId, parameters, this);
+                    modelDB.registerObject(crate1);
+                }
+
+            }
+
+
+            for (int i = 0; i < 25; i++)
+            {
+                parameters = new ObjectParameters();
+                Double number1 = (3.6 * (i / 5));
+                Double number2 = (3.6 * (i % 5));
+
+
+                parameters.AddAttribute("Z", number1.ToString());
+                parameters.AddAttribute("Y", number2.ToString());
+                parameters.AddAttribute("X", "14.4");
+                parameters.AddAttribute("Crate_Type", "SMALL");
+
+
+                if ((!(i > 9 && i < 12)))
+                {
+                    int crateId = modelDB.getNextOpenID();
+                    Crate crate1 = (Crate)ObjectFactories.CreateObject("Crate", crateId, parameters, this);
+                    modelDB.registerObject(crate1);
+                }
+
+            }
+
+            for (int i = 0; i < 25; i++)
+            {
+                parameters = new ObjectParameters();
+                Double number1 = (3.6 * (i / 5));
+                Double number2 = (3.6 * (i % 5));
+
+
+                parameters.AddAttribute("X", number1.ToString());
+                parameters.AddAttribute("Y", "18"); 
+                parameters.AddAttribute("Z", number2.ToString());                
+                parameters.AddAttribute("Crate_Type", "SMALL");
+
+                int crateId = modelDB.getNextOpenID();
+                Crate crate1 = (Crate)ObjectFactories.CreateObject("Crate", crateId, parameters, this);
+                modelDB.registerObject(crate1);
+
+            }
 
             // ObjectFactories.content_test(this);
 

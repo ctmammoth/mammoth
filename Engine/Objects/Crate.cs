@@ -91,7 +91,7 @@ namespace Mammoth.Engine
         private void Specialize(String attribute)
         {
             XmlHandler handler = new XmlHandler();
-            handler.ChangeFile("static_objects.xml");
+            handler.ChangeFile("../../../static_objects.xml");
             handler.GetElement("VARIANT", "NAME", attribute);
             while (!handler.IsClosingTag("VARIANT"))
             {

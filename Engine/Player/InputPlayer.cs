@@ -199,16 +199,7 @@ namespace Mammoth.Engine
             Console.WriteLine("Throwing bullet with position: " + b.Position);
             Console.WriteLine("Player position: " + Position);
 
-            ObjectParameters parameters = new ObjectParameters();
-            parameters.AddAttribute("X", "0");
-            parameters.AddAttribute("Y", "0");
-            parameters.AddAttribute("Z", "0");
-            parameters.AddAttribute("Crate_Type", "SMALL");
-            int crateId = modelDB.getNextOpenID();
             
-
-            Crate crate1 = (Crate) ObjectFactories.CreateObject("Crate",crateId,parameters,this.Game);
-            modelDB.registerObject(crate1);
 
             // ObjectFactories.
             return b;
