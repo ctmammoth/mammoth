@@ -13,6 +13,7 @@ using Mammoth.Engine.Physics;
 using Mammoth.Engine.Interface;
 using Mammoth.Engine.Networking;
 using Mammoth.Engine.Graphics;
+using Mammoth.Engine.Audio;
 
 namespace Mammoth
 {
@@ -91,6 +92,10 @@ namespace Mammoth
                 UpdateOrder = 2
             };
             this.Components.Add(cam);
+
+            // Play game music
+            IAudioService audio = (IAudioService)Game.Services.GetService(typeof(IAudioService));
+            audio.playMusic("In_Game");
 
             // Now, we want to initialize all of the components we just added.
             foreach (GameComponent component in this.Components)
