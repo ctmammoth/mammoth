@@ -105,6 +105,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="songs\01 Funky Town.mp3">
+      <Name>funkytown</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="textures\menu\exit_down.png">
       <Name>exit_down</Name>
       <Importer>TextureImporter</Importer>

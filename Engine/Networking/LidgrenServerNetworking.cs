@@ -219,7 +219,7 @@ namespace Mammoth.Engine.Networking
             // an integer (i.e. the zero-ith object created by the client).
             player.ID = id << 25;
             //TODO: change where the player spawns to?
-            player.Spawn(new Vector3(-3.0f, 3.0f, 10.0f), Quaternion.Identity);
+            player.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
             mdb.registerObject(player);
         }
 

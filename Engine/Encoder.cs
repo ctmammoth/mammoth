@@ -49,15 +49,6 @@ namespace Mammoth.Engine.Networking
         }
 
 
-
-
-
-
-
-
-
-
-
         /// <summary>
         /// Adds a property to be encoded. Cannot take anything that is not a primitive or doesn't implement Encodable. Will not add null.
         /// </summary>
@@ -70,19 +61,6 @@ namespace Mammoth.Engine.Networking
                 table.Add(key, theobject);
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         /// <summary>
@@ -99,17 +77,6 @@ namespace Mammoth.Engine.Networking
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
         /// <summary>
         /// Once a byte array has been deserialized, then elements can be accesed through their String key. Returns null if the key could not be hashed.
         /// </summary>
@@ -117,18 +84,15 @@ namespace Mammoth.Engine.Networking
         /// <returns>an object which must be type cast</returns>
         public object GetElement(string key, object orig)
         {
-                object hashed = table[key];
+            object hashed = table[key];
 
-                if (hashed != null)
-                    return hashed;
-                else
-                {
-                    return (object)orig;
-                }
+            if (hashed != null)
+                return hashed;
+            else
+            {
+                return (object)orig;
+            }
         }
-
-
-
 
         /// <summary>
         /// Once a byte array has been deserialized, then IEncodable objects can be updated. Note that if the IEncodable is null, it cannot be updated.
@@ -147,11 +111,9 @@ namespace Mammoth.Engine.Networking
             }
             catch (Exception e)
             {
-                
+
             }
         }
-
-
 
 
         /// <summary>
@@ -163,15 +125,6 @@ namespace Mammoth.Engine.Networking
         {
             return table.ContainsKey(key);
         }
-
-
-
-
-
-
-
-
-
 
 
         /// <summary>
@@ -219,6 +172,5 @@ namespace Mammoth.Engine.Networking
                 throw;
             }
         }
-
     }
 }

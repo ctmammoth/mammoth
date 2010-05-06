@@ -15,16 +15,9 @@ namespace Mammoth.Engine
     /// <summary>
     /// Represents any projectile in the game.
     /// </summary>
-    public abstract class Projectile : PhysicalObject, IDamager
+    public abstract class Projectile : BaseObject, IDamager
     {
         #region Properties
-
-        // Not needed for sufficiently fast-moving projectiles
-        public Model Model3D
-        {
-            get;
-            protected set;
-        }
 
         public int Creator
         {
@@ -32,16 +25,22 @@ namespace Mammoth.Engine
             protected set;
         }
 
-        #endregion
+        public Vector3 InitialPosition
+        {
+            get;
+            protected set;
+        }
 
-        #region Variables
-        protected float InitialVelocityMagnitude;
+        public Vector3 InitialDirection
+        {
+            get;
+            protected set;
+        }
 
-        public Vector3 InitialVelocity;
         #endregion
 
         // Default
-        protected Projectile(Game game, int creator)
+        protected Projectile(Game game, int creator) 
             : base(game)
         {
             Creator = creator;
@@ -56,5 +55,10 @@ namespace Mammoth.Engine
         }
 
         #endregion
+
+        public override string getObjectType()
+        {
+            return "Projectile";
+        }
     }
 }

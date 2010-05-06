@@ -26,7 +26,6 @@ namespace Mammoth.Engine
         /// <param name="gameTime">The official GameTime.</param>
         public virtual void Draw(GameTime gameTime) { }
 
-
         /// <summary>
         /// Supplies every object with a unique ID which can be used to access the object in the ModelDB.
         /// </summary>
@@ -41,6 +40,7 @@ namespace Mammoth.Engine
         /// </summary>
         /// <returns></returns>
         public abstract String getObjectType();
+
         #region Properties
 
         public Game Game

@@ -73,10 +73,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audio\Audio.cs" />
     <Compile Include="Graphics\Skybox.cs" />
     <Compile Include="GameLogic.cs" />
     <Compile Include="Interface\TImage.cs" />
     <Compile Include="Interface\TImageButton.cs" />
+    <Compile Include="Audio\IAudioService.cs" />
+    <Compile Include="Networking\Encoder.cs" />
     <Compile Include="Objects\Bullet.cs" />
     <Compile Include="Graphics\Camera.cs" />
     <Compile Include="ClientState.cs" />
@@ -94,7 +97,6 @@
     <Compile Include="Objects\Door.cs" />
     <Compile Include="Networking\Decoder.cs" />
     <Compile Include="Networking\DummyNetworking.cs" />
-    <Compile Include="Networking\Encoder.cs" />
     <Compile Include="Input\IInputService.cs" />
     <Compile Include="Objects\Fortress.cs" />
     <Compile Include="Networking\IDecoder.cs" />
@@ -131,7 +133,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Interface\Interface.cd" />
-    <None Include="Networking\Networking.cd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
