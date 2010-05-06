@@ -40,8 +40,9 @@ namespace Mammoth.Engine
         /// <param name="clientID">The ID of the client this player is simulating on the server</param>
         public ProxyInputPlayer(Game game, int clientID): base(game)
         {
+            Console.WriteLine("Creating proxy player");
             this.ClientID = clientID;
-            IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(GameLogic));
+            IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
             this.Team = g.AddToTeam(this.ClientID);
             Console.WriteLine("Proxy Player " + this.ClientID + " joined " + this.Team.ToString());
         }
@@ -85,12 +86,13 @@ namespace Mammoth.Engine
 
         public override void TakeDamage(float damage, IDamager inflicter)
         {
-            base.TakeDamage(damage, inflicter);
+            Console.WriteLine("Proxy player took damage");
             if (this.Health <= 0)
             {
                 IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
                 g.AwardKill(this.ClientID);
             }
+            base.TakeDamage(damage, inflicter);
         }
     }
 }

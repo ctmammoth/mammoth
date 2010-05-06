@@ -257,9 +257,9 @@ namespace Mammoth.Engine
             {
                 Die();
                 //Get your own id
-                IClientNetworking me = (IClientNetworking)this.Game.Services.GetService(typeof(IClientNetworking));
+                int myID = this.ID >> 25;
                 Projectile p = (Projectile)inflicter;
-                Console.WriteLine("Player " + me.ClientID + " was killed by Player " + p.Creator);
+                Console.WriteLine("Player " + myID + " was killed by Player " + p.Creator);
             }
         }
 
