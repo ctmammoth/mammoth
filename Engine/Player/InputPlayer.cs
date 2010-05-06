@@ -198,6 +198,10 @@ namespace Mammoth.Engine
                 if (input.KeyPressed(InputType.Fire))
                     this.Shoot();
 
+                // Reload the user's gun
+                if (input.KeyPressed(InputType.Reload))
+                    this.Reload();
+
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
 

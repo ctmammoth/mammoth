@@ -139,7 +139,7 @@ namespace Mammoth.Engine
             Owner = owner;
             // Set location
             Position = owner.Position;
-            Orientation = owner.Orientation;
+            Orientation = owner.HeadOrient;
         }
 
         #region IWeapon Members
