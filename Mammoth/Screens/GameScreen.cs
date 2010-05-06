@@ -199,6 +199,10 @@ namespace Mammoth
             ICameraService cam = (ICameraService)this.Game.Services.GetService(typeof(ICameraService));
             this.Game.Components.Remove((GameComponent)cam);
             this.Game.Services.RemoveService(typeof(ICameraService));
+
+            // Play the menu music
+            IAudioService audio = (IAudioService)Game.Services.GetService(typeof(IAudioService));
+            audio.stopSounds();
         }
 
         #endregion

@@ -11,9 +11,11 @@ using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
-    public interface IWeapon : IRenderable
+    public interface IWeapon : IRenderable, IEncodable
     {
         void Shoot(Vector3 position, Vector3 direction, int shooterID, GameTime time);
         void Reload(GameTime time);
+        int ShotsLeft();
+        int MagsLeft();
     }
 }

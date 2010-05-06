@@ -11,9 +11,9 @@ using Mammoth.Engine.Objects;
 
 namespace Mammoth.Engine.Objects
 {
-    public class Magazine : BaseObject
+    public class Magazine : BaseObject, IEncodable
     {
-        public readonly int MaxRounds;
+        public int MaxRounds;
         public int AmmoRemaining
         {
             get;
@@ -54,12 +54,36 @@ namespace Mammoth.Engine.Objects
         {
             return "Magazine";
         }
+
+        #region IEncodable Members
+
+        public byte[] Encode()
+        {
+            Networking.Encoder tosend = new Networking.Encoder();
+
+            tosend.AddElement("MaxRounds", MaxRounds);
+            tosend.AddElement("AmmoRemaining", AmmoRemaining);
+
+            return tosend.Serialize();
+        }
+
+        public void Decode(byte[] serialized)
+        {
+            Networking.Encoder props = new Networking.Encoder(serialized);
+
+            if (props.UpdatesFor("MaxRounds"))
+                MaxRounds = (int)props.GetElement("MaxRounds", MaxRounds);
+            if (props.UpdatesFor("AmmoRemaining"))
+                AmmoRemaining = (int)props.GetElement("AmmoRemaining", AmmoRemaining);
+        }
+
+        #endregion
     }
 
     /// <summary>
     /// A simple weapon which shoots Bullets.
     /// </summary>
-    public abstract class Gun : BaseObject, IWeapon, IHoldeableItem
+    public abstract class Gun : BaseObject, IWeapon, IHoldeableItem, IEncodable
     {
         #region Properties
 
@@ -176,6 +200,16 @@ namespace Mammoth.Engine.Objects
 
         #region IWeapon Members
 
+        public int ShotsLeft()
+        {
+            return Mag.AmmoRemaining;
+        }
+
+        public int MagsLeft()
+        {
+            return MagCount;
+        }
+
         public void Shoot(Vector3 position, Vector3 direction, int shooterID, GameTime time)
         {
             // Make sure a shot can be fired
@@ -191,6 +225,7 @@ namespace Mammoth.Engine.Objects
                     direction = Vector3.Add(direction, new Vector3((float)(directionPerturber.NextDouble() - 1) * Inaccuracy,
                         (float)(directionPerturber.NextDouble() - 1) * Inaccuracy,
                         (float)(directionPerturber.NextDouble() - 1) * Inaccuracy));
+                    direction.Normalize();
 
                     SpawnBullet(position, direction, shooterID);
                 }
@@ -254,7 +289,7 @@ namespace Mammoth.Engine.Objects
 
         #region BaseObject Members
 
-        public override abstract string getObjectType();
+        public abstract override string getObjectType();
 
         public override void Update(GameTime gameTime)
         {
@@ -271,12 +306,13 @@ namespace Mammoth.Engine.Objects
 
         public override void Draw(GameTime gameTime)
         {
-            //Load services
-            IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
-            ICameraService cam = (ICameraService)this.Game.Services.GetService(typeof(ICameraService));
+            // TODO: actually draw the gun
+            ////Load services
+            //IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
+            //ICameraService cam = (ICameraService)this.Game.Services.GetService(typeof(ICameraService));
 
-            //Render the RemotePlayer
-            r.DrawRenderable(this);
+            ////Render the RemotePlayer
+            //r.DrawRenderable(this);
         }
 
         #endregion
@@ -301,5 +337,38 @@ namespace Mammoth.Engine.Objects
         }
 
         #endregion
+
+        #region IEncodable Members
+
+        public byte[] Encode()
+        {
+            Networking.Encoder tosend = new Networking.Encoder();
+
+            tosend.AddElement("Magazine", Mag);
+            tosend.AddElement("MagCount", MagCount);
+            tosend.AddElement("Position", _position);
+            tosend.AddElement("Orientation", _orientation);
+
+            return tosend.Serialize();
+        }
+
+        public void Decode(byte[] serialized)
+        {
+            Networking.Encoder props = new Networking.Encoder(serialized);
+
+            if (Mag == null)
+                Mag = new Magazine(this.Game, MagazineCapacity);
+            if (props.UpdatesFor("Magazine"))
+                props.UpdateIEncodable("Magazine", Mag);
+            if (props.UpdatesFor("MagCount"))
+                MagCount = (int)props.GetElement("MagCount", MagCount);
+            if (props.UpdatesFor("Position"))
+                Position = (Vector3)props.GetElement("Position", Position);
+            if (props.UpdatesFor("Orientation"))
+                Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
+        }
+
+        #endregion
+
     }
 }
