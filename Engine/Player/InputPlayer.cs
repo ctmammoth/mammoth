@@ -205,7 +205,7 @@ namespace Mammoth.Engine
 
                 // If the player presses space (and is on the ground), jump!
                 if (InCollisionState(ControllerCollisionFlag.Down))
-                    if (input.KeyPressed(InputType.Jump))
+                    if (input.IsKeyDown(InputType.Jump))
                         this.Velocity += Vector3.Up / 4.0f;
 
                 // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
@@ -228,6 +228,8 @@ namespace Mammoth.Engine
 
             // Update main weapon
             ((BaseObject)CurWeapon).Update(gameTime);
+
+            Console.WriteLine("Weapon " + ((BaseObject)CurWeapon).getObjectType() + " has " + CurWeapon.ShotsLeft() + " shots left.");
         }
 
         /// <summary>
@@ -318,6 +320,8 @@ namespace Mammoth.Engine
             tosend.AddElement("Velocity", Velocity);
             tosend.AddElement("Health", Health);
             tosend.AddElement("GameStats", GameStats);
+            tosend.AddElement("GunType", ((BaseObject)CurWeapon).getObjectType());
+            tosend.AddElement("Gun", CurWeapon);
 
             return tosend.Serialize();
         }
@@ -336,6 +340,18 @@ namespace Mammoth.Engine
                 Health = (float)props.GetElement("Health", Health);
             if (props.UpdatesFor("GameStats"))
                 props.UpdateIEncodable("GameStats", GameStats);
+
+            if (CurWeapon == null)
+            {
+                switch ((string)props.GetElement("GunType", "Revolver"))
+                {
+                    case "Revolver":
+                        CurWeapon = new Revolver(this.Game, this);
+                        break;
+                }
+            }
+            if (props.UpdatesFor("Gun"))
+                props.UpdateIEncodable("Gun", CurWeapon);
 
             //Console.WriteLine("Decoding: " + GameStats.ToString());
         }
