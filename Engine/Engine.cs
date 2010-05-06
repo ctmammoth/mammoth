@@ -189,6 +189,7 @@ namespace Mammoth.Engine
 
 
             ObjectParameters parameters = new ObjectParameters();
+            /*
             for (int i = 0; i < 25; i++)
             {
                 parameters = new ObjectParameters();
@@ -221,7 +222,7 @@ namespace Mammoth.Engine
                 parameters.AddAttribute("X", number1.ToString());
                 parameters.AddAttribute("Y", number2.ToString());
                 parameters.AddAttribute("Z", "14.4");
-                parameters.AddAttribute("Crate_Type", "SMALL");
+                parameters.AddAttribute("Crate_Type", "DARK");
 
 
                 if ((!(i > 9 && i < 12)))
@@ -277,6 +278,12 @@ namespace Mammoth.Engine
                 }
 
             }
+             * 
+             * 
+
+
+            */
+
 
             for (int i = 0; i < 25; i++)
             {
@@ -293,6 +300,8 @@ namespace Mammoth.Engine
                 int crateId = modelDB.getNextOpenID();
                 Crate crate1 = (Crate)ObjectFactories.CreateObject("Crate", crateId, parameters, this);
                 modelDB.registerObject(crate1);
+                Room room = new Room(631,this);
+                room.BuildWall();
 
             }
 

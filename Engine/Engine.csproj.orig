@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E80FCA0E-78EC-44C5-B375-894050EEE6CB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mammoth.Engine</RootNamespace>
+    <AssemblyName>Engine</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PhysX Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\PhysX Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;PHYSX_DEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <Reference Include="Lidgren.Network, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Assemblies\Lidgren.Network.dll</HintPath>
+    </Reference>
+    <Reference Include="Lidgren.Network.Xna, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Assemblies\Lidgren.Network.Xna.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86" />
+    <Reference Include="StillDesign.PhysX.Net, Version=0.12.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Assemblies\StillDesign.PhysX.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Engine.cs" />
+    <Compile Include="Objects\Bullet.cs" />
+    <Compile Include="Camera.cs" />
+    <Compile Include="ClientState.cs" />
+    <Compile Include="Objects\IDamager.cs" />
+    <Compile Include="Objects\IDestructable.cs" />
+    <Compile Include="IModelDBService.cs" />
+    <Compile Include="Input\EmulatedInput.cs" />
+    <Compile Include="Objects\IWeapon.cs" />
+<<<<<<< HEAD
+    <Compile Include="Objects\ObjectFactories.cs" />
+=======
+    <Compile Include="Interface\TWidgetScreen.cs" />
+    <Compile Include="Objects\MinimalPhysicalObject.cs" />
+>>>>>>> 876a4ee9d0a4e0d801233e46017c35f49d9fc2b6
+    <Compile Include="Objects\Projectile.cs" />
+    <Compile Include="Player\LocalInputPlayer.cs" />
+    <Compile Include="ModelDatabase.cs" />
+    <Compile Include="Objects\Crate.cs" />
+    <Compile Include="Objects\Door.cs" />
+    <Compile Include="Networking\Car.cs" />
+    <Compile Include="Networking\Decoder.cs" />
+    <Compile Include="Networking\Driver.cs" />
+    <Compile Include="Networking\DummyNetworking.cs" />
+    <Compile Include="Networking\Encoder.cs" />
+    <Compile Include="Input\IInputService.cs" />
+    <Compile Include="Objects\Fortress.cs" />
+    <Compile Include="Networking\IDecoder.cs" />
+    <Compile Include="Networking\IEncodable.cs" />
+    <Compile Include="ObjectParameters.cs" />
+    <Compile Include="Input\InputState.cs" />
+    <Compile Include="Input\LocalInput.cs" />
+    <Compile Include="Interface\ExtensionMethods.cs" />
+    <Compile Include="Interface\TButton.cs" />
+    <Compile Include="Interface\TScreen.cs" />
+    <Compile Include="Interface\TScreenManager.cs" />
+    <Compile Include="Interface\TSimpleButton.cs" />
+    <Compile Include="Interface\TText.cs" />
+    <Compile Include="IRenderable.cs" />
+    <Compile Include="IRenderService.cs" />
+    <Compile Include="Player\InputPlayer.cs" />
+    <Compile Include="Networking\LidgrenClientNetworking.cs" />
+    <Compile Include="Objects\BaseObject.cs" />
+    <Compile Include="Networking\LidgrenNetworking.cs" />
+    <Compile Include="Networking\LidgrenServerNetworking.cs" />
+    <Compile Include="Networking\Networking.cs" />
+    <Compile Include="Physics\PhysicalObject.cs" />
+    <Compile Include="Physics\PhysicsManagerService.cs" />
+    <Compile Include="Player\Player.cs" />
+    <Compile Include="Player\ProxyInputPlayer.cs" />
+    <Compile Include="Player\RemotePlayer.cs" />
+    <Compile Include="Renderer.cs" />
+    <Compile Include="Objects\Room.cs" />
+    <Compile Include="Objects\SimpleGun.cs" />
+    <Compile Include="Objects\StaticObject.cs" />
+    <Compile Include="Interface\TWidget.cs" />
+    <Compile Include="Networking\Test.cs" />
+    <Compile Include="XmlHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Interface\Interface.cd" />
+    <None Include="Networking\Networking.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+</Project>

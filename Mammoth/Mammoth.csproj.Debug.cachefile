@@ -2,8 +2,12 @@ Content\models\soldier-low-poly.xnb
 Content\models\toon-soldier.xnb
 Content\fonts\calibri.xnb
 Content\FBX\9D693047\soldier-low-poly.fbm\Soldier_D_1024_alt_0.xnb
+Content\models\Wood_0715_0.xnb
 Content\models\Crate.xnb
 Content\models\Wood_0716_0.xnb
+Content\models\DarkCrate.xnb
+Content\models\test_crate_tex_0.xnb
+Content\models\crateflat.xnb
 NxCharacter.dll
 PhysXCooking.dll
 PhysXCore.dll

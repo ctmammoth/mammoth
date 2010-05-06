@@ -84,7 +84,7 @@ namespace Mammoth.Engine
 
         public Crate(int id, Game game)
         {
-            // this.Game = game;
+            this.Game = game;
             InitializeDefault(id);
         }
 
