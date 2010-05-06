@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 
 using Mammoth.Engine.Physics;
 using Mammoth.Engine.Networking;
+using Mammoth.Engine.Objects;
 
 namespace Mammoth.Engine
 {
@@ -58,22 +59,47 @@ namespace Mammoth.Engine
     /// <summary>
     /// A simple weapon which shoots Bullets.
     /// </summary>
-    public class SimpleGun : BaseObject, IWeapon
+    public class SimpleGun : BaseObject, IWeapon, IHoldeableItem
     {
         #region Properties
 
-        // This gun's orientation
-        public Quaternion Orientation
+        // This gun's owner
+        private Player Owner
         {
             get;
             set;
         }
 
+        // This gun's orientation
+        public Quaternion Orientation
+        {
+            get
+            {
+                return Orientation;
+            }
+            set
+            {
+                if (Owner != null)
+                    Orientation = Owner.HeadOrient;
+                else
+                    Orientation = value;
+            }
+        }
+
         // The gun's position
         public Vector3 Position
         {
-            get;
-            set;
+            get
+            {
+                return Position;
+            }
+            set
+            {
+                if (Owner != null)
+                    Position = Owner.Position;
+                else
+                    Position = value;
+            }
         }
 
         // The magazine used by this gun
@@ -113,6 +139,7 @@ namespace Mammoth.Engine
             else if (MagCount > 1)
             {
                 Reload();
+                SpawnBullet(position, direction, shooterID);
             }
             else
             {
@@ -120,6 +147,12 @@ namespace Mammoth.Engine
             }
         }
 
+        /// <summary>
+        /// Spawns a bullet from this gun.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="direction"></param>
+        /// <param name="shooterID"></param>
         private void SpawnBullet(Vector3 position, Vector3 direction, int shooterID)
         {
             // Make sure the bullet isn't spawned in the player: shift it by a bit
@@ -156,5 +189,14 @@ namespace Mammoth.Engine
         {
             return "SimpleGun";
         }
+
+        #region IHoldeableItem Members
+
+        void IHoldeableItem.SetOwner(Player owner)
+        {
+            Owner = owner;
+        }
+
+        #endregion
     }
 }

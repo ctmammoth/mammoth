@@ -46,7 +46,7 @@ namespace Mammoth.Engine
         private void FireBullet()
         {
             IAudioService audio = (IAudioService)Game.Services.GetService(typeof(IAudioService));
-            audio.playSound("Gunshot");
+            //audio.playSound("Gunshot");
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
 

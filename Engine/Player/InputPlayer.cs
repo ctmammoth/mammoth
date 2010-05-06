@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Input;
 
 using Mammoth.Engine.Input;
 using Mammoth.Engine.Physics;
+using Mammoth.Engine.Objects;
 using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
@@ -69,6 +70,8 @@ namespace Mammoth.Engine
             // Give the player a simple gun, for now
             Items[0] = new SimpleGun(game);
             CurWeapon = Items[0];
+            // Set the owner of the weapon to this player
+            ((IHoldeableItem)CurWeapon).SetOwner(this);
 
             // Initializes PhysX of a player.
             InitializePhysX();
