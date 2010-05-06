@@ -103,6 +103,9 @@ namespace Mammoth
             {
                 DrawOrder = 1
             });
+
+            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            modelDB.registerObject(new Terrain(this.Game));
         }
 
         public override void Update(GameTime gameTime, bool hasFocus, bool visible)

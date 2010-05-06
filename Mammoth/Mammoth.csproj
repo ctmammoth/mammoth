@@ -118,6 +118,7 @@
     <Compile Include="MammothMain.cs" />
     <Compile Include="Screens\PrettyMenuScreen.cs" />
     <Compile Include="Server\Server.cs" />
+    <Compile Include="Terrain.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

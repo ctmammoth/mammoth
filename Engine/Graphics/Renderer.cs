@@ -142,6 +142,7 @@ namespace Mammoth.Engine
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {
+                    effect.PreferPerPixelLighting = true;
                     effect.EnableDefaultLighting();
 
                     effect.View = view;
