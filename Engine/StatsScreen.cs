@@ -94,17 +94,17 @@ namespace Mammoth.Engine
 
                 baseWid.Add(new TText(this.Game, "Personal Kills: " + GameStats.NumKills)
                 {
-                    Center = new Vector2((2 * this.Game.Window.ClientBounds.Width) / 5, 350)
+                    Center = new Vector2((1 * this.Game.Window.ClientBounds.Width) / 6, 350)
                 });
 
                 baseWid.Add(new TText(this.Game, "Personal Captures: " + GameStats.NumCaptures)
                 {
-                    Center = new Vector2((3 * this.Game.Window.ClientBounds.Width) / 5, 350)
+                    Center = new Vector2((3 * this.Game.Window.ClientBounds.Width) / 6, 350)
                 });
 
                 baseWid.Add(new TText(this.Game, "Personal Deaths: " + GameStats.NumDeaths)
                 {
-                    Center = new Vector2((4 * this.Game.Window.ClientBounds.Width) / 5, 350)
+                    Center = new Vector2((5 * this.Game.Window.ClientBounds.Width) / 6, 350)
                 });
 
 
