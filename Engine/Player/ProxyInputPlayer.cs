@@ -87,10 +87,10 @@ namespace Mammoth.Engine
         /// <summary>
         /// Overrides InputPlayer's Reload() in order to allow reloading.
         /// </summary>
-        protected override void Reload()
+        protected override void Reload(GameTime time)
         {
             if (CurWeapon != null)
-                CurWeapon.Reload();
+                CurWeapon.Reload(time);
         }
 
         public override void TakeDamage(float damage, IDamager inflicter)

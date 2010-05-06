@@ -14,6 +14,6 @@ namespace Mammoth.Engine
     public interface IWeapon : IRenderable
     {
         void Shoot(Vector3 position, Vector3 direction, int shooterID, GameTime time);
-        void Reload();
+        void Reload(GameTime time);
     }
 }
