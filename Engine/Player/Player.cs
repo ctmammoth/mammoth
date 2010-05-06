@@ -35,6 +35,8 @@ namespace Mammoth.Engine
             this.Position = pos;
             this.Orientation = orient;
             this.HeadOrient = orient;
+            //this.Health = 100;
+            this.Dead = false;
         }
 
         public override void InitializeDefault(int id)

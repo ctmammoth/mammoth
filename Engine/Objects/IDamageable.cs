@@ -15,11 +15,6 @@ namespace Mammoth.Engine
     public interface IDamageable
     {
         /// <summary>
-        /// Peforms any tasks necessary to destroy this object.
-        /// </summary>
-        void Die();
-
-        /// <summary>
         /// Deals damage to this damageable.
         /// </summary>
         /// <param name="damage">The amount of damage to deal: negative damage adds health to the damageable.</param>
