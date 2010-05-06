@@ -20,7 +20,7 @@ namespace Mammoth.Engine.Physics
         Actor CreateActor(ActorDescription aDesc, PhysicalObject owner);
         void RemoveActor(Actor toRemove);
 
-        PhysicalObject RaycastClosestShape(Vector3 position, Vector3 direction);
+        RaycastHit RaycastClosestShape(Vector3 position, Vector3 direction);
     
         Controller CreateController(ControllerDescription cDesc, PhysicalObject owner);
 
@@ -203,10 +203,11 @@ namespace Mammoth.Engine.Physics
         /// <param name="direction">A unit vector in the direction in which to cast the ray.</param>
         /// <returns>The PhysicalObject that owns the Actor that owns the Shape hit by the ray, or null if nothing
         /// was hit or the Actor hit had no userdata.</returns>
-        public PhysicalObject RaycastClosestShape(Vector3 position, Vector3 direction)
+        public RaycastHit RaycastClosestShape(Vector3 position, Vector3 direction)
         {
-            // Return the userdata for the actor for the shape that was hit
-            RaycastHit rayHit = curScene.RaycastClosestShape(new StillDesign.PhysX.Ray(position, direction), ShapesType.Dynamic);
+            // Return the result of the raycast
+            return curScene.RaycastClosestShape(new StillDesign.PhysX.Ray(position, direction), ShapesType.Dynamic);
+            /*
             // Make sure the shape that was hit exists and that its actor has userdata
             if (rayHit.Shape != null && rayHit.Shape.Actor.UserData != null)
             {
@@ -217,6 +218,7 @@ namespace Mammoth.Engine.Physics
             }
             else
                 return null;
+            */
         }
 
         /// <summary>

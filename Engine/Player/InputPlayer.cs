@@ -82,6 +82,9 @@ namespace Mammoth.Engine
             // Give the player a simple gun, for now
             Items[0] = new Revolver(game, this);
             CurWeapon = Items[0];
+
+            // Give the player some stats
+            GameStats = new GameStats();
         }
 
         /// <summary>
