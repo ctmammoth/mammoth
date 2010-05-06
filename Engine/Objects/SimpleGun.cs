@@ -134,6 +134,11 @@ namespace Mammoth.Engine
         private const double FIRE_RATE = 4.0;
         private const double RELOAD_TIME = 2000.0;
 
+        // Perturbs the bullet's direction
+        private Random directionPerturber;
+        // Determines the amount by which to perturb the bullet's direction
+        private float inaccuracy;
+
         public SimpleGun(Game game, Player owner)
             : base(game)
         {
@@ -152,6 +157,10 @@ namespace Mammoth.Engine
             // Set location
             Position = owner.Position;
             Orientation = owner.HeadOrient;
+            // Set inaccuracy
+            inaccuracy = 0.01f;
+            // Make the randomizer
+            directionPerturber = new Random();
         }
 
         #region IWeapon Members
@@ -166,6 +175,12 @@ namespace Mammoth.Engine
                 if ((curTime - _lastFiredTime) >= (1000.0 / FIRE_RATE) && _lastReloadTime < 0)
                 {
                     _lastFiredTime = curTime;
+
+                    // Randomly perturb the bullet
+                    direction = Vector3.Add(direction, new Vector3(directionPerturber.NextDouble() * inaccuracy,
+                        directionPerturber.NextDouble() * inaccuracy,
+                        directionPerturber.NextDouble() * inaccuracy));
+
                     SpawnBullet(position, direction, shooterID);
                 }
             }
