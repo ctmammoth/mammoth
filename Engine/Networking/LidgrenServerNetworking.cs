@@ -271,7 +271,7 @@ namespace Mammoth.Engine.Networking
                 case "Mammoth.Engine.Input.InputState":
                     // Decode the InputState and add it to the sender's InputState queue
                     if (!_inputStates.ContainsKey(senderID))
-                        throw new Exception("Invalid player id: " + senderID);
+                        return;
                     IDecoder decoder = (IDecoder)this.Game.Services.GetService(typeof(IDecoder));
                     int length = buffer.ReadVariableInt32();
                     buffer.SkipPadBits();
