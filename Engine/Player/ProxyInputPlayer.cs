@@ -24,6 +24,13 @@ namespace Mammoth.Engine
             protected set;
         }
 
+        //TEAM
+        public Team Team
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         /// <summary>
@@ -34,6 +41,9 @@ namespace Mammoth.Engine
         public ProxyInputPlayer(Game game, int clientID): base(game)
         {
             this.ClientID = clientID;
+            IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(GameLogic));
+            this.Team = g.AddToTeam(this.ClientID);
+            Console.WriteLine("Proxy Player " + this.ClientID + " joined " + this.Team.ToString());
         }
 
         /// <summary>
@@ -84,6 +94,16 @@ namespace Mammoth.Engine
             // Send the bullet after it's created
             IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
             net.sendThing(b);
+        }
+
+        public override void TakeDamage(float damage, IDamager inflicter)
+        {
+            base.TakeDamage(damage, inflicter);
+            if (this.Health <= 0)
+            {
+                IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
+                g.AwardKill(this.ClientID);
+            }
         }
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Input;
 
 using Mammoth.Engine.Input;
 using Mammoth.Engine.Physics;
+using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
@@ -225,11 +226,14 @@ namespace Mammoth.Engine
         public override void TakeDamage(float damage, IDamager inflicter)
         {
             base.TakeDamage(damage, inflicter);
+            Console.WriteLine("Health: " + this.Health);
             if (this.Health <= 0)
             {
                 Die();
-                Bullet b = (Bullet) inflicter;
-                Console.WriteLine("Player " + this.ID + " was killed by Player " + b.Creator);
+                //Get your own id
+                IClientNetworking me = (IClientNetworking)this.Game.Services.GetService(typeof(IClientNetworking));
+                Projectile p = (Projectile)inflicter;
+                Console.WriteLine("Player " + me.ClientID + " was killed by Player " + p.Creator);
             }
         }
 

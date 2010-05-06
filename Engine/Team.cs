@@ -78,5 +78,9 @@ namespace Mammoth.Engine
             return NumKills + (10 * NumCaptures);
         }
 
+        public string ToString()
+        {
+            return "Team " + TeamID;
+        }
     }
 }
