@@ -239,7 +239,11 @@ namespace Mammoth.Engine
             this.Position = Owner.Position;
             this.Orientation = Owner.HeadOrient;
             if (_lastReloadTime >= 0 && gameTime.TotalRealTime.TotalMilliseconds - _lastReloadTime >= RELOAD_TIME)
+            {
                 _lastReloadTime = -1;
+                IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+                net.sendSound("Reload", Owner.ID >> 25);
+            }
         }
 
         public override void Draw(GameTime gameTime)
