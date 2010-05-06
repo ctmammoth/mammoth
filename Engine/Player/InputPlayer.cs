@@ -199,7 +199,7 @@ namespace Mammoth.Engine
             Console.WriteLine("Throwing bullet with position: " + b.Position);
             Console.WriteLine("Player position: " + Position);
 
-            
+                      
 
             // ObjectFactories.
             return b;

@@ -73,15 +73,15 @@ namespace Mammoth.Engine
 
         }
 
-        public static Crate CrateFactory(int id, ObjectParameters parameters, Game game)
+        public static WallBlock CrateFactory(int id, ObjectParameters parameters, Game game)
         {
             if (parameters != null)
             {
-                return new Crate(id, parameters, game);
+                return new WallBlock(id, parameters, game);
             }
             else
             {
-                return new Crate(id, game);
+                return new WallBlock(id, game);
             }
 
 

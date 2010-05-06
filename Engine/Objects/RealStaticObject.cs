@@ -18,7 +18,7 @@ using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
-    public class Crate : PhysicalObject, IEncodable, IRenderable
+    public class RealStaticObject : PhysicalObject, IEncodable, IRenderable
     {
         private Vector3 dimensions, localPosition; ///
 
@@ -39,14 +39,14 @@ namespace Mammoth.Engine
             protected set;
         }
 
-        public Crate(int id, ObjectParameters parameters, Game game)
+        public RealStaticObject(int id, ObjectParameters parameters, Game game)
         {
             this.ID = id;
             this.Game = game;
             Vector3 pos = new Vector3();
             foreach (String attribute in parameters.GetAttributes())
             {
-                
+
                 switch (attribute)
                 {
                     case "X":
@@ -63,10 +63,10 @@ namespace Mammoth.Engine
                         break;
 
                 }
-                
+
             }
 
-            PhysicsManagerService physics = (PhysicsManagerService) this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            PhysicsManagerService physics = (PhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             this.PositionOffset = new Vector3(0.0f, 0.0f, 0.0f);
 
             ActorDescription boxActorDesc = new ActorDescription();
@@ -78,11 +78,11 @@ namespace Mammoth.Engine
 
             
             this.Actor = physics.CreateActor(boxActorDesc);
-            this.Position = pos;
+            this.Position = pos;            
             // this.
         }
 
-        public Crate(int id, Game game)
+        public RealStaticObject(int id, Game game)
         {
             this.Game = game;
             InitializeDefault(id);
@@ -130,7 +130,7 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-            tosend.AddElement("Position", Position);
+            // tosend.AddElement("Position", Position);
             //tosend.AddElement("Orientation", Orientation);
             //tosend.AddElement("Velocity", Velocity);
 
@@ -219,8 +219,22 @@ namespace Mammoth.Engine
         public Vector3 PositionOffset
         {
             get { return positionOffset; }
-            set {positionOffset = value;}
+            set { positionOffset = value; }
         }
+
+        public Vector3 Dimensions
+        {
+            get { return dimensions; }
+            set { dimensions = value; }
+        }
+
+        public Vector3 LocalPosition
+        {
+            get { return localPosition; }
+            set { localPosition = value; }
+        }
+
+
 
         public Quaternion Orientation
         {

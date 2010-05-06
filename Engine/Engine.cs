@@ -282,7 +282,8 @@ namespace Mammoth.Engine
              * 
 
 
-            */
+             * 
+            
 
 
             for (int i = 0; i < 25; i++)
@@ -300,10 +301,19 @@ namespace Mammoth.Engine
                 int crateId = modelDB.getNextOpenID();
                 Crate crate1 = (Crate)ObjectFactories.CreateObject("Crate", crateId, parameters, this);
                 modelDB.registerObject(crate1);
-                Room room = new Room(631,this);
-                room.BuildWall();
+
+                
 
             }
+             * */
+
+            Room room = new Room(631, this);
+            room.BuildWalls(0, 0 , 0);
+            room.BuildWalls(0, 21, 0);
+            room.BuildWalls(0, 42, 0);
+            room.BuildWalls(0, 63, 0);
+            room.BuildWalls(0, 0, 24);
+            room.BuildWalls(24, 0, 24);
 
             // ObjectFactories.content_test(this);
 

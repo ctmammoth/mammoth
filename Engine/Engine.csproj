@@ -84,9 +84,10 @@
     <Compile Include="Objects\IWeapon.cs" />
     <Compile Include="Objects\ObjectFactories.cs" />
     <Compile Include="Objects\Projectile.cs" />
+    <Compile Include="Objects\RealStaticObject.cs" />
     <Compile Include="Player\LocalInputPlayer.cs" />
     <Compile Include="ModelDatabase.cs" />
-    <Compile Include="Objects\Crate.cs" />
+    <Compile Include="Objects\WallBlock.cs" />
     <Compile Include="Objects\Door.cs" />
     <Compile Include="Networking\Car.cs" />
     <Compile Include="Networking\Decoder.cs" />

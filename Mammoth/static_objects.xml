@@ -16,8 +16,8 @@
 			<MODEL>Crate</MODEL>
 		</VARIANT>	
 		<VARIANT NAME="DARK">
-			<DIMENSION WIDTH="3.6" HEIGHT="3.6" LENGTH="3.6" />
-			<LOCAL_POSITION X="-0.83" Y="1.85" Z="-0.85" />			
+			<DIMENSION WIDTH="3" HEIGHT="3" LENGTH="3" />
+			<LOCAL_POSITION X="0" Y="0" Z="-1.8" />			
 			<MODEL>crateflat</MODEL>
 		</VARIANT>		
 	</OBJECT>

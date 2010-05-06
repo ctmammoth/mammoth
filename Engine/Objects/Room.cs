@@ -16,12 +16,15 @@ using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
-    public class Room : BaseObject, IEncodable, IRenderable
+    public class Room : PhysicalObject, IEncodable, IRenderable
     {
         private double width, height, length;
         private double x, y, z;
         private List<BaseObject> objectList;
         private String roomType;
+        ActorDescription boxActorDesc;
+        PhysicsManagerService physics;
+        IModelDBService modelDB;
 
         public Game Game
         {
@@ -38,6 +41,16 @@ namespace Mammoth.Engine
         {
             this.ID = id;
             this.Game = game;
+            boxActorDesc = new ActorDescription()
+            {
+                /*BodyDescription = new BodyDescription()
+                {
+                    Mass = 1000.0f
+                }*/
+            };
+            physics = (PhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            
         }
 
 
@@ -130,34 +143,92 @@ namespace Mammoth.Engine
             //List<BaseObject> objects = XmlHandler.CreateFromXml(roomType);
         }
 
-        public void BuildWall()
+        public void BuildWalls(Double X, Double Y, Double Z)
+        {
+            BuildWall("X", X + 3, "Z", Z + 18, Y);
+            BuildWall("X", X + 3, "Z", Z - 3, Y);
+            BuildWall("Z", Z + 0, "X", X + 0, Y);
+            BuildWall("Z", Z + 0, "X", X + 21, Y);
+            BuildCeiling(X,Y,Z);
+            this.Actor = physics.CreateActor(boxActorDesc);
+            // this.Position = new Vector3((float)X, (float)Y, (float)Z);
+        }
+
+
+        public void BuildWall(String alongAxis, double alongOffset, String oppositeAxis, double oppositeOffset, double height)
         {
 
-            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            
 
             ObjectParameters parameters;
-            for (int i = 0; i < 25; i++)
+
+            
+
+
+
+            for (int i = 0; i < 36; i++)
             {
                 parameters = new ObjectParameters();
-                Double number1 = (3.6 * (i / 5));
-                Double number2 = (3.6 * (i % 5));
+                Double number1 = (3 * (i / 6));
+                Double number2 = (3 * (i % 6));
 
 
-                parameters.AddAttribute("X", number1.ToString());
-                parameters.AddAttribute("Y", number2.ToString());
-                parameters.AddAttribute("Z", "14.4");
+                parameters.AddAttribute(alongAxis, (alongOffset + number1).ToString());
+                parameters.AddAttribute("Y", (number2+(height)).ToString() );
+                parameters.AddAttribute(oppositeAxis, oppositeOffset.ToString());
                 parameters.AddAttribute("Crate_Type", "DARK");
 
 
-                if ((!(i > 9 && i < 12)))
+                if (!((i>11&&i<15)||(i>17&&i<21)))
                 {
                     int crateId = modelDB.getNextOpenID();
-                    Crate crate1 = (Crate)ObjectFactories.CreateObject("Crate", crateId, parameters, this.Game);
-                    modelDB.registerObject(crate1);
+                    WallBlock crate1 = (WallBlock)ObjectFactories.CreateObject("Crate", crateId, parameters, this.Game);
+                    modelDB.registerObject(crate1);                    
+                    
+                    boxActorDesc.Shapes.Add(new BoxShapeDescription()
+                    {
+                        Size = crate1.Dimensions,
+                        LocalPosition = crate1.LocalPosition + crate1.NonPhysicalPosition
+                    });
+
                 }
 
             }
         }
+
+        public void BuildCeiling(Double X, Double Y, Double Z)
+        {
+            ObjectParameters parameters = new ObjectParameters();
+            for (int i = 0; i < 64; i++)
+            {
+                parameters = new ObjectParameters();
+                Double number1 = (3 * (i / 8));
+                Double number2 = (3 * (i % 8));
+
+
+                parameters.AddAttribute("X", (X + number1).ToString());
+                parameters.AddAttribute("Y", (Y+18.0f).ToString());
+                parameters.AddAttribute("Z", (Z + number2 - 3).ToString());
+                parameters.AddAttribute("Crate_Type", "DARK");
+
+                
+                if (!(i==0||i==7||i==63||i==56||i==9||i==54))
+                {
+                    int crateId = modelDB.getNextOpenID();
+                    WallBlock crate1 = (WallBlock)ObjectFactories.CreateObject("Crate", crateId, parameters, this.Game);
+                    modelDB.registerObject(crate1);
+
+                    boxActorDesc.Shapes.Add(new BoxShapeDescription()
+                    {
+                        Size = crate1.Dimensions,
+                        LocalPosition = crate1.LocalPosition + crate1.NonPhysicalPosition
+                    });
+
+                }
+            }
+
+        }
+
 
 
         private class PossibleObjects
