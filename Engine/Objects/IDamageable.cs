@@ -27,7 +27,7 @@ namespace Mammoth.Engine
         /// Deals damage to this damageable.
         /// </summary>
         /// <param name="damage">The amount of damage to deal: negative damage adds health to the damageable.</param>
-        void TakeDamage(float damage);
+        void TakeDamage(float damage, IDamager inflicter);
 
         /// <summary>
         /// Defines the action of an object once Health reaches 0.

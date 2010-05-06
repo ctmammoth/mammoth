@@ -52,7 +52,7 @@ namespace Mammoth.Engine
             if (objectHit != null && objectHit is IDamageable)
             {
                 Console.WriteLine("Damaging a mofo of type " + objectHit.getObjectType());
-                ((IDamageable)objectHit).TakeDamage(GetDamage());
+                ((IDamageable)objectHit).TakeDamage(GetDamage(), this);
             }
         }
 

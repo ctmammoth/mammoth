@@ -97,13 +97,6 @@ namespace Mammoth.Engine
         /// <param name="gameTime">The Game Time.</param>
         public override void Update(GameTime gameTime)
         {
-            // Check whether the player is dead
-            /*if (Health <= 0)
-            {
-                Die();
-                return;
-            }*/
-
             // Load services for use later.
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             IInputService inputService = (IInputService)this.Game.Services.GetService(typeof(IInputService));
@@ -227,6 +220,27 @@ namespace Mammoth.Engine
             //If you're using the first-person camera, don't draw your own geometry.
             if (cam.Type != Camera.CameraType.FIRST_PERSON)
                 r.DrawRenderable(this);
+        }
+
+        public override void TakeDamage(float damage, IDamager inflicter)
+        {
+            base.TakeDamage(damage, inflicter);
+            if (this.Health <= 0)
+            {
+                Die();
+                Bullet b = (Bullet) inflicter;
+                Console.WriteLine("Player " + this.ID + " was killed by Player " + b.Creator);
+            }
+        }
+
+        /// <summary>
+        /// Respawns the player when the it dies.
+        /// </summary>
+        public override void Die()
+        {
+            base.Die();
+            Console.WriteLine("Player " + ID + " died.");
+            this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
         }
 
         #region IEncodable Members

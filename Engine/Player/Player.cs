@@ -56,12 +56,12 @@ namespace Mammoth.Engine
             set;
         }
 
-        public void TakeDamage(float damage)
+        public virtual void TakeDamage(float damage, IDamager inflicter)
         {
             this.Health -= damage;
         }
 
-        public void Die()
+        public virtual void Die()
         {
             this.NumDeaths++;
         }
