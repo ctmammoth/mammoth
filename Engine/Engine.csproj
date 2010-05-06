@@ -128,6 +128,7 @@
     <Compile Include="Objects\SimpleGun.cs" />
     <Compile Include="Objects\StaticObject.cs" />
     <Compile Include="Interface\TWidget.cs" />
+    <Compile Include="StatsScreen.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="XmlHandler.cs" />
   </ItemGroup>

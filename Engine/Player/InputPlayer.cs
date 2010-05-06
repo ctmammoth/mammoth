@@ -13,6 +13,8 @@ using Mammoth.Engine.Input;
 using Mammoth.Engine.Physics;
 using Mammoth.Engine.Objects;
 using Mammoth.Engine.Networking;
+using Mammoth.Engine.Interface;
+using Mammoth;
 
 namespace Mammoth.Engine
 {
@@ -179,7 +181,14 @@ namespace Mammoth.Engine
 
                 if (input.IsKeyDown(InputType.Right)) // Right?
                     motion += Vector3.Right;
-                //}
+
+                if (input.KeyPressed(InputType.Stats))
+                {
+                    TScreenManager t = (TScreenManager)this.Game.Services.GetService(typeof(TScreenManager));
+                    IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
+                    int myID = ID >> 25;
+                    t.AddScreen(new StatsScreen(this.Game, NumKills, NumCaptures, NumDeaths, myID, g));
+                }
 
                 // Normalize the motion vector (so we don't move at twice the speed when moving diagonally).
                 if (motion != Vector3.Zero)

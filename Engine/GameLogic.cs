@@ -106,6 +106,10 @@ namespace Mammoth.Engine
             }
         }
 
+        /// <summary>
+        /// If someone on a team kills another, give that person's team a point.
+        /// </summary>
+        /// <param name="client_id">The client id of the killer</param>
         public void AwardKill(int client_id)
         {
             Console.WriteLine("Awarding kill...");
@@ -122,5 +126,22 @@ namespace Mammoth.Engine
             }
         }
 
+
+        /// <summary>
+        /// Returns the team on which the client indicated resigns.
+        /// </summary>
+        /// <param name="client_id">The client ID in query</param>
+        /// <returns>The team on which that client resides</returns>
+        public Team GetTeamOf(int client_id)
+        {
+            if (team1.GetTeamMemberList().Contains(client_id))
+            {
+                return team1;
+            }
+            else
+            {
+                return team2;
+            }
+        }
     }
 }
