@@ -91,14 +91,14 @@ namespace Mammoth.Engine
         {
             get
             {
-                return Position;
+                return _position;
             }
             set
             {
                 if (Owner != null)
-                    Position = Owner.Position;
+                    _position = Owner.Position;
                 else
-                    Position = value;
+                    _position = value;
             }
         }
 
@@ -125,13 +125,15 @@ namespace Mammoth.Engine
 
         #endregion
 
+        private Vector3 _position;
+
         private double _lastFiredTime;
         private double _lastReloadTime;
 
         private const double FIRE_RATE = 4.0;
         private const double RELOAD_TIME = 2000.0;
 
-        public SimpleGun(Game game)
+        public SimpleGun(Game game, Player owner)
             : base(game)
         {
             // Give each magazine 15 bullets
@@ -144,6 +146,11 @@ namespace Mammoth.Engine
 
             _lastFiredTime = 0;
             _lastReloadTime = -1;
+            // Set the owner
+            Owner = owner;
+            // Set location
+            Position = owner.Position;
+            Orientation = owner.HeadOrient;
         }
 
         #region IWeapon Members

@@ -65,18 +65,16 @@ namespace Mammoth.Engine
         /// </summary>
         public InputPlayer(Game game) : base(game)
         {
-            // Give the player 5 weapons, for now
-            Items = new IWeapon[5];
-            // Give the player a simple gun, for now
-            Items[0] = new SimpleGun(game);
-            CurWeapon = Items[0];
-            // Set the owner of the weapon to this player
-            ((IHoldeableItem)CurWeapon).SetOwner(this);
-
             // Initializes PhysX of a player.
             InitializePhysX();
 
             this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
+
+            // Give the player 5 weapons, for now
+            Items = new IWeapon[5];
+            // Give the player a simple gun, for now
+            Items[0] = new SimpleGun(game, this);
+            CurWeapon = Items[0];
         }
 
         /// <summary>
@@ -199,6 +197,10 @@ namespace Mammoth.Engine
                 // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
                 if (input.KeyPressed(InputType.Fire))
                     this.Shoot(gameTime);
+
+                // Reload the user's gun
+                if (input.KeyPressed(InputType.Reload))
+                    this.Reload();
 
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
