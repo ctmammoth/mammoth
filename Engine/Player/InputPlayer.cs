@@ -230,7 +230,7 @@ namespace Mammoth.Engine
             // Update main weapon
             ((BaseObject)CurWeapon).Update(gameTime);
 
-            Console.WriteLine("Weapon " + ((BaseObject)CurWeapon).getObjectType() + " has " + CurWeapon.ShotsLeft() + " shots left.");
+            //Console.WriteLine("Weapon " + ((BaseObject)CurWeapon).getObjectType() + " has " + CurWeapon.ShotsLeft() + " shots left.");
         }
 
         /// <summary>
@@ -277,7 +277,7 @@ namespace Mammoth.Engine
             if (cam.Type != Camera.CameraType.FIRST_PERSON)
                 r.DrawRenderable(this);
             if (CurWeapon != null)
-                r.DrawRenderable(CurWeapon);
+                ((BaseObject)CurWeapon).Draw(gameTime);
         }
 
         public override void TakeDamage(float damage, IDamager inflicter)

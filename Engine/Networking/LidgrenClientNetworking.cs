@@ -122,7 +122,8 @@ namespace Mammoth.Engine.Networking
             buffer.WriteVariableInt32(message.Data.Length);
             buffer.WritePadBits();
             buffer.Write(message.Data);
-            _client.SendMessage(buffer, NetChannel.ReliableInOrder1);
+            if (_client.Status == NetConnectionStatus.Connected)
+                _client.SendMessage(buffer, NetChannel.ReliableInOrder1);
         }
 
         /// <summary>
