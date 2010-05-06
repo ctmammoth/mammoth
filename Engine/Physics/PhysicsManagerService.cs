@@ -206,7 +206,7 @@ namespace Mammoth.Engine.Physics
         public PhysicalObject RaycastClosestShape(Vector3 position, Vector3 direction)
         {
             // Return the userdata for the actor for the shape that was hit
-            RaycastHit rayHit = curScene.RaycastClosestShape(new StillDesign.PhysX.Ray(position, direction), ShapesType.All);
+            RaycastHit rayHit = curScene.RaycastClosestShape(new StillDesign.PhysX.Ray(position, direction), ShapesType.Dynamic);
             // Make sure the shape that was hit exists and that its actor has userdata
             if (rayHit.Shape != null && rayHit.Shape.Actor.UserData != null)
             {

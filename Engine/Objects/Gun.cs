@@ -191,6 +191,7 @@ namespace Mammoth.Engine.Objects
                     direction = Vector3.Add(direction, new Vector3((float)(directionPerturber.NextDouble() - 1) * Inaccuracy,
                         (float)(directionPerturber.NextDouble() - 1) * Inaccuracy,
                         (float)(directionPerturber.NextDouble() - 1) * Inaccuracy));
+                    direction.Normalize();
 
                     SpawnBullet(position, direction, shooterID);
                 }

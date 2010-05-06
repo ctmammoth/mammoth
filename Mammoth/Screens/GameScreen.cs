@@ -73,6 +73,19 @@ namespace Mammoth
             audio.playMusic("In_Game");
             audio.loopSound("Ambient");
 
+            // Initialize the HUD to cover the screen.
+            TWidget baseWid = new TWidget(this.Game)
+            {
+                Bounds = this.Game.Window.ClientBounds
+            };
+
+            baseWid.Add(new TText(this.Game, "ZOMG ROFLOL")
+            {
+                Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, 150)
+            });
+
+            baseWid.Initialize();
+
             // Now, we want to initialize all of the components we just added.
             foreach (GameComponent component in this.Components)
                 component.Initialize();
@@ -160,6 +173,9 @@ namespace Mammoth
 
             // Maybe here is where we would draw HUD stuff?  Or maybe an explicit call to something
             // that draws the HUD for us.  Some widget code, I suppose.
+
+            // Draw the HUD
+            //HUDWidget.Draw(gameTime);
         }
 
         /// <summary>
@@ -201,6 +217,11 @@ namespace Mammoth
             this.Game.Services.RemoveService(typeof(ICameraService));
         }
 
+        #endregion
+
+        #region Variables
+        // This widget is used to draw the HUD.
+        private TWidget HUDWidget;
         #endregion
 
         #region Properties
