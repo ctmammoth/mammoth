@@ -51,7 +51,7 @@ namespace Mammoth.Engine
 
             // Load a retarded model
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
-            this.Model3D = r.LoadModel("soldier-low-poly");
+            this.Model3D = r.LoadModel("bullet_low");
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
 
@@ -95,7 +95,7 @@ namespace Mammoth.Engine
             Vector3 tempPos = Position + Vector3.Multiply(Velocity, (float)gameTime.ElapsedGameTime.TotalSeconds);
 
             // Perform the raycast
-            RaycastHit rayHit = physics.RaycastClosestShape(Position + (new Vector3(0.0f, 8.0f, 0.0f)), InitialDirection);
+            RaycastHit rayHit = physics.RaycastClosestShape(Position, InitialDirection);
 
             // Get the difference in position
             float distanceMoved = Vector3.Subtract(tempPos, Position).Length();

@@ -112,7 +112,7 @@ namespace Mammoth.Engine
         public int getNextOpenID()
         {
             INetworkingService net = (INetworkingService)this.Game.Services.GetService(typeof(INetworkingService));
-            Console.WriteLine("ID = " + (net.ClientID << 25 | (nextID + 1)));
+            //Console.WriteLine("ID = " + (net.ClientID << 25 | (nextID + 1)));
             return net.ClientID << 25 | nextID++;
         }
 
