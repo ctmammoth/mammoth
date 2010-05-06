@@ -8,7 +8,7 @@ using Mammoth.Engine.Objects;
 
 namespace Mammoth.Engine.Objects
 {
-    class Revolver : SimpleGun
+    class Revolver : Gun
     {
         public Revolver(Game game, Player player)
             : base(game, player)

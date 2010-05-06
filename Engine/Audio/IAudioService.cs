@@ -10,5 +10,6 @@ namespace Mammoth.Engine.Audio
         void playMusic(string toPlay);
         void playSound(string toPlay);
         void loopSound(string toPlay);
+        void stopSounds();
     }
 }

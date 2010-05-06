@@ -86,6 +86,12 @@ namespace Mammoth.Engine.Audio
             sei.Play();
         }
 
+        public void stopSounds()
+        {
+            foreach (SoundEffectInstance sei in _loopedSounds)
+                sei.Stop();
+        }
+
         #endregion IAudioService Members
 
         public override void Update(GameTime gameTime)

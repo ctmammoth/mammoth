@@ -129,7 +129,7 @@
     <Compile Include="Player\RemotePlayer.cs" />
     <Compile Include="Graphics\Renderer.cs" />
     <Compile Include="Objects\Room.cs" />
-    <Compile Include="Objects\SimpleGun.cs" />
+    <Compile Include="Objects\Gun.cs" />
     <Compile Include="Objects\StaticObject.cs" />
     <Compile Include="Interface\TWidget.cs" />
     <Compile Include="StatsScreen.cs" />

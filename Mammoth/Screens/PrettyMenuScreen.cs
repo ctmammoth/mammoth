@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 
 using Mammoth.Engine.Interface;
+using Mammoth.Engine.Audio;
 using Mammoth.Engine;
 
 namespace Mammoth
@@ -65,6 +66,10 @@ namespace Mammoth
 
             // Set the base widget for this screen.
             _baseWidget = baseWid;
+
+            // Play the menu music
+            IAudioService audio = (IAudioService)Game.Services.GetService(typeof(IAudioService));
+            audio.playMusic("Main_Menu");
 
             // Initialize the base widget and children.
             base.Initialize();
