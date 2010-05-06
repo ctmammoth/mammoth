@@ -19,6 +19,8 @@ namespace Mammoth.Engine.Physics
         Actor CreateActor(ActorDescription aDesc);
         Actor CreateActor(ActorDescription aDesc, PhysicalObject owner);
         void RemoveActor(Actor toRemove);
+
+        CCDSkeleton CreateCCDSkeleton(TriangleMeshDescription tDesc);
     
         Controller CreateController(ControllerDescription cDesc, PhysicalObject owner);
 
@@ -200,6 +202,11 @@ namespace Mammoth.Engine.Physics
                 return null;
         }
 
+        // TODO
+        public CCDSkeleton CreateCCDSkeleton(TriangleMeshDescription tDesc)
+        {
+            return core.CreateCCDSkeleton(tDesc);
+        }
 
         /// <summary>
         /// Creates a new Actor in the current scene.
