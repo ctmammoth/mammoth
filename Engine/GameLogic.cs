@@ -14,6 +14,7 @@ namespace Mammoth.Engine
 
         public GameLogic()
         {
+            Console.WriteLine("Constructing game logic");
             team1 = new Team(1);
             team2 = new Team(2);
         }
@@ -107,6 +108,8 @@ namespace Mammoth.Engine
 
         public void AwardKill(int client_id)
         {
+            Console.WriteLine("Awarding kill...");
+
             if (team1.GetTeamMemberList().Contains(client_id))
             {
                 Console.WriteLine("Awarding kill to Team 1. Thanks to Player " + client_id);
