@@ -94,6 +94,7 @@
     <Compile Include="Interface\TWidgetScreen.cs" />
     <Compile Include="Objects\MinimalPhysicalObject.cs" />
     <Compile Include="Objects\Projectile.cs" />
+    <Compile Include="Objects\Revolver.cs" />
     <Compile Include="Player\LocalInputPlayer.cs" />
     <Compile Include="ModelDatabase.cs" />
     <Compile Include="Objects\Crate.cs" />
