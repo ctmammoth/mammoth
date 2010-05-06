@@ -99,8 +99,17 @@ namespace Mammoth.Engine
             Console.WriteLine("Proxy player took damage");
             if (this.Health <= 0)
             {
+                Projectile p = (Projectile)inflicter;
+
+                //update teams kills
                 IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
-                g.AwardKill(this.ClientID);
+                int cid = p.Creator >> 25;
+                g.AwardKill(cid);
+
+                //update players kills
+                IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+                ProxyInputPlayer pip = mdb.getObject(p.Creator);
+                pip.NumKills++;
             }
             base.TakeDamage(damage, inflicter);
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using Mammoth.Engine.Input;
 using Mammoth.Engine.Interface;
@@ -27,7 +28,8 @@ namespace Mammoth.Engine
             // Create a base widget (kinda like a JFrame or a JPanel that contains everything else).
             TWidget baseWid = new TWidget(this.Game)
             {
-                Bounds = this.Game.Window.ClientBounds
+                Bounds = this.Game.Window.ClientBounds,
+                //BgColor = new Color(0.0f, 0.0f, 0.0f, 0.5f)
             };
 
 

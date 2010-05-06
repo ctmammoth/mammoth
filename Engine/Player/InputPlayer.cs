@@ -189,6 +189,7 @@ namespace Mammoth.Engine
                 if (input.IsKeyDown(InputType.Right)) // Right?
                     motion += Vector3.Right;
 
+                //TODO: Put this somewhere not sucky.
                 if (input.KeyPressed(InputType.Stats) && this is LocalInputPlayer)
                 {
                     TScreenManager t = (TScreenManager)this.Game.Services.GetService(typeof(TScreenManager));
