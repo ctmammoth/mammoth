@@ -75,14 +75,14 @@ namespace Mammoth.Engine
         {
             get
             {
-                return Orientation;
+                return _orientation;
             }
             set
             {
                 if (Owner != null)
-                    Orientation = Owner.HeadOrient;
+                    _orientation = Owner.HeadOrient;
                 else
-                    Orientation = value;
+                    _orientation = value;
             }
         }
 
@@ -126,6 +126,7 @@ namespace Mammoth.Engine
         #endregion
 
         private Vector3 _position;
+        private Quaternion _orientation;
 
         private double _lastFiredTime;
         private double _lastReloadTime;
