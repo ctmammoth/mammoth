@@ -6,6 +6,12 @@ namespace Mammoth.Engine
 {
     public abstract class PhysicalObject : BaseObject
     {
+        public PhysicalObject(Game game)
+            : base(game)
+        {
+
+        }
+
         # region Properties
         public Actor Actor
         {

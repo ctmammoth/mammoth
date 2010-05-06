@@ -30,8 +30,9 @@ namespace Mammoth.Engine
         #endregion
 
         public SimpleGun(Game game)
+            : base(game)
         {
-            Game = game;
+            
         }
 
         #region IWeapon Members

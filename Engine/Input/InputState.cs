@@ -21,7 +21,7 @@ namespace Mammoth.Engine.Input
         Jump = 0x20,
         Crouch = 0x40,
         Reload = 0x80,
-        Shoot = 0x100,
+        Fire = 0x100,
         Zoom = 0x200
     }
 

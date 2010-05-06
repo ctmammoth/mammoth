@@ -66,7 +66,8 @@ namespace Mammoth
             this.Components.Add(screenManager);
 
             // Create the networking component, and have it update after all of the rest of the code.
-            LidgrenClientNetworking net = new LidgrenClientNetworking(this)
+            //LidgrenClientNetworking net = new LidgrenClientNetworking(this)
+            DummyClientNetworking net = new DummyClientNetworking(this)
             {
                 UpdateOrder = 3
             };

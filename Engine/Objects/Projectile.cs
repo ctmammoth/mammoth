@@ -42,8 +42,8 @@ namespace Mammoth.Engine
 
         // Default
         protected Projectile(Game game)
+            : base(game)
         {
-            Game = game;
 
         }
 

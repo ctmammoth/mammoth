@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 using StillDesign.PhysX;
 
@@ -15,40 +16,18 @@ namespace Mammoth.Engine
 {
     public abstract class InputPlayer : Player, IDestructable
     {
-
-        /*[Flags]
-        public enum EncodableProperties
-        {
-            None = 0x00,
-            Position = 0x01,
-            Orientation = 0x02,
-            Velocity = 0x04,
-            Health = 0x08
-        }*/
-
-
-        //EncodableProperties dirty;
-
         public InputPlayer(Game game) : base(game)
         {
-            Init();
-            //dirty = EncodableProperties.None;
-        }
-
-        protected void Init()
-        {
             this.Height = 6.0f;
+
+            // HACK: WTF.  FUCK THIS.
+            this.Game = game;
 
             InitializePhysX();
 
             /// TODO: Remove this call - the player will get spawned by the game logic.
             this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
-
-            this.CurrentCollision = 0;
-
-            this.Health = 100;
         }
-
 
         public override void Spawn(Vector3 pos, Quaternion orient)
         {
@@ -56,6 +35,10 @@ namespace Mammoth.Engine
 
             this.Yaw = 0.0f;
             this.Pitch = 0.0f;
+
+            this.CurrentCollision = 0;
+
+            this.Health = 100;
         }
 
         // TODO: Clean this up a bit?
@@ -170,7 +153,7 @@ namespace Mammoth.Engine
 
                 //Console.WriteLine("Position before throw: " + Position);
                 // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
-                if (input.KeyPressed(InputType.Shoot))
+                if (input.KeyPressed(InputType.Fire))
                     this.Throw();
                 //Console.WriteLine("Position after throw: " + Position);
                 //Console.WriteLine("Orientation after throw: " + Orientation);

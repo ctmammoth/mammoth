@@ -73,9 +73,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Engine.cs" />
+    <Compile Include="Graphics\Skybox.cs" />
     <Compile Include="Objects\Bullet.cs" />
-    <Compile Include="Camera.cs" />
+    <Compile Include="Graphics\Camera.cs" />
     <Compile Include="ClientState.cs" />
     <Compile Include="Objects\IDamager.cs" />
     <Compile Include="Objects\IDestructable.cs" />
@@ -107,8 +107,8 @@
     <Compile Include="Interface\TScreenManager.cs" />
     <Compile Include="Interface\TSimpleButton.cs" />
     <Compile Include="Interface\TText.cs" />
-    <Compile Include="IRenderable.cs" />
-    <Compile Include="IRenderService.cs" />
+    <Compile Include="Graphics\IRenderable.cs" />
+    <Compile Include="Graphics\IRenderService.cs" />
     <Compile Include="Player\InputPlayer.cs" />
     <Compile Include="Networking\LidgrenClientNetworking.cs" />
     <Compile Include="Objects\BaseObject.cs" />
@@ -120,12 +120,11 @@
     <Compile Include="Player\Player.cs" />
     <Compile Include="Player\ProxyInputPlayer.cs" />
     <Compile Include="Player\RemotePlayer.cs" />
-    <Compile Include="Renderer.cs" />
+    <Compile Include="Graphics\Renderer.cs" />
     <Compile Include="Objects\Room.cs" />
     <Compile Include="Objects\SimpleGun.cs" />
     <Compile Include="Objects\StaticObject.cs" />
     <Compile Include="Interface\TWidget.cs" />
-    <Compile Include="Networking\Test.cs" />
     <Compile Include="XmlHandler.cs" />
   </ItemGroup>
   <ItemGroup>

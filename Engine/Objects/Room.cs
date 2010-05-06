@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Microsoft.Xna.Framework;
+
 using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
@@ -37,7 +39,8 @@ namespace Mammoth.Engine
             throw new NotImplementedException();
         }
 
-        public Room(int id, ObjectParameters parameters)
+        public Room(Game game, int id, ObjectParameters parameters)
+            : base(game)
         {
             this.ID = id;            
             foreach (String attribute in parameters.GetAttributes()) 

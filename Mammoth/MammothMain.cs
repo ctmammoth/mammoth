@@ -18,8 +18,6 @@ namespace Mammoth
             }
             if (args[0].Equals("client"))
             {
-                //Mammoth.Engine.Engine game = new Mammoth.Engine.Engine(false);
-                //game.Run();
                 Client client = new Client();
                 client.Run();
             }
@@ -31,10 +29,9 @@ namespace Mammoth
             else if (args[0].Equals("content_test"))
             {
                 int x = 0;
-                Mammoth.Engine.Engine game;
-                game = new Mammoth.Engine.Engine(false);
-                game.Run();
-                // ObjectFactories.content_test(game);
+                Client client = new Client();
+                client.Run();
+                // ObjectFactories.content_test(client);
             }
             else
             {

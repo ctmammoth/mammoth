@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Microsoft.Xna.Framework;
+
 using StillDesign.PhysX;
 
 namespace Mammoth.Engine.Objects
@@ -12,7 +14,8 @@ namespace Mammoth.Engine.Objects
     /// </summary>
     public class MinimalPhysicalObject : PhysicalObject
     {
-        public MinimalPhysicalObject(Actor a)
+        public MinimalPhysicalObject(Game game, Actor a)
+            : base(game)
         {
             Actor = a;
             a.UserData = this;

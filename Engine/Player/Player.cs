@@ -21,8 +21,8 @@ namespace Mammoth.Engine
         
 
         public Player(Game game)
+            : base(game)
         {
-            this.Game = game;
 
         }
 

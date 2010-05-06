@@ -17,7 +17,8 @@ namespace Mammoth.Engine
 
 
 
-        public Crate(int id, ObjectParameters parameters)
+        public Crate(Game game, int id, ObjectParameters parameters)
+            : base(game)
         {
             this.ID = id;
             Vector3 temp = Vector3.Zero;

@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 using Mammoth.Engine;
 using Mammoth.Engine.Physics;
+using Mammoth.Engine.Graphics;
 using Mammoth.Engine.Interface;
 using Mammoth.Engine.Networking;
 
@@ -50,7 +51,7 @@ namespace Mammoth
                 Size = new Vector3(100.0f, 2.0f, 100.0f),
                 LocalPosition = new Vector3(0.0f, -1.0f, 0.0f)
             });
-            new Mammoth.Engine.Objects.MinimalPhysicalObject(physics.CreateActor(boxActorDesc));
+            new Mammoth.Engine.Objects.MinimalPhysicalObject(this.Game, physics.CreateActor(boxActorDesc));
 
             // Just to test collisions...
             boxActorDesc = new ActorDescription();
@@ -59,7 +60,7 @@ namespace Mammoth
                 Size = new Vector3(0.5f, 0.5f, 0.5f),
                 LocalPosition = new Vector3(-3.0f, 3.0f, 0.0f)
             });
-            new Mammoth.Engine.Objects.MinimalPhysicalObject(physics.CreateActor(boxActorDesc));
+            new Mammoth.Engine.Objects.MinimalPhysicalObject(this.Game, physics.CreateActor(boxActorDesc));
 
             #endregion
 
@@ -90,6 +91,14 @@ namespace Mammoth
             // Now, we want to initialize all of the components we just added.
             foreach (GameComponent component in this.Components)
                 component.Initialize();
+        }
+
+        public override void LoadContent()
+        {
+            this.Components.Add(new Skybox(this.Game)
+            {
+                DrawOrder = 3
+            });
         }
 
         public override void Update(GameTime gameTime, bool hasFocus, bool visible)
@@ -145,13 +154,6 @@ namespace Mammoth
 
         public override void Draw(GameTime gameTime)
         {
-            // Draw the PhysX debug geometry if we're doing PhysX debugging.
-        #if PHYSX_DEBUG
-            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
-            IPhysicsManagerService physics = (IPhysicsManagerService) this.Game.Services.GetService(typeof(IPhysicsManagerService));
-            r.DrawPhysXDebug(physics.Scene);
-        #endif
-
             // Get the list of drawable game components in the component collection.
             var drawList = from c in this.Components
                              where c is IDrawable
@@ -160,6 +162,13 @@ namespace Mammoth
             // Draw them according to their DrawOrder.  Yes, this doesn't need to sort every time.
             foreach (IDrawable component in drawList.OrderBy((comp) => comp.DrawOrder))
                 component.Draw(gameTime);
+
+            // Draw the PhysX debug geometry if we're doing PhysX debugging.
+        #if PHYSX_DEBUG
+            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
+            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            r.DrawPhysXDebug(physics.Scene);
+        #endif
 
             // Maybe here is where we would draw HUD stuff?  Or maybe an explicit call to something
             // that draws the HUD for us.  Some widget code, I suppose.

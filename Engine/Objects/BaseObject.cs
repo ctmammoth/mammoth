@@ -9,6 +9,11 @@ namespace Mammoth.Engine
 {
     public abstract class BaseObject
     {
+        public BaseObject(Game game)
+        {
+            this.Game = game;
+        }
+
         private static int nextId = 0;
         private String objectType;
 
@@ -25,9 +30,14 @@ namespace Mammoth.Engine
 
         public abstract void InitializeDefault(int id);
 
-       
+        #region Properties
 
+        public Game Game
+        {
+            get;
+            protected set;
+        }
 
-
+        #endregion
     }
 }

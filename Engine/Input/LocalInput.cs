@@ -56,7 +56,7 @@ namespace Mammoth.Engine.Input
             // Add in mouse-based input.
             MouseState mouseState = Mouse.GetState();
             if (mouseState.LeftButton == ButtonState.Pressed)
-                newState |= InputType.Shoot;
+                newState |= InputType.Fire;
             if (mouseState.RightButton == ButtonState.Pressed)
                 newState |= InputType.Zoom;
 
