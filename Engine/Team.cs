@@ -61,6 +61,10 @@ namespace Mammoth.Engine
             NumCaptures++;
         }
 
+        public int GetCaptures()
+        {
+            return NumCaptures;
+        }
 
         /// <summary>
         /// Adds a kill to the team.
@@ -68,6 +72,11 @@ namespace Mammoth.Engine
         public void AddTeamKill()
         {
             NumKills++;
+        }
+
+        public int GetKills()
+        {
+            return NumKills;
         }
 
         /// <summary>
@@ -78,9 +87,14 @@ namespace Mammoth.Engine
             return NumKills + (10 * NumCaptures);
         }
 
+        /// <summary>
+        /// Returns the team name as a string.
+        /// </summary>
+        /// <returns>"Team + (team id)"</returns>
         public string ToString()
         {
             return "Team " + TeamID;
         }
+
     }
 }

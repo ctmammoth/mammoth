@@ -8,6 +8,7 @@ using StillDesign.PhysX;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Mammoth.Screens;
 using Mammoth.Engine;
 using Mammoth.Engine.Input;
 using Mammoth.Engine.Physics;
@@ -66,8 +67,8 @@ namespace Mammoth
             this.Components.Add(screenManager);
 
             // Create the networking component, and have it update after all of the rest of the code.
-            //DummyClientNetworking net = new DummyClientNetworking(this)
-            LidgrenClientNetworking net = new LidgrenClientNetworking(this)
+            DummyClientNetworking net = new DummyClientNetworking(this)
+            //LidgrenClientNetworking net = new LidgrenClientNetworking(this)
             {
             /*DummyClientNetworking net = new DummyClientNetworking(this)
             {*/

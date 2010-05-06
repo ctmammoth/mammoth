@@ -22,7 +22,8 @@ namespace Mammoth.Engine.Input
         Crouch = 0x40,
         Reload = 0x80,
         Fire = 0x100,
-        Zoom = 0x200
+        Zoom = 0x200,
+        Stats = 0x400
     }
 
     public class InputState : IEncodable
