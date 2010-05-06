@@ -30,9 +30,9 @@ namespace Mammoth
             // Create a graphics device manager to deal with graphics devices.
             graphics = new GraphicsDeviceManager(this);
             graphics.SynchronizeWithVerticalRetrace = true;
-            graphics.IsFullScreen = true;
-            graphics.PreferredBackBufferWidth = 1440;
-            graphics.PreferredBackBufferHeight = 900;
+            //graphics.IsFullScreen = true;
+            //graphics.PreferredBackBufferWidth = 1440;
+            //graphics.PreferredBackBufferHeight = 900;
 
             // Set the root directory from which to load game content files.
             Content.RootDirectory = "Content";
@@ -66,11 +66,9 @@ namespace Mammoth
             this.Components.Add(screenManager);
 
             // Create the networking component, and have it update after all of the rest of the code.
-            //DummyClientNetworking net = new DummyClientNetworking(this)
-            LidgrenClientNetworking net = new LidgrenClientNetworking(this)
+            DummyClientNetworking net = new DummyClientNetworking(this)
+            //LidgrenClientNetworking net = new LidgrenClientNetworking(this)
             {
-            /*DummyClientNetworking net = new DummyClientNetworking(this)
-            {*/
                 UpdateOrder = 3
             };
             this.Components.Add(net);

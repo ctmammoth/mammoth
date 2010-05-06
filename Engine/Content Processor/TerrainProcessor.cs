@@ -26,10 +26,10 @@ namespace Mammoth.Engine.ContentProcessors
     [ContentProcessor]
     public class TerrainProcessor : ContentProcessor<Texture2DContent, ModelContent>
     {
-        const float terrainScale = 1.5f;
-        const float terrainBumpiness = 32;
+        const float terrainScale = 3.0f;
+        const float terrainBumpiness = 64;
         const float texCoordScale = 0.1f;
-        const string terrainTexture = "rocks.bmp";
+        const string terrainTexture = "ground-cracked.png";
 
 
         /// <summary>
