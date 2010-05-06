@@ -72,7 +72,6 @@ namespace Mammoth.Server
             this.Components.Add(modelDB);
 
             NetworkComponent.CreateServerNetworking(this);
-            this.Services.AddService(typeof(IDecoder), new Mammoth.Engine.Networking.Decoder(this));
 
             base.Initialize();
         }
