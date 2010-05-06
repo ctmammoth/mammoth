@@ -14,6 +14,7 @@ namespace Mammoth.Engine.Audio
     {
         private Dictionary<string, List<Song>> _songs;
         private Dictionary<string, SoundEffect> _sounds;
+        private Dictionary<string, float> _volumes;
         private List<SoundEffectInstance> _loopedSounds;
         private int _currentSong;
         private string _currentPlaylist;
@@ -25,8 +26,10 @@ namespace Mammoth.Engine.Audio
             _songs = new Dictionary<string, List<Song>>();
             _sounds = new Dictionary<string, SoundEffect>();
             _loopedSounds = new List<SoundEffectInstance>();
+            _volumes = new Dictionary<string, float>();
             loadSongs();
             loadSounds();
+            MediaPlayer.Volume = 0.7f;
         }
 
         private void loadSongs()
@@ -37,9 +40,9 @@ namespace Mammoth.Engine.Audio
             _songs["Main_Menu"].Add(manager.Load<Song>("songs/onestop"));
 
             _songs.Add("In_Game", new List<Song>());
+            _songs["In_Game"].Add(manager.Load<Song>("songs/momentviolence"));
             _songs["In_Game"].Add(manager.Load<Song>("songs/minority"));
             _songs["In_Game"].Add(manager.Load<Song>("songs/superman"));
-            _songs["In_Game"].Add(manager.Load<Song>("songs/momentviolence"));
         }
 
         private void loadSounds()
@@ -49,6 +52,7 @@ namespace Mammoth.Engine.Audio
             _sounds.Add("Gunshot", manager.Load<SoundEffect>("sounds/gunshot"));
             _sounds.Add("Ambient", manager.Load<SoundEffect>("sounds/ambient"));
             _sounds.Add("Reload", manager.Load<SoundEffect>("sounds/reload"));
+            _volumes.Add("Reload", 1.0f);
         }
 
         #region IAudioService Members
@@ -57,18 +61,26 @@ namespace Mammoth.Engine.Audio
         {
             _currentSong = 0;
             _currentPlaylist = toPlay;
-            //MediaPlayer.Play(_songs[toPlay][0]);
+            Song s;
+            MediaPlayer.Play(_songs[toPlay][0]);
         }
 
         public void playSound(string toPlay)
         {
-            _sounds[toPlay].Play();
+            if (_volumes.ContainsKey(toPlay))
+                _sounds[toPlay].Play(_volumes[toPlay], 0.0f, 0.0f);
+            else
+                _sounds[toPlay].Play(0.7f, 0.0f, 0.0f);
         }
 
         public void loopSound(string toPlay)
         {
             SoundEffectInstance sei = _sounds[toPlay].CreateInstance();
             _loopedSounds.Add(sei);
+            if (_volumes.ContainsKey(toPlay))
+                sei.Volume = _volumes[toPlay];
+            else
+                sei.Volume = 0.7f;
             sei.Play();
         }
 
