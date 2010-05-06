@@ -73,7 +73,6 @@ namespace Mammoth.Engine.Networking
 
                 // Give this projectile an ID
                 b.ID = modelDB.getNextOpenID();
-                modelDB.registerObject(b);
             }
         }
 

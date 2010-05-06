@@ -40,7 +40,7 @@ namespace Mammoth.Engine
         #endregion
 
         // Default
-        protected Projectile(Game game, int creator)
+        protected Projectile(Game game, int creator) 
             : base(game)
         {
             Creator = creator;
@@ -55,5 +55,10 @@ namespace Mammoth.Engine
         }
 
         #endregion
+
+        public override string getObjectType()
+        {
+            return "Projectile";
+        }
     }
 }

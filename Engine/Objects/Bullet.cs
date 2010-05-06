@@ -30,6 +30,20 @@ namespace Mammoth.Engine
             InitialPosition = position;
             InitialDirection = direction;
 
+            // Fire the bullet
+            FireBullet();
+        }
+
+        public Bullet(Game game)
+            : base(game, 0)
+        {
+        }
+
+        /// <summary>
+        /// Performs the ray cast to shoot the bullet.
+        /// </summary>
+        private void FireBullet()
+        {
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
 
             // Just handle bullets by raycasting
@@ -39,23 +53,7 @@ namespace Mammoth.Engine
                 ((IDamageable)objectHit).TakeDamage(GetDamage());
         }
 
-        public Bullet(Game game)
-            : base(game, 0)
-        {
-        }
-
-        public override void Draw(GameTime gameTime)
-        {
-            base.Draw(gameTime);
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-        }
-
-        // TODO
-        public override string getObjectType()
+        public string getObjectType()
         {
             return "Bullet";
         }
@@ -84,6 +82,9 @@ namespace Mammoth.Engine
 
             Console.WriteLine("Bullet InitialPosition received: " + InitialPosition);
             Console.WriteLine("Bullet InitialDirection received: " + InitialDirection);
+
+            // Fire the bullet from the decoded position in the decoded direction
+            FireBullet();
         }
         #endregion
 
