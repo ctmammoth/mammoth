@@ -125,6 +125,7 @@
     <Compile Include="Objects\StaticObject.cs" />
     <Compile Include="Interface\TWidget.cs" />
     <Compile Include="Networking\Test.cs" />
+    <Compile Include="Team.cs" />
     <Compile Include="XmlHandler.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -16,6 +16,10 @@ namespace Mammoth.Engine
     {
         #region Variables
         protected bool Dead;
+        public int NumKills;
+        public int NumKilled;
+        public int NumCaptures;
+        public Team Team;
         #endregion
 
         
