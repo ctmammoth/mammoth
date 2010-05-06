@@ -44,7 +44,7 @@ namespace Mammoth.Server
                 Size = new Vector3(100.0f, 2.0f, 100.0f),
                 LocalPosition = new Vector3(0.0f, -1.0f, 0.0f)
             });
-            new Mammoth.Engine.Objects.MinimalPhysicalObject(physics.CreateActor(boxActorDesc));
+            new Mammoth.Engine.Objects.MinimalPhysicalObject(this, physics.CreateActor(boxActorDesc));
 
             // Just to test collisions...
             boxActorDesc = new ActorDescription();
@@ -53,7 +53,7 @@ namespace Mammoth.Server
                 Size = new Vector3(5.0f, 5.0f, 5.0f),
                 LocalPosition = new Vector3(-3.0f, 10.0f, 0.0f)
             });
-            new Mammoth.Engine.Objects.MinimalPhysicalObject(physics.CreateActor(boxActorDesc));
+            new Mammoth.Engine.Objects.MinimalPhysicalObject(this, physics.CreateActor(boxActorDesc));
 
             #endregion
 

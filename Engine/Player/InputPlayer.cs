@@ -45,14 +45,12 @@ namespace Mammoth.Engine
         /// <summary>
         /// Initialize a new InputPlayer. Does nothing special.
         /// </summary>
-        /// <param name="game">The Game.</param>
         public InputPlayer(Game game) : base(game)
         {
-            // HACK: WTF.  FUCK THIS.
-            this.Game = game;
-
             //Initializes PhysX of a player.
             InitializePhysX();
+
+            this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
         }
 
         /// <summary>
@@ -62,17 +60,14 @@ namespace Mammoth.Engine
         /// <param name="orient">Starting orientation.</param>
         public override void Spawn(Vector3 pos, Quaternion orient)
         {
-            //CALL PLAYER'S SPAWN
+            // Set the spawn properties that are unique to all players.
             base.Spawn(pos, orient);
 
-            //INPUT PLAYER SPECIFIC PROPERTIES
+            // TODO: Fix this stuff.
+            // Set properties specific to an input-based player.
             this.CurrentCollision = 0;
             this.Yaw = 0.0f;
             this.Pitch = 0.0f;
-
-            this.CurrentCollision = 0;
-
-            this.Health = 100;
         }
 
         /// <summary>
@@ -103,19 +98,17 @@ namespace Mammoth.Engine
         public override void Update(GameTime gameTime)
         {
             // Check whether the player is dead
-            if (Health <= 0)
+            /*if (Health <= 0)
             {
                 Die();
                 return;
-            }
+            }*/
 
-            #region REACT TO INPUT STATES
-
-            //Load services for use later
+            // Load services for use later.
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             IInputService inputService = (IInputService)this.Game.Services.GetService(typeof(IInputService));
 
-            //Go through queued InputStates and modify Player properties accordingly
+            // Go through queued InputStates and modify Player properties accordingly.
             foreach (var input in inputService.States)
             {
                 // Get a dampened version of the mouse movement.
@@ -184,30 +177,19 @@ namespace Mammoth.Engine
                     if (input.IsKeyDown(InputType.Jump))
                         this.Velocity += Vector3.Up / 4.0f;
 
-                //Console.WriteLine("Position before throw: " + Position);
                 // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
                 if (input.KeyPressed(InputType.Fire))
                     this.Throw();
-                //Console.WriteLine("Position after throw: " + Position);
-                //Console.WriteLine("Orientation after throw: " + Orientation);
 
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
-                //Console.WriteLine("Collision: " + this.CurrentCollision);
 
                 // Now, we need to reset parts of the velocity so that we're not compounding it.
                 if (InCollisionState(ControllerCollisionFlag.Down))
                     this.Velocity = Vector3.Zero;
                 else
                     this.Velocity += physics.Scene.Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds - motion;
-
-                //Console.WriteLine("Velocity: " + Velocity);
-                //Console.WriteLine("Motion: " + motion);
-                //Console.WriteLine("Position before exiting: " + Position);
-                //Console.WriteLine("Orientation before exiting: " + Orientation);
             }
-
-            #endregion
         }
 
         /// <summary>

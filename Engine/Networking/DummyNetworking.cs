@@ -34,14 +34,12 @@ namespace Mammoth.Engine.Networking
 
     public class DummyClientNetworking : DummyNetworking, IClientNetworking
     {
-        LocalInputPlayer player;
-
         #region IClientNetworking Members
 
-        public DummyClientNetworking(Game game, LocalInputPlayer player)
+        public DummyClientNetworking(Game game)
             : base(game)
         {
-            this.player = player;
+            
         }
 
         public void sendThing(IEncodable toSend)
@@ -60,7 +58,9 @@ namespace Mammoth.Engine.Networking
             IInputService inputServer = (IInputService)this.Game.Services.GetService(typeof(IInputService));
             InputState state = inputServer.States.Peek();
 
-            if (state.KeyPressed(InputType.Shoot))
+            InputPlayer player = (InputPlayer)this.Game.Services.GetService(typeof(InputPlayer));
+
+            if (state.KeyPressed(InputType.Fire))
             {
                 IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
                 Vector3 forward = Vector3.Transform(Vector3.Forward, player.HeadOrient) * 1000.0f;

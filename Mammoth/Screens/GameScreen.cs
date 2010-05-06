@@ -80,6 +80,9 @@ namespace Mammoth
             this.LocalPlayer = new LocalInputPlayer(this.Game, net.ClientID);
             modelDB.registerObject(this.LocalPlayer);
 
+            if (net is DummyNetworking)
+                this.Game.Services.AddService(typeof(InputPlayer), this.LocalPlayer);
+
             // Create the camera.  We want it to update after all of the models (especially the player)
             // have been updated.  Set its target to be the local player.
             Camera cam = new FirstPersonCamera(this.Game, this.LocalPlayer)

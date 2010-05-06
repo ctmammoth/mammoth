@@ -15,7 +15,6 @@ namespace Mammoth.Engine
     //TODO: Make bullet drawable
     public class Bullet : Projectile, IEncodable, IRenderable
     {
-
         /// <summary>
         /// Creates a new bullet at the specified position and gives it the required initial velocity.  It moves in the
         /// direction of the vector obtained by taking Vector3.Transform(Vector3.UnitZ, orientation).

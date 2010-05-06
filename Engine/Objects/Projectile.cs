@@ -26,12 +26,6 @@ namespace Mammoth.Engine
             protected set;
         }
 
-        public Game Game
-        {
-            get;
-            protected set;
-        }
-
         public int Creator
         {
             get;
