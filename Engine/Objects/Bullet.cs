@@ -22,8 +22,8 @@ namespace Mammoth.Engine
         /// </summary>
         /// <param name="position">The location at which to spawn the bullet.</param>
         /// <param name="forward">A vector pointing in the direction in which to shoot the bullet.</param>
-        public Bullet(Game game, Vector3 position, Vector3 forward)
-            : base(game)
+        public Bullet(Game game, Vector3 position, Vector3 forward, int creator)
+            : base(game, creator)
         {
             Console.WriteLine("Constructing a bullet...");
             InitialVelocityMagnitude = 50.0f;
@@ -77,7 +77,7 @@ namespace Mammoth.Engine
         }
 
         public Bullet(Game game)
-            : base(game)
+            : base(game, 0)
         {
             InitializeDefault(0);
         }
@@ -137,6 +137,7 @@ namespace Mammoth.Engine
 
             e.AddElement("Position", Position);
             e.AddElement("InitialVelocity", InitialVelocity);
+            e.AddElement("Creator", Creator);
 
             return e.Serialize();
         }
@@ -175,7 +176,8 @@ namespace Mammoth.Engine
             // Create the actor
             this.Actor = physics.CreateActor(bulletActorDesc, this);
 
-            Position = (Vector3)e.GetElement("Position", Position);          
+            Position = (Vector3)e.GetElement("Position", Position);
+            Creator = (int)e.GetElement("Creator", Creator);
 
             Console.WriteLine("Bullet position received: " + Position);
             Console.WriteLine("Initial Velocity received: " + InitialVelocity);

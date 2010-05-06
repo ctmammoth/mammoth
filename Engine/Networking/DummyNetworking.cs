@@ -75,7 +75,7 @@ namespace Mammoth.Engine.Networking
                 Vector3 offset = Vector3.Multiply(forward, 2.0f);
                 position = Vector3.Add(position, offset);
 
-                Bullet b = new Bullet(Game, position, forward);
+                Bullet b = new Bullet(Game, position, forward, player.ID >> 25);
 
                 // Give this projectile an ID
                 b.ID = modelDB.getNextOpenID();
