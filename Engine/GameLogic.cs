@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine
 {
-    public class GameLogic : GameComponent, Mammoth.Engine.IGameLogic
+    public class GameLogic : Mammoth.Engine.IGameLogic
     {
         public Team team1;
         public Team team2;
