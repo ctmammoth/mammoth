@@ -200,10 +200,7 @@ namespace Mammoth.Engine
 
                 // Reload the user's gun
                 if (input.KeyPressed(InputType.Reload))
-                {
-                    Console.WriteLine("Reload key was pressed.");
-                    this.Reload();
-                }
+                    this.Reload(gameTime);
 
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
@@ -226,7 +223,7 @@ namespace Mammoth.Engine
         /// <summary>
         /// Reloads the player's current weapon.  Overridden in ProxyInputPlayer since reloading only happens on server-side.
         /// </summary>
-        protected virtual void Reload()
+        protected virtual void Reload(GameTime time)
         {
             Console.WriteLine("Reloading.");
         }

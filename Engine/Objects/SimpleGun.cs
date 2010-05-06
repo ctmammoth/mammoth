@@ -205,9 +205,10 @@ namespace Mammoth.Engine
             Console.WriteLine("Shot a bullet with a SimpleGun; " + Mag.AmmoRemaining + " bullets left.");
         }
 
-        public void Reload()
+        public void Reload(GameTime time)
         {
             Console.WriteLine("SimpleGun is reloading!");
+            _lastReloadTime = time.TotalRealTime.TotalMilliseconds;
             IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
             net.sendSound("Reload", Owner.ID >> 25);
 
