@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.GamerServices;
 
-namespace Mammoth.Engine
+namespace Mammoth.Engine.Networking
 {
     public abstract class XNANetworking : Networking
     {
@@ -21,7 +21,7 @@ namespace Mammoth.Engine
 
         public XNANetworking(Game game) : base(game)
         {
-            game.Components.Add(new GamerServicesComponent(game));
+            
         }
 
         public override bool isLANCapable()
@@ -65,6 +65,7 @@ namespace Mammoth.Engine
 
         public void createSession()
         {
+            Console.WriteLine("Began creating session.");
             _session = NetworkSession.Create(NetworkSessionType.SystemLink, 1, MAX_PLAYERS);
             _session.AllowHostMigration = false;
             _session.AllowJoinInProgress = false;
@@ -74,6 +75,7 @@ namespace Mammoth.Engine
             //_session.GameEnded += new EventHandler<GameEndedEventArgs>(session_GameEnded);
             //_session.SessionEnded +=new EventHandler<NetworkSessionEndedEventArgs>(session_SessionEnded);
             _server = _session.LocalGamers[0];
+            Console.WriteLine("Finished creating session.");
         }
 
         void session_GamerJoined(object sender, GamerJoinedEventArgs e)
@@ -90,7 +92,7 @@ namespace Mammoth.Engine
             }
         }
 
-        public void sendThing(IEncodable toSend, string target)
+        public void sendThing(IEncodable toSend, int target)
         {
             _toSend.Enqueue(new DataGram(toSend.Encode(), target));
         }
@@ -109,6 +111,7 @@ namespace Mammoth.Engine
                 _server.ReceiveData(reader, out sender);
                 if (!sender.IsLocal)
                 {
+                    Console.WriteLine("Read something");
                     Console.WriteLine(reader.ReadBytes(reader.Length));
                 }
             }
@@ -119,9 +122,9 @@ namespace Mammoth.Engine
         private class DataGram
         {
             public byte[] Data { get; set;  }
-            public string Recipient { get; set;  }
+            public int Recipient { get; set;  }
 
-            public DataGram(byte[] data, string recipient)
+            public DataGram(byte[] data, int recipient)
             {
                 Data = data;
                 Recipient = recipient;

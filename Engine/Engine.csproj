@@ -35,7 +35,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'PhysX Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\PhysX Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;PHYSX_DEBUG</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -49,6 +49,14 @@
   </Target>
   -->
   <ItemGroup>
+    <Reference Include="Lidgren.Network, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Assemblies\Lidgren.Network.dll</HintPath>
+    </Reference>
+    <Reference Include="Lidgren.Network.Xna, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Assemblies\Lidgren.Network.Xna.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86" />
     <Reference Include="StillDesign.PhysX.Net, Version=0.12.0.0, Culture=neutral, processorArchitecture=x86">
@@ -65,19 +73,64 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Camera.cs" />
-    <Compile Include="Networking\Car.cs" />
-    <Compile Include="Networking\Driver.cs" />
-    <Compile Include="Engine.cs" />
-    <Compile Include="Networking\Encoder.cs" />
+    <Compile Include="Graphics\Skybox.cs" />
+    <Compile Include="GameLogic.cs" />
+    <Compile Include="Objects\Bullet.cs" />
+    <Compile Include="Graphics\Camera.cs" />
+    <Compile Include="ClientState.cs" />
+    <Compile Include="Objects\IDamager.cs" />
+    <Compile Include="Objects\IDamageable.cs" />
+    <Compile Include="IModelDBService.cs" />
+    <Compile Include="Input\EmulatedInput.cs" />
+    <Compile Include="Objects\IWeapon.cs" />
+    <Compile Include="Interface\TWidgetScreen.cs" />
+    <Compile Include="Objects\MinimalPhysicalObject.cs" />
+    <Compile Include="Objects\Projectile.cs" />
+    <Compile Include="Player\LocalInputPlayer.cs" />
+    <Compile Include="ModelDatabase.cs" />
+    <Compile Include="Objects\Crate.cs" />
+    <Compile Include="Objects\Door.cs" />
+    <Compile Include="Networking\Decoder.cs" />
+    <Compile Include="Networking\DummyNetworking.cs" />
+    <Compile Include="Input\IInputService.cs" />
+    <Compile Include="Objects\Fortress.cs" />
+    <Compile Include="Networking\IDecoder.cs" />
     <Compile Include="Networking\IEncodable.cs" />
-    <Compile Include="IRenderable.cs" />
-    <Compile Include="LocalPlayer.cs" />
+    <Compile Include="ObjectParameters.cs" />
+    <Compile Include="Input\InputState.cs" />
+    <Compile Include="Input\LocalInput.cs" />
+    <Compile Include="Interface\ExtensionMethods.cs" />
+    <Compile Include="Interface\TButton.cs" />
+    <Compile Include="Interface\TScreen.cs" />
+    <Compile Include="Interface\TScreenManager.cs" />
+    <Compile Include="Interface\TSimpleButton.cs" />
+    <Compile Include="Interface\TText.cs" />
+    <Compile Include="Graphics\IRenderable.cs" />
+    <Compile Include="Graphics\IRenderService.cs" />
+    <Compile Include="Player\InputPlayer.cs" />
+    <Compile Include="Networking\LidgrenClientNetworking.cs" />
+    <Compile Include="Objects\BaseObject.cs" />
+    <Compile Include="Networking\LidgrenNetworking.cs" />
+    <Compile Include="Networking\LidgrenServerNetworking.cs" />
     <Compile Include="Networking\Networking.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="Renderer.cs" />
-    <Compile Include="StaticObject.cs" />
-    <Compile Include="Networking\Test.cs" />
-    <Compile Include="Networking\XNANetworking.cs" />
+    <Compile Include="Physics\PhysicalObject.cs" />
+    <Compile Include="Physics\PhysicsManagerService.cs" />
+    <Compile Include="Player\Player.cs" />
+    <Compile Include="Player\ProxyInputPlayer.cs" />
+    <Compile Include="Player\RemotePlayer.cs" />
+    <Compile Include="Graphics\Renderer.cs" />
+    <Compile Include="Objects\Room.cs" />
+    <Compile Include="Objects\SimpleGun.cs" />
+    <Compile Include="Objects\StaticObject.cs" />
+    <Compile Include="Interface\TWidget.cs" />
+    <Compile Include="Team.cs" />
+    <Compile Include="XmlHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Interface\Interface.cd" />
+    <None Include="Networking\Networking.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 </Project>

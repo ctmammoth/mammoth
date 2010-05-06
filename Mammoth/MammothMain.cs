@@ -11,9 +11,32 @@ namespace Mammoth
         /// </summary>
         static void Main(string[] args)
         {
-            using (Mammoth.Engine.Engine game = Mammoth.Engine.Engine.Instance)
+            if (!(args.Length == 1 || args.Length == 2))
             {
-                game.Run();
+                Console.WriteLine("Usage: add 'server' or 'client' to indicate mode.");
+                return;
+            }
+            if (args[0].Equals("client"))
+            {
+                Client client = new Client();
+                client.Run();
+            }
+            else if (args[0].Equals("server"))
+            {
+                Server.Server server = new Mammoth.Server.Server();
+                server.Run();
+            }
+            else if (args[0].Equals("content_test"))
+            {
+                int x = 0;
+                Client client = new Client();
+                client.Run();
+                // ObjectFactories.content_test(client);
+            }
+            else
+            {
+                Console.WriteLine("Usage: add 'server' or 'client' to indicate mode.");
+                return;
             }
         }
 

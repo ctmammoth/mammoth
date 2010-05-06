@@ -5,6 +5,8 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
+
 
 namespace Mammoth.Engine
 {
@@ -21,7 +23,9 @@ namespace Mammoth.Engine
         {
             base.Draw(gameTime);
 
-            Renderer.Instance.DrawObject(this);
+            Renderer r = (Renderer) this.Game.Services.GetService(typeof(IRenderService));
+
+            r.DrawRenderable(this);
         }
 
         #region Properties
@@ -57,7 +61,10 @@ namespace Mammoth.Engine
     {
         public SoldierObject(Game game) : base(game)
         {
-            this.Model3D = Renderer.Instance.LoadModel("soldier-low-poly");
+            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
+
+            
+            this.Model3D = r.LoadModel("soldier-low-poly");
             this.Position = Vector3.Zero;
             this.PositionOffset = Vector3.Zero;
             this.Orientation = Quaternion.Identity;

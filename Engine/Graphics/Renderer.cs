@@ -11,21 +11,35 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Mammoth.Engine
 {
-    public class Renderer
+    public class Renderer : IRenderService
     {
-        #region Variables
+        #region Fields
 
         private ContentManager _content;
         private GraphicsDevice _graphics;
+        private SpriteBatch _spriteBatch;
 
-        private static Renderer _instance = null;
+        // Used to draw solid colored rectangles to the screen.
+        private Texture2D _whitePixel;
+
+        // Default font to use for drawing text.
+        private SpriteFont _defaultFont;
 
         #endregion
 
-        private Renderer()
+        public Renderer(Game game)
         {
-            _content = Engine.Instance.Content;
-            _graphics = Engine.Instance.GraphicsDevice;
+            this.Game = game;
+            _content = game.Content;
+            _graphics = game.GraphicsDevice;
+            _spriteBatch = new SpriteBatch(_graphics);
+            
+            // Create the white pixel.
+            _whitePixel = new Texture2D(_graphics, 1, 1, 1, TextureUsage.None, SurfaceFormat.Color);
+            _whitePixel.SetData<Color>(new Color[] { Color.White });
+
+            // Load the default font.
+            _defaultFont = LoadFont("calibri");
         }
 
         public Model LoadModel(string path)
@@ -43,9 +57,78 @@ namespace Mammoth.Engine
             return _content.Load<SpriteFont>("fonts\\" + path);
         }
 
-        public void DrawObject(IRenderable obj)
+        public void DrawFilledRectangle(Rectangle rect, Color color)
         {
-            Camera cam = (Camera) Engine.Instance.Services.GetService(typeof(ICameraService));
+            _spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
+            _spriteBatch.Draw(_whitePixel, rect, color);
+            _spriteBatch.End();
+        }
+
+        public void DrawTexturedRectangle(Vector2 pos, Texture2D tex)
+        {
+            _spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
+            _spriteBatch.Draw(tex, pos, Color.White);
+            _spriteBatch.End();
+        }
+
+        public void DrawTexturedRectangle(Vector2 pos, Texture2D tex, Color tint)
+        {
+            _spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
+            _spriteBatch.Draw(tex, pos, tint);
+            _spriteBatch.End();
+        }
+
+        public void DrawTexturedRectangle(Rectangle rect, Texture2D tex)
+        {
+            _spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
+            _spriteBatch.Draw(tex, rect, Color.White);
+            _spriteBatch.End();
+        }
+
+        public void DrawTexturedRectangle(Rectangle rect, Texture2D tex, Color tint)
+        {
+            _spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
+            _spriteBatch.Draw(tex, rect, tint);
+            _spriteBatch.End();
+        }
+
+        public Texture2D RenderFont(string text, Vector2 pos, Color textColor, Color bgColor)
+        {
+            return this.RenderFont(text, pos, textColor, bgColor, _defaultFont);
+        }
+
+        public Texture2D RenderFont(string text, Vector2 pos, Color textColor, Color bgColor, SpriteFont font)
+        {
+            Vector2 textSize = font.MeasureString(text);
+
+            RenderTarget2D target = new RenderTarget2D(_graphics, (int) textSize.X, (int) textSize.Y, 0, SurfaceFormat.Color);
+
+            _graphics.SetRenderTarget(0, target);
+            {
+                _graphics.Clear(bgColor);
+                DrawText(text, pos, textColor, bgColor, font);
+            }
+            _graphics.SetRenderTarget(0, null);
+
+            return target.GetTexture();
+
+        }
+
+        public void DrawText(string text, Vector2 pos, Color textColor, Color bgColor)
+        {
+            this.DrawText(text, pos, textColor, bgColor, _defaultFont);
+        }
+
+        public void DrawText(string text, Vector2 pos, Color textColor, Color bgColor, SpriteFont font)
+        {
+            _spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
+            _spriteBatch.DrawString(font, text, pos, textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 1);
+            _spriteBatch.End();
+        }
+
+        public void DrawRenderable(IRenderable obj)
+        {
+            Camera cam = (Camera) this.Game.Services.GetService(typeof(ICameraService));
 
             Model m = obj.Model3D;
 
@@ -78,7 +161,7 @@ namespace Mammoth.Engine
         /// <param name="scene">The PhysX scene that we want to draw debug geometry for.</param>
         public void DrawPhysXDebug(StillDesign.PhysX.Scene scene)
         {
-            Camera cam = (Camera)Engine.Instance.Services.GetService(typeof(ICameraService));
+            Camera cam = (Camera)this.Game.Services.GetService(typeof(ICameraService));
 
             _graphics.VertexDeclaration = new VertexDeclaration(_graphics, VertexPositionColor.VertexElements);
 
@@ -154,14 +237,10 @@ namespace Mammoth.Engine
 
         #region Properties
 
-        public static Renderer Instance
+        public Game Game
         {
-            get
-            {
-                if (_instance == null)
-                    _instance = new Renderer();
-                return _instance;
-            }
+            get;
+            private set;
         }
 
         #endregion
