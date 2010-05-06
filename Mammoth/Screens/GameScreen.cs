@@ -19,6 +19,12 @@ namespace Mammoth
 {
     class GameScreen : TScreen
     {
+        #region Fields
+
+        TWidget baseWidget;
+
+        #endregion
+
         public GameScreen(Game game)
             : base(game)
         {
@@ -87,6 +93,15 @@ namespace Mammoth
 
             IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
             modelDB.registerObject(new Terrain(this.Game));
+
+            IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
+
+            // Add the crosshairs to the game.
+            baseWidget = new TImage(this.Game, r.LoadTexture("cross"))
+            {
+                Size = new Vector2(50, 50),
+                Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2)
+            };
         }
 
         public override void Update(GameTime gameTime, bool hasFocus, bool visible)
@@ -131,6 +146,10 @@ namespace Mammoth
                 foreach (IUpdateable component in updateList.OrderBy((comp) => comp.UpdateOrder))
                     component.Update(gameTime);
 
+                // TODO: Do this correctly?
+                // Update the HUD.
+                baseWidget.Update(gameTime);
+
                 // Let's have PhysX update itself.
                 // This might need to be changed/optimized a bit if things are getting slow because they have
                 // to wait for the physics calculations.
@@ -160,6 +179,7 @@ namespace Mammoth
 
             // Maybe here is where we would draw HUD stuff?  Or maybe an explicit call to something
             // that draws the HUD for us.  Some widget code, I suppose.
+            baseWidget.Draw(gameTime);
         }
 
         /// <summary>
