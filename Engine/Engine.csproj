@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Audio\Audio.cs" />
+    <Compile Include="GameStats.cs" />
     <Compile Include="Graphics\Skybox.cs" />
     <Compile Include="GameLogic.cs" />
     <Compile Include="Interface\TImage.cs" />

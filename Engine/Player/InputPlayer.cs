@@ -14,7 +14,7 @@ using Mammoth.Engine.Physics;
 using Mammoth.Engine.Objects;
 using Mammoth.Engine.Networking;
 using Mammoth.Engine.Interface;
-using Mammoth;
+using Mammoth.Engine;
 
 namespace Mammoth.Engine
 {
@@ -60,6 +60,11 @@ namespace Mammoth.Engine
             set;
         }
 
+        protected GameStats GameStats
+        {
+            get;
+            set;
+        }
         #endregion
 
         /// <summary>
@@ -182,12 +187,10 @@ namespace Mammoth.Engine
                 if (input.IsKeyDown(InputType.Right)) // Right?
                     motion += Vector3.Right;
 
-                if (input.KeyPressed(InputType.Stats))
+                if (input.KeyPressed(InputType.Stats) && this is LocalInputPlayer)
                 {
                     TScreenManager t = (TScreenManager)this.Game.Services.GetService(typeof(TScreenManager));
-                    IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
-                    int myID = ID >> 25;
-                    t.AddScreen(new StatsScreen(this.Game, NumKills, NumCaptures, NumDeaths, myID, g));
+                    t.AddScreen(new StatsScreen(this.Game, GameStats));
                 }
 
                 // Normalize the motion vector (so we don't move at twice the speed when moving diagonally).
@@ -302,10 +305,17 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
+            IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
+            int myID = ID >> 25;
+            GameStats = new GameStats(NumKills, NumCaptures, NumDeaths, myID, g);
+
+            Console.WriteLine("Encoding: " + GameStats.ToString());
+
             tosend.AddElement("Position", Position);
             tosend.AddElement("Orientation", Orientation);
             tosend.AddElement("Velocity", Velocity);
             tosend.AddElement("Health", Health);
+            tosend.AddElement("GameStats", GameStats);
 
             return tosend.Serialize();
         }
@@ -322,6 +332,10 @@ namespace Mammoth.Engine
                 Velocity = (Vector3)props.GetElement("Velocity", Velocity);
             if (props.UpdatesFor("Health"))
                 Health = (float)props.GetElement("Health", Health);
+            if (props.UpdatesFor("GameStats"))
+                props.UpdateIEncodable("GameStats", GameStats);
+
+            Console.WriteLine("Decoding: " + GameStats.ToString());
         }
 
         #endregion

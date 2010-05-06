@@ -14,17 +14,12 @@ namespace Mammoth.Engine
     public class StatsScreen : TWidgetScreen
     {
 
-        private int numKills;
-        private int numCaptures;
-        private int numDeaths;
-        private IGameLogic gl;
-        private int playerID;
+        private GameStats GameStats;
 
 
-        public StatsScreen(Game game, int nk, int nc, int nd, int id, IGameLogic g)
-            : base(game)
+        public StatsScreen(Game game, GameStats g): base(game)
         {
-            numKills = nk; numCaptures = nc; numDeaths = nd; playerID = id;  gl = g;
+            GameStats = g;
         }
 
         public override void Initialize()
@@ -39,47 +34,53 @@ namespace Mammoth.Engine
 
             try
             {
+
                 // Add a Leading team header
-                baseWid.Add(new TText(this.Game, "Leading Team: " + gl.GetLeadingTeam().ToString())
+                baseWid.Add(new TText(this.Game, "Leading Team: " + GameStats.LeadingTeam)
                 {
                     Center = new Vector2(this.Game.Window.ClientBounds.Width / 4, 50)
                 });
 
-                baseWid.Add(new TText(this.Game, "Team Kills: " + gl.GetLeadingTeam().GetKills())
+                baseWid.Add(new TText(this.Game, "Team Kills: " + GameStats.LeadingTeam_NumKills)
                 {
                     Center = new Vector2(this.Game.Window.ClientBounds.Width / 4, 100)
                 });
 
-                baseWid.Add(new TText(this.Game, "Team Captures: " + gl.GetLeadingTeam().GetCaptures())
+                baseWid.Add(new TText(this.Game, "Team Captures: " + GameStats.LeadingTeam_NumCaptures)
                 {
                     Center = new Vector2(this.Game.Window.ClientBounds.Width / 4, 150)
                 });
 
 
-                baseWid.Add(new TText(this.Game, "Team Total: " + gl.GetLeadingTeam().GetTeamPoints())
+                baseWid.Add(new TText(this.Game, "Team Total: " + GameStats.LeadingTeam_NumPoints)
                 {
                     Center = new Vector2(this.Game.Window.ClientBounds.Width / 4, 200)
                 });
 
 
 
+
+
+
+
+
                 // Add a Trailing team header
-                baseWid.Add(new TText(this.Game, "Trailing Team: " + gl.GetTrailingTeam().ToString())
+                baseWid.Add(new TText(this.Game, "Trailing Team: " + GameStats.TrailingTeam)
                 {
                     Center = new Vector2((3 * this.Game.Window.ClientBounds.Width) / 4, 50)
                 });
 
-                baseWid.Add(new TText(this.Game, "Team Kills: " + gl.GetTrailingTeam().GetKills())
+                baseWid.Add(new TText(this.Game, "Team Kills: " + GameStats.TrailingTeam_NumKills)
                 {
                     Center = new Vector2((3 * this.Game.Window.ClientBounds.Width) / 4, 100)
                 });
 
-                baseWid.Add(new TText(this.Game, "Team Captures: " + gl.GetTrailingTeam().GetCaptures())
+                baseWid.Add(new TText(this.Game, "Team Captures: " + GameStats.TrailingTeam_NumCaptures)
                 {
                     Center = new Vector2((3 * this.Game.Window.ClientBounds.Width) / 4, 150)
                 });
 
-                baseWid.Add(new TText(this.Game, "Team Total: " + gl.GetTrailingTeam().GetTeamPoints())
+                baseWid.Add(new TText(this.Game, "Team Total: " + GameStats.TrailingTeam_NumPoints)
                 {
                     Center = new Vector2((3 * this.Game.Window.ClientBounds.Width) / 4, 200)
                 });
@@ -91,33 +92,35 @@ namespace Mammoth.Engine
                     Center = new Vector2((this.Game.Window.ClientBounds.Width) / 2, 300)
                 });
 
-                baseWid.Add(new TText(this.Game, "Personal Kills: " + numKills)
+                baseWid.Add(new TText(this.Game, "Personal Kills: " + GameStats.NumKills)
                 {
                     Center = new Vector2((2 * this.Game.Window.ClientBounds.Width) / 5, 350)
                 });
 
-                baseWid.Add(new TText(this.Game, "Personal Captures: " + numCaptures)
+                baseWid.Add(new TText(this.Game, "Personal Captures: " + GameStats.NumCaptures)
                 {
                     Center = new Vector2((3 * this.Game.Window.ClientBounds.Width) / 5, 350)
                 });
 
-                baseWid.Add(new TText(this.Game, "Personal Deaths: " + numDeaths)
+                baseWid.Add(new TText(this.Game, "Personal Deaths: " + GameStats.NumDeaths)
                 {
                     Center = new Vector2((4 * this.Game.Window.ClientBounds.Width) / 5, 350)
                 });
 
 
                 //Your Team
-                baseWid.Add(new TText(this.Game, "Your Team: " + gl.GetTeamOf(playerID))
+                baseWid.Add(new TText(this.Game, "Your Team: " + GameStats.YourTeam)
                 {
                     Center = new Vector2((4 * this.Game.Window.ClientBounds.Width) / 5, 350)
                 });
+
             }
             catch (Exception e)
             {
+                //Default
                 baseWid.Add(new TText(this.Game, "NOT CONNECTED TO SERVER")
                 {
-                    Center = new Vector2((this.Game.Window.ClientBounds.Width) / 2, 200)
+                    Center = new Vector2((this.Game.Window.ClientBounds.Width) / 2, 150)
                 });
             }
 
