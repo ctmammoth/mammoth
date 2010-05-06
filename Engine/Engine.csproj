@@ -73,8 +73,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audio\Audio.cs" />
     <Compile Include="Graphics\Skybox.cs" />
     <Compile Include="GameLogic.cs" />
+    <Compile Include="Audio\IAudioService.cs" />
     <Compile Include="Networking\Encoder.cs" />
     <Compile Include="Objects\Bullet.cs" />
     <Compile Include="Graphics\Camera.cs" />
@@ -129,7 +131,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Interface\Interface.cd" />
-    <None Include="Networking\Networking.cd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

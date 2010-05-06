@@ -66,6 +66,7 @@ namespace Mammoth
             this.Components.Add(screenManager);
 
             // Create the networking component, and have it update after all of the rest of the code.
+            //DummyClientNetworking net = new DummyClientNetworking(this)
             LidgrenClientNetworking net = new LidgrenClientNetworking(this)
             {
             /*DummyClientNetworking net = new DummyClientNetworking(this)
@@ -76,6 +77,9 @@ namespace Mammoth
 
             // Add the main menu as a screen for the screen manager.
             screenManager.AddScreen(new MainMenuScreen(this));
+
+            // Add the audio system
+            this.Components.Add(new Mammoth.Engine.Audio.Audio(this));
 
             // Initialize all of the components that we just added to the game.
             base.Initialize();
