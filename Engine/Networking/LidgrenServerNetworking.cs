@@ -12,15 +12,30 @@ using Lidgren.Network;
 
 namespace Mammoth.Engine.Networking
 {
+    /// <summary>
+    /// Server side networking system. Provides for receiving message from 
+    /// clients and sending messages to all or specific clients.
+    /// </summary>
     public class LidgrenServerNetworking : LidgrenNetworking, IServerNetworking
     {
         private NetServer _server;
+
+        // Dictionary from ClientID to client connection
         private Dictionary<int, NetConnection> _connections;
+
         private Queue<DataGram> _toSend;
+
+        // Dictionary from ClientID to the queue of InputStates for that client
         private Dictionary<int, Queue<InputState>> _inputStates;
 
+        // The next ID to assign a newly connecting client
         private int _nextID;
 
+        /// <summary>
+        /// Creates the server networking system, initializing the
+        /// instance variables.
+        /// </summary>
+        /// <param name="game"></param>
         public LidgrenServerNetworking(Game game)
             : base(game)
         {
@@ -32,6 +47,12 @@ namespace Mammoth.Engine.Networking
 
         #region IServerNetworking Members
 
+        /// <summary>
+        /// Sends an Encodable thing to a specified client by
+        /// putting a Datagram in the queue of things to send.
+        /// </summary>
+        /// <param name="toSend">the Encodable to send</param>
+        /// <param name="target">the ID of the client to send it to</param>
         public void sendThing(IEncodable toSend, int target)
         {
             if (toSend is BaseObject)
@@ -39,6 +60,11 @@ namespace Mammoth.Engine.Networking
                     ((BaseObject)toSend).ID, toSend.Encode(), target));
         }
 
+        /// <summary>
+        /// Sends an Encodable thing to all connected clients by
+        /// putting a Datagram in the queue of things to send.
+        /// </summary>
+        /// <param name="toSend"></param>
         public void sendThing(IEncodable toSend)
         {
             if (toSend is BaseObject)
@@ -46,6 +72,12 @@ namespace Mammoth.Engine.Networking
                     ((BaseObject)toSend).ID, toSend.Encode(), -1));
         }
 
+        /// <summary>
+        /// Sends an Encodable thing to all connected clients except for
+        /// the specified client by putting a Datagram in the queue of things to send.
+        /// </summary>
+        /// <param name="toSend">the Encodable to send</param>
+        /// <param name="excludeTarget">the ID of the client to exclude</param>
         public void sendToAllBut(IEncodable toSend, int excludeTarget)
         {
             if (toSend is BaseObject)
@@ -53,16 +85,29 @@ namespace Mammoth.Engine.Networking
                     ((BaseObject)toSend).ID, toSend.Encode(), -1, excludeTarget));
         }
 
+        /// <summary>
+        /// Starts by making sure that all clients are still connected, removing
+        /// thos thate aren't anymore. Then eends everything in the queue of messages 
+        /// to send, then clears the InputState queues for each client and reads in 
+        /// all the new messages.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
+            // Check for and remove disconnected players
+            checkForDisconnectedPlayers();
+
+            // Send all the queued up messages
             while (_toSend.Count != 0)
                 sendMessage(_toSend.Dequeue());
 
+            // Clear all the InputState queues
             foreach (Queue<InputState> q in _inputStates.Values)
                 q.Clear();
 
+            // Read in all the new messages, calling the appropriate handle methods
             NetBuffer buffer = _server.CreateBuffer();
             NetMessageType type;
             NetConnection sender;
@@ -86,22 +131,14 @@ namespace Mammoth.Engine.Networking
             }
         }
 
+        /// <summary>
+        /// Sends a message in the form of a DataGram to the recipients specified by
+        /// the DataGram.
+        /// </summary>
+        /// <param name="message"></param>
         private void sendMessage(DataGram message)
         {
-            //Console.WriteLine("sending message: " + message.ObjectType + " id: " + message.ID);
-            if (message.Recipient >= 0)
-            {
-                NetConnectionStatus status = _connections[message.Recipient].Status;
-                if (status != NetConnectionStatus.Connected)
-                {
-                    Console.WriteLine("Removing disconnected client " + message.Recipient);
-                    _connections.Remove(message.Recipient);
-                    IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-                    if (mdb.hasObject(message.Recipient << 25))
-                        mdb.removeObject(message.Recipient << 25);
-                    return;
-                }
-            }
+            // Write the data to a buffer
             NetBuffer buffer = _server.CreateBuffer();
             buffer.WriteVariableInt32((int)MessageType.ENCODABLE);
             buffer.Write(message.ObjectType);
@@ -109,29 +146,62 @@ namespace Mammoth.Engine.Networking
             buffer.WriteVariableInt32(message.Data.Length);
             buffer.WritePadBits();
             buffer.Write(message.Data);
+
+            // If there is more than one specified target, send 
             if (message.Recipient < 0)
             {
-                //if (message.Exclude >= 0)
-                    //Console.WriteLine("Excluding " + message.Exclude);
-                foreach (int target in _connections.Keys)
-                {
-                    if (target != message.Exclude && _connections[target].Status == NetConnectionStatus.Connected)
-                    {
-                        //if (message.Exclude >= 0)
-                            //Console.WriteLine("Sending to " + target);
-                        _server.SendMessage(buffer, _connections[target], NetChannel.Unreliable);
-                    }
-                }
+                // If there is no client to exclude, send to all clients
+                if (message.Exclude < 0)
+                    _server.SendToAll(buffer, NetChannel.Unreliable);
+                // Else, exclude the client to exclude
+                else
+                    _server.SendToAll(buffer, NetChannel.Unreliable, _connections[message.Exclude]);
             }
+            // If there is one specified target, send to that target
             else
                 _server.SendMessage(buffer, _connections[message.Recipient], NetChannel.Unreliable);
         }
 
+        /// <summary>
+        /// Check all clients to make sure their status is still connected. If a client
+        /// is not connected, remove its player from the model database, its connection
+        /// from the connections dictionary, and its queue of input states.
+        /// </summary>
+        private void checkForDisconnectedPlayers()
+        {
+            foreach (int id in _connections.Keys)
+            {
+                NetConnectionStatus status = _connections[id].Status;
+                if (status != NetConnectionStatus.Connected)
+                {
+                    // If the client is no longer connected, remove it from the 
+                    // connections, input states, and model database
+                    Console.WriteLine("Removing disconnected client " + id);
+                    _connections.Remove(id);
+                    _inputStates.Remove(id);
+                    IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+                    if (mdb.hasObject(id << 25))
+                        mdb.removeObject(id << 25);
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles a player joining message (technically a "Connection Approved"
+        /// message). Approves the connection attempt of the player, then
+        /// sends it a ClientID and creates a new ProxyInputPlayer and places
+        /// it in the model database.
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="sender"></param>
         private void handlePlayerJoin(NetBuffer buffer, NetConnection sender)
         {
-            Console.WriteLine("Connection Approval");
             sender.Approve();
+            // Wait for the client to be fully connected
             while (sender.Status != NetConnectionStatus.Connected) ;
+            
+            // Send a ClientID to the new client
             int id = _nextID++;
             Console.WriteLine("The value of id: " + id);
             _connections.Add(id, sender);
@@ -141,13 +211,24 @@ namespace Mammoth.Engine.Networking
             buffer.WriteVariableInt32(id);
             _server.SendMessage(buffer, sender, NetChannel.ReliableInOrder2);
 
-            //TODO: TEST CODE
+            // Create ProxyInputPlayer to represent the new client and add it to
+            // the model database.
             IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
             InputPlayer player = new ProxyInputPlayer(this.Game, id);
+            // Give the player object the object ID of the ClientID bitshifted to the front of
+            // an integer (i.e. the zero-ith object created by the client).
             player.ID = id << 25;
+            //TODO: change where the player spawns to?
+            player.Spawn(new Vector3(-3.0f, 3.0f, 10.0f), Quaternion.Identity);
             mdb.registerObject(player);
         }
 
+        /// <summary>
+        /// Handles a Lidgren status change message. At the moment just
+        /// prints out the status change.
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="sender"></param>
         public void handleStatusChange(NetBuffer buffer, NetConnection sender)
         {
             string statusMessage = buffer.ReadString();
@@ -155,6 +236,13 @@ namespace Mammoth.Engine.Networking
             Console.WriteLine("New status for " + sender + ": " + newStatus + " (" + statusMessage + ")");
         }
 
+        /// <summary>
+        /// Handles a data message, which can be of several
+        /// types, though at the moment only Encodables are
+        /// supported.
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="sender"></param>
         public void handleData(NetBuffer buffer, NetConnection sender)
         {
             int senderID = buffer.ReadVariableInt32();
@@ -164,29 +252,24 @@ namespace Mammoth.Engine.Networking
                 case MessageType.ENCODABLE:
                     handleEncodable(buffer, senderID);
                     break;
-                case MessageType.STATUS_CHANGE:
-                    switch (buffer.ReadString())
-                    {
-                        case "CLIENT_QUIT":
-                            int clientID = buffer.ReadVariableInt32();
-                            Console.WriteLine("Client " + clientID + " has quit.");
-                            _connections.Remove(clientID);
-                            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-                            if (mdb.hasObject(clientID << 25))
-                                mdb.removeObject(clientID << 25);
-                            break;
-                    }
-                    break;
             }
         }
 
+        /// <summary>
+        /// Handles an encodable by switching on the type
+        /// of the sent thing and handling it appropriately.
+        /// At the moment only supports InputStates, which
+        /// it adds to the appropriate queue.
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="senderID"></param>
         private void handleEncodable(NetBuffer buffer, int senderID)
         {
             string objectType = buffer.ReadString();
             switch (objectType)
             {
-                    //TODO: change input state's getType?
                 case "Mammoth.Engine.Input.InputState":
+                    // Decode the InputState and add it to the sender's InputState queue
                     if (!_inputStates.ContainsKey(senderID))
                         throw new Exception("Invalid player id: " + senderID);
                     IDecoder decoder = (IDecoder)this.Game.Services.GetService(typeof(IDecoder));
@@ -199,16 +282,23 @@ namespace Mammoth.Engine.Networking
             }
         }
 
+        /// <summary>
+        /// Returns the queue of InputStates for the specified
+        /// client.
+        /// </summary>
+        /// <param name="playerID"></param>
+        /// <returns></returns>
         public Queue<InputState> getInputStateQueue(int playerID)
         {
             if (_inputStates[playerID] == null)
-            {
-                //TODO add good exceptions
                 throw new Exception("Invalid player id: " + playerID);
-            }
             return _inputStates[playerID];
         }
 
+        /// <summary>
+        /// Creates the game session, which at the moment
+        /// allows up to 32 client connections.
+        /// </summary>
         public void createSession()
         {
             Console.WriteLine("Creating session...");
@@ -221,15 +311,17 @@ namespace Mammoth.Engine.Networking
             _server.Start();
         }
 
+        /// <summary>
+        /// Ends the game by shutting down the server.
+        /// </summary>
         public void endGame()
         {
-            NetBuffer buffer = _server.CreateBuffer();
-            buffer.WriteVariableInt32((int)MessageType.STATUS_CHANGE);
-            buffer.Write("SERVER_QUIT");
-            _server.SendMessage(buffer, _connections.Values, NetChannel.ReliableInOrder1);
             _server.Shutdown("Game ended.");
         }
 
+        /// <summary>
+        /// The ClientID of the server, which is always 0.
+        /// </summary>
         public override int ClientID
         {
             get { return 0; }
@@ -237,6 +329,11 @@ namespace Mammoth.Engine.Networking
 
         #endregion
 
+        /// <summary>
+        /// Small storage class which stores an object to be sent
+        /// in serialized form along with the type, ID, and 
+        /// recipient information.
+        /// </summary>
         private class DataGram
         {
             public string ObjectType;
@@ -245,6 +342,13 @@ namespace Mammoth.Engine.Networking
             public byte[] Data { get; set; }
             public int Recipient { get; set; }
 
+            /// <summary>
+            /// Creates a DataGram.
+            /// </summary>
+            /// <param name="objectType">The type of the object to be sent</param>
+            /// <param name="id">The object ID of the object to be sent</param>
+            /// <param name="data">The serialized data to be sent</param>
+            /// <param name="recipient">The recipient of the data, -1 to send to all</param>
             public DataGram(string objectType, int id, byte[] data, int recipient)
             {
                 ObjectType = objectType;
@@ -254,6 +358,14 @@ namespace Mammoth.Engine.Networking
                 Exclude = -1;
             }
 
+            /// <summary>
+            /// Creates a DataGram.
+            /// </summary>
+            /// <param name="objectType">The type of the object to be sent</param>
+            /// <param name="id">The object ID of the object to be sent</param>
+            /// <param name="data">The serialized data to be sent</param>
+            /// <param name="recipient">The recipient of the data, -1 to send to all</param>
+            /// <param name="exclude">A client to exclude from receiving the message</param>
             public DataGram(string objectType, int id, byte[] data, int recipient, int exclude)
             {
                 ObjectType = objectType;

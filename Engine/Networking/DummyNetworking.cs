@@ -16,16 +16,6 @@ namespace Mammoth.Engine.Networking
 
         }
 
-        public override bool isLANCapable()
-        {
-            return false;
-        }
-
-        public override bool isNetCapable()
-        {
-            return false;
-        }
-
         public override NetworkComponent.NetworkingType getType()
         {
             return NetworkingType.DUMMY;
@@ -59,6 +49,10 @@ namespace Mammoth.Engine.Networking
             return;
         }
 
+        /// <summary>
+        /// If the player shoots, creates a bullet in the correct place.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
