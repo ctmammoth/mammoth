@@ -59,7 +59,7 @@ namespace Mammoth.Engine.Objects
     /// <summary>
     /// A simple weapon which shoots Bullets.
     /// </summary>
-    public abstract class SimpleGun : BaseObject, IWeapon, IHoldeableItem
+    public abstract class Gun : BaseObject, IWeapon, IHoldeableItem
     {
         #region Properties
 
@@ -152,7 +152,7 @@ namespace Mammoth.Engine.Objects
         // Perturbs the bullet's direction
         private Random directionPerturber;
 
-        public SimpleGun(Game game, Player owner)
+        public Gun(Game game, Player owner)
             : base(game)
         {
             // Give each magazine 15 bullets

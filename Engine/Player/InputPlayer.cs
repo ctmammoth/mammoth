@@ -75,7 +75,7 @@ namespace Mammoth.Engine
             // Give the player 5 weapons, for now
             Items = new IWeapon[5];
             // Give the player a simple gun, for now
-            Items[0] = new SimpleGun(game, this);
+            Items[0] = new Revolver(game, this);
             CurWeapon = Items[0];
         }
 
