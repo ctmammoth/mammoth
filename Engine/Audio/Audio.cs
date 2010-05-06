@@ -14,6 +14,7 @@ namespace Mammoth.Engine.Audio
     {
         private Dictionary<string, List<Song>> _songs;
         private Dictionary<string, SoundEffect> _sounds;
+        private List<SoundEffectInstance> _loopedSounds;
         private int _currentSong;
         private string _currentPlaylist;
 
@@ -23,6 +24,7 @@ namespace Mammoth.Engine.Audio
             game.Services.AddService(typeof(IAudioService), this);
             _songs = new Dictionary<string, List<Song>>();
             _sounds = new Dictionary<string, SoundEffect>();
+            _loopedSounds = new List<SoundEffectInstance>();
             loadSongs();
             loadSounds();
         }
@@ -45,6 +47,8 @@ namespace Mammoth.Engine.Audio
             ContentManager manager = this.Game.Content;
 
             _sounds.Add("Gunshot", manager.Load<SoundEffect>("sounds/gunshot"));
+            _sounds.Add("Ambient", manager.Load<SoundEffect>("sounds/ambient"));
+            _sounds.Add("Reload", manager.Load<SoundEffect>("sounds/reload"));
         }
 
         #region IAudioService Members
@@ -53,13 +57,22 @@ namespace Mammoth.Engine.Audio
         {
             _currentSong = 0;
             _currentPlaylist = toPlay;
-            MediaPlayer.Play(_songs[toPlay][0]);
+            //MediaPlayer.Play(_songs[toPlay][0]);
         }
 
         public void playSound(string toPlay)
         {
             _sounds[toPlay].Play();
         }
+
+        public void loopSound(string toPlay)
+        {
+            SoundEffectInstance sei = _sounds[toPlay].CreateInstance();
+            _loopedSounds.Add(sei);
+            sei.Play();
+        }
+
+        #endregion IAudioService Members
 
         public override void Update(GameTime gameTime)
         {
@@ -68,10 +81,13 @@ namespace Mammoth.Engine.Audio
             if (MediaPlayer.State != MediaState.Playing)
             {
                 _currentSong = (_currentSong + 1) % _songs[_currentPlaylist].Count;
-                MediaPlayer.Play(_songs[_currentPlaylist][_currentSong]);
+                //MediaPlayer.Play(_songs[_currentPlaylist][_currentSong]);
+            }
+            foreach (SoundEffectInstance sei in _loopedSounds)
+            {
+                if (sei.State != SoundState.Playing)
+                    sei.Play();
             }
         }
-
-        #endregion
     }
 }
