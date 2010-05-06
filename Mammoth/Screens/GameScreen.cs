@@ -217,6 +217,10 @@ namespace Mammoth
 
             IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
             mdb.Dispose();
+
+            ICameraService cam = (ICameraService)this.Game.Services.GetService(typeof(ICameraService));
+            this.Game.Components.Remove((GameComponent)cam);
+            this.Game.Services.RemoveService(typeof(ICameraService));
         }
 
         #endregion
