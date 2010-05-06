@@ -21,7 +21,6 @@ namespace Mammoth.Engine
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            Console.WriteLine("Health: " + this.Health);
         }
     }
 }

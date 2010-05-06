@@ -16,11 +16,13 @@ namespace Mammoth.Engine.Physics
     /// </summary>
     public interface IPhysicsManagerService
     {
+        void CollidePair(Actor ActorA, Actor ActorB);
+
         Actor CreateActor(ActorDescription aDesc);
         Actor CreateActor(ActorDescription aDesc, PhysicalObject owner);
         void RemoveActor(Actor toRemove);
 
-        CCDSkeleton CreateCCDSkeleton(TriangleMeshDescription tDesc);
+        PhysicalObject RaycastClosestShape(Vector3 position, Vector3 direction);
     
         Controller CreateController(ControllerDescription cDesc, PhysicalObject owner);
 
@@ -89,6 +91,13 @@ namespace Mammoth.Engine.Physics
         /// </summary>
         private class ContactReporter : UserContactReport
         {
+            private PhysicsManagerService owner;
+
+            public ContactReporter(PhysicsManagerService owner)
+            {
+                this.owner = owner;
+            }
+
             /// <summary>
             /// Collides two objects involved in a collision with each other.
             /// </summary>
@@ -99,34 +108,45 @@ namespace Mammoth.Engine.Physics
                 // Test
                 Debug.Assert(contactInformation != null);
 
-                // Collide the objects with each other: make sure ActorA is not null and has userdata
-                if (contactInformation.ActorA != null && contactInformation.ActorA.UserData != null)
-                {
-                    // Make sure ActorB is not null and has userdata
-                    if (contactInformation.ActorB != null && contactInformation.ActorB.UserData != null)
-                    {
-                        ((PhysicalObject)contactInformation.ActorA.UserData).CollideWith(
-                            (PhysicalObject)contactInformation.ActorB.UserData);
-                        Console.WriteLine("A = " + ((PhysicalObject)contactInformation.ActorA.UserData).getObjectType());
-                    }
-                }
-                else
-                    Console.WriteLine("ActorA has no data or is null");
-
-                // Make sure ActorB is not null and has userdata
-                if (contactInformation.ActorB != null && contactInformation.ActorB.UserData != null)
-                {
-                    // Make sure ActorA is not null and has userdata
-                    if (contactInformation.ActorA != null && contactInformation.ActorA.UserData != null)
-                    {
-                        ((PhysicalObject)contactInformation.ActorB.UserData).CollideWith(
-                        (PhysicalObject)contactInformation.ActorA.UserData);
-                        Console.WriteLine("B = " + ((PhysicalObject)contactInformation.ActorB.UserData).getObjectType());
-                    }
-                }
-                else
-                    Console.WriteLine("ActorB has no data or is null");
+                // Collide the pair in the ContactPair
+                owner.CollidePair(contactInformation.ActorA, contactInformation.ActorB);
             }
+        }
+
+        /// <summary>
+        /// Collides a pair of objects with each other
+        /// </summary>
+        /// <param name="ActorA"></param>
+        /// <param name="ActorB"></param>
+        public void CollidePair(Actor ActorA, Actor ActorB)
+        {
+            // Collide the objects with each other: make sure ActorA is not null and has userdata
+            if (ActorA != null && ActorA.UserData != null)
+            {
+                // Make sure ActorB is not null and has userdata
+                if (ActorB != null && ActorB.UserData != null)
+                {
+                    ((PhysicalObject)ActorA.UserData).CollideWith(
+                        (PhysicalObject)ActorB.UserData);
+                    Console.WriteLine("A = " + ((PhysicalObject)ActorA.UserData).getObjectType());
+                }
+            }
+            else
+                Console.WriteLine("ActorA has no data or is null");
+
+            // Make sure ActorB is not null and has userdata
+            if (ActorB != null && ActorB.UserData != null)
+            {
+                // Make sure ActorA is not null and has userdata
+                if (ActorA != null && ActorA.UserData != null)
+                {
+                    ((PhysicalObject)ActorB.UserData).CollideWith(
+                    (PhysicalObject)ActorA.UserData);
+                    Console.WriteLine("B = " + ((PhysicalObject)ActorB.UserData).getObjectType());
+                }
+            }
+            else
+                Console.WriteLine("ActorB has no data or is null");
         }
 
         /// <summary>
@@ -143,6 +163,8 @@ namespace Mammoth.Engine.Physics
 
             // Construct the core
             core = new Core(new CoreDescription(), new ConsoleOutputStream());
+            // Turn on CCD (continuous collision detection)
+            core.SetParameter(PhysicsParameter.ContinuousCollisionDetection, true);
 
             // Set debug parameters
             #if PHYSX_DEBUG
@@ -175,6 +197,29 @@ namespace Mammoth.Engine.Physics
         }
 
         #region IPhysicsManagerService Members
+
+        /// <summary>
+        /// Shoots a ray that stops after hitting the nearest shape.
+        /// </summary>
+        /// <param name="position">The position from which to cast the ray.</param>
+        /// <param name="direction">A unit vector in the direction in which to cast the ray.</param>
+        /// <returns>The PhysicalObject that owns the Actor that owns the Shape hit by the ray, or null if nothing
+        /// was hit or the Actor hit had no userdata.</returns>
+        public PhysicalObject RaycastClosestShape(Vector3 position, Vector3 direction)
+        {
+            // Return the userdata for the actor for the shape that was hit
+            RaycastHit rayHit = curScene.RaycastClosestShape(new StillDesign.PhysX.Ray(position, direction), ShapesType.All);
+            // Make sure the shape that was hit exists and that its actor has userdata
+            if (rayHit.Shape != null && rayHit.Shape.Actor.UserData != null)
+            {
+                // Get the PhysicalObject that owns the Shape hit by the raycast
+                PhysicalObject objHit = ((PhysicalObject)rayHit.Shape.Actor.UserData);
+                return objHit;
+            }
+            else
+                return null;
+        }
+
         /// <summary>
         /// Creates a new Actor in the current scene.
         /// </summary>
@@ -200,12 +245,6 @@ namespace Mammoth.Engine.Physics
             }
             else
                 return null;
-        }
-
-        // TODO
-        public CCDSkeleton CreateCCDSkeleton(TriangleMeshDescription tDesc)
-        {
-            return core.CreateCCDSkeleton(tDesc);
         }
 
         /// <summary>
@@ -273,6 +312,7 @@ namespace Mammoth.Engine.Physics
 
                 // Create the controller
                 Controller ctrler = controllerManager.CreateController(cDesc);
+                // Set the userdata for the controller and its actor
                 ctrler.UserData = owner;
                 ctrler.Actor.UserData = owner;
 
@@ -326,7 +366,7 @@ namespace Mammoth.Engine.Physics
                     // We'll make our own plane
                     GroundPlaneEnabled = false,
                     // Set this to our custom class
-                    UserContactReport = new ContactReporter(),
+                    UserContactReport = new ContactReporter(this),
                     // Set gravity to earth's default
                     Gravity = new Vector3(0.0f, -9.81f, 0.0f) / 9.81f,
                     // Use variable timesteps for the simulation to make sure that it's syncing with the refresh 
