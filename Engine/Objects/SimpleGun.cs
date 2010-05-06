@@ -59,7 +59,7 @@ namespace Mammoth.Engine
     /// <summary>
     /// A simple weapon which shoots Bullets.
     /// </summary>
-    public class SimpleGun : BaseObject, IWeapon, IHoldeableItem
+    public class SimpleGun : BaseObject, IWeapon, IHoldeableItem, IRenderable
     {
         #region Properties
 
@@ -225,6 +225,18 @@ namespace Mammoth.Engine
         void IHoldeableItem.SetOwner(Player owner)
         {
             Owner = owner;
+        }
+
+        #endregion
+
+        #region IRenderable Members
+
+        Vector3 IRenderable.PositionOffset
+        {
+            get
+            {
+                return Vector3(2.0f, 2.0f, 2.0f);
+            }
         }
 
         #endregion
