@@ -177,9 +177,9 @@ namespace Mammoth.Engine
                     _lastFiredTime = curTime;
 
                     // Randomly perturb the bullet
-                    direction = Vector3.Add(direction, new Vector3(directionPerturber.NextDouble() * inaccuracy,
-                        directionPerturber.NextDouble() * inaccuracy,
-                        directionPerturber.NextDouble() * inaccuracy));
+                    direction = Vector3.Add(direction, new Vector3((float)(directionPerturber.NextDouble() - 1) * inaccuracy,
+                        (float)(directionPerturber.NextDouble() - 1) * inaccuracy,
+                        (float)(directionPerturber.NextDouble() - 1) * inaccuracy));
 
                     SpawnBullet(position, direction, shooterID);
                 }
