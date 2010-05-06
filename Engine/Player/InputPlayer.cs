@@ -199,7 +199,7 @@ namespace Mammoth.Engine
 
                 // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
                 if (input.KeyPressed(InputType.Fire))
-                    this.Throw();
+                    this.Shoot();
 
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
@@ -213,10 +213,18 @@ namespace Mammoth.Engine
         }
 
         /// <summary>
-        /// Throws a "bullet" in the current direction of the player. Overridden in ProxyInputPlayer since throwing only happens on server-side.
+        /// Throws a "bullet" in the current direction of the player. Overridden in ProxyInputPlayer since shooting only happens on server-side.
         /// </summary>
-        protected virtual void Throw() {
-            Console.WriteLine("Throwing");
+        protected virtual void Shoot() {
+            Console.WriteLine("Throwing.");
+        }
+
+        /// <summary>
+        /// Reloads the player's current weapon.  Overridden in ProxyInputPlayer since reloading only happens on server-side.
+        /// </summary>
+        protected virtual void Reload()
+        {
+            Console.WriteLine("Reloading.");
         }
 
         /// <summary>

@@ -67,7 +67,7 @@ namespace Mammoth.Engine
         /// <summary>
         /// Overrides InputPlayer's Throw() in order to allow shooting with respect to player's position and orientation.
         /// </summary>
-        protected override void Throw()
+        protected override void Shoot()
         {
             // Shoot if the player currently has a weapon
             if (CurWeapon != null)
@@ -81,6 +81,15 @@ namespace Mammoth.Engine
 
                 CurWeapon.Shoot(position, direction, ID);
             }
+        }
+
+        /// <summary>
+        /// Overrides InputPlayer's Reload() in order to allow reloading.
+        /// </summary>
+        protected override void Reload()
+        {
+            if (CurWeapon != null)
+                CurWeapon.Reload();
         }
 
         public override void TakeDamage(float damage, IDamager inflicter)
