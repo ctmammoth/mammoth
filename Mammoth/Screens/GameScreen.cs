@@ -214,7 +214,8 @@ namespace Mammoth
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             physics.RemoveScene();
 
-            // TODO: Clear/delete/dispose of the model database.
+            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            mdb.Dispose();
         }
 
         #endregion
