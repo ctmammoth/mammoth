@@ -59,7 +59,7 @@ namespace Mammoth.Engine
     /// <summary>
     /// A simple weapon which shoots Bullets.
     /// </summary>
-    public class SimpleGun : BaseObject, IWeapon, IHoldeableItem, IRenderable
+    public class SimpleGun : BaseObject, IWeapon, IHoldeableItem
     {
         #region Properties
 
@@ -117,7 +117,7 @@ namespace Mammoth.Engine
         }
 
         // The gun's model
-        public Model Model3D
+        public Microsoft.Xna.Framework.Graphics.Model Model3D
         {
             get;
             protected set;
@@ -213,9 +213,8 @@ namespace Mammoth.Engine
             IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
             ICameraService cam = (ICameraService)this.Game.Services.GetService(typeof(ICameraService));
 
-            //If you're using the first-person camera, don't draw your own geometry.
-            if (cam.Type != Camera.CameraType.FIRST_PERSON)
-                r.DrawRenderable(this);
+            //Render the RemotePlayer
+            r.DrawRenderable(this);
         }
 
         #endregion
@@ -235,7 +234,7 @@ namespace Mammoth.Engine
         {
             get
             {
-                return Vector3(2.0f, 2.0f, 2.0f);
+                return new Vector3(2.0f, 2.0f, 2.0f);
             }
         }
 

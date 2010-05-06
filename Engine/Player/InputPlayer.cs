@@ -254,6 +254,8 @@ namespace Mammoth.Engine
             //If you're using the first-person camera, don't draw your own geometry.
             if (cam.Type != Camera.CameraType.FIRST_PERSON)
                 r.DrawRenderable(this);
+            if (CurWeapon != null)
+                r.DrawRenderable(CurWeapon);
         }
 
         public override void TakeDamage(float damage, IDamager inflicter)
