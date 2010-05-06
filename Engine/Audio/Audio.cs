@@ -55,7 +55,10 @@ namespace Mammoth.Engine.Audio
         public void playMusic(string toPlay)
         {
             if (!_songs.ContainsKey(toPlay))
+            {
                 MediaPlayer.Stop();
+                _currentPlaylist = null;
+            }
             else
             {
                 _currentSong = 0;
@@ -89,7 +92,7 @@ namespace Mammoth.Engine.Audio
         {
             base.Update(gameTime);
 
-            if (MediaPlayer.State != MediaState.Playing)
+            if (MediaPlayer.State != MediaState.Playing && _currentPlaylist != null)
             {
                 _currentSong = (_currentSong + 1) % _songs[_currentPlaylist].Count;
                 //MediaPlayer.Play(_songs[_currentPlaylist][_currentSong]);

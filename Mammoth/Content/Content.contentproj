@@ -170,47 +170,19 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="textures\terrain-257.bmp">
-      <Name>terrain-257</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Engine\Engine.csproj">
       <Project>{E80FCA0E-78EC-44C5-B375-894050EEE6CB}</Project>
       <Name>Engine</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="textures\heightmap-257.bmp">
-      <Name>heightmap-257</Name>
+    <Compile Include="textures\heightmap-256.bmp">
+      <Name>heightmap-256</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="textures\heightmap-64.bmp">
-      <Name>heightmap-64</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="textures\terrain-64.bmp">
-      <Name>terrain-64</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="textures\heightmap-128.bmp">
-      <Name>heightmap-128</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="textures\terrain-128.bmp">
-      <Name>terrain-128</Name>
+    <Compile Include="textures\terrain-256.bmp">
+      <Name>terrain-256</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
