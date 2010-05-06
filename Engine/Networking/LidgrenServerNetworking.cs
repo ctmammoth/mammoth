@@ -89,9 +89,9 @@ namespace Mammoth.Engine.Networking
         /// Sends a sound event to all players.
         /// </summary>
         /// <param name="soundToPlay"></param>
-        public void sendSound(string soundToPlay)
+        public void sendEvent(string eventType, string param)
         {
-            _toSend.Enqueue(new DataGram(MessageType.EVENT, "Sound", -1, null, -1, -1, soundToPlay));
+            _toSend.Enqueue(new DataGram(MessageType.EVENT, eventType, -1, null, -1, -1, param));
         }
 
         /// <summary>
@@ -99,9 +99,9 @@ namespace Mammoth.Engine.Networking
         /// </summary>
         /// <param name="soundToPlay"></param>
         /// <param name="target"></param>
-        public void sendSound(string soundToPlay, int target)
+        public void sendEvent(string eventType, string param, int target)
         {
-            _toSend.Enqueue(new DataGram(MessageType.EVENT, "Sound", -1, null, target, -1, soundToPlay));
+            _toSend.Enqueue(new DataGram(MessageType.EVENT, eventType, -1, null, target, -1, param));
         }
 
         /// <summary>
@@ -210,6 +210,7 @@ namespace Mammoth.Engine.Networking
                     IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
                     if (mdb.hasObject(id << 25))
                         mdb.removeObject(id << 25);
+                    sendEvent("PlayerLeft", id.ToString());
                     return;
                 }
             }

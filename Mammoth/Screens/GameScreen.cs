@@ -19,6 +19,12 @@ namespace Mammoth
 {
     class GameScreen : TScreen
     {
+        #region Fields
+
+        TWidget baseWidget;
+
+        #endregion
+
         public GameScreen(Game game)
             : base(game)
         {
@@ -74,7 +80,7 @@ namespace Mammoth
             audio.loopSound("Ambient");
 
             // Initialize the HUD to cover the screen.
-            TWidget baseWid = new TWidget(this.Game)
+            /*TWidget baseWid = new TWidget(this.Game)
             {
                 Bounds = this.Game.Window.ClientBounds
             };
@@ -84,7 +90,7 @@ namespace Mammoth
                 Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, 150)
             });
 
-            baseWid.Initialize();
+            baseWid.Initialize();*/
 
             // Now, we want to initialize all of the components we just added.
             foreach (GameComponent component in this.Components)
@@ -100,6 +106,15 @@ namespace Mammoth
 
             IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
             modelDB.registerObject(new Terrain(this.Game));
+
+            IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
+
+            // Add the crosshairs to the game.
+            baseWidget = new TImage(this.Game, r.LoadTexture("cross"))
+            {
+                Size = new Vector2(50, 50),
+                Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2)
+            };
         }
 
         public override void Update(GameTime gameTime, bool hasFocus, bool visible)
@@ -144,6 +159,10 @@ namespace Mammoth
                 foreach (IUpdateable component in updateList.OrderBy((comp) => comp.UpdateOrder))
                     component.Update(gameTime);
 
+                // TODO: Do this correctly?
+                // Update the HUD.
+                baseWidget.Update(gameTime);
+
                 // Let's have PhysX update itself.
                 // This might need to be changed/optimized a bit if things are getting slow because they have
                 // to wait for the physics calculations.
@@ -172,10 +191,10 @@ namespace Mammoth
         #endif
 
             // Maybe here is where we would draw HUD stuff?  Or maybe an explicit call to something
-            // that draws the HUD for us.  Some widget code, I suppose.
+            // that draws the HUD for us.  Some widget code, I suppose.\
 
             // Draw the HUD
-            //HUDWidget.Draw(gameTime);
+            //baseWidget.Draw(gameTime);
         }
 
         /// <summary>
@@ -215,13 +234,16 @@ namespace Mammoth
             ICameraService cam = (ICameraService)this.Game.Services.GetService(typeof(ICameraService));
             this.Game.Components.Remove((GameComponent)cam);
             this.Game.Services.RemoveService(typeof(ICameraService));
+
+            // Play the menu music
+            IAudioService audio = (IAudioService)Game.Services.GetService(typeof(IAudioService));
+            audio.stopSounds();
         }
 
         #endregion
 
         #region Variables
         // This widget is used to draw the HUD.
-        private TWidget HUDWidget;
         #endregion
 
         #region Properties

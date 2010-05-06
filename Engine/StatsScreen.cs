@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using Mammoth.Engine.Input;
 using Mammoth.Engine.Interface;
@@ -27,7 +28,8 @@ namespace Mammoth.Engine
             // Create a base widget (kinda like a JFrame or a JPanel that contains everything else).
             TWidget baseWid = new TWidget(this.Game)
             {
-                Bounds = this.Game.Window.ClientBounds
+                Bounds = this.Game.Window.ClientBounds,
+                //BgColor = new Color(0.0f, 0.0f, 0.0f, 0.5f)
             };
 
 
@@ -94,24 +96,24 @@ namespace Mammoth.Engine
 
                 baseWid.Add(new TText(this.Game, "Personal Kills: " + GameStats.NumKills)
                 {
-                    Center = new Vector2((2 * this.Game.Window.ClientBounds.Width) / 5, 350)
+                    Center = new Vector2((1 * this.Game.Window.ClientBounds.Width) / 6, 350)
                 });
 
                 baseWid.Add(new TText(this.Game, "Personal Captures: " + GameStats.NumCaptures)
                 {
-                    Center = new Vector2((3 * this.Game.Window.ClientBounds.Width) / 5, 350)
+                    Center = new Vector2((3 * this.Game.Window.ClientBounds.Width) / 6, 350)
                 });
 
                 baseWid.Add(new TText(this.Game, "Personal Deaths: " + GameStats.NumDeaths)
                 {
-                    Center = new Vector2((4 * this.Game.Window.ClientBounds.Width) / 5, 350)
+                    Center = new Vector2((5 * this.Game.Window.ClientBounds.Width) / 6, 350)
                 });
 
 
                 //Your Team
                 baseWid.Add(new TText(this.Game, "Your Team: " + GameStats.YourTeam)
                 {
-                    Center = new Vector2((4 * this.Game.Window.ClientBounds.Width) / 5, 350)
+                    Center = new Vector2((this.Game.Window.ClientBounds.Width) / 2, 400)
                 });
 
             }

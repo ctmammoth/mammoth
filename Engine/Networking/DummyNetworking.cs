@@ -135,16 +135,16 @@ namespace Mammoth.Engine.Networking
         #region IServerNetworking Members
 
 
-        public void sendSound(string toPlay)
+        public void sendEvent(string eventType, string param)
         {
             IAudioService audio = (IAudioService)this.Game.Services.GetService(typeof(IAudioService));
-            audio.playSound(toPlay);
+            audio.playSound(param);
         }
 
-        public void sendSound(string toPlay, int target)
+        public void sendEvent(string eventType, string param, int target)
         {
             IAudioService audio = (IAudioService)this.Game.Services.GetService(typeof(IAudioService));
-            audio.playSound(toPlay);
+            audio.playSound(param);
         }
 
         #endregion

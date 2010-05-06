@@ -190,6 +190,7 @@ namespace Mammoth.Engine
                 if (input.IsKeyDown(InputType.Right)) // Right?
                     motion += Vector3.Right;
 
+                //TODO: Put this somewhere not sucky.
                 if (input.KeyPressed(InputType.Stats) && this is LocalInputPlayer)
                 {
                     TScreenManager t = (TScreenManager)this.Game.Services.GetService(typeof(TScreenManager));
@@ -206,7 +207,7 @@ namespace Mammoth.Engine
 
                 // If the player presses space (and is on the ground), jump!
                 if (InCollisionState(ControllerCollisionFlag.Down))
-                    if (input.KeyPressed(InputType.Jump))
+                    if (input.IsKeyDown(InputType.Jump))
                         this.Velocity += Vector3.Up / 4.0f;
 
                 // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
@@ -229,6 +230,8 @@ namespace Mammoth.Engine
 
             // Update main weapon
             ((BaseObject)CurWeapon).Update(gameTime);
+
+            //Console.WriteLine("Weapon " + ((BaseObject)CurWeapon).getObjectType() + " has " + CurWeapon.ShotsLeft() + " shots left.");
         }
 
         /// <summary>
@@ -275,7 +278,7 @@ namespace Mammoth.Engine
             if (cam.Type != Camera.CameraType.FIRST_PERSON)
                 r.DrawRenderable(this);
             if (CurWeapon != null)
-                r.DrawRenderable(CurWeapon);
+                ((BaseObject)CurWeapon).Draw(gameTime);
         }
 
         public override void TakeDamage(float damage, IDamager inflicter)
@@ -312,13 +315,15 @@ namespace Mammoth.Engine
             int myID = ID >> 25;
             GameStats = new GameStats(NumKills, NumCaptures, NumDeaths, myID, g);
 
-            Console.WriteLine("Encoding: " + GameStats.ToString());
+            //Console.WriteLine("Encoding: " + GameStats.ToString());
 
             tosend.AddElement("Position", Position);
             tosend.AddElement("Orientation", Orientation);
             tosend.AddElement("Velocity", Velocity);
             tosend.AddElement("Health", Health);
             tosend.AddElement("GameStats", GameStats);
+            tosend.AddElement("GunType", ((BaseObject)CurWeapon).getObjectType());
+            tosend.AddElement("Gun", CurWeapon);
 
             return tosend.Serialize();
         }
@@ -338,7 +343,20 @@ namespace Mammoth.Engine
             if (props.UpdatesFor("GameStats"))
                 props.UpdateIEncodable("GameStats", GameStats);
 
-            Console.WriteLine("Decoding: " + GameStats.ToString());
+            string gunType = (string)props.GetElement("GunType", "Revolver");
+            if (CurWeapon == null || !((BaseObject)CurWeapon).getObjectType().Equals(gunType))
+            {
+                switch (gunType)
+                {
+                    case "Revolver":
+                        CurWeapon = new Revolver(this.Game, this);
+                        break;
+                }
+            }
+            if (props.UpdatesFor("Gun"))
+                props.UpdateIEncodable("Gun", CurWeapon);
+
+            //Console.WriteLine("Decoding: " + GameStats.ToString());
         }
 
         #endregion
