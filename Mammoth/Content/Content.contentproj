@@ -105,8 +105,34 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="songs\01 Funky Town.mp3">
-      <Name>funkytown</Name>
+    <Compile Include="sounds\9mm.wav">
+      <Name>gunshot</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="songs\onestop.mp3">
+      <Name>onestop</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="songs\10 A Moment Of Violence.mp3">
+      <Name>momentviolence</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="songs\01 Superman.mp3">
+      <Name>superman</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+    <Compile Include="songs\02 Minority.mp3">
+      <Name>minority</Name>
       <Importer>Mp3Importer</Importer>
       <Processor>SongProcessor</Processor>
     </Compile>

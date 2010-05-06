@@ -9,7 +9,7 @@ using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
-    public class ModelDatabase : DrawableGameComponent, IModelDBService
+    public class ModelDatabase : DrawableGameComponent, IModelDBService, IDisposable
     {
         // This must not be zero since the player will have nextID = 0!
         private static int nextID = 1;
@@ -120,6 +120,17 @@ namespace Mammoth.Engine
         {
             //TODO: make this do something
             return true;
+        }
+
+        #endregion
+
+        #region IDisposable Members
+
+        void IDisposable.Dispose()
+        {
+            foreach (BaseObject obj in _objects.Values)
+                obj.Dispose();
+            this.Game.Services.RemoveService(typeof(IModelDBService));
         }
 
         #endregion
