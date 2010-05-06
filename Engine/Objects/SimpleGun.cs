@@ -116,6 +116,13 @@ namespace Mammoth.Engine
             private set;
         }
 
+        // The gun's model
+        public Model Model3D
+        {
+            get;
+            protected set;
+        }
+
         #endregion
 
         public SimpleGun(Game game)
@@ -125,6 +132,9 @@ namespace Mammoth.Engine
             Mag = new Magazine(game, 15);
             // Give the gun some magazines
             MagCount = 5;
+            // Give the gun a model
+            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
+            this.Model3D = r.LoadModel("soldier-low-poly");
         }
 
         #region IWeapon Members
@@ -190,10 +200,25 @@ namespace Mammoth.Engine
 
         #endregion
 
+        #region BaseObject Members
+
         public override string getObjectType()
         {
             return "SimpleGun";
         }
+
+        public override void Draw(GameTime gameTime)
+        {
+            //Load services
+            IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
+            ICameraService cam = (ICameraService)this.Game.Services.GetService(typeof(ICameraService));
+
+            //If you're using the first-person camera, don't draw your own geometry.
+            if (cam.Type != Camera.CameraType.FIRST_PERSON)
+                r.DrawRenderable(this);
+        }
+
+        #endregion
 
         #region IHoldeableItem Members
 
