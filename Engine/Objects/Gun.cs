@@ -251,7 +251,7 @@ namespace Mammoth.Engine.Objects
         private void SpawnBullet(Vector3 position, Vector3 direction, int shooterID)
         {
             IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
-            net.sendSound(FireSound);
+            net.sendEvent("Sound", FireSound);
 
             // Make sure the bullet isn't spawned in the player: shift it by a bit
             Bullet b = new Bullet(Game, position, direction, shooterID >> 25);
@@ -271,7 +271,7 @@ namespace Mammoth.Engine.Objects
             Console.WriteLine(getObjectType() + " is reloading!");
             _lastReloadTime = time.TotalRealTime.TotalMilliseconds;
             IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
-            net.sendSound("Reload", Owner.ID >> 25);
+            net.sendEvent("Sound", "Reload", Owner.ID >> 25);
 
             if (MagCount != 0)
             {
@@ -300,7 +300,7 @@ namespace Mammoth.Engine.Objects
             {
                 _lastReloadTime = -1;
                 IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
-                net.sendSound("Reload", Owner.ID >> 25);
+                net.sendEvent("Sound", "Reload", Owner.ID >> 25);
             }
         }
 

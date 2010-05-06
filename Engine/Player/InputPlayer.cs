@@ -342,9 +342,10 @@ namespace Mammoth.Engine
             if (props.UpdatesFor("GameStats"))
                 props.UpdateIEncodable("GameStats", GameStats);
 
-            if (CurWeapon == null)
+            string gunType = (string)props.GetElement("GunType", "Revolver");
+            if (CurWeapon == null || !((BaseObject)CurWeapon).getObjectType().Equals(gunType))
             {
-                switch ((string)props.GetElement("GunType", "Revolver"))
+                switch (gunType)
                 {
                     case "Revolver":
                         CurWeapon = new Revolver(this.Game, this);

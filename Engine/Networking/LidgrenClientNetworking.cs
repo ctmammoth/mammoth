@@ -187,6 +187,15 @@ namespace Mammoth.Engine.Networking
                             IAudioService audio = (IAudioService)this.Game.Services.GetService(typeof(IAudioService));
                             audio.playSound(toPlay);
                             break;
+                        case "PlayerLeft":
+                            int playerID = int.Parse(buffer.ReadString()) << 25;
+                            Physics.IPhysicsManagerService phys = 
+                                (Physics.IPhysicsManagerService)this.Game.Services.GetService(typeof(Physics.IPhysicsManagerService));
+                            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+                            phys.RemoveController(((RemotePlayer)mdb.getObject(playerID)).Controller);
+                            if (mdb.hasObject(playerID))
+                                mdb.removeObject(playerID);
+                            break;
                     }
                     break;
             }

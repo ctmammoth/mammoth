@@ -34,8 +34,8 @@ namespace Mammoth.Engine.Networking
         void sendThing(IEncodable toSend, int target);
         void sendThing(IEncodable toSend);
         void sendToAllBut(IEncodable toSend, int excludeTarget);
-        void sendSound(string toPlay);
-        void sendSound(string toPlay, int target);
+        void sendEvent(string eventType, string param);
+        void sendEvent(string eventType, string param, int target);
         Queue<InputState> getInputStateQueue(int playerID);
         void createSession();
         void endGame();
