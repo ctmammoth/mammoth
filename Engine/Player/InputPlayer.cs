@@ -68,10 +68,8 @@ namespace Mammoth.Engine
             // Give the player 5 weapons, for now
             Items = new IWeapon[5];
             // Give the player a simple gun, for now
-            Items[0] = new SimpleGun(game);
+            Items[0] = new SimpleGun(game, this);
             CurWeapon = Items[0];
-            // Set the owner of the weapon to this player
-            ((IHoldeableItem)CurWeapon).SetOwner(this);
 
             // Initializes PhysX of a player.
             InitializePhysX();
@@ -199,6 +197,10 @@ namespace Mammoth.Engine
                 // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
                 if (input.KeyPressed(InputType.Fire))
                     this.Shoot();
+
+                // Reload the user's gun
+                if (input.KeyPressed(InputType.Reload))
+                    this.Reload();
 
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;

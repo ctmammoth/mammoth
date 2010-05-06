@@ -125,7 +125,7 @@ namespace Mammoth.Engine
 
         #endregion
 
-        public SimpleGun(Game game)
+        public SimpleGun(Game game, Player owner)
             : base(game)
         {
             // Give each magazine 15 bullets
@@ -135,6 +135,11 @@ namespace Mammoth.Engine
             // Give the gun a model
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
             this.Model3D = r.LoadModel("soldier-low-poly");
+            // Set the owner
+            Owner = owner;
+            // Set location
+            Position = owner.Position;
+            Orientation = owner.HeadOrient;
         }
 
         #region IWeapon Members
