@@ -8,6 +8,7 @@ using Lidgren.Network.Xna;
 using Lidgren.Network;
 
 using Mammoth.Engine.Input;
+using Mammoth.Engine.Audio;
 
 namespace Mammoth.Engine.Networking
 {
@@ -147,9 +148,9 @@ namespace Mammoth.Engine.Networking
         }
 
         /// <summary>
-        /// Handles a Data packet, which could either be an encodable or 
-        /// a application-level status change message. Encodables are 
-        /// sent to the decoder, while status changes are handles appropriately.
+        /// Handles a Data packet, which could be an encodable or 
+        /// a application-level status change message or an event. Encodables are 
+        /// sent to the decoder, while status changes and events are handled appropriately.
         /// </summary>
         /// <param name="buffer"></param>
         private void handleData(NetBuffer buffer)
@@ -175,6 +176,16 @@ namespace Mammoth.Engine.Networking
                             // If the server quit, shut down the client
                             Console.WriteLine("The server has quit.");
                             _client.Shutdown("The server quit.");
+                            break;
+                    }
+                    break;
+                case MessageType.EVENT:
+                    switch (buffer.ReadString())
+                    {
+                        case "Sound":
+                            string toPlay = buffer.ReadString();
+                            IAudioService audio = (IAudioService)this.Game.Services.GetService(typeof(IAudioService));
+                            audio.playSound(toPlay);
                             break;
                     }
                     break;
@@ -240,7 +251,8 @@ namespace Mammoth.Engine.Networking
         public void quitGame()
         {
             Console.WriteLine("Quitting game.");
-            _client.Shutdown("Player Quit");
+            _client.Disconnect("Player Quit");
+            _toSend.Clear();
         }
 
         /// <summary>

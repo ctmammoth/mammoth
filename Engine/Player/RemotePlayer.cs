@@ -63,5 +63,13 @@ namespace Mammoth.Engine
             IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
             r.DrawRenderable(this);
         }
+
+        #region Properties
+        private IWeapon CurWeapon
+        {
+            get;
+            set;
+        }
+        #endregion
     }
 }

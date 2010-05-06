@@ -11,6 +11,10 @@ using Microsoft.Xna.Framework.Input;
 
 using Mammoth.Engine.Input;
 using Mammoth.Engine.Physics;
+using Mammoth.Engine.Objects;
+using Mammoth.Engine.Networking;
+using Mammoth.Engine.Interface;
+using Mammoth;
 
 namespace Mammoth.Engine
 {
@@ -41,16 +45,38 @@ namespace Mammoth.Engine
             get;
             set;
         }
+
+        // The armed weapon
+        protected IWeapon CurWeapon
+        {
+            get;
+            set;
+        }
+
+        // The weapons owned by this player
+        protected IWeapon[] Items
+        {
+            get;
+            set;
+        }
+
         #endregion
+
         /// <summary>
         /// Initialize a new InputPlayer. Does nothing special.
         /// </summary>
         public InputPlayer(Game game) : base(game)
         {
-            //Initializes PhysX of a player.
+            // Initializes PhysX of a player.
             InitializePhysX();
 
             this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
+
+            // Give the player 5 weapons, for now
+            Items = new IWeapon[5];
+            // Give the player a simple gun, for now
+            Items[0] = new SimpleGun(game, this);
+            CurWeapon = Items[0];
         }
 
         /// <summary>
@@ -97,13 +123,6 @@ namespace Mammoth.Engine
         /// <param name="gameTime">The Game Time.</param>
         public override void Update(GameTime gameTime)
         {
-            // Check whether the player is dead
-            /*if (Health <= 0)
-            {
-                Die();
-                return;
-            }*/
-
             // Load services for use later.
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             IInputService inputService = (IInputService)this.Game.Services.GetService(typeof(IInputService));
@@ -162,7 +181,14 @@ namespace Mammoth.Engine
 
                 if (input.IsKeyDown(InputType.Right)) // Right?
                     motion += Vector3.Right;
-                //}
+
+                if (input.KeyPressed(InputType.Stats))
+                {
+                    TScreenManager t = (TScreenManager)this.Game.Services.GetService(typeof(TScreenManager));
+                    IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
+                    int myID = ID >> 25;
+                    t.AddScreen(new StatsScreen(this.Game, NumKills, NumCaptures, NumDeaths, myID, g));
+                }
 
                 // Normalize the motion vector (so we don't move at twice the speed when moving diagonally).
                 if (motion != Vector3.Zero)
@@ -179,7 +205,11 @@ namespace Mammoth.Engine
 
                 // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
                 if (input.KeyPressed(InputType.Fire))
-                    this.Throw();
+                    this.Shoot(gameTime);
+
+                // Reload the user's gun
+                if (input.KeyPressed(InputType.Reload))
+                    this.Reload(gameTime);
 
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
@@ -190,13 +220,24 @@ namespace Mammoth.Engine
                 else
                     this.Velocity += physics.Scene.Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds - motion;
             }
+
+            // Update main weapon
+            ((BaseObject)CurWeapon).Update(gameTime);
         }
 
         /// <summary>
-        /// Throws a "bullet" in the current direction of the player. Overridden in ProxyInputPlayer since throwing only happens on server-side.
+        /// Throws a "bullet" in the current direction of the player. Overridden in ProxyInputPlayer since shooting only happens on server-side.
         /// </summary>
-        protected virtual void Throw() {
-            Console.WriteLine("Throwing");
+        protected virtual void Shoot(GameTime time) {
+            Console.WriteLine("Throwing.");
+        }
+
+        /// <summary>
+        /// Reloads the player's current weapon.  Overridden in ProxyInputPlayer since reloading only happens on server-side.
+        /// </summary>
+        protected virtual void Reload(GameTime time)
+        {
+            Console.WriteLine("Reloading.");
         }
 
         /// <summary>
@@ -227,6 +268,32 @@ namespace Mammoth.Engine
             //If you're using the first-person camera, don't draw your own geometry.
             if (cam.Type != Camera.CameraType.FIRST_PERSON)
                 r.DrawRenderable(this);
+            if (CurWeapon != null)
+                r.DrawRenderable(CurWeapon);
+        }
+
+        public override void TakeDamage(float damage, IDamager inflicter)
+        {
+            base.TakeDamage(damage, inflicter);
+            Console.WriteLine("Health: " + this.Health);
+            if (this.Health <= 0)
+            {
+                Die();
+                //Get your own id
+                int myID = this.ID >> 25;
+                Projectile p = (Projectile)inflicter;
+                Console.WriteLine("Player " + myID + " was killed by Player " + p.Creator);
+            }
+        }
+
+        /// <summary>
+        /// Respawns the player when the it dies.
+        /// </summary>
+        public override void Die()
+        {
+            base.Die();
+            Console.WriteLine("Player " + ID + " died.");
+            this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
         }
 
         #region IEncodable Members

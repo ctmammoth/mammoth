@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Microsoft.Xna.Framework;
+
 namespace Mammoth.Engine
 {
-    public class GameLogic
+    public class GameLogic : Mammoth.Engine.IGameLogic
     {
         public Team team1;
         public Team team2;
 
         public GameLogic()
         {
+            Console.WriteLine("Constructing game logic");
             team1 = new Team(1);
             team2 = new Team(2);
         }
@@ -20,12 +23,19 @@ namespace Mammoth.Engine
         /// Adds a client to the smallest team. If teams are same size, adds client to Team 1.
         /// </summary>
         /// <param name="client_id">The ID of the client being added to the team.</param>
-        public void AddToTeam(int client_id)
+        /// <returns>The team the client was added to.</returns>
+        public Team AddToTeam(int client_id)
         {
             if (team1.GetTeamSize() > team2.GetTeamSize())
+            {
                 team2.AddTeamMember(client_id);
+                return team2;
+            }
             else
+            {
                 team1.AddTeamMember(client_id);
+                return team1;
+            }
         }
 
         /// <summary>
@@ -33,14 +43,24 @@ namespace Mammoth.Engine
         /// </summary>
         /// <param name="client_id">The ID of the client being added to the team.</param>
         /// <param name="team_id">The ID of the team to add the client to.</param>
-        public void ManuallyAddToTeam(int client_id, int team_id)
+        /// <returns>The team the client was added to.</returns>
+        public Team ManuallyAddToTeam(int client_id, int team_id)
         {
             if (team_id == 1)
+            {
                 team1.AddTeamMember(client_id);
+                return team1;
+            }
             else if (team_id == 2)
+            {
                 team2.AddTeamMember(client_id);
+                return team2;
+            }
             else
+            {
                 Console.WriteLine("Team " + team_id + " doesn't exist. Cannot add client.");
+                return null;
+            }
         }
 
         /// <summary>
@@ -86,7 +106,42 @@ namespace Mammoth.Engine
             }
         }
 
+        /// <summary>
+        /// If someone on a team kills another, give that person's team a point.
+        /// </summary>
+        /// <param name="client_id">The client id of the killer</param>
+        public void AwardKill(int client_id)
+        {
+            Console.WriteLine("Awarding kill...");
+
+            if (team1.GetTeamMemberList().Contains(client_id))
+            {
+                Console.WriteLine("Awarding kill to Team 1. Thanks to Player " + client_id);
+                team1.AddTeamKill();
+            }
+            else
+            {
+                Console.WriteLine("Awarding kill to Team 2. Thanks to Player " + client_id);
+                team2.AddTeamKill();
+            }
+        }
 
 
+        /// <summary>
+        /// Returns the team on which the client indicated resigns.
+        /// </summary>
+        /// <param name="client_id">The client ID in query</param>
+        /// <returns>The team on which that client resides</returns>
+        public Team GetTeamOf(int client_id)
+        {
+            if (team1.GetTeamMemberList().Contains(client_id))
+            {
+                return team1;
+            }
+            else
+            {
+                return team2;
+            }
+        }
     }
 }

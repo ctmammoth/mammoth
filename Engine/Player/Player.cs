@@ -30,6 +30,7 @@ namespace Mammoth.Engine
 
             //Defines model height which is used by the camera
             this.Height = 6.0f;
+
         }
 
         /// <summary>
@@ -56,12 +57,12 @@ namespace Mammoth.Engine
             set;
         }
 
-        public void TakeDamage(float damage)
+        public virtual void TakeDamage(float damage, IDamager inflicter)
         {
             this.Health -= damage;
         }
 
-        public void Die()
+        public virtual void Die()
         {
             this.NumDeaths++;
         }
@@ -195,12 +196,6 @@ namespace Mammoth.Engine
             set;
         }
 
-        //TEAM
-        protected Team Team
-        {
-            get;
-            set;
-        }
         #endregion
     }
 }

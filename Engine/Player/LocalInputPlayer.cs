@@ -12,7 +12,7 @@ namespace Mammoth.Engine
     /// An InputPlayer that draws itself on the client-side, acting as the client's player.
     /// </summary>
     public class LocalInputPlayer : InputPlayer
-    {      
+    {
         /// <summary>
         /// Initializes the player and loads its model.
         /// </summary>

@@ -24,6 +24,13 @@ namespace Mammoth.Engine
             protected set;
         }
 
+        //TEAM
+        public Team Team
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         /// <summary>
@@ -33,7 +40,11 @@ namespace Mammoth.Engine
         /// <param name="clientID">The ID of the client this player is simulating on the server</param>
         public ProxyInputPlayer(Game game, int clientID): base(game)
         {
+            Console.WriteLine("Creating proxy player");
             this.ClientID = clientID;
+            IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
+            this.Team = g.AddToTeam(this.ClientID);
+            Console.WriteLine("Proxy Player " + this.ClientID + " joined " + this.Team.ToString());
         }
 
         /// <summary>
@@ -57,33 +68,41 @@ namespace Mammoth.Engine
         /// <summary>
         /// Overrides InputPlayer's Throw() in order to allow shooting with respect to player's position and orientation.
         /// </summary>
-        protected override void Throw()
+        protected override void Shoot(GameTime gameTime)
         {
-            //Calculate the unit vector pointing the direction in which the bullet will be thrown.
-            Vector3 forward = Vector3.Transform(Vector3.Forward, HeadOrient) * 1000.0f;
-            forward.Normalize();
+            // Shoot if the player currently has a weapon
+            if (CurWeapon != null)
+            {
+                //Calculate initial position of bullet to shoot from
+                Vector3 direction = Vector3.Transform(Vector3.Forward, HeadOrient) * 1000.0f;
+                direction.Normalize();
+                Vector3 position = Position + (Vector3.Up * Height / 4.0f);
+                Vector3 offset = Vector3.Multiply(direction, 2.0f);
+                position = Vector3.Add(position, offset);
 
-            //Calculate initial position of bullet to shoot from
-            Vector3 direction = Vector3.Transform(Vector3.Forward, HeadOrient) * 1000.0f;
-            direction.Normalize();
-            Vector3 position = Position + (Vector3.Up * Height / 4.0f);
-            Vector3 offset = Vector3.Multiply(direction, 2.0f);
-            position = Vector3.Add(position, offset);
+                CurWeapon.Shoot(position, direction, ID, gameTime);
+            }
+        }
 
-            // Make sure the bullet isn't spawned in the player: shift it by a bit
-            Bullet b = new Bullet(Game, position, direction, ID >> 25);
+        /// <summary>
+        /// Overrides InputPlayer's Reload() in order to allow reloading.
+        /// </summary>
+        protected override void Reload(GameTime time)
+        {
+            Console.WriteLine("Proxyplayer is reloading.");
+            if (CurWeapon != null)
+                CurWeapon.Reload(time);
+        }
 
-            // Give this projectile an ID, but it's not really necessary since it gets shot instantaneously
-            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            b.ID = modelDB.getNextOpenID();
-
-            // Debug info
-            Console.WriteLine("Throwing bullet with position: " + b.InitialPosition + ", direction: " + b.InitialDirection);
-            Console.WriteLine("Player position: " + Position);
-
-            // Send the bullet after it's created
-            IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
-            net.sendThing(b);
+        public override void TakeDamage(float damage, IDamager inflicter)
+        {
+            Console.WriteLine("Proxy player took damage");
+            if (this.Health <= 0)
+            {
+                IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
+                g.AwardKill(this.ClientID);
+            }
+            base.TakeDamage(damage, inflicter);
         }
     }
 }

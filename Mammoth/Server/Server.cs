@@ -29,6 +29,7 @@ namespace Mammoth.Server
             // Let's create/initialize the PhysX subsystem.
             PhysicsManagerService physics = new PhysicsManagerService(this);
             this.Components.Add(physics);
+
             // Give the server a renderer
             Renderer r = new Renderer(this);
             this.Services.AddService(typeof(IRenderService), r);
@@ -51,6 +52,10 @@ namespace Mammoth.Server
             modelDB.registerObject(new Terrain(this));
 
             NetworkComponent.CreateServerNetworking(this);
+
+            //Add GameLogic
+            GameLogic g = new GameLogic();
+            this.Services.AddService(typeof(IGameLogic), g);
 
             base.Initialize();
         }

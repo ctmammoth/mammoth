@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine
 {
-    public abstract class BaseObject
+    public abstract class BaseObject : IDisposable
     {
         public BaseObject(Game game)
         {
@@ -48,6 +48,12 @@ namespace Mammoth.Engine
             get;
             protected set;
         }
+        #endregion
+
+        #region IDisposable Members
+
+        public virtual void Dispose() { }
+
         #endregion
     }
 }

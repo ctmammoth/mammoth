@@ -61,6 +61,10 @@ namespace Mammoth.Engine
             NumCaptures++;
         }
 
+        public int GetCaptures()
+        {
+            return NumCaptures;
+        }
 
         /// <summary>
         /// Adds a kill to the team.
@@ -70,12 +74,26 @@ namespace Mammoth.Engine
             NumKills++;
         }
 
+        public int GetKills()
+        {
+            return NumKills;
+        }
+
         /// <summary>
         /// Gets the team's points. Points are determined by the sum of the number of kills and 10 times the number of flag captures.
         /// </summary>
         public int GetTeamPoints()
         {
             return NumKills + (10 * NumCaptures);
+        }
+
+        /// <summary>
+        /// Returns the team name as a string.
+        /// </summary>
+        /// <returns>"Team + (team id)"</returns>
+        public string ToString()
+        {
+            return "Team " + TeamID;
         }
 
     }

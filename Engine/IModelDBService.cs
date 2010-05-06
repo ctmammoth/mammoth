@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine
 {
-    public interface IModelDBService
+    public interface IModelDBService : IDisposable
     {
         bool hasObject(int objectID);
         BaseObject getObject(int objectID);

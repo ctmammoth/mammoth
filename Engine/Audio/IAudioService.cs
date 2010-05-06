@@ -8,5 +8,7 @@ namespace Mammoth.Engine.Audio
     public interface IAudioService
     {
         void playMusic(string toPlay);
+        void playSound(string toPlay);
+        void loopSound(string toPlay);
     }
 }

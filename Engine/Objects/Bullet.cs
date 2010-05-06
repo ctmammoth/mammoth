@@ -9,6 +9,7 @@ using StillDesign.PhysX.Utilities;
 using Microsoft.Xna.Framework;
 
 using Mammoth.Engine.Physics;
+using Mammoth.Engine.Audio;
 
 namespace Mammoth.Engine
 {
@@ -44,6 +45,9 @@ namespace Mammoth.Engine
         /// </summary>
         private void FireBullet()
         {
+            IAudioService audio = (IAudioService)Game.Services.GetService(typeof(IAudioService));
+            //audio.playSound("Gunshot");
+
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
 
             // Just handle bullets by raycasting
@@ -52,7 +56,7 @@ namespace Mammoth.Engine
             if (objectHit != null && objectHit is IDamageable)
             {
                 Console.WriteLine("Damaging a mofo of type " + objectHit.getObjectType());
-                ((IDamageable)objectHit).TakeDamage(GetDamage());
+                ((IDamageable)objectHit).TakeDamage(GetDamage(), this);
             }
         }
 

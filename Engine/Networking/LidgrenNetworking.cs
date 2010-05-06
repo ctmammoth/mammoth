@@ -32,6 +32,6 @@ namespace Mammoth.Engine.Networking
     /// </summary>
     public enum MessageType
     {
-        ENCODABLE, STATUS_CHANGE, CLIENT_ID
+        ENCODABLE, STATUS_CHANGE, CLIENT_ID, EVENT
     }
 }
