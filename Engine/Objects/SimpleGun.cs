@@ -91,14 +91,14 @@ namespace Mammoth.Engine
         {
             get
             {
-                return Position;
+                return _position;
             }
             set
             {
                 if (Owner != null)
-                    Position = Owner.Position;
+                    _position = Owner.Position;
                 else
-                    Position = value;
+                    _position = value;
             }
         }
 
@@ -125,6 +125,14 @@ namespace Mammoth.Engine
 
         #endregion
 
+        private Vector3 _position;
+
+        private double _lastFiredTime;
+        private double _lastReloadTime;
+
+        private const double FIRE_RATE = 4.0;
+        private const double RELOAD_TIME = 2000.0;
+
         public SimpleGun(Game game, Player owner)
             : base(game)
         {
@@ -135,6 +143,9 @@ namespace Mammoth.Engine
             // Give the gun a model
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
             this.Model3D = r.LoadModel("soldier-low-poly");
+
+            _lastFiredTime = 0;
+            _lastReloadTime = -1;
             // Set the owner
             Owner = owner;
             // Set location
@@ -144,15 +155,22 @@ namespace Mammoth.Engine
 
         #region IWeapon Members
 
-        public void Shoot(Vector3 position, Vector3 direction, int shooterID)
+        public void Shoot(Vector3 position, Vector3 direction, int shooterID, GameTime time)
         {
             // Make sure a shot can be fired
+            double curTime = time.TotalRealTime.TotalMilliseconds;
             if (Mag.FireShot() > 0)
             {
-                SpawnBullet(position, direction, shooterID);
+                // Check whether it's too soon to fire
+                if ((curTime - _lastFiredTime) >= (1000.0 / FIRE_RATE) && _lastReloadTime < 0)
+                {
+                    _lastFiredTime = curTime;
+                    SpawnBullet(position, direction, shooterID);
+                }
             }
             else if (MagCount > 1)
             {
+                _lastReloadTime = curTime;
                 Reload();
                 SpawnBullet(position, direction, shooterID);
             }
@@ -210,6 +228,15 @@ namespace Mammoth.Engine
         public override string getObjectType()
         {
             return "SimpleGun";
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            this.Position = Owner.Position;
+            this.Orientation = Owner.HeadOrient;
+            if (_lastReloadTime >= 0 && gameTime.TotalRealTime.TotalMilliseconds - _lastReloadTime >= RELOAD_TIME)
+                _lastReloadTime = -1;
         }
 
         public override void Draw(GameTime gameTime)

@@ -196,7 +196,7 @@ namespace Mammoth.Engine
 
                 // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
                 if (input.KeyPressed(InputType.Fire))
-                    this.Shoot();
+                    this.Shoot(gameTime);
 
                 // Reload the user's gun
                 if (input.KeyPressed(InputType.Reload))
@@ -216,7 +216,7 @@ namespace Mammoth.Engine
         /// <summary>
         /// Throws a "bullet" in the current direction of the player. Overridden in ProxyInputPlayer since shooting only happens on server-side.
         /// </summary>
-        protected virtual void Shoot() {
+        protected virtual void Shoot(GameTime time) {
             Console.WriteLine("Throwing.");
         }
 
