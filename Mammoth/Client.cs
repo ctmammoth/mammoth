@@ -33,8 +33,8 @@ namespace Mammoth
             graphics.SynchronizeWithVerticalRetrace = true;
             graphics.PreferredDepthStencilFormat = DepthFormat.Depth32;
             //graphics.IsFullScreen = true;
-            //graphics.PreferredBackBufferWidth = 1440;
-            //graphics.PreferredBackBufferHeight = 900;
+            //graphics.PreferredBackBufferWidth = 1024;
+            //graphics.PreferredBackBufferHeight = 768;
 
             // Set the root directory from which to load game content files.
             Content.RootDirectory = "Content";
