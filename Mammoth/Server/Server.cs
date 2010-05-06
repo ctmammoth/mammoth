@@ -35,28 +35,6 @@ namespace Mammoth.Server
             // TODO: Change this to create a new scene when a game screen is created.
             physics.CreateScene();
 
-            #region PhysX Code
-
-            // Because I don't trust the ground plane, I'm making my own.
-            ActorDescription boxActorDesc = new ActorDescription();
-            boxActorDesc.Shapes.Add(new BoxShapeDescription()
-            {
-                Size = new Vector3(100.0f, 2.0f, 100.0f),
-                LocalPosition = new Vector3(0.0f, -1.0f, 0.0f)
-            });
-            new Mammoth.Engine.Objects.MinimalPhysicalObject(this, physics.CreateActor(boxActorDesc));
-
-            // Just to test collisions...
-            boxActorDesc = new ActorDescription();
-            boxActorDesc.Shapes.Add(new BoxShapeDescription()
-            {
-                Size = new Vector3(5.0f, 5.0f, 5.0f),
-                LocalPosition = new Vector3(-3.0f, 10.0f, 0.0f)
-            });
-            new Mammoth.Engine.Objects.MinimalPhysicalObject(this, physics.CreateActor(boxActorDesc));
-
-            #endregion
-
             // Set up the emulated input.
             this.Components.Add(new EmulatedInput(this)
             {
@@ -70,6 +48,7 @@ namespace Mammoth.Server
                 Visible = false
             };
             this.Components.Add(modelDB);
+            modelDB.registerObject(new Terrain(this));
 
             NetworkComponent.CreateServerNetworking(this);
 

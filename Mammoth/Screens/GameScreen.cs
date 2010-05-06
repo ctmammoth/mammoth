@@ -39,31 +39,6 @@ namespace Mammoth
             // Let's create a PhysX scene for the game.
             physics.CreateScene();
 
-            // Now we'll add some PhysX objects for testing purposes.  Later, this should contain
-            // code for loading the game data from the network as well as possibly loading some
-            // local data.  In fact, this should probably get moved into LoadContent eventually.
-            #region PhysX Code
-
-            // Because I don't trust the ground plane, I'm making my own.
-            ActorDescription boxActorDesc = new ActorDescription();
-            boxActorDesc.Shapes.Add(new BoxShapeDescription()
-            {
-                Size = new Vector3(100.0f, 2.0f, 100.0f),
-                LocalPosition = new Vector3(0.0f, -1.0f, 0.0f)
-            });
-            new Mammoth.Engine.Objects.MinimalPhysicalObject(this.Game, physics.CreateActor(boxActorDesc));
-
-            // Just to test collisions...
-            boxActorDesc = new ActorDescription();
-            boxActorDesc.Shapes.Add(new BoxShapeDescription()
-            {
-                Size = new Vector3(0.5f, 0.5f, 0.5f),
-                LocalPosition = new Vector3(-3.0f, 3.0f, 0.0f)
-            });
-            new Mammoth.Engine.Objects.MinimalPhysicalObject(this.Game, physics.CreateActor(boxActorDesc));
-
-            #endregion
-
             // Add the model database.
             ModelDatabase modelDB = new ModelDatabase(this.Game)
             {
