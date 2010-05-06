@@ -58,7 +58,7 @@ namespace Mammoth.Engine
                     case "Z":
                         pos.Z = (float)parameters.GetDoubleValue(attribute);
                         break;
-                    case "Crate_Type":
+                    case "Special_Type":
                         Specialize(parameters.GetStringValue(attribute));
                         break;
 
@@ -92,7 +92,7 @@ namespace Mammoth.Engine
         private void Specialize(String attribute)
         {
             XmlHandler handler = new XmlHandler();
-            handler.ChangeFile("../../../static_objects.xml");
+            handler.ChangeFile("static_objects.xml");
             handler.GetElement("VARIANT", "NAME", attribute);
             while (!handler.IsClosingTag("VARIANT"))
             {

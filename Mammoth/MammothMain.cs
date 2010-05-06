@@ -36,7 +36,7 @@ namespace Mammoth
                 Mammoth.Engine.Engine game;
                 game = new Mammoth.Engine.Engine(false);
                 game.Run();
-                // ObjectFactories.content_test(game);
+                
             }
             else
             {

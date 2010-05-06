@@ -62,8 +62,11 @@ namespace Mammoth.Engine
             BaseObject theObject = null;
             switch (type)
             {
-                case "Crate":
-                    theObject = CrateFactory(id, parameters, game);
+                case "Static_Object":
+                    theObject = RealStaticObjectFactory(id, parameters, game);
+                    break;
+                case "WallBlock":
+                    theObject = WallBlockFactory(id, parameters, game);
                     break;
                 case "Fortress":
                     theObject = FortressFactory(id, parameters, game);
@@ -73,7 +76,7 @@ namespace Mammoth.Engine
 
         }
 
-        public static WallBlock CrateFactory(int id, ObjectParameters parameters, Game game)
+        public static WallBlock WallBlockFactory(int id, ObjectParameters parameters, Game game)
         {
             if (parameters != null)
             {
@@ -84,6 +87,18 @@ namespace Mammoth.Engine
                 return new WallBlock(id, game);
             }
 
+        }
+
+        public static RealStaticObject RealStaticObjectFactory(int id, ObjectParameters parameters, Game game)
+        {
+            if (parameters != null)
+            {
+                return new RealStaticObject(id, parameters, game, false);
+            }
+            else
+            {
+                return new RealStaticObject(id, parameters, game, true);
+            }
 
         }
 

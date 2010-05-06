@@ -56,8 +56,7 @@ namespace Mammoth.Engine
 
         public override void InitializeDefault(int id)
         {
-            // TODO: Implement this
-            throw new NotImplementedException();
+            this.ID = id;
         }
 
         public Byte[] Encode()
@@ -72,9 +71,20 @@ namespace Mammoth.Engine
             throw new NotImplementedException();
         }
 
-        public Room(int id, ObjectParameters parameters)
+        public Room(int id, ObjectParameters parameters, Game game)
         {
-            this.ID = id;            
+            boxActorDesc = new ActorDescription()
+            {
+                /*BodyDescription = new BodyDescription()
+                {
+                    Mass = 1000.0f
+                }*/
+            };
+
+            this.Game = game;
+            this.ID = id;
+            physics = (PhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
             foreach (String attribute in parameters.GetAttributes()) 
             {
                 switch(attribute) 
@@ -88,11 +98,15 @@ namespace Mammoth.Engine
                     case "Z":
                         z = parameters.GetDoubleValue(attribute);
                         break;
-                    case "Room_Type":
+                    case "Special_Type":
                         Specialize(parameters.GetStringValue(attribute));
                         break;
                 }
             }
+
+
+
+            BuildWalls(x, y, z);
         }
 
         private void Specialize(String attribute)
@@ -121,6 +135,48 @@ namespace Mammoth.Engine
 
         private void HandleItems(XmlHandler handler)
         {
+            handler.GetNextElement();
+            while (!handler.IsClosingTag("ITEMS"))
+            {
+                String itemType = null, specialType = null;
+                String X = null, Y = null, Z = null;
+
+                ObjectParameters parameters = handler.GetAttributes();
+                foreach (String attribute in parameters.GetAttributes())
+                {
+                    switch (attribute)
+                    {
+                        case "TYPE":
+                            itemType = parameters.GetStringValue(attribute);
+                            break;
+                        case "Special_Type":
+                            specialType = parameters.GetStringValue(attribute);
+                            break;
+                        case "X":
+                            X = parameters.GetStringValue(attribute);
+                            break;
+                        case "Y":
+                            Y = parameters.GetStringValue(attribute);
+                            break;
+                        case "Z":
+                            Z = parameters.GetStringValue(attribute);
+                            break;
+                    }
+                }
+
+                ObjectParameters itemParameters = new ObjectParameters();
+                itemParameters.AddAttribute("X", X);
+                itemParameters.AddAttribute("Y", Y);
+                itemParameters.AddAttribute("Z", Z);
+                itemParameters.AddAttribute("Special_Type", specialType);
+
+                BaseObject item = ObjectFactories.CreateObject(itemType, modelDB.getNextOpenID(), itemParameters, this.Game);
+                modelDB.registerObject(item);
+                handler.GetNextElement();
+            }
+
+            
+            
             // TODO: Handle those items
         }
 
@@ -131,17 +187,12 @@ namespace Mammoth.Engine
 
         public void initialize()
         {
-            populate();
+            
 
             
 
         }
-
-        public void populate()
-        {
-            //TODO: fix this?
-            //List<BaseObject> objects = XmlHandler.CreateFromXml(roomType);
-        }
+        
 
         public void BuildWalls(Double X, Double Y, Double Z)
         {
@@ -156,15 +207,8 @@ namespace Mammoth.Engine
 
 
         public void BuildWall(String alongAxis, double alongOffset, String oppositeAxis, double oppositeOffset, double height)
-        {
-
-            
-
+        { 
             ObjectParameters parameters;
-
-            
-
-
 
             for (int i = 0; i < 36; i++)
             {
@@ -176,19 +220,20 @@ namespace Mammoth.Engine
                 parameters.AddAttribute(alongAxis, (alongOffset + number1).ToString());
                 parameters.AddAttribute("Y", (number2+(height)).ToString() );
                 parameters.AddAttribute(oppositeAxis, oppositeOffset.ToString());
-                parameters.AddAttribute("Crate_Type", "DARK");
+                parameters.AddAttribute("Special_Type", "BRICK");
 
 
                 if (!((i>11&&i<15)||(i>17&&i<21)))
                 {
                     int crateId = modelDB.getNextOpenID();
-                    WallBlock crate1 = (WallBlock)ObjectFactories.CreateObject("Crate", crateId, parameters, this.Game);
-                    modelDB.registerObject(crate1);                    
+                    WallBlock block = (WallBlock)ObjectFactories.CreateObject("WallBlock", crateId, parameters, this.Game);
+                    modelDB.registerObject(block);
+
                     
                     boxActorDesc.Shapes.Add(new BoxShapeDescription()
                     {
-                        Size = crate1.Dimensions,
-                        LocalPosition = crate1.LocalPosition + crate1.NonPhysicalPosition
+                        Size = block.Dimensions,
+                        LocalPosition = block.LocalPosition + block.NonPhysicalPosition
                     });
 
                 }
@@ -209,50 +254,38 @@ namespace Mammoth.Engine
                 parameters.AddAttribute("X", (X + number1).ToString());
                 parameters.AddAttribute("Y", (Y+18.0f).ToString());
                 parameters.AddAttribute("Z", (Z + number2 - 3).ToString());
-                parameters.AddAttribute("Crate_Type", "DARK");
+                parameters.AddAttribute("Special_Type", "BRICK");
 
                 
                 if (!(i==0||i==7||i==63||i==56||i==9||i==54))
                 {
                     int crateId = modelDB.getNextOpenID();
-                    WallBlock crate1 = (WallBlock)ObjectFactories.CreateObject("Crate", crateId, parameters, this.Game);
+                    WallBlock crate1 = (WallBlock)ObjectFactories.CreateObject("WallBlock", crateId, parameters, this.Game);
                     modelDB.registerObject(crate1);
 
+                    if (boxActorDesc == null)
+                    {
+                        Console.WriteLine(); // breakpoint
+                    }
+                    
+                    if (boxActorDesc.Shapes == null)
+                    {
+                        Console.WriteLine(); // breakpoint
+                    }
+
+                    
                     boxActorDesc.Shapes.Add(new BoxShapeDescription()
                     {
                         Size = crate1.Dimensions,
                         LocalPosition = crate1.LocalPosition + crate1.NonPhysicalPosition
                     });
+                    
+
 
                 }
             }
 
         }
-
-
-
-        private class PossibleObjects
-        {
-            Dictionary<String, List<PossibleObject>> objects;
-
-            private void AddObject(XmlHandler handler)
-            {
-                ObjectParameters attributes = handler.GetAttributes();
-
-            }
-
-
-        }
-        private class PossibleObject 
-        {
-        }
-
-
-
-
-
-
-
 
 
 

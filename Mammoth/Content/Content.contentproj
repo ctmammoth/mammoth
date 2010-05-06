@@ -66,14 +66,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="models\Crate.FBX">
-      <Name>Crate</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.02</ProcessorParameters_Scale>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="models\DarkCrate.FBX">
       <Name>DarkCrate</Name>
       <Importer>FbxImporter</Importer>
@@ -82,8 +74,23 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="models\crateflat.fbx">
-      <Name>crateflat</Name>
+    <Compile Include="models\brickbox.fbx">
+      <Name>brickbox</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.03</ProcessorParameters_Scale>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="models\table.FBX">
+      <Name>table</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="models\crate.fbx">
+      <Name>crate</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>0.03</ProcessorParameters_Scale>

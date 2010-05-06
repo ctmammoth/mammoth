@@ -3,22 +3,29 @@
 		<VARIANT NAME="LARGE">
 			<DIMENSION WIDTH="128" HEIGHT="128" LENGTH="128" />
 			<OFFSET X="-0.83" Y="1.85" Z="-1.0" />	
-			<MODEL>Crate</MODEL>
+			<MODEL>crate</MODEL>
 		</VARIANT>
 		<VARIANT NAME="MEDIUM">
 			<DIMENSION WIDTH="64" HEIGHT="64" LENGTH="64" />
 			<OFFSET X="-0.83" Y="1.85" Z="-1.0" />	
-			<MODEL>Crate</MODEL>
+			<MODEL>crate</MODEL>
 		</VARIANT>
 		<VARIANT NAME="SMALL">
-			<DIMENSION WIDTH="3.6" HEIGHT="3.6" LENGTH="3.6" />
-			<LOCAL_POSITION X="-0.83" Y="1.85" Z="-0.85" />			
-			<MODEL>Crate</MODEL>
+			<DIMENSION WIDTH="3" HEIGHT="3" LENGTH="3" />
+			<LOCAL_POSITION X="0" Y="0" Z="-1.8" />			
+			<MODEL>crate</MODEL>
 		</VARIANT>	
 		<VARIANT NAME="DARK">
 			<DIMENSION WIDTH="3" HEIGHT="3" LENGTH="3" />
 			<LOCAL_POSITION X="0" Y="0" Z="-1.8" />			
 			<MODEL>crateflat</MODEL>
 		</VARIANT>		
+	</OBJECT>
+	<OBJECT TYPE = "WallBlock">
+		<VARIANT NAME="BRICK">
+			<DIMENSION WIDTH="3" HEIGHT="3" LENGTH="3" />
+			<LOCAL_POSITION X="0" Y="0" Z="-1.8" />			
+			<MODEL>brickbox</MODEL>
+		</VARIANT>	
 	</OBJECT>
 </DEFINITIONS>

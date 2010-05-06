@@ -21,6 +21,7 @@ namespace Mammoth.Engine
     public class RealStaticObject : PhysicalObject, IEncodable, IRenderable
     {
         private Vector3 dimensions, localPosition; ///
+        private String typeName;
 
         public override void Draw(GameTime gameTime)
         {
@@ -39,7 +40,22 @@ namespace Mammoth.Engine
             protected set;
         }
 
-        public RealStaticObject(int id, ObjectParameters parameters, Game game)
+        public RealStaticObject(int id, ObjectParameters parameters, Game game, bool isFromNetwork)
+        {
+            if (isFromNetwork)
+            {
+                CreateFromNetwork(id, game);
+            }
+            else
+            {
+                CreateFromLocal(id, parameters, game);
+            }
+
+
+        }
+
+
+        public void CreateFromLocal(int id, ObjectParameters parameters, Game game)
         {
             this.ID = id;
             this.Game = game;
@@ -58,7 +74,7 @@ namespace Mammoth.Engine
                     case "Z":
                         pos.Z = (float)parameters.GetDoubleValue(attribute);
                         break;
-                    case "Crate_Type":
+                    case "Special_Type":
                         Specialize(parameters.GetStringValue(attribute));
                         break;
 
@@ -82,7 +98,7 @@ namespace Mammoth.Engine
             // this.
         }
 
-        public RealStaticObject(int id, Game game)
+        public void CreateFromNetwork(int id, Game game)
         {
             this.Game = game;
             InitializeDefault(id);
@@ -91,12 +107,13 @@ namespace Mammoth.Engine
         private void Specialize(String attribute)
         {
             XmlHandler handler = new XmlHandler();
-            handler.ChangeFile("../../../static_objects.xml");
+            handler.ChangeFile("static_objects.xml");
             handler.GetElement("VARIANT", "NAME", attribute);
             while (!handler.IsClosingTag("VARIANT"))
             {
                 handler.GetNextElement();
                 String name = handler.GetElementName();
+                this.TypeName = name;
                 switch (name)
                 {
                     case "DIMENSION":
@@ -118,9 +135,6 @@ namespace Mammoth.Engine
         public override void InitializeDefault(int id)
         {
             ID = id;
-            //pos.X = 0;
-            //Position.Y = 0;
-            //Position.Z = 0;
             dimensions.X = 0;
             dimensions.Y = 0;
             dimensions.Z = 0;
@@ -130,27 +144,46 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-            // tosend.AddElement("Position", Position);
-            //tosend.AddElement("Orientation", Orientation);
-            //tosend.AddElement("Velocity", Velocity);
+            tosend.AddElement("Position", Position);
+            tosend.AddElement("Orientation", Orientation);
+            tosend.AddElement("TypeName", TypeName);
+            tosend.AddElement("PositionOffset", PositionOffset);
+            tosend.AddElement("LocalPosition", LocalPosition);
+            
+            // tosend.AddElement("Velocity", Velocity);
 
             return tosend.Serialize();
         }
 
         public void Decode(byte[] serialized)
         {
+
             Networking.Encoder props = new Networking.Encoder(serialized);
 
-            //Position = (Vector3)props.GetElement("Position");
-            //Orientation = (Quaternion)props.GetElement("Orientation");
-            //Velocity = (Vector3)props.GetElement("Velocity");
+            if (props.UpdatesFor("Position"))
+                Position = (Vector3)props.GetElement("Position", Position);
+            if (props.UpdatesFor("Orientation"))
+                Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
+            if (props.UpdatesFor("TypeName"))
+                Position = (Vector3)props.GetElement("TypeName", TypeName);
+            if (props.UpdatesFor("PositionOffset"))
+                Orientation = (Quaternion)props.GetElement("PositionOffset", PositionOffset);
+            if (props.UpdatesFor("LocalPosition"))
+                Position = (Vector3)props.GetElement("LocalPosition", LocalPosition);
+            
         }
 
 
         public override String getObjectType()
         {
-            return "Crate";
+            return "RealStaticObject";
         }
+
+        public String GetTypeName()
+        {
+            return TypeName;
+        }
+
 
         private void HandleDimension(XmlHandler handler)
         {
@@ -234,13 +267,16 @@ namespace Mammoth.Engine
             set { localPosition = value; }
         }
 
-
-
-        public Quaternion Orientation
+        public String TypeName
         {
-            get { return new Quaternion(); }
+            get { return typeName; }
+            set { typeName = value; }
         }
 
+
+
+
+       
         public Model Model3D
         {
             get;

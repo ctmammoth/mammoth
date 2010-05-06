@@ -1,15 +1,12 @@
 <ROOMS>
-	<ROOM NAME="Armory" WIDTH="2" HEIGHT="3" LENGTH="1">
+	<ROOM NAME="CRATE_ROOM">
 		<ITEMS>
-			<OBJECT TYPE="Crate" X="6" Y="0" Z="8" CRATE_TYPE="LARGE" />			
-			<OBJECT TYPE="Crate" X="4" Y="0" Z="6" CRATE_TYPE="LARGE" />			
-			<OBJECT TYPE="Crate" X="2" Y="0" Z="5" CRATE_TYPE="LARGE" />			
-			<OBJECT TYPE="Terminal" X="6" Y="0" Z="0" TERMINAL_TYPE="WEAPONS">				
-			</OBJECT>			
+			<OBJECT TYPE="Static_Object" X="12" Y="0" Z="12" Special_Type="SMALL" />		
+			<OBJECT TYPE="Static_Object" X="9" Y="0" Z="12" Special_Type="SMALL" />	
+			<OBJECT TYPE="Static_Object" X="9" Y="0" Z="9" Special_Type="SMALL" />			
+			<OBJECT TYPE="Static_Object" X="9" Y="3" Z="12" Special_Type="SMALL" />			
 		</ITEMS>	
-		<PARAMETERS>
-			<RANGE OBJECT_TYPE="CRATE" MIN="1" MAX="3" />
-			<RANGE OBJECT_TYPE="TERMINAL" MIN="1" MAX="1" />
+		<PARAMETERS>			
 		</PARAMETERS>
 	</ROOM>
 	<ROOM NAME="INFIRMARY" WIDTH="2" HEIGHT="2" LENGTH="1">

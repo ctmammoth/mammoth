@@ -307,13 +307,19 @@ namespace Mammoth.Engine
             }
              * */
 
-            Room room = new Room(631, this);
-            room.BuildWalls(0, 0 , 0);
+            ObjectParameters parameters2 = new ObjectParameters();
+            parameters2.AddAttribute("X","0");
+            parameters2.AddAttribute("Y", "0");
+            parameters2.AddAttribute("Z", "0");
+            parameters2.AddAttribute("Special_Type", "CRATE_ROOM");
+            Room room = new Room(631, parameters2, this);
+            // room.BuildWalls(0, 0 , 0);
+            /*
             room.BuildWalls(0, 21, 0);
             room.BuildWalls(0, 42, 0);
             room.BuildWalls(0, 63, 0);
             room.BuildWalls(0, 0, 24);
-            room.BuildWalls(24, 0, 24);
+            room.BuildWalls(24, 0, 24);*/
 
             // ObjectFactories.content_test(this);
 
