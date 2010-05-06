@@ -66,7 +66,8 @@ namespace Mammoth.Engine
             ControllerDescription desc = new CapsuleControllerDescription(1, this.Height - 2.0f)
             {
                 UpDirection = Axis.Y,
-                Position = Vector3.UnitY * (this.Height - 1.0f) / 2.0f
+                Position = Vector3.UnitY * (this.Height - 1.0f) / 2.0f,
+                StepOffset = 0.55f
             };
             this.PositionOffset = -1.0f * desc.Position;
 

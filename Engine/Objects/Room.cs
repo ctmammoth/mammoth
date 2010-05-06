@@ -153,13 +153,13 @@ namespace Mammoth.Engine
                             specialType = parameters.GetStringValue(attribute);
                             break;
                         case "X":
-                            X = parameters.GetStringValue(attribute);
+                            X = (this.x +  parameters.GetDoubleValue(attribute)).ToString();
                             break;
                         case "Y":
-                            Y = parameters.GetStringValue(attribute);
+                            Y = (this.y + parameters.GetDoubleValue(attribute)).ToString();
                             break;
                         case "Z":
-                            Z = parameters.GetStringValue(attribute);
+                            Z = (this.z + parameters.GetDoubleValue(attribute)).ToString();
                             break;
                     }
                 }
@@ -257,7 +257,7 @@ namespace Mammoth.Engine
                 parameters.AddAttribute("Special_Type", "BRICK");
 
                 
-                if (!(i==0||i==7||i==63||i==56||i==9||i==54))
+                if (!(i==0||i==7||i==63||i==56||i==9||i==54||i==53||i==52||i==51))
                 {
                     int crateId = modelDB.getNextOpenID();
                     WallBlock crate1 = (WallBlock)ObjectFactories.CreateObject("WallBlock", crateId, parameters, this.Game);

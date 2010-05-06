@@ -96,6 +96,28 @@
       <ProcessorParameters_Scale>0.03</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="models\ammocrate.fbx">
+      <Name>ammocrate</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.03</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="models\healthcrate.fbx">
+      <Name>healthcrate</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.03</ProcessorParameters_Scale>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="models\staircrate.fbx">
+      <Name>staircrate</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.005</ProcessorParameters_Scale>
+    </Compile>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

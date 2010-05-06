@@ -9,6 +9,12 @@ Content\models\brickbox.xnb
 Content\models\table.xnb
 Content\models\crate.xnb
 Content\models\crate_0.xnb
+Content\models\ammocrate.xnb
+Content\models\healthcrate.xnb
+Content\models\ammocrate_0.xnb
+Content\models\healthcrate_0.xnb
+Content\models\staircrate_0.xnb
+Content\models\staircrate.xnb
 NxCharacter.dll
 PhysXCooking.dll
 PhysXCore.dll

@@ -311,8 +311,29 @@ namespace Mammoth.Engine
             parameters2.AddAttribute("X","0");
             parameters2.AddAttribute("Y", "0");
             parameters2.AddAttribute("Z", "0");
-            parameters2.AddAttribute("Special_Type", "CRATE_ROOM");
-            Room room = new Room(631, parameters2, this);
+            parameters2.AddAttribute("Special_Type", "STAIR_ROOM");
+            Room room1 = new Room(631, parameters2, this);
+
+            parameters2 = new ObjectParameters();
+            parameters2.AddAttribute("X", "0");
+            parameters2.AddAttribute("Y", "21");
+            parameters2.AddAttribute("Z", "0");
+            parameters2.AddAttribute("Special_Type", "STAIR_ROOM");
+            Room room0 = new Room(516, parameters2, this);
+
+            parameters2 = new ObjectParameters();
+            parameters2.AddAttribute("X", "24");
+            parameters2.AddAttribute("Y", "0");
+            parameters2.AddAttribute("Z", "0");
+            parameters2.AddAttribute("Special_Type", "WAREHOUSE");
+            Room room2 = new Room(69, parameters2, this);
+
+            parameters2 = new ObjectParameters();
+            parameters2.AddAttribute("X", "0");
+            parameters2.AddAttribute("Y", "0");
+            parameters2.AddAttribute("Z", "24");
+            parameters2.AddAttribute("Special_Type", "INFIRMARY");
+            Room room3 = new Room(420, parameters2, this);
             // room.BuildWalls(0, 0 , 0);
             /*
             room.BuildWalls(0, 21, 0);
