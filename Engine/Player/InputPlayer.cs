@@ -65,16 +65,16 @@ namespace Mammoth.Engine
         /// </summary>
         public InputPlayer(Game game) : base(game)
         {
+            // Initializes PhysX of a player.
+            InitializePhysX();
+
+            this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
+
             // Give the player 5 weapons, for now
             Items = new IWeapon[5];
             // Give the player a simple gun, for now
             Items[0] = new SimpleGun(game, this);
             CurWeapon = Items[0];
-
-            // Initializes PhysX of a player.
-            InitializePhysX();
-
-            this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
         }
 
         /// <summary>
