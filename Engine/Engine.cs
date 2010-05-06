@@ -65,8 +65,8 @@ namespace Mammoth.Engine
             boxActorDesc = new ActorDescription();
             boxActorDesc.Shapes.Add(new BoxShapeDescription()
             {
-                Size = new Vector3(0.5f, 0.5f, 0.5f),
-                LocalPosition = new Vector3(-3.0f, 3.0f, 0.0f)
+                Size = new Vector3(5.0f, 5.0f, 5.0f),
+                LocalPosition = new Vector3(-3.0f, 10.0f, 0.0f)
             });
             new Mammoth.Engine.Objects.MinimalPhysicalObject(physics.CreateActor(boxActorDesc));
 

@@ -274,6 +274,7 @@ namespace Mammoth.Engine.Physics
                 // Create the controller
                 Controller ctrler = controllerManager.CreateController(cDesc);
                 ctrler.UserData = owner;
+                ctrler.Actor.UserData = owner;
 
                 return ctrler;
             }
@@ -336,7 +337,6 @@ namespace Mammoth.Engine.Physics
                 });
 
                 // Enable collisions for all objects
-                // TODO: is this right?
                 curScene.SetActorGroupPairFlags(0, 0, ContactPairFlag.All);
 
                 // Create the controller manager

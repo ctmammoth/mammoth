@@ -234,7 +234,7 @@ namespace Mammoth.Engine
             //if ((dirty & EncodableProperties.Velocity) == EncodableProperties.Velocity)
                 tosend.AddElement("Velocity", Velocity);
             //if ((dirty & EncodableProperties.Health) == EncodableProperties.Health)
-                tosend.AddElement("Health", Velocity);
+                tosend.AddElement("Health", Health);
 
             //reset DIRTY
             //dirty = EncodableProperties.None;
@@ -259,7 +259,7 @@ namespace Mammoth.Engine
             if (props.UpdatesFor("Velocity"))
                 Velocity = (Vector3)props.GetElement("Velocity", Velocity);
             if (props.UpdatesFor("Health"))
-                Velocity = (Vector3)props.GetElement("Health", Velocity);
+                Health = (float)props.GetElement("Health", Health);
         }
 
         #region Properties

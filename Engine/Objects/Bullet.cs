@@ -26,7 +26,7 @@ namespace Mammoth.Engine
             : base(game)
         {
             Console.WriteLine("Constructing a bullet...");
-            InitialVelocityMagnitude = 500.0f;
+            InitialVelocityMagnitude = 50.0f;
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
 
@@ -38,8 +38,8 @@ namespace Mammoth.Engine
             // Make the bullet's actor description
             BodyDescription bodyDesc = new BodyDescription()
             {
-                //BodyFlags = BodyFlag.Kinematic,
-                Mass = 1.0f
+                Mass = 1.0f,
+                CCDMotionThreshold = 50.0f
             };
 
 
