@@ -194,8 +194,7 @@ namespace Mammoth.Engine
                 // If the player presses space (and is on the ground), jump!
                 if (InCollisionState(ControllerCollisionFlag.Down))
                     if (input.IsKeyDown(InputType.Jump))
-                        //this.Velocity += Vector3.Up / 4.0f;
-                        this.Velocity += Vector3.Up * 20.0f;
+                        this.Velocity += Vector3.Up / 4.0f;
 
                 // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
                 if (input.KeyPressed(InputType.Fire))
