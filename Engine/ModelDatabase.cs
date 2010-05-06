@@ -88,13 +88,6 @@ namespace Mammoth.Engine
 
         public void registerObject(BaseObject newObject)
         {
-            Console.WriteLine(">>>Here's what's in ModelDB: ");
-            foreach (var obj in _objects.Values)
-            {
-                Console.WriteLine("ID " + obj.ID + ", type " + obj.getObjectType());
-                Debug.Assert(_objects.Keys.Contains<int>(obj.ID));
-            }
-
             if (isUpdating)
                 toRegister.Enqueue(newObject);
             else

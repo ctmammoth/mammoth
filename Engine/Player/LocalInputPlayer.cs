@@ -12,13 +12,18 @@ namespace Mammoth.Engine
     /// An InputPlayer that draws itself on the client-side, acting as the client's player.
     /// </summary>
     public class LocalInputPlayer : InputPlayer
-    {      
+    {
+        private SimpleGun myGun;
+
         /// <summary>
         /// Initializes the player and loads its model.
         /// </summary>
         /// <param name="game">The game</param>
         public LocalInputPlayer(Game game, int clientID): base(game)
         {
+            // Make the gun!
+            myGun = new SimpleGun(game);
+
             //Load the Model
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
 
