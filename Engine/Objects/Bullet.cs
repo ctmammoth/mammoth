@@ -117,7 +117,7 @@ namespace Mammoth.Engine
                         ((IDamageable)objHit).TakeDamage(GetDamage(), this);
                     }
                     IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-                    mdb.removeObject(this);
+                    mdb.removeObject(this.ID);
                     physics.RemoveActor(this.Actor);
                 }
             }
