@@ -58,7 +58,6 @@
       <HintPath>..\Assemblies\Lidgren.Network.Xna.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86" />
-    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86" />
     <Reference Include="StillDesign.PhysX.Net, Version=0.12.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -74,36 +73,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Audio\Audio.cs" />
-    <Compile Include="GameStats.cs" />
-    <Compile Include="Graphics\Skybox.cs" />
-    <Compile Include="GameLogic.cs" />
-    <Compile Include="Interface\TImage.cs" />
-    <Compile Include="Interface\TImageButton.cs" />
-    <Compile Include="Audio\IAudioService.cs" />
-    <Compile Include="IGameLogic.cs" />
-    <Compile Include="Networking\Encoder.cs" />
+    <Compile Include="Engine.cs" />
     <Compile Include="Objects\Bullet.cs" />
-    <Compile Include="Graphics\Camera.cs" />
+    <Compile Include="Camera.cs" />
     <Compile Include="ClientState.cs" />
     <Compile Include="Objects\IDamager.cs" />
-    <Compile Include="Objects\IDamageable.cs" />
+    <Compile Include="Objects\IDestructable.cs" />
     <Compile Include="IModelDBService.cs" />
     <Compile Include="Input\EmulatedInput.cs" />
-    <Compile Include="Objects\IHoldeableItem.cs" />
     <Compile Include="Objects\IWeapon.cs" />
+<<<<<<< HEAD
     <Compile Include="Objects\ObjectFactories.cs" />
+=======
     <Compile Include="Interface\TWidgetScreen.cs" />
     <Compile Include="Objects\MinimalPhysicalObject.cs" />
+>>>>>>> 876a4ee9d0a4e0d801233e46017c35f49d9fc2b6
     <Compile Include="Objects\Projectile.cs" />
-    <Compile Include="Objects\Revolver.cs" />
-    <Compile Include="Objects\RealStaticObject.cs" />
     <Compile Include="Player\LocalInputPlayer.cs" />
     <Compile Include="ModelDatabase.cs" />
-    <Compile Include="Objects\WallBlock.cs" />
+    <Compile Include="Objects\Crate.cs" />
     <Compile Include="Objects\Door.cs" />
+    <Compile Include="Networking\Car.cs" />
     <Compile Include="Networking\Decoder.cs" />
+    <Compile Include="Networking\Driver.cs" />
     <Compile Include="Networking\DummyNetworking.cs" />
+    <Compile Include="Networking\Encoder.cs" />
     <Compile Include="Input\IInputService.cs" />
     <Compile Include="Objects\Fortress.cs" />
     <Compile Include="Networking\IDecoder.cs" />
@@ -117,8 +111,8 @@
     <Compile Include="Interface\TScreenManager.cs" />
     <Compile Include="Interface\TSimpleButton.cs" />
     <Compile Include="Interface\TText.cs" />
-    <Compile Include="Graphics\IRenderable.cs" />
-    <Compile Include="Graphics\IRenderService.cs" />
+    <Compile Include="IRenderable.cs" />
+    <Compile Include="IRenderService.cs" />
     <Compile Include="Player\InputPlayer.cs" />
     <Compile Include="Networking\LidgrenClientNetworking.cs" />
     <Compile Include="Objects\BaseObject.cs" />
@@ -130,18 +124,17 @@
     <Compile Include="Player\Player.cs" />
     <Compile Include="Player\ProxyInputPlayer.cs" />
     <Compile Include="Player\RemotePlayer.cs" />
-    <Compile Include="Graphics\Renderer.cs" />
+    <Compile Include="Renderer.cs" />
     <Compile Include="Objects\Room.cs" />
-    <Compile Include="Objects\Gun.cs" />
+    <Compile Include="Objects\SimpleGun.cs" />
     <Compile Include="Objects\StaticObject.cs" />
     <Compile Include="Interface\TWidget.cs" />
-    <Compile Include="StatsScreen.cs" />
-    <Compile Include="Team.cs" />
-    <Compile Include="Content Processor\TerrainProcessor.cs" />
+    <Compile Include="Networking\Test.cs" />
     <Compile Include="XmlHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Interface\Interface.cd" />
+    <None Include="Networking\Networking.cd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

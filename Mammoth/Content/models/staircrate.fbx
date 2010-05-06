@@ -1385,7 +1385,7 @@ Objects:  {
             Property: "LastFrame", "int", "",0
             Property: "Width", "int", "",0
             Property: "Height", "int", "",0
-            Property: "Path", "charptr", "", "crate.jpg"
+            Property: "Path", "charptr", "", "staircrate.jpg"
             Property: "StartFrame", "int", "",0
             Property: "StopFrame", "int", "",0
             Property: "PlaySpeed", "double", "",1
@@ -1396,8 +1396,8 @@ Objects:  {
             Property: "AccessMode", "enum", "",0
         }
         UseMipMap: 0
-        Filename: "crate.jpg"
-        RelativeFilename: "./crate.jpg"
+        Filename: "staircrate.jpg"
+        RelativeFilename: "./staircrate.jpg"
     }
     Texture: "Texture::crate_mat_tex", "TextureVideoClip" {
         Type: "TextureVideoClip"
@@ -1421,8 +1421,8 @@ Objects:  {
             Property: "VideoProperty", "object", ""
         }
         Media: "Video::crate_mat_tex"
-        FileName: "crate.jpg"
-        RelativeFilename: "./crate.jpg"
+        FileName: "staircrate.jpg"
+        RelativeFilename: "./staircrate.jpg"
         ModelUVTranslation: 0,0
         ModelUVScaling: 1,1
         Texture_Alpha_Source: "None"

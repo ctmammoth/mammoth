@@ -33,7 +33,7 @@ namespace Mammoth.Engine
             _content = game.Content;
             _graphics = game.GraphicsDevice;
             _spriteBatch = new SpriteBatch(_graphics);
-            
+
             // Create the white pixel.
             _whitePixel = new Texture2D(_graphics, 1, 1, 1, TextureUsage.None, SurfaceFormat.Color);
             _whitePixel.SetData<Color>(new Color[] { Color.White });
@@ -128,6 +128,10 @@ namespace Mammoth.Engine
 
         public void DrawRenderable(IRenderable obj)
         {
+            _graphics.RenderState.DepthBufferEnable = true;
+            _graphics.RenderState.AlphaBlendEnable = false;
+            _graphics.RenderState.AlphaTestEnable = false;
+
             Camera cam = (Camera) this.Game.Services.GetService(typeof(ICameraService));
 
             Model m = obj.Model3D;

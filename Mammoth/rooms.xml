@@ -1,17 +1,370 @@
 <ROOMS>
-	<ROOM NAME="Armory" WIDTH="2" HEIGHT="3" LENGTH="1">
+	<ROOM NAME="STAIR_ROOM">
 		<ITEMS>
-			<OBJECT TYPE="Crate" X="6" Y="0" Z="8" CRATE_TYPE="LARGE" />			
-			<OBJECT TYPE="Crate" X="4" Y="0" Z="6" CRATE_TYPE="LARGE" />			
-			<OBJECT TYPE="Crate" X="2" Y="0" Z="5" CRATE_TYPE="LARGE" />			
-			<OBJECT TYPE="Terminal" X="6" Y="0" Z="0" TERMINAL_TYPE="WEAPONS">				
-			</OBJECT>			
+			
+			
+			
+			
+			<OBJECT TYPE="Static_Object" X="3" Y="0" Z="10" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="3" Y="0.5" Z="10.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="3" Y="1" Z="11" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="3.5" Y="0" Z="10" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="3.5" Y="0.5" Z="10.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="3.5" Y="1" Z="11" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="3" Y="1.5" Z="11.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="3" Y="2" Z="12" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="3" Y="2.5" Z="12.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="3.5" Y="1.5" Z="11.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="3.5" Y="2" Z="12" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="3.5" Y="2.5" Z="12.5" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="4" Y="0" Z="10" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="4" Y="0.5" Z="10.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="4" Y="1" Z="11" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="4.5" Y="0" Z="10" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="4.5" Y="0.5" Z="10.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="4.5" Y="1" Z="11" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="4" Y="1.5" Z="11.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="4" Y="2" Z="12" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="4" Y="2.5" Z="12.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="4.5" Y="1.5" Z="11.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="4.5" Y="2" Z="12" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="4.5" Y="2.5" Z="12.5" Special_Type="STAIR" />	
+
+			<OBJECT TYPE="Static_Object" X="3" Y="2.5" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="3.5" Y="2.5" Z="13" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="4" Y="2.5" Z="13" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="4.5" Y="2.5" Z="13" Special_Type="STAIR" />	
+
+			<OBJECT TYPE="Static_Object" X="3" Y="2.5" Z="13.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="3.5" Y="2.5" Z="13.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="4" Y="2.5" Z="13.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="4.5" Y="2.5" Z="13.5" Special_Type="STAIR" />	
+
+			<OBJECT TYPE="Static_Object" X="3" Y="2.5" Z="14" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="3.5" Y="2.5" Z="14" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="4" Y="2.5" Z="14" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="4.5" Y="2.5" Z="14" Special_Type="STAIR" />	
+
+			<OBJECT TYPE="Static_Object" X="3" Y="2.5" Z="14.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="3.5" Y="2.5" Z="14.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="4" Y="2.5" Z="14.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="4.5" Y="2.5" Z="14.5" Special_Type="STAIR" />
+
+			<OBJECT TYPE="Static_Object" X="5" Y="3" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="5" Y="3" Z="13.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="5" Y="3" Z="14" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="5" Y="3" Z="14.5" Special_Type="STAIR" />	
+			
+			
+			<OBJECT TYPE="Static_Object" X="5.5" Y="3.5" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="5.5" Y="3.5" Z="13.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="5.5" Y="3.5" Z="14" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="5.5" Y="3.5" Z="14.5" Special_Type="STAIR" />	
+			
+			
+			<OBJECT TYPE="Static_Object" X="6" Y="4" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="6" Y="4" Z="13.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="6" Y="4" Z="14" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="6" Y="4" Z="14.5" Special_Type="STAIR" />	
+			
+			
+			<OBJECT TYPE="Static_Object" X="6.5" Y="4.5" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="6.5" Y="4.5" Z="13.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="6.5" Y="4.5" Z="14" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="6.5" Y="4.5" Z="14.5" Special_Type="STAIR" />	
+			
+			<OBJECT TYPE="Static_Object" X="7" Y="5" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="7" Y="5" Z="13.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="7" Y="5" Z="14" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="7" Y="5" Z="14.5" Special_Type="STAIR" />	
+			
+			
+			<OBJECT TYPE="Static_Object" X="7.5" Y="5.5" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="7.5" Y="5.5" Z="13.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="7.5" Y="5.5" Z="14" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="7.5" Y="5.5" Z="14.5" Special_Type="STAIR" />	
+			
+			
+			<OBJECT TYPE="Static_Object" X="8" Y="6" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="8" Y="6" Z="13.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="8" Y="6" Z="14" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="8" Y="6" Z="14.5" Special_Type="STAIR" />	
+			
+			
+			<OBJECT TYPE="Static_Object" X="8.5" Y="6.5" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="8.5" Y="6.5" Z="13.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="8.5" Y="6.5" Z="14" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="8.5" Y="6.5" Z="14.5" Special_Type="STAIR" />	
+			
+			
+			<OBJECT TYPE="Static_Object" X="9" Y="7" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="9" Y="7" Z="13.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="9" Y="7" Z="14" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="9" Y="7" Z="14.5" Special_Type="STAIR" />	
+			
+			
+			<OBJECT TYPE="Static_Object" X="9.5" Y="7.5" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="9.5" Y="7.5" Z="13.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="9.5" Y="7.5" Z="14" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="9.5" Y="7.5" Z="14.5" Special_Type="STAIR" />	
+			
+			
+			<OBJECT TYPE="Static_Object" X="10" Y="8" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="10" Y="8" Z="13.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="10" Y="8" Z="14" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="10" Y="8" Z="14.5" Special_Type="STAIR" />	
+			
+			
+			<OBJECT TYPE="Static_Object" X="10.5" Y="8.5" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="10.5" Y="8.5" Z="13.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="10.5" Y="8.5" Z="14" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="10.5" Y="8.5" Z="14.5" Special_Type="STAIR" />	
+			
+			<OBJECT TYPE="Static_Object" X="11" Y="9" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="11" Y="9" Z="13.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="11" Y="9" Z="14" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="11" Y="9" Z="14.5" Special_Type="STAIR" />	
+			
+			
+
+			
+			
+	
+			<OBJECT TYPE="Static_Object" X="11" Y="9" Z="14.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="11.5" Y="9" Z="14.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="12" Y="9" Z="14.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="12.5" Y="9" Z="14.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="13" Y="9" Z="14.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="13.5" Y="9" Z="14.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="14" Y="9" Z="14.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="14.5" Y="9" Z="14.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="15" Y="9" Z="14.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="15.5" Y="9" Z="14.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="16" Y="9" Z="14.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="16.5" Y="9" Z="14.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="17" Y="9" Z="14.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="17.5" Y="9" Z="14.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18" Y="9" Z="14.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="9" Z="14.5" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="9" Z="14.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="9" Z="14.5" Special_Type="STAIR" />
+
+
+			<OBJECT TYPE="Static_Object" X="11" Y="9" Z="14" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="11.5" Y="9" Z="14" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="12" Y="9" Z="14" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="12.5" Y="9" Z="14" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="13" Y="9" Z="14" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="13.5" Y="9" Z="14" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="14" Y="9" Z="14" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="14.5" Y="9" Z="14" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="15" Y="9" Z="14" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="15.5" Y="9" Z="14" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="16" Y="9" Z="14" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="16.5" Y="9" Z="14" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="17" Y="9" Z="14" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="17.5" Y="9" Z="14" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18" Y="9" Z="14" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="9" Z="14" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="9" Z="14" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="9" Z="14" Special_Type="STAIR" />
+
+			<OBJECT TYPE="Static_Object" X="11" Y="9" Z="13.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="11.5" Y="9" Z="13.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="12" Y="9" Z="13.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="12.5" Y="9" Z="13.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="13" Y="9" Z="13.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="13.5" Y="9" Z="13.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="14" Y="9" Z="13.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="14.5" Y="9" Z="13.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="15" Y="9" Z="13.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="15.5" Y="9" Z="13.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="16" Y="9" Z="13.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="16.5" Y="9" Z="13.5" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="17" Y="9" Z="13.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="17.5" Y="9" Z="13.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18" Y="9" Z="13.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="9" Z="13.5" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="9" Z="13.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="9" Z="13.5" Special_Type="STAIR" />
+
+			<OBJECT TYPE="Static_Object" X="11" Y="9" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="11.5" Y="9" Z="13" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="12" Y="9" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="12.5" Y="9" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="13" Y="9" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="13.5" Y="9" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="14" Y="9" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="14.5" Y="9" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="15" Y="9" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="15.5" Y="9" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="16" Y="9" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="16.5" Y="9" Z="13" Special_Type="STAIR" />
+			<OBJECT TYPE="Static_Object" X="17" Y="9" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="17.5" Y="9" Z="13" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="9" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="9" Z="13" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="9" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="9" Z="13" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="9" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="9" Z="13" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="9" Z="13" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="9" Z="13" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="9.5" Z="12.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="9.5" Z="12.5" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="9.5" Z="12.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="9.5" Z="12.5" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="10" Z="12" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="10" Z="12" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="10" Z="12" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="10" Z="12" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="10.5" Z="11.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="10.5" Z="11.5" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="10.5" Z="11.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="10.5" Z="11.5" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="11" Z="11" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="11" Z="11" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="11" Z="11" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="11" Z="11" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="11.5" Z="10.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="11.5" Z="10.5" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="11.5" Z="10.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="11.5" Z="10.5" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="12" Z="10" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="12" Z="10" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="12" Z="10" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="12" Z="10" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="12.5" Z="9.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="12.5" Z="9.5" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="12.5" Z="9.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="12.5" Z="9.5" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="13" Z="9" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="13" Z="9" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="13" Z="9" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="13" Z="9" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="13.5" Z="8.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="13.5" Z="8.5" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="13.5" Z="8.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="13.5" Z="8.5" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="14" Z="8" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="14" Z="8" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="14" Z="8" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="14" Z="8" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="14.5" Z="7.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="14.5" Z="7.5" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="14.5" Z="7.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="14.5" Z="7.5" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="15" Z="7" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="15" Z="7" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="15" Z="7" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="15" Z="7" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="15.5" Z="6.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="15.5" Z="6.5" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="15.5" Z="6.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="15.5" Z="6.5" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="16" Z="6" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="16" Z="6" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="16" Z="6" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="16" Z="6" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="16.5" Z="5.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="16.5" Z="5.5" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="16.5" Z="5.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="16.5" Z="5.5" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="17" Z="5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="17" Z="5" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="17" Z="5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="17" Z="5" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="17.5" Z="4.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="17.5" Z="4.5" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="17.5" Z="4.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="17.5" Z="4.5" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="18" Z="4" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="18" Z="4" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="18" Z="4" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="18" Z="4" Special_Type="STAIR" />
+			
+			<OBJECT TYPE="Static_Object" X="18" Y="18.5" Z="3.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="18.5" Y="18.5" Z="3.5" Special_Type="STAIR" />			
+			<OBJECT TYPE="Static_Object" X="19" Y="18.5" Z="3.5" Special_Type="STAIR" />	
+			<OBJECT TYPE="Static_Object" X="19.5" Y="18.5" Z="3.5" Special_Type="STAIR" />
+
+
+			
+			
+			
+			
+
+			
+			
+
+			
+			
+			
+			
 		</ITEMS>	
-		<PARAMETERS>
-			<RANGE OBJECT_TYPE="CRATE" MIN="1" MAX="3" />
-			<RANGE OBJECT_TYPE="TERMINAL" MIN="1" MAX="1" />
+		<PARAMETERS>			
 		</PARAMETERS>
 	</ROOM>
+	<ROOM NAME="INFIRMARY">
+		<ITEMS>
+			<OBJECT TYPE="Static_Object" X="12" Y="0" Z="12" Special_Type="HEALTH" />				
+			<OBJECT TYPE="Static_Object" X="9" Y="0" Z="9" Special_Type="HEALTH" />			
+			<OBJECT TYPE="Static_Object" X="3" Y="0" Z="12" Special_Type="HEALTH" />			
+		</ITEMS>	
+		<PARAMETERS>			
+		</PARAMETERS>
+	</ROOM>
+	<ROOM NAME="WAREHOUSE">
+		<ITEMS>
+			<OBJECT TYPE="Static_Object" X="3" Y="0" Z="3" Special_Type="AMMO" />				
+			<OBJECT TYPE="Static_Object" X="6" Y="0" Z="3" Special_Type="AMMO" />			
+			<OBJECT TYPE="Static_Object" X="9" Y="0" Z="3" Special_Type="AMMO" />	
+			<OBJECT TYPE="Static_Object" X="3" Y="3" Z="3" Special_Type="AMMO" />				
+			<OBJECT TYPE="Static_Object" X="6" Y="3" Z="3" Special_Type="AMMO" />			
+			<OBJECT TYPE="Static_Object" X="9" Y="3" Z="3" Special_Type="AMMO" />			
+		</ITEMS>	
+		<PARAMETERS>			
+		</PARAMETERS>
+	</ROOM>
+	
+	<OBJECT TYPE="Static_Object" X="18" Y="0" Z="0" Special_Type="WOOD" />	
+			<OBJECT TYPE="Static_Object" X="15" Y="0" Z="0" Special_Type="WOOD" />	
+			<OBJECT TYPE="Static_Object" X="18" Y="3" Z="0" Special_Type="WOOD" />	
+			<OBJECT TYPE="Static_Object" X="18" Y="0" Z="3" Special_Type="WOOD" />	
+			
+	
+	<ROOM NAME="CRATE_ROOM" WIDTH="2" HEIGHT="2" LENGTH="1">
+		<ITEMS>
+			<OBJECT TYPE="Static_Object" X="18" Y="0" Z="0" Special_Type="WOOD" />	
+			<OBJECT TYPE="Static_Object" X="15" Y="0" Z="0" Special_Type="WOOD" />	
+			<OBJECT TYPE="Static_Object" X="18" Y="3" Z="0" Special_Type="WOOD" />	
+			<OBJECT TYPE="Static_Object" X="18" Y="0" Z="3" Special_Type="WOOD" />		
+		</ITEMS>
+		<PARAMETERS>			
+		</PARAMETERS>	
+	</ROOM>	
+	
 	<ROOM NAME="INFIRMARY" WIDTH="2" HEIGHT="2" LENGTH="1">
 		<ITEMS>
 			<OBJECT TYPE="CRATE" X="6" Y="0" Z="8" CRATE_TYPE="LARGE" />

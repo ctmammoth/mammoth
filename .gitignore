@@ -29,3 +29,6 @@ obj/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*
+Engine/Crate.cs.orig
+Mammoth/Mammoth.csproj.Debug.cachefile.orig
+Engine/Physics/PhysicalObject.cs.orig

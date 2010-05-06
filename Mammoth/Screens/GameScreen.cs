@@ -79,19 +79,6 @@ namespace Mammoth
             audio.playMusic("In_Game");
             audio.loopSound("Ambient");
 
-            // Initialize the HUD to cover the screen.
-            /*TWidget baseWid = new TWidget(this.Game)
-            {
-                Bounds = this.Game.Window.ClientBounds
-            };
-
-            baseWid.Add(new TText(this.Game, "ZOMG ROFLOL")
-            {
-                Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, 150)
-            });
-
-            baseWid.Initialize();*/
-
             // Now, we want to initialize all of the components we just added.
             foreach (GameComponent component in this.Components)
                 component.Initialize();
@@ -115,6 +102,14 @@ namespace Mammoth
                 Size = new Vector2(50, 50),
                 Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2)
             };
+
+            // LET'S TRY ADDING A ROOM!!!
+            ObjectParameters stairRoom = new ObjectParameters();
+            stairRoom.AddAttribute("X", "-50");
+            stairRoom.AddAttribute("Y", "-23");
+            stairRoom.AddAttribute("Z", "-50");
+            stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
+            Room room = new Room(modelDB.getNextOpenID(), stairRoom, this.Game);
         }
 
         public override void Update(GameTime gameTime, bool hasFocus, bool visible)
@@ -194,7 +189,7 @@ namespace Mammoth
             // that draws the HUD for us.  Some widget code, I suppose.\
 
             // Draw the HUD
-            //baseWidget.Draw(gameTime);
+            baseWidget.Draw(gameTime);
         }
 
         /// <summary>
@@ -240,10 +235,6 @@ namespace Mammoth
             audio.stopSounds();
         }
 
-        #endregion
-
-        #region Variables
-        // This widget is used to draw the HUD.
         #endregion
 
         #region Properties

@@ -38,6 +38,8 @@ namespace Mammoth.Engine.Interface
             {
                 screen.Initialize();
             }
+
+            LoadContent();
         }
 
         /// <summary>
