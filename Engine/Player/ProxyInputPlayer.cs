@@ -68,7 +68,7 @@ namespace Mammoth.Engine
         /// <summary>
         /// Overrides InputPlayer's Throw() in order to allow shooting with respect to player's position and orientation.
         /// </summary>
-        protected override void Shoot()
+        protected override void Shoot(GameTime gameTime)
         {
             // Shoot if the player currently has a weapon
             if (CurWeapon != null)
@@ -80,7 +80,7 @@ namespace Mammoth.Engine
                 Vector3 offset = Vector3.Multiply(direction, 2.0f);
                 position = Vector3.Add(position, offset);
 
-                CurWeapon.Shoot(position, direction, ID);
+                CurWeapon.Shoot(position, direction, ID, gameTime);
             }
         }
 
