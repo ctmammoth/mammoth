@@ -75,7 +75,7 @@ namespace Mammoth.Server
             NetworkComponent.CreateServerNetworking(this);
 
             //Add GameLogic
-            GameLogic g = new GameLogic(this);
+            GameLogic g = new GameLogic();
             this.Services.AddService(typeof(IGameLogic), g);
 
             base.Initialize();

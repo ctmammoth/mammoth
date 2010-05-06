@@ -12,7 +12,7 @@ namespace Mammoth.Engine
         public Team team1;
         public Team team2;
 
-        public GameLogic(Game game) : base(game)
+        public GameLogic()
         {
             team1 = new Team(1);
             team2 = new Team(2);
