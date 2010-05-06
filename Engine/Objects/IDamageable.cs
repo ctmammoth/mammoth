@@ -17,7 +17,7 @@ namespace Mammoth.Engine
         /// <summary>
         /// The quantified health of the object.
         /// </summary>
-        protected int Health
+        float Health
         {
             get;
             set;

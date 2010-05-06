@@ -17,7 +17,7 @@ namespace Mammoth.Engine
         /// Initializes the player and loads its model.
         /// </summary>
         /// <param name="game">The game</param>
-        public LocalInputPlayer(Game game): base(game)
+        public LocalInputPlayer(Game game, int clientID): base(game)
         {
             //Load the Model
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));

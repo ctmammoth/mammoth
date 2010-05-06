@@ -17,23 +17,91 @@ namespace Mammoth.Engine
     /// A player can not be instantiated.
     /// </summary>
     public abstract class Player : PhysicalObject, IRenderable, IEncodable, IDamageable
-            : base(game)
     {
+        /// <summary>
+        /// Constructs a new player allowing access to the Game.
+        /// </summary>
+        /// <param name="game">The current Game.</param>
+        public Player(Game game)
+            : base(game)
+        {
+            //Give players access to game.
+            this.Game = game;
+
+            //Defines model height which is used by the camera
+            this.Height = 6.0f;
+        }
+
+        /// <summary>
+        /// Spawns the player with a given position and orientation. Also changes dead to false and restores full health.
+        /// </summary>
+        /// <param name="pos">The position of the spawn</param>
+        /// <param name="orient">The initial orientation of the spawn.</param>
+        public virtual void Spawn(Vector3 pos, Quaternion orient)
+        {
+            //Spawn position
+            this.Position = pos;
+            this.Orientation = orient;
+            this.HeadOrient = orient;
+
+            //Revive life
+            this.Health = 100;
+        }
+
+        #region IDamageable Members
+
+        public float Health
+        {
+            get;
+            set;
+        }
+
+        public void TakeDamage(float damage)
+        {
+            this.Health -= damage;
+        }
+
+        public void Die()
+        {
+            this.NumDeaths++;
+        }
+
+        #endregion
+        
+        #region IEncodable Members
+
+        public virtual byte[] Encode()
+        {
+            Networking.Encoder tosend = new Networking.Encoder();
+
+            tosend.AddElement("Position", Position);
+            tosend.AddElement("Orientation", Orientation);
+            tosend.AddElement("Velocity", Velocity);
+
+            return tosend.Serialize();
+        }
+
+        public virtual void Decode(byte[] serialized)
+        {
+            Networking.Encoder props = new Networking.Encoder(serialized);
+
+            if(props.UpdatesFor("Position"))
+                Position = (Vector3) props.GetElement("Position", Position);
+            if (props.UpdatesFor("Velocity"))
+                Orientation = (Quaternion) props.GetElement("Orientation", Orientation);
+            if (props.UpdatesFor("Orientation"))
+                Velocity = (Vector3) props.GetElement("Velocity", Velocity);
+        }
+
+        #endregion
+
         #region Properties
 
         //For PhysicalObject
-        public string getObjectType()
+        public override string getObjectType()
         {
             return "Player";
         }
-
-        //-----------------------TEMPORARY CONSTANTS FOR SPAWNING--------------------//
-        public static const Vector3 DefaultSpawnPos = new Vector3(-3.0f, 10.0f, 0.0f);
-        public static const Quaternion DefaultSpawnOrient = Quaternion.Identity;
-        
-
-
-        //-------------------PHYSICAL DESCRIPTIVE PROPERTIES----------------------//
 
         //POSITION
         public override Vector3 Position
@@ -89,13 +157,6 @@ namespace Mammoth.Engine
             protected set;
         }
 
-        //GAME
-        public Game Game
-        {
-            get;
-            protected set;
-        }
-
         //HEIGHT
         public float Height
         {
@@ -110,7 +171,6 @@ namespace Mammoth.Engine
             get;
             set;
         }
-
 
         //-----------------------STATISTICAL VARIABLES-----------------------//
 
@@ -141,83 +201,6 @@ namespace Mammoth.Engine
             get;
             set;
         }
-        #endregion
-
-        /// <summary>
-        /// Constructs a new player allowing access to the Game.
-        /// </summary>
-        /// <param name="game">The current Game.</param>
-        public Player(Game game)
-        {
-            //Give players access to game.
-            this.Game = game;
-
-            //Defines model height which is used by the camera
-            this.Height = 6.0f;
-        }
-
-        /// <summary>
-        /// Spawns the player with a given position and orientation. Also changes dead to false and restores full health.
-        /// </summary>
-        /// <param name="pos">The position of the spawn</param>
-        /// <param name="orient">The initial orientation of the spawn.</param>
-        public virtual void Spawn(Vector3 pos, Quaternion orient)
-        {
-            //Spawn position
-            this.Position = pos;
-            this.Orientation = orient;
-            this.HeadOrient = orient;
-
-            //Revive life
-            this.Health = 100;
-            this.Dead = false;
-        }
-
-        #region IDamageable Members
-
-        protected int Health
-        {
-            get;
-            set;
-        }
-
-        public void TakeDamage(float damage)
-        {
-            Health -= damage;
-        }
-
-        public void Die()
-        {
-            NumKilled++;
-        }
-
-        #endregion
-        
-        #region IEncodable Members
-
-        public virtual byte[] Encode()
-        {
-            Networking.Encoder tosend = new Networking.Encoder();
-
-            tosend.AddElement("Position", Position);
-            tosend.AddElement("Orientation", Orientation);
-            tosend.AddElement("Velocity", Velocity);
-
-            return tosend.Serialize();
-        }
-
-        public virtual void Decode(byte[] serialized)
-        {
-            Networking.Encoder props = new Networking.Encoder(serialized);
-
-            if(props.UpdatesFor("Position"))
-                Position = (Vector3) props.GetElement("Position", Position);
-            if (props.UpdatesFor("Velocity"))
-                Orientation = (Quaternion) props.GetElement("Orientation", Orientation);
-            if (props.UpdatesFor("Orientation"))
-                Velocity = (Vector3) props.GetElement("Velocity", Velocity);
-        }
-
         #endregion
     }
 }
