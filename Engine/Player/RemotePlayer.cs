@@ -26,7 +26,6 @@ namespace Mammoth.Engine
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
             this.Model3D = r.LoadModel("soldier-low-poly");
 
-
             //Initialize PhysX for the RemotePlayer so it can be interacted with (collision, etc.)
             InitializePhysX();
         }

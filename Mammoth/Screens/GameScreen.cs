@@ -67,7 +67,8 @@ namespace Mammoth
             // Add the model database.
             ModelDatabase modelDB = new ModelDatabase(this.Game)
             {
-                UpdateOrder = 1
+                UpdateOrder = 1,
+                DrawOrder = 2
             };
             this.Components.Add(modelDB);
 
@@ -100,7 +101,7 @@ namespace Mammoth
         {
             this.Components.Add(new Skybox(this.Game)
             {
-                DrawOrder = 3
+                DrawOrder = 1
             });
         }
 

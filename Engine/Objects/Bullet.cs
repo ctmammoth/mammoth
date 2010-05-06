@@ -50,13 +50,16 @@ namespace Mammoth.Engine
             PhysicalObject objectHit = physics.RaycastClosestShape(InitialPosition, InitialDirection);
             // Damage the object that was hit if possible
             if (objectHit != null && objectHit is IDamageable)
+            {
+                Console.WriteLine("Damaging a mofo of type " + objectHit.getObjectType());
                 ((IDamageable)objectHit).TakeDamage(GetDamage());
+            }
         }
 
-        public string getObjectType()
+        public override string getObjectType()
         {
             return "Bullet";
-        }
+        }        
 
         #region IEncodeable members
         public byte[] Encode()

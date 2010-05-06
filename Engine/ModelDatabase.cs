@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 using Microsoft.Xna.Framework;
 using Mammoth.Engine.Networking;
@@ -41,21 +42,30 @@ namespace Mammoth.Engine
         {
             // Kinda hackish (because the name no longer really applies), but can be fixed later if necessary.
             // Done updating
-            isUpdating = false;
+            isUpdating = true;
 
             // Add objects that are waiting to be registered
             while (toRegister.Count > 0)
-                registerObject(toRegister.Dequeue());
+            {
+                BaseObject objToRegister = toRegister.Dequeue();
+                _objects.Add(objToRegister.ID, objToRegister);
+            }
+
+            toRegister.Clear();
 
             while (toRemove.Count > 0)
-                removeObject(toRemove.Dequeue());
+            {
+                int objToRemove = toRemove.Dequeue();
+                _objects.Remove(objToRemove);
+            }
 
-            // Currently updating
-            isUpdating = true;
+            toRemove.Clear();
 
             // Update all objects
             foreach (var obj in _objects.Values)
                 obj.Update(gameTime);
+
+            isUpdating = false;
         }
 
         public override void Draw(GameTime gameTime)
@@ -79,6 +89,13 @@ namespace Mammoth.Engine
 
         public void registerObject(BaseObject newObject)
         {
+            Console.WriteLine(">>>Here's what's in ModelDB: ");
+            foreach (var obj in _objects.Values)
+            {
+                Console.WriteLine("ID " + obj.ID + ", type " + obj.getObjectType());
+                Debug.Assert(_objects.Keys.Contains<int>(obj.ID));
+            }
+
             if (isUpdating)
                 toRegister.Enqueue(newObject);
             else

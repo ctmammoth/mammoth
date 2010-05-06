@@ -88,9 +88,9 @@ namespace Mammoth.Engine
             if(props.UpdatesFor("Position"))
                 Position = (Vector3) props.GetElement("Position", Position);
             if (props.UpdatesFor("Velocity"))
-                Orientation = (Quaternion) props.GetElement("Orientation", Orientation);
-            if (props.UpdatesFor("Orientation"))
                 Velocity = (Vector3) props.GetElement("Velocity", Velocity);
+            if (props.UpdatesFor("Orientation"))
+                Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
         }
 
         #endregion
