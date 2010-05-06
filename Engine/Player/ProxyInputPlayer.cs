@@ -108,7 +108,7 @@ namespace Mammoth.Engine
 
                 //update players kills
                 IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-                ProxyInputPlayer pip = mdb.getObject(p.Creator);
+                ProxyInputPlayer pip = (ProxyInputPlayer) mdb.getObject(p.Creator);
                 pip.NumKills++;
             }
             base.TakeDamage(damage, inflicter);
