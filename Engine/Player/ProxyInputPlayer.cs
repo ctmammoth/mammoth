@@ -89,6 +89,7 @@ namespace Mammoth.Engine
         /// </summary>
         protected override void Reload()
         {
+            Console.WriteLine("Proxyplayer is reloading.");
             if (CurWeapon != null)
                 CurWeapon.Reload();
         }

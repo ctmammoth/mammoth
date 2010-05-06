@@ -44,6 +44,7 @@ namespace Mammoth.Engine.Input
             _keyMappings.Add(InputType.Right, Keys.D);
             _keyMappings.Add(InputType.Sprint, Keys.LeftShift);
             _keyMappings.Add(InputType.Jump, Keys.Space);
+            _keyMappings.Add(InputType.Reload, Keys.R);
         }
 
         public override void Update(GameTime gameTime)

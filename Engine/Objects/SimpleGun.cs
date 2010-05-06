@@ -207,6 +207,7 @@ namespace Mammoth.Engine
 
         public void Reload()
         {
+            Console.WriteLine("SimpleGun is reloading!");
             IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
             net.sendSound("Reload", Owner.ID >> 25);
 
