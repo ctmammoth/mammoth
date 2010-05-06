@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mammoth.Engine.Networking;
+
 using StillDesign.PhysX;
+using StillDesign.PhysX.Utilities;
 using Microsoft.Xna.Framework;
 
 using Mammoth.Engine.Physics;
@@ -39,9 +41,25 @@ namespace Mammoth.Engine
                 //BodyFlags = BodyFlag.Kinematic,
                 Mass = 1.0f
             };
+
+
+            TriangleMeshDescription trimeshDesc = new TriangleMeshDescription();
+            trimeshDesc.AllocateVertices<Vector3>(1);
+            trimeshDesc.AllocateTriangles<int>(1);
+            // Add a single vertex somewhere
+            trimeshDesc.VerticesStream.Write<Vector3>(new Vector3(0.0f, 0.0f, 0.0f));
+            trimeshDesc.VertexCount = 1;
+            trimeshDesc.TriangleCount = 1;
+
+            SphereShapeDescription sphereShapeDesc = new SphereShapeDescription()
+            {
+                Radius = 1.0f,
+                CCDSkeleton = physics.CreateCCDSkeleton(trimeshDesc)
+            };
+
             ActorDescription bulletActorDesc = new ActorDescription()
             {
-                Shapes = { new SphereShapeDescription() { Radius = 1.0f } },
+                Shapes = { sphereShapeDesc },
                 // Add a body so the bullet moves
                 BodyDescription = bodyDesc,
                 UserData = this
@@ -88,6 +106,11 @@ namespace Mammoth.Engine
         // TODO
         public override void CollideWith(PhysicalObject obj)
         {
+            // Check whether obj is damageable
+            if (obj is IDamageable)
+                ((IDamageable)obj).TakeDamage(GetDamage());
+
+            // Destroy this bullet on impact
             IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof (IModelDBService));
             mdb.removeObject(ID);
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));

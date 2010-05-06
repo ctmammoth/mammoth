@@ -34,6 +34,7 @@ namespace Mammoth.Server
             this.Services.AddService(typeof(IRenderService), r);
             // TODO: Change this to create a new scene when a game screen is created.
             physics.CreateScene();
+
             #region PhysX Code
 
             // Because I don't trust the ground plane, I'm making my own.
@@ -43,7 +44,7 @@ namespace Mammoth.Server
                 Size = new Vector3(100.0f, 2.0f, 100.0f),
                 LocalPosition = new Vector3(0.0f, -1.0f, 0.0f)
             });
-            physics.CreateActor(boxActorDesc);
+            new Mammoth.Engine.Objects.MinimalPhysicalObject(physics.CreateActor(boxActorDesc));
 
             // Just to test collisions...
             boxActorDesc = new ActorDescription();
@@ -52,7 +53,7 @@ namespace Mammoth.Server
                 Size = new Vector3(0.5f, 0.5f, 0.5f),
                 LocalPosition = new Vector3(-3.0f, 3.0f, 0.0f)
             });
-            physics.CreateActor(boxActorDesc);
+            new Mammoth.Engine.Objects.MinimalPhysicalObject(physics.CreateActor(boxActorDesc));
 
             #endregion
 

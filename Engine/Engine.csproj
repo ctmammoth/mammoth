@@ -78,7 +78,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="ClientState.cs" />
     <Compile Include="Objects\IDamager.cs" />
-    <Compile Include="Objects\IDestructable.cs" />
+    <Compile Include="Objects\IDamageable.cs" />
     <Compile Include="IModelDBService.cs" />
     <Compile Include="Input\EmulatedInput.cs" />
     <Compile Include="Objects\IWeapon.cs" />

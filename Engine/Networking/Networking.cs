@@ -101,9 +101,9 @@ namespace Mammoth.Engine.Networking
             client.joinGame();
         }
 
-        public static void CreateDummyClient(Game game)
+        public static void CreateDummyClient(Game game, LocalInputPlayer player)
         {
-            DummyClientNetworking client = new DummyClientNetworking(game);
+            DummyClientNetworking client = new DummyClientNetworking(game, player);
             game.Components.Add(client);
             client.UpdateOrder = 7;
         }
