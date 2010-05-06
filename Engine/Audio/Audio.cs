@@ -33,13 +33,11 @@ namespace Mammoth.Engine.Audio
 
             _songs.Add("Main_Menu", new List<Song>());
             _songs["Main_Menu"].Add(manager.Load<Song>("songs/onestop"));
-            _songs["Main_Menu"].Add(manager.Load<Song>("songs/funkytown"));
 
             _songs.Add("In_Game", new List<Song>());
             _songs["In_Game"].Add(manager.Load<Song>("songs/minority"));
             _songs["In_Game"].Add(manager.Load<Song>("songs/superman"));
             _songs["In_Game"].Add(manager.Load<Song>("songs/momentviolence"));
-            _songs["In_Game"].Add(manager.Load<Song>("songs/nosleep"));
         }
 
         private void loadSounds()

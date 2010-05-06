@@ -105,13 +105,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="songs\01 Funky Town.mp3">
-      <Name>funkytown</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="sounds\9mm.wav">
       <Name>gunshot</Name>
       <Importer>WavImporter</Importer>
@@ -121,13 +114,6 @@
   <ItemGroup>
     <Compile Include="songs\onestop.mp3">
       <Name>onestop</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="songs\10 Who Needs Sleep_.mp3">
-      <Name>nosleep</Name>
       <Importer>Mp3Importer</Importer>
       <Processor>SongProcessor</Processor>
     </Compile>
