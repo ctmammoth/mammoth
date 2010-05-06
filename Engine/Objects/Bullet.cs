@@ -26,21 +26,32 @@ namespace Mammoth.Engine
             : base(game, creator)
         {
             Console.WriteLine("Constructing a bullet...");
-            
             // Set the initial position and direction
             InitialPosition = position;
             InitialDirection = direction;
+            InitialDirection.Normalize();
 
-            // Set the velocity to point the same way as direction
-            Velocity = Vector3.Multiply(InitialDirection, VelocityMagnitude);
-
-            // Load a retarded model
-            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
-            this.Model3D = r.LoadModel("soldier-low-poly");
+            this.Init();
 
             IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
             this.ID = mdb.getNextOpenID();
             mdb.registerObject(this);
+
+            // Send the bullet
+            IServerNetworking network = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            network.sendThing(this);
+        }
+
+        private void Init()
+        {
+            //Console.WriteLine("Initializing a bullet with position " + InitialPosition + " and direction " + InitialDirection);
+            // Set the velocity to point the same way as direction
+            Velocity = Vector3.Multiply(InitialDirection, VelocityMagnitude);
+            //Console.WriteLine("initial velocity: " + Velocity);
+
+            // Load a retarded model
+            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
+            this.Model3D = r.LoadModel("soldier-low-poly");
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
 
@@ -65,6 +76,7 @@ namespace Mammoth.Engine
 
             // Create the actor at the specified location
             this.Position = InitialPosition;
+            this.Orientation = Quaternion.Identity;
         }
 
         public Bullet(Game game)
@@ -72,20 +84,15 @@ namespace Mammoth.Engine
         {
         }
 
-        /// <summary>
-        /// Performs the ray cast to shoot the bullet.
-        /// </summary>
-        private void FireBullet()
-        {
-        }
-
         public override void Update(GameTime gameTime)
         {
+            //Console.WriteLine("I'm here with " + Velocity + " id=" + ID);
+
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
 
-
             // Move the position by the amount dictated by its velocity and the elapsed game time
-            Vector3 tempPos = Vector3.Multiply(Velocity, (float)gameTime.ElapsedGameTime.TotalSeconds);
+
+            Vector3 tempPos = Position + Vector3.Multiply(Velocity, (float)gameTime.ElapsedGameTime.TotalSeconds);
 
             // Perform the raycast
             RaycastHit rayHit = physics.RaycastClosestShape(Position + (new Vector3(0.0f, 8.0f, 0.0f)), InitialDirection);
@@ -143,7 +150,7 @@ namespace Mammoth.Engine
 
         #region Variables
         // The magnitude of the bullet's velocity
-        private const float VelocityMagnitude = 0.0f;
+        private const float VelocityMagnitude = 50.0f;
         #endregion
 
         #region IEncodeable members
@@ -170,11 +177,10 @@ namespace Mammoth.Engine
             InitialDirection = (Vector3)e.GetElement("InitialDirection", InitialDirection);
             Creator = (int)e.GetElement("Creator", Creator);
 
-
             Console.WriteLine("Bullet InitialPosition received: " + InitialPosition);
             Console.WriteLine("Bullet InitialDirection received: " + InitialDirection);
 
-            FireBullet();
+            Init();
         }
         #endregion
 
@@ -194,14 +200,6 @@ namespace Mammoth.Engine
             get
             {
                 return Vector3.Zero;
-            }
-        }
-
-        public Quaternion Orientation
-        {
-            get
-            {
-                return Quaternion.Identity;
             }
         }
 

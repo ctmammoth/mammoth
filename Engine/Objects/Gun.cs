@@ -222,9 +222,9 @@ namespace Mammoth.Engine.Objects
                     _lastFiredTime = curTime;
 
                     // Randomly perturb the bullet
-                    direction = Vector3.Add(direction, new Vector3((float)(directionPerturber.NextDouble() - 1) * Inaccuracy,
-                        (float)(directionPerturber.NextDouble() - 1) * Inaccuracy,
-                        (float)(directionPerturber.NextDouble() - 1) * Inaccuracy));
+                    direction = Vector3.Add(direction, new Vector3((float)(directionPerturber.NextDouble() - 0.5) * Inaccuracy,
+                        (float)(directionPerturber.NextDouble() - 0.5) * Inaccuracy,
+                        (float)(directionPerturber.NextDouble() - 0.5) * Inaccuracy));
                     direction.Normalize();
 
                     SpawnBullet(position, direction, shooterID);
@@ -257,8 +257,8 @@ namespace Mammoth.Engine.Objects
             Bullet b = new Bullet(Game, position, direction, shooterID >> 25);
 
             // Give this projectile an ID, but it's not really necessary since it gets shot instantaneously
-            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            b.ID = modelDB.getNextOpenID();
+            //IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            //b.ID = modelDB.getNextOpenID();
 
             // Send the bullet after it's created
             net.sendThing(b);
