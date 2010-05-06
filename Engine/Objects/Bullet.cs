@@ -109,10 +109,16 @@ namespace Mammoth.Engine
                 PhysicalObject objHit = ((PhysicalObject)rayHit.Shape.Actor.UserData);
 
                 // Try damaging the object
-                if (objHit != null && objHit is IDamageable)
+                if (objHit != null)
                 {
-                    Console.WriteLine("Damaging a mofo of type " + objHit.getObjectType());
-                    //((IDamageable)objHit).TakeDamage(GetDamage(), this);
+                    if (objHit is IDamageable)
+                    {
+                        Console.WriteLine("Damaging a mofo of type " + objHit.getObjectType());
+                        ((IDamageable)objHit).TakeDamage(GetDamage(), this);
+                    }
+                    IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+                    mdb.removeObject(this);
+                    physics.RemoveActor(this.Actor);
                 }
             }
             else
@@ -159,7 +165,7 @@ namespace Mammoth.Engine
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder();
 
             e.AddElement("InitialPosition", InitialPosition);
-            e.AddElement("Velocity", Velocity);
+            e.AddElement("InitialDirection", InitialDirection);
             e.AddElement("Creator", Creator);
 
             return e.Serialize();
