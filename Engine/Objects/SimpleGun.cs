@@ -172,7 +172,7 @@ namespace Mammoth.Engine
             else if (MagCount > 1)
             {
                 _lastReloadTime = curTime;
-                Reload();
+                Reload(time);
                 SpawnBullet(position, direction, shooterID);
             }
             else

@@ -211,6 +211,9 @@ namespace Mammoth.Engine
                 else
                     this.Velocity += physics.Scene.Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds - motion;
             }
+
+            // Update main weapon
+            ((BaseObject)CurWeapon).Update(gameTime);
         }
 
         /// <summary>
