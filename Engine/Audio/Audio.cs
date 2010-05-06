@@ -29,7 +29,7 @@ namespace Mammoth.Engine.Audio
             _volumes = new Dictionary<string, float>();
             loadSongs();
             loadSounds();
-            MediaPlayer.Volume = 0.7f;
+            MediaPlayer.Volume = 0.5f;
         }
 
         private void loadSongs()
@@ -38,11 +38,6 @@ namespace Mammoth.Engine.Audio
 
             _songs.Add("Main_Menu", new List<Song>());
             _songs["Main_Menu"].Add(manager.Load<Song>("songs/onestop"));
-
-            _songs.Add("In_Game", new List<Song>());
-            _songs["In_Game"].Add(manager.Load<Song>("songs/momentviolence"));
-            _songs["In_Game"].Add(manager.Load<Song>("songs/minority"));
-            _songs["In_Game"].Add(manager.Load<Song>("songs/superman"));
         }
 
         private void loadSounds()
@@ -59,10 +54,14 @@ namespace Mammoth.Engine.Audio
 
         public void playMusic(string toPlay)
         {
-            _currentSong = 0;
-            _currentPlaylist = toPlay;
-            Song s;
-            MediaPlayer.Play(_songs[toPlay][0]);
+            if (!_songs.ContainsKey(toPlay))
+                MediaPlayer.Stop();
+            else
+            {
+                _currentSong = 0;
+                _currentPlaylist = toPlay;
+                MediaPlayer.Play(_songs[toPlay][0]);
+            }
         }
 
         public void playSound(string toPlay)
@@ -70,7 +69,7 @@ namespace Mammoth.Engine.Audio
             if (_volumes.ContainsKey(toPlay))
                 _sounds[toPlay].Play(_volumes[toPlay], 0.0f, 0.0f);
             else
-                _sounds[toPlay].Play(0.7f, 0.0f, 0.0f);
+                _sounds[toPlay].Play(0.5f, 0.0f, 0.0f);
         }
 
         public void loopSound(string toPlay)
@@ -80,7 +79,7 @@ namespace Mammoth.Engine.Audio
             if (_volumes.ContainsKey(toPlay))
                 sei.Volume = _volumes[toPlay];
             else
-                sei.Volume = 0.7f;
+                sei.Volume = 0.5f;
             sei.Play();
         }
 
