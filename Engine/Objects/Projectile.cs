@@ -32,6 +32,12 @@ namespace Mammoth.Engine
             protected set;
         }
 
+        public int Creator
+        {
+            get;
+            protected set;
+        }
+
         #endregion
 
         #region Variables
@@ -41,10 +47,10 @@ namespace Mammoth.Engine
         #endregion
 
         // Default
-        protected Projectile(Game game)
+        protected Projectile(Game game, int creator)
             : base(game)
         {
-
+            Creator = creator;
         }
 
         #region IDamager Members

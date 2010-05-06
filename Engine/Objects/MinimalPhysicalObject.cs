@@ -26,7 +26,7 @@ namespace Mammoth.Engine.Objects
             return "Minimal physical object";
         }
 
-        public override void InitializeDefault(int id)
+        public void InitializeDefault(int id)
         {
             ID = id;
         }

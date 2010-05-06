@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Microsoft.Xna.Framework;
+using Mammoth.Engine.Input;
 
 namespace Mammoth.Engine.Networking
 {
@@ -13,16 +14,6 @@ namespace Mammoth.Engine.Networking
             : base(game)
         {
 
-        }
-
-        public override bool isLANCapable()
-        {
-            return false;
-        }
-
-        public override bool isNetCapable()
-        {
-            return false;
         }
 
         public override NetworkComponent.NetworkingType getType()
@@ -43,17 +34,47 @@ namespace Mammoth.Engine.Networking
 
     public class DummyClientNetworking : DummyNetworking, IClientNetworking
     {
+        LocalInputPlayer player;
+
         #region IClientNetworking Members
 
-        public DummyClientNetworking(Game game)
+        public DummyClientNetworking(Game game, LocalInputPlayer player)
             : base(game)
         {
-
+            this.player = player;
         }
 
         public void sendThing(IEncodable toSend)
         {
             return;
+        }
+
+        /// <summary>
+        /// If the player shoots, creates a bullet in the correct place.
+        /// </summary>
+        /// <param name="gameTime"></param>
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            IInputService inputServer = (IInputService)this.Game.Services.GetService(typeof(IInputService));
+            InputState state = inputServer.States.Peek();
+
+            if (state.KeyPressed(InputType.Shoot))
+            {
+                IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+                Vector3 forward = Vector3.Transform(Vector3.Forward, player.HeadOrient) * 1000.0f;
+                forward.Normalize();
+                Vector3 position = player.Position + (Vector3.Up * player.Height / 4.0f);
+                Vector3 offset = Vector3.Multiply(forward, 2.0f);
+                position = Vector3.Add(position, offset);
+
+                Bullet b = new Bullet(Game, position, forward, player.ID >> 25);
+
+                // Give this projectile an ID
+                b.ID = modelDB.getNextOpenID();
+                modelDB.registerObject(b);
+            }
         }
 
         public void joinGame()

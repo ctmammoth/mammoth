@@ -19,6 +19,7 @@ namespace Mammoth.Engine
         private Queue<int> toRemove;
         // The objects in this database
         private Dictionary<int, BaseObject> _objects;
+        private LocalInputPlayer _localPlayer;
 
         public ModelDatabase(Game game) : base(game)
         {

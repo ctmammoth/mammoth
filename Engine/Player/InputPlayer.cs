@@ -14,25 +14,59 @@ using Mammoth.Engine.Physics;
 
 namespace Mammoth.Engine
 {
-    public abstract class InputPlayer : Player, IDestructable
+    /// <summary>
+    /// An InputPlayer is a Player whose properties may be modified by the IInputService.
+    /// </summary>
+    public abstract class InputPlayer : Player
     {
+
+        #region Properties
+        
+        //CURRENT COLLISION
+        public ControllerCollisionFlag CurrentCollision
+        {
+            get;
+            private set;
+        }
+        //YAW
+        private float Yaw
+        {
+            get;
+            set;
+        }
+
+        //PITCH
+        private float Pitch
+        {
+            get;
+            set;
+        }
+        #endregion
+        /// <summary>
+        /// Initialize a new InputPlayer. Does nothing special.
+        /// </summary>
+        /// <param name="game">The Game.</param>
         public InputPlayer(Game game) : base(game)
         {
-            this.Height = 6.0f;
-
             // HACK: WTF.  FUCK THIS.
             this.Game = game;
 
+            //Initializes PhysX of a player.
             InitializePhysX();
-
-            /// TODO: Remove this call - the player will get spawned by the game logic.
-            this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
         }
 
+        /// <summary>
+        /// Resets all the properties of an InputPlayer to default values. Spawns the player with passed in position and orientation.
+        /// </summary>
+        /// <param name="pos">Starting position.</param>
+        /// <param name="orient">Starting orientation.</param>
         public override void Spawn(Vector3 pos, Quaternion orient)
         {
+            //CALL PLAYER'S SPAWN
             base.Spawn(pos, orient);
 
+            //INPUT PLAYER SPECIFIC PROPERTIES
+            this.CurrentCollision = 0;
             this.Yaw = 0.0f;
             this.Pitch = 0.0f;
 
@@ -41,47 +75,47 @@ namespace Mammoth.Engine
             this.Health = 100;
         }
 
-        // TODO: Clean this up a bit?
+        /// <summary>
+        /// Sets up the PhysX of a player and "syncs" with model.
+        /// </summary>
         public void InitializePhysX()
         {
+            //Gives the player a bounding box and a physical description
             IPhysicsManagerService physics = (IPhysicsManagerService) this.Game.Services.GetService(typeof(IPhysicsManagerService));
-
             ControllerDescription desc = new CapsuleControllerDescription(1, this.Height - 2.0f)
             {
                 UpDirection = Axis.Y,
                 Position = Vector3.UnitY * (this.Height - 1.0f) / 2.0f
             };
-            this.PositionOffset = -1.0f * desc.Position;
 
+            //Describe the offset of the model to sync model center with PhysX Controller center
+            this.PositionOffset = -1.0f * desc.Position;
+            
+            //Set controllet to one defined above
             this.Controller = physics.CreateController(desc, this);
         }
 
-        public void Die()
-        {
-            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
-            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            this.Dead = true;
-            // Remove the physx controller
-            physics.RemoveController(this.Controller);
-            // Remove the model
-            modelDB.removeObject(this.ID);
-        }
 
+        /// <summary>
+        /// On every timestep, checks that player is still alive, checks queued input states and reacts.
+        /// </summary>
+        /// <param name="gameTime">The Game Time.</param>
         public override void Update(GameTime gameTime)
         {
             // Check whether the player is dead
-            if (Dead)
+            if (Health <= 0)
             {
                 Die();
                 return;
             }
 
+            #region REACT TO INPUT STATES
+
+            //Load services for use later
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             IInputService inputService = (IInputService)this.Game.Services.GetService(typeof(IInputService));
 
-            //Console.WriteLine("Position in update: " + Position);
-            //Console.WriteLine("Position in update (actor): " + Actor.GlobalPosition);
-
+            //Go through queued InputStates and modify Player properties accordingly
             foreach (var input in inputService.States)
             {
                 // Get a dampened version of the mouse movement.
@@ -90,10 +124,9 @@ namespace Mammoth.Engine
                 this.Yaw = MathHelper.WrapAngle(this.Yaw - delta.X);
                 // Modify the pitch based on vertical mouse movement.
                 const float pitchClamp = 0.9876f;
-
+                //Calculate pitch
                 // TODO: There's probably a better (faster) way of doing this...
                 this.Pitch = (float)Math.Asin(MathHelper.Clamp((float)Math.Sin(this.Pitch - delta.Y), -pitchClamp, pitchClamp));
-
                 // Set the orientation of the player's body.  We only use the yaw, as we don't want the player model
                 // rotating up and down.
                 this.Orientation = Quaternion.CreateFromYawPitchRoll(this.Yaw, 0, 0);
@@ -173,9 +206,13 @@ namespace Mammoth.Engine
                 //Console.WriteLine("Position before exiting: " + Position);
                 //Console.WriteLine("Orientation before exiting: " + Orientation);
             }
+
+            #endregion
         }
 
-        // TODO: MAKE THIS LEGITIMATE
+        /// <summary>
+        /// Throws a "bullet" in the current direction of the player. Overridden in ProxyInputPlayer since throwing only happens on server-side.
+        /// </summary>
         protected virtual void Throw() {
             Console.WriteLine("Throwing");
         }
@@ -192,53 +229,34 @@ namespace Mammoth.Engine
             return (this.CurrentCollision & flag) == flag;
         }
 
+        /// <summary>
+        /// Draws the InputPlayer.
+        /// </summary>
+        /// <param name="gameTime">The Game Time.</param>
         public override void Draw(GameTime gameTime)
         {
+            //Call Player's Draw
             base.Draw(gameTime);
 
+            //Load services
             IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
             ICameraService cam = (ICameraService)this.Game.Services.GetService(typeof(ICameraService));
 
-            // If you're using the first-person camera, don't draw your own geometry.
+            //If you're using the first-person camera, don't draw your own geometry.
             if (cam.Type != Camera.CameraType.FIRST_PERSON)
                 r.DrawRenderable(this);
         }
 
-        public override string getObjectType()
-        {
-            //return typeof(InputPlayer).ToString();
-            return "Player";
-        }
-
-        public override void CollideWith(PhysicalObject obj)
-        {
-            if (obj is IDamager)
-                TakeDamage(((IDamager)obj).GetDamage());
-        }
-
-        private void TakeDamage(float damage)
-        {
-            Health -= damage;
-        }
+        #region IEncodable Members
 
         public override byte[] Encode()
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-            //if ((dirty & EncodableProperties.Position) == EncodableProperties.Position)
-            //{
-                tosend.AddElement("Position", Position);
-                //Console.WriteLine("Sending new pos: " + Position);
-            //}
-            //if ((dirty & EncodableProperties.Orientation) == EncodableProperties.Orientation)
-                tosend.AddElement("Orientation", Orientation);
-            //if ((dirty & EncodableProperties.Velocity) == EncodableProperties.Velocity)
-                tosend.AddElement("Velocity", Velocity);
-            //if ((dirty & EncodableProperties.Health) == EncodableProperties.Health)
-                tosend.AddElement("Health", Velocity);
-
-            //reset DIRTY
-            //dirty = EncodableProperties.None;
+            tosend.AddElement("Position", Position);
+            tosend.AddElement("Orientation", Orientation);
+            tosend.AddElement("Velocity", Velocity);
+            tosend.AddElement("Health", Health);
 
             return tosend.Serialize();
         }
@@ -248,55 +266,16 @@ namespace Mammoth.Engine
             Networking.Encoder props = new Networking.Encoder(serialized);
 
             if (props.UpdatesFor("Position"))
-            {
                 Position = (Vector3)props.GetElement("Position", Position);
-                //Console.WriteLine("Received new pos: " + Position);
-            }
             if (props.UpdatesFor("Orientation"))
-            {
                 Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
-                //Console.WriteLine("Received new orientation: " + Orientation);
-            }
             if (props.UpdatesFor("Velocity"))
                 Velocity = (Vector3)props.GetElement("Velocity", Velocity);
             if (props.UpdatesFor("Health"))
-                Velocity = (Vector3)props.GetElement("Health", Velocity);
-        }
-
-        #region Properties
-
-        public ControllerCollisionFlag CurrentCollision
-        {
-            get;
-            private set;
-        }
-
-        private float Yaw
-        {
-            get;
-            set;
-        }
-
-        private float Pitch
-        {
-            get;
-            set;
-        }
-
-        float _health;
-        public float Health
-        {
-            get
-            {
-                return _health;
-            }
-            set
-            {
-                //dirty |= EncodableProperties.Health;
-                _health = value;
-            }
+                Health = (float)props.GetElement("Health", Health);
         }
 
         #endregion
+
     }
 }

@@ -7,24 +7,28 @@ using Mammoth.Engine.Input;
 
 namespace Mammoth.Engine.Networking
 {
-    /**
-     * Interface which defines a networking service
-     * which can send encodable objects and farms out
-     * updates;
-     */
+    /// <summary>
+    /// Interface which defines a networking service
+    /// which can send encodable objects and farms out
+    /// updates.
+    /// </summary>
     public interface INetworkingService
     {
-        bool isLANCapable();
-        bool isNetCapable();
         NetworkComponent.NetworkingType getType();
-        void Update(GameTime gameTime);
 
+        /// <summary>
+        /// A unique identifier for a client (0 for the server)
+        /// </summary>
         int ClientID
         {
             get;
         } 
     }
 
+    /// <summary>
+    /// Specifies methods for sending to different recipients,
+    /// managing sessions, and retrieving InputState queues.
+    /// </summary>
     public interface IServerNetworking : INetworkingService
     {
         void sendThing(IEncodable toSend, int target);
@@ -35,6 +39,10 @@ namespace Mammoth.Engine.Networking
         void endGame();
     }
 
+    /// <summary>
+    /// Specifies methods for sending to the server and
+    /// joining and quitting games.
+    /// </summary>
     public interface IClientNetworking : INetworkingService
     {
         void sendThing(IEncodable toSend);
@@ -42,52 +50,27 @@ namespace Mammoth.Engine.Networking
         void quitGame();
     }
 
-    public class InputStateUpdate
-    {
-        public uint _bitmask;
-        public double _elapsedTime;
-
-        public InputStateUpdate(uint bitmask, double elapsedTime)
-        {
-            _bitmask = bitmask;
-            _elapsedTime = elapsedTime;
-        }
-
-        public uint Bitmask
-        {
-            get
-            {
-                return _bitmask;
-            }
-        }
-
-        public double ElapsedTime
-        {
-            get
-            {
-                return _elapsedTime;
-            }
-        }
-    }
-
     /**
      * Abstract class which defines a networking system.
      */
     public abstract class NetworkComponent : GameComponent, INetworkingService
     {
+        /// <summary>
+        /// Defines the different available networking types
+        /// </summary>
         public enum NetworkingType
         {
-            XNA,
             LIDGREN,
             DUMMY
         }
 
-        public abstract bool isLANCapable();
-
-        public abstract bool isNetCapable();
-
         public abstract NetworkingType getType();
 
+
+        /// <summary>
+        /// Adds this networking component to the game services.
+        /// </summary>
+        /// <param name="game"></param>
         public NetworkComponent(Game game) : base(game)
         {
             this.Game.Services.AddService(typeof(INetworkingService), this);
@@ -101,9 +84,9 @@ namespace Mammoth.Engine.Networking
             client.joinGame();
         }
 
-        public static void CreateDummyClient(Game game)
+        public static void CreateDummyClient(Game game, LocalInputPlayer player)
         {
-            DummyClientNetworking client = new DummyClientNetworking(game);
+            DummyClientNetworking client = new DummyClientNetworking(game, player);
             game.Components.Add(client);
             client.UpdateOrder = 7;
         }
@@ -116,6 +99,9 @@ namespace Mammoth.Engine.Networking
             server.createSession();
         }
 
+        /// <summary>
+        /// A unique identifier for a client (0 for the server)
+        /// </summary>
         public abstract int ClientID
         {
             get;

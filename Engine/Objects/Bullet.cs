@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mammoth.Engine.Networking;
+
 using StillDesign.PhysX;
+using StillDesign.PhysX.Utilities;
 using Microsoft.Xna.Framework;
 
 using Mammoth.Engine.Physics;
@@ -20,11 +22,11 @@ namespace Mammoth.Engine
         /// </summary>
         /// <param name="position">The location at which to spawn the bullet.</param>
         /// <param name="forward">A vector pointing in the direction in which to shoot the bullet.</param>
-        public Bullet(Game game, Vector3 position, Vector3 forward)
-            : base(game)
+        public Bullet(Game game, Vector3 position, Vector3 forward, int creator)
+            : base(game, creator)
         {
             Console.WriteLine("Constructing a bullet...");
-            InitialVelocityMagnitude = 500.0f;
+            InitialVelocityMagnitude = 50.0f;
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
 
@@ -36,12 +38,28 @@ namespace Mammoth.Engine
             // Make the bullet's actor description
             BodyDescription bodyDesc = new BodyDescription()
             {
-                //BodyFlags = BodyFlag.Kinematic,
-                Mass = 1.0f
+                Mass = 1.0f,
+                CCDMotionThreshold = 50.0f
             };
+
+
+            TriangleMeshDescription trimeshDesc = new TriangleMeshDescription();
+            trimeshDesc.AllocateVertices<Vector3>(1);
+            trimeshDesc.AllocateTriangles<int>(1);
+            // Add a single vertex somewhere
+            trimeshDesc.VerticesStream.Write<Vector3>(new Vector3(0.0f, 0.0f, 0.0f));
+            trimeshDesc.VertexCount = 1;
+            trimeshDesc.TriangleCount = 1;
+
+            SphereShapeDescription sphereShapeDesc = new SphereShapeDescription()
+            {
+                Radius = 1.0f,
+                CCDSkeleton = physics.CreateCCDSkeleton(trimeshDesc)
+            };
+
             ActorDescription bulletActorDesc = new ActorDescription()
             {
-                Shapes = { new SphereShapeDescription() { Radius = 1.0f } },
+                Shapes = { sphereShapeDesc },
                 // Add a body so the bullet moves
                 BodyDescription = bodyDesc,
                 UserData = this
@@ -59,7 +77,7 @@ namespace Mammoth.Engine
         }
 
         public Bullet(Game game)
-            : base(game)
+            : base(game, 0)
         {
             InitializeDefault(0);
         }
@@ -73,7 +91,7 @@ namespace Mammoth.Engine
             r.DrawRenderable(this);
         }
 
-        public override void InitializeDefault(int id)
+        public void InitializeDefault(int id)
         {
             InitialVelocityMagnitude = 10.0f;
         }
@@ -88,6 +106,11 @@ namespace Mammoth.Engine
         // TODO
         public override void CollideWith(PhysicalObject obj)
         {
+            // Check whether obj is damageable
+            if (obj is IDamageable)
+                ((IDamageable)obj).TakeDamage(GetDamage());
+
+            // Destroy this bullet on impact
             IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof (IModelDBService));
             mdb.removeObject(ID);
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
@@ -114,6 +137,7 @@ namespace Mammoth.Engine
 
             e.AddElement("Position", Position);
             e.AddElement("InitialVelocity", InitialVelocity);
+            e.AddElement("Creator", Creator);
 
             return e.Serialize();
         }
@@ -152,7 +176,8 @@ namespace Mammoth.Engine
             // Create the actor
             this.Actor = physics.CreateActor(bulletActorDesc, this);
 
-            Position = (Vector3)e.GetElement("Position", Position);          
+            Position = (Vector3)e.GetElement("Position", Position);
+            Creator = (int)e.GetElement("Creator", Creator);
 
             Console.WriteLine("Bullet position received: " + Position);
             Console.WriteLine("Initial Velocity received: " + InitialVelocity);

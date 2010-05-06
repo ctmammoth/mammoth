@@ -74,11 +74,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphics\Skybox.cs" />
+    <Compile Include="GameLogic.cs" />
     <Compile Include="Objects\Bullet.cs" />
     <Compile Include="Graphics\Camera.cs" />
     <Compile Include="ClientState.cs" />
     <Compile Include="Objects\IDamager.cs" />
-    <Compile Include="Objects\IDestructable.cs" />
+    <Compile Include="Objects\IDamageable.cs" />
     <Compile Include="IModelDBService.cs" />
     <Compile Include="Input\EmulatedInput.cs" />
     <Compile Include="Objects\IWeapon.cs" />
@@ -89,9 +90,7 @@
     <Compile Include="ModelDatabase.cs" />
     <Compile Include="Objects\Crate.cs" />
     <Compile Include="Objects\Door.cs" />
-    <Compile Include="Networking\Car.cs" />
     <Compile Include="Networking\Decoder.cs" />
-    <Compile Include="Networking\Driver.cs" />
     <Compile Include="Networking\DummyNetworking.cs" />
     <Compile Include="Networking\Encoder.cs" />
     <Compile Include="Input\IInputService.cs" />
@@ -125,6 +124,7 @@
     <Compile Include="Objects\SimpleGun.cs" />
     <Compile Include="Objects\StaticObject.cs" />
     <Compile Include="Interface\TWidget.cs" />
+    <Compile Include="Team.cs" />
     <Compile Include="XmlHandler.cs" />
   </ItemGroup>
   <ItemGroup>
