@@ -5,6 +5,7 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 using Mammoth.Engine.Input;
+using Mammoth.Engine.Audio;
 
 namespace Mammoth.Engine.Networking
 {
@@ -127,6 +128,23 @@ namespace Mammoth.Engine.Networking
         public void endGame()
         {
             return;
+        }
+
+        #endregion
+
+        #region IServerNetworking Members
+
+
+        public void sendSound(string toPlay)
+        {
+            IAudioService audio = (IAudioService)this.Game.Services.GetService(typeof(IAudioService));
+            audio.playSound(toPlay);
+        }
+
+        public void sendSound(string toPlay, int target)
+        {
+            IAudioService audio = (IAudioService)this.Game.Services.GetService(typeof(IAudioService));
+            audio.playSound(toPlay);
         }
 
         #endregion

@@ -155,6 +155,9 @@ namespace Mammoth.Engine
         /// <param name="shooterID"></param>
         private void SpawnBullet(Vector3 position, Vector3 direction, int shooterID)
         {
+            IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            net.sendSound("Gunshot");
+
             // Make sure the bullet isn't spawned in the player: shift it by a bit
             Bullet b = new Bullet(Game, position, direction, shooterID >> 25);
 
@@ -163,7 +166,6 @@ namespace Mammoth.Engine
             b.ID = modelDB.getNextOpenID();
 
             // Send the bullet after it's created
-            IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
             net.sendThing(b);
 
             Console.WriteLine("Shot a bullet with a SimpleGun; " + Mag.AmmoRemaining + " bullets left.");
@@ -171,6 +173,9 @@ namespace Mammoth.Engine
 
         public void Reload()
         {
+            IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            net.sendSound("Reload", Owner.ID >> 25);
+
             if (MagCount != 0)
             {
                 // Create a new magazine (really just refill the current one)

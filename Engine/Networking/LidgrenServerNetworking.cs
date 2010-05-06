@@ -56,8 +56,8 @@ namespace Mammoth.Engine.Networking
         public void sendThing(IEncodable toSend, int target)
         {
             if (toSend is BaseObject)
-                _toSend.Enqueue(new DataGram(((BaseObject)toSend).getObjectType(), 
-                    ((BaseObject)toSend).ID, toSend.Encode(), target));
+                _toSend.Enqueue(new DataGram(MessageType.ENCODABLE, ((BaseObject)toSend).getObjectType(), 
+                    ((BaseObject)toSend).ID, toSend.Encode(), target, -1, null));
         }
 
         /// <summary>
@@ -68,8 +68,8 @@ namespace Mammoth.Engine.Networking
         public void sendThing(IEncodable toSend)
         {
             if (toSend is BaseObject)
-                _toSend.Enqueue(new DataGram(((BaseObject)toSend).getObjectType(), 
-                    ((BaseObject)toSend).ID, toSend.Encode(), -1));
+                _toSend.Enqueue(new DataGram(MessageType.ENCODABLE, ((BaseObject)toSend).getObjectType(), 
+                    ((BaseObject)toSend).ID, toSend.Encode(), -1, -1, null));
         }
 
         /// <summary>
@@ -81,8 +81,27 @@ namespace Mammoth.Engine.Networking
         public void sendToAllBut(IEncodable toSend, int excludeTarget)
         {
             if (toSend is BaseObject)
-                _toSend.Enqueue(new DataGram(((BaseObject)toSend).getObjectType(),
-                    ((BaseObject)toSend).ID, toSend.Encode(), -1, excludeTarget));
+                _toSend.Enqueue(new DataGram(MessageType.ENCODABLE, ((BaseObject)toSend).getObjectType(),
+                    ((BaseObject)toSend).ID, toSend.Encode(), -1, excludeTarget, null));
+        }
+
+        /// <summary>
+        /// Sends a sound event to all players.
+        /// </summary>
+        /// <param name="soundToPlay"></param>
+        public void sendSound(string soundToPlay)
+        {
+            _toSend.Enqueue(new DataGram(MessageType.EVENT, "Sound", -1, null, -1, -1, soundToPlay));
+        }
+
+        /// <summary>
+        /// Sends a sound event to the specified player.
+        /// </summary>
+        /// <param name="soundToPlay"></param>
+        /// <param name="target"></param>
+        public void sendSound(string soundToPlay, int target)
+        {
+            _toSend.Enqueue(new DataGram(MessageType.EVENT, "Sound", -1, null, target, -1, soundToPlay));
         }
 
         /// <summary>
@@ -140,12 +159,21 @@ namespace Mammoth.Engine.Networking
         {
             // Write the data to a buffer
             NetBuffer buffer = _server.CreateBuffer();
-            buffer.WriteVariableInt32((int)MessageType.ENCODABLE);
-            buffer.Write(message.ObjectType);
-            buffer.WriteVariableInt32(message.ID);
-            buffer.WriteVariableInt32(message.Data.Length);
-            buffer.WritePadBits();
-            buffer.Write(message.Data);
+            buffer.WriteVariableInt32((int)message.MessageType);
+            switch (message.MessageType)
+            {
+                case MessageType.ENCODABLE:
+                    buffer.Write(message.ObjectType);
+                    buffer.WriteVariableInt32(message.ID);
+                    buffer.WriteVariableInt32(message.Data.Length);
+                    buffer.WritePadBits();
+                    buffer.Write(message.Data);
+                    break;
+                case MessageType.EVENT:
+                    buffer.Write(message.ObjectType);
+                    buffer.Write(message.Params);
+                    break;
+            }
 
             // If there is more than one specified target, send 
             if (message.Recipient < 0)
@@ -336,11 +364,13 @@ namespace Mammoth.Engine.Networking
         /// </summary>
         private class DataGram
         {
+            public MessageType MessageType;
             public string ObjectType;
             public int ID;
             public int Exclude;
-            public byte[] Data { get; set; }
-            public int Recipient { get; set; }
+            public byte[] Data;
+            public int Recipient;
+            public string Params;
 
             /// <summary>
             /// Creates a DataGram.
@@ -349,30 +379,17 @@ namespace Mammoth.Engine.Networking
             /// <param name="id">The object ID of the object to be sent</param>
             /// <param name="data">The serialized data to be sent</param>
             /// <param name="recipient">The recipient of the data, -1 to send to all</param>
-            public DataGram(string objectType, int id, byte[] data, int recipient)
+            /// <param name="exclude">A client to exclude from receiving the message, -1 to not exclude any</param>
+            /// <param name="parameters">Any additional string params to send</param>
+            public DataGram(MessageType messageType, string objectType, int id, byte[] data, int recipient, int exclude, string parameters)
             {
-                ObjectType = objectType;
-                ID = id;
-                Data = data;
-                Recipient = recipient;
-                Exclude = -1;
-            }
-
-            /// <summary>
-            /// Creates a DataGram.
-            /// </summary>
-            /// <param name="objectType">The type of the object to be sent</param>
-            /// <param name="id">The object ID of the object to be sent</param>
-            /// <param name="data">The serialized data to be sent</param>
-            /// <param name="recipient">The recipient of the data, -1 to send to all</param>
-            /// <param name="exclude">A client to exclude from receiving the message</param>
-            public DataGram(string objectType, int id, byte[] data, int recipient, int exclude)
-            {
+                MessageType = messageType;
                 ObjectType = objectType;
                 ID = id;
                 Data = data;
                 Recipient = recipient;
                 Exclude = exclude;
+                Params = parameters;
             }
         }
     }

@@ -96,6 +96,7 @@ namespace Mammoth
             // Play game music
             IAudioService audio = (IAudioService)Game.Services.GetService(typeof(IAudioService));
             audio.playMusic("In_Game");
+            audio.loopSound("Ambient");
 
             // Now, we want to initialize all of the components we just added.
             foreach (GameComponent component in this.Components)
