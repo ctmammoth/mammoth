@@ -42,13 +42,35 @@ namespace Mammoth.Engine
             get;
             set;
         }
+
+        // The armed weapon
+        protected IWeapon CurWeapon
+        {
+            get;
+            set;
+        }
+
+        // The weapons owned by this player
+        protected IWeapon[] Items
+        {
+            get;
+            set;
+        }
+
         #endregion
+
         /// <summary>
         /// Initialize a new InputPlayer. Does nothing special.
         /// </summary>
         public InputPlayer(Game game) : base(game)
         {
-            //Initializes PhysX of a player.
+            // Give the player 5 weapons, for now
+            Items = new IWeapon[5];
+            // Give the player a simple gun, for now
+            Items[0] = new SimpleGun(game);
+            CurWeapon = Items[0];
+
+            // Initializes PhysX of a player.
             InitializePhysX();
 
             this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
@@ -169,7 +191,8 @@ namespace Mammoth.Engine
                 // If the player presses space (and is on the ground), jump!
                 if (InCollisionState(ControllerCollisionFlag.Down))
                     if (input.IsKeyDown(InputType.Jump))
-                        this.Velocity += Vector3.Up / 4.0f;
+                        //this.Velocity += Vector3.Up / 4.0f;
+                        this.Velocity += Vector3.Up * 20.0f;
 
                 // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
                 if (input.KeyPressed(InputType.Fire))

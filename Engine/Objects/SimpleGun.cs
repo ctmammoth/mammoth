@@ -6,21 +6,24 @@ using System.Text;
 using Microsoft.Xna.Framework;
 
 using Mammoth.Engine.Physics;
+using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
-    public class SimpleGunClip : BaseObject
+    public class Magazine : BaseObject
     {
-        private const int MaxRounds = 15;
+        public readonly int MaxRounds;
         public int AmmoRemaining
         {
             get;
             private set;
         }
 
-        public SimpleGunClip(Game game)
+        public Magazine(Game game, int maxRounds)
             : base(game)
         {
+            MaxRounds = maxRounds;
+            AmmoRemaining = maxRounds;
         }
 
         /// <summary>
@@ -28,9 +31,13 @@ namespace Mammoth.Engine
         /// </summary>
         /// <returns>The number of bullets remain in the magazine after the shot is fired, or zero if a bullet is
         /// shot when no rounds are remaining.</returns>
-        public void FireShot()
+        public int FireShot()
         {
+            if (AmmoRemaining == 0)
+                return 0;
+
             AmmoRemaining = AmmoRemaining - 1;
+            return AmmoRemaining;
         }
 
         /// <summary>
@@ -44,58 +51,106 @@ namespace Mammoth.Engine
 
         public override string getObjectType()
         {
-            return "Simple gun clip";
+            return "Magazine";
         }
     }
 
+    /// <summary>
+    /// A simple weapon which shoots Bullets.
+    /// </summary>
     public class SimpleGun : BaseObject, IWeapon
     {
         #region Properties
 
+        // This gun's orientation
         public Quaternion Orientation
         {
             get;
             set;
         }
 
+        // The gun's position
         public Vector3 Position
         {
             get;
             set;
         }
 
-        #endregion
+        // The magazine used by this gun
+        private Magazine Mag
+        {
+            get;
+            set;
+        }
 
-        private SimpleGunClip Magazine;
+        // The number of magazines remaining for this gun
+        public int MagCount
+        {
+            get;
+            private set;
+        }
+
+        #endregion
 
         public SimpleGun(Game game)
             : base(game)
         {
-            Magazine = new SimpleGunClip(game);
+            // Give each magazine 15 bullets
+            Mag = new Magazine(game, 15);
+            // Give the gun some magazines
+            MagCount = 5;
         }
 
         #region IWeapon Members
 
-        public void Shoot(Vector3 position, Vector3 direction)
+        public void Shoot(Vector3 position, Vector3 direction, int shooterID)
         {
-
+            // Make sure a shot can be fired
+            if (Mag.FireShot() > 0)
+            {
+                SpawnBullet(position, direction, shooterID);
+            }
+            else if (MagCount > 1)
+            {
+                Reload();
+            }
+            else
+            {
+                Console.WriteLine("Out of ammo.");
+            }
         }
 
-        public int AmmoRemainingInClip()
+        private void SpawnBullet(Vector3 position, Vector3 direction, int shooterID)
         {
-            return 0;
+            // Make sure the bullet isn't spawned in the player: shift it by a bit
+            Bullet b = new Bullet(Game, position, direction, shooterID >> 25);
+
+            // Give this projectile an ID, but it's not really necessary since it gets shot instantaneously
+            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            b.ID = modelDB.getNextOpenID();
+
+            // Send the bullet after it's created
+            IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            net.sendThing(b);
+
+            Console.WriteLine("Shot a bullet with a SimpleGun; " + Mag.AmmoRemaining + " bullets left.");
         }
 
         public void Reload()
         {
-
+            if (MagCount != 0)
+            {
+                // Create a new magazine (really just refill the current one)
+                Mag.Refill();
+                MagCount -= 1;
+            }
+            else
+            {
+                // Out of magazines
+            }
         }
 
         #endregion
-
-        public void InitializeDefault(int id)
-        {
-        }
 
         public override string getObjectType()
         {

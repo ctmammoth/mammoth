@@ -240,7 +240,8 @@ namespace Mammoth.Engine.Networking
         public void quitGame()
         {
             Console.WriteLine("Quitting game.");
-            _client.Shutdown("Player Quit");
+            _client.Disconnect("Player Quit");
+            _toSend.Clear();
         }
 
         /// <summary>
