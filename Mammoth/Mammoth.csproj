@@ -116,6 +116,7 @@
     <Compile Include="Screens\MainMenuScreen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MammothMain.cs" />
+    <Compile Include="Screens\PrettyMenuScreen.cs" />
     <Compile Include="Server\Server.cs" />
   </ItemGroup>
   <ItemGroup>

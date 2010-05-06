@@ -30,9 +30,9 @@ namespace Mammoth
             // Create a graphics device manager to deal with graphics devices.
             graphics = new GraphicsDeviceManager(this);
             graphics.SynchronizeWithVerticalRetrace = true;
-            //graphics.IsFullScreen = true;
-            //graphics.PreferredBackBufferWidth = 1440;
-            //graphics.PreferredBackBufferHeight = 900;
+            graphics.IsFullScreen = true;
+            graphics.PreferredBackBufferWidth = 1440;
+            graphics.PreferredBackBufferHeight = 900;
 
             // Set the root directory from which to load game content files.
             Content.RootDirectory = "Content";
@@ -74,7 +74,8 @@ namespace Mammoth
             this.Components.Add(net);
 
             // Add the main menu as a screen for the screen manager.
-            screenManager.AddScreen(new MainMenuScreen(this));
+            //screenManager.AddScreen(new MainMenuScreen(this));
+            screenManager.AddScreen(new PrettyMenuScreen(this));
 
             // Initialize all of the components that we just added to the game.
             base.Initialize();

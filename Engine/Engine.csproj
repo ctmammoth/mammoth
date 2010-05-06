@@ -75,6 +75,8 @@
   <ItemGroup>
     <Compile Include="Graphics\Skybox.cs" />
     <Compile Include="GameLogic.cs" />
+    <Compile Include="Interface\TImage.cs" />
+    <Compile Include="Interface\TImageButton.cs" />
     <Compile Include="Objects\Bullet.cs" />
     <Compile Include="Graphics\Camera.cs" />
     <Compile Include="ClientState.cs" />
