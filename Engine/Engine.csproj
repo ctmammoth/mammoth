@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engine.cs" />
+    <Compile Include="GameLogic.cs" />
     <Compile Include="Objects\Bullet.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="ClientState.cs" />

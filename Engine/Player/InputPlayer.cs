@@ -44,18 +44,22 @@ namespace Mammoth.Engine
             /// TODO: Remove this call - the player will get spawned by the game logic.
             this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
 
-            this.CurrentCollision = 0;
-
-            this.Health = 100;
+            
         }
 
 
         public override void Spawn(Vector3 pos, Quaternion orient)
         {
             base.Spawn(pos, orient);
-
+            this.CurrentCollision = 0;
+            this.Health = 100;
             this.Yaw = 0.0f;
             this.Pitch = 0.0f;
+        }
+
+        public void Spawn()
+        {
+            Init();
         }
 
         // TODO: Clean this up a bit?
@@ -262,6 +266,14 @@ namespace Mammoth.Engine
                 Health = (float)props.GetElement("Health", Health);
         }
 
+        public void Die()
+        {
+            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            this.Dead = true;
+            NumKilled++;
+        }
+
         #region Properties
 
         public ControllerCollisionFlag CurrentCollision
@@ -299,17 +311,6 @@ namespace Mammoth.Engine
         #endregion
 
         #region IDamageable Members
-
-        public void Die()
-        {
-            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
-            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            this.Dead = true;
-            // Remove the physx controller
-            physics.RemoveController(this.Controller);
-            // Remove the model
-            modelDB.removeObject(this.ID);
-        }
 
         public void TakeDamage(float damage)
         {
