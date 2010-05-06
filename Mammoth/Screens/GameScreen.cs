@@ -10,9 +10,9 @@ using Microsoft.Xna.Framework.Input;
 
 using Mammoth.Engine;
 using Mammoth.Engine.Physics;
-using Mammoth.Engine.Graphics;
 using Mammoth.Engine.Interface;
 using Mammoth.Engine.Networking;
+using Mammoth.Engine.Graphics;
 
 namespace Mammoth
 {

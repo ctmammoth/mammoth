@@ -75,8 +75,7 @@ namespace Mammoth.Engine.Networking
                     Bullet b = new Bullet(game);
                     b.Decode(properties);
                     b.ID = id;
-                    ro.registerObject(b);
-                    Console.WriteLine("Bullet received, position: " + b.Position);
+                    Console.WriteLine("Bullet received, position: " + b.InitialPosition + ", direction: " + b.InitialDirection);
                 break;
 
                 default:

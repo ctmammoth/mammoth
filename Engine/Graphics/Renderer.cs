@@ -101,7 +101,7 @@ namespace Mammoth.Engine
         {
             Vector2 textSize = font.MeasureString(text);
 
-            RenderTarget2D target = new RenderTarget2D(_graphics, (int) textSize.X, (int) textSize.Y, 0, SurfaceFormat.Color);
+            RenderTarget2D target = new RenderTarget2D(_graphics, (int)textSize.X, (int)textSize.Y, 1, SurfaceFormat.Color);
 
             _graphics.SetRenderTarget(0, target);
             {
