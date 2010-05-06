@@ -31,6 +31,7 @@ namespace Mammoth
             // Create a graphics device manager to deal with graphics devices.
             graphics = new GraphicsDeviceManager(this);
             graphics.SynchronizeWithVerticalRetrace = true;
+            graphics.PreferredDepthStencilFormat = DepthFormat.Depth32;
             //graphics.IsFullScreen = true;
             //graphics.PreferredBackBufferWidth = 1440;
             //graphics.PreferredBackBufferHeight = 900;
@@ -67,8 +68,8 @@ namespace Mammoth
             this.Components.Add(screenManager);
 
             // Create the networking component, and have it update after all of the rest of the code.
-            //DummyClientNetworking net = new DummyClientNetworking(this)
-            LidgrenClientNetworking net = new LidgrenClientNetworking(this)
+            DummyClientNetworking net = new DummyClientNetworking(this)
+            //LidgrenClientNetworking net = new LidgrenClientNetworking(this)
             {
                 UpdateOrder = 3
             };
@@ -88,7 +89,7 @@ namespace Mammoth
         protected override void Draw(GameTime gameTime)
         {
             // Clear the backbuffer - set it to a nice sky blue.
-            this.GraphicsDevice.Clear(Color.CornflowerBlue);
+            this.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1.0f, 0);
 
             // Draw all of this game's drawable components.
             base.Draw(gameTime);

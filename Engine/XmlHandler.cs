@@ -14,6 +14,7 @@ namespace Mammoth.Engine
         public void ChangeFile(String path)
         {
             currentPath = path;
+            path = "../../../" + path;            
             reader = new XmlTextReader(path);
         }
         public void GetNextElement()
