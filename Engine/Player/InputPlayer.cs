@@ -82,6 +82,8 @@ namespace Mammoth.Engine
             // Give the player a simple gun, for now
             Items[0] = new Revolver(game, this);
             CurWeapon = Items[0];
+
+            GameStats = new GameStats();
         }
 
         /// <summary>
@@ -309,7 +311,7 @@ namespace Mammoth.Engine
             int myID = ID >> 25;
             GameStats = new GameStats(NumKills, NumCaptures, NumDeaths, myID, g);
 
-            Console.WriteLine("Encoding: " + GameStats.ToString());
+            //Console.WriteLine("Encoding: " + GameStats.ToString());
 
             tosend.AddElement("Position", Position);
             tosend.AddElement("Orientation", Orientation);
@@ -335,7 +337,7 @@ namespace Mammoth.Engine
             if (props.UpdatesFor("GameStats"))
                 props.UpdateIEncodable("GameStats", GameStats);
 
-            Console.WriteLine("Decoding: " + GameStats.ToString());
+            //Console.WriteLine("Decoding: " + GameStats.ToString());
         }
 
         #endregion

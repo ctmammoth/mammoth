@@ -111,7 +111,7 @@ namespace Mammoth.Engine
                 //Your Team
                 baseWid.Add(new TText(this.Game, "Your Team: " + GameStats.YourTeam)
                 {
-                    Center = new Vector2((4 * this.Game.Window.ClientBounds.Width) / 5, 350)
+                    Center = new Vector2((this.Game.Window.ClientBounds.Width) / 2, 400)
                 });
 
             }
