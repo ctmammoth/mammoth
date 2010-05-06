@@ -51,6 +51,9 @@ namespace Mammoth.Engine.Interface
 
                 if (!UpdateTransition(gameTime, transitionOffTime, 1))
                 {
+                    // Let other components know that the screen is exiting.
+                    if (Exiting != null)
+                        Exiting(this, new EventArgs());
                     // When the transition's done, remove the screen.
                     this.ScreenManager.RemoveScreen(this);
                 }
@@ -113,6 +116,12 @@ namespace Mammoth.Engine.Interface
         }
 
         public virtual void Draw(GameTime gameTime) { }
+
+        #region Events
+
+        public event EventHandler Exiting;
+
+        #endregion
 
         #region Properties
 

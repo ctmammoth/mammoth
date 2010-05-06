@@ -16,7 +16,7 @@ namespace Mammoth.Engine.Networking
         public LidgrenNetworking(Game game)
             : base(game)
         {
-
+            Mammoth.Engine.Networking.Decoder d = new Mammoth.Engine.Networking.Decoder(this.Game);
         }
 
         public override bool isLANCapable()

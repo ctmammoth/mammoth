@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using StillDesign.PhysX;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -27,6 +29,10 @@ namespace Mammoth
         {
             // Create a graphics device manager to deal with graphics devices.
             graphics = new GraphicsDeviceManager(this);
+            graphics.SynchronizeWithVerticalRetrace = true;
+            //graphics.IsFullScreen = true;
+            //graphics.PreferredBackBufferWidth = 1440;
+            //graphics.PreferredBackBufferHeight = 900;
 
             // Set the root directory from which to load game content files.
             Content.RootDirectory = "Content";
@@ -45,12 +51,6 @@ namespace Mammoth
             PhysicsManagerService physics = new PhysicsManagerService(this);
             this.Components.Add(physics);
 
-            // TODO: This should probably be moved into the networking code.
-            // TODO: Decoder should register itself with the Game as providing the IDecoder service.
-            // We only need to create a decoder if we're doing networking.
-            Mammoth.Engine.Networking.Decoder d = new Mammoth.Engine.Networking.Decoder(this);
-            this.Services.AddService(typeof(IDecoder), d);
-
             // Add the input handler.
             this.Components.Add(new LocalInput(this)
             {
@@ -64,6 +64,13 @@ namespace Mammoth
                 DrawOrder = 1
             };
             this.Components.Add(screenManager);
+
+            // Create the networking component, and have it update after all of the rest of the code.
+            LidgrenClientNetworking net = new LidgrenClientNetworking(this)
+            {
+                UpdateOrder = 3
+            };
+            this.Components.Add(net);
 
             // Add the main menu as a screen for the screen manager.
             screenManager.AddScreen(new MainMenuScreen(this));
@@ -79,16 +86,6 @@ namespace Mammoth
 
             // Draw all of this game's drawable components.
             base.Draw(gameTime);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            Console.WriteLine("Disposing");
-            IPhysicsManagerService physics = (IPhysicsManagerService)this.Services.GetService(typeof(IPhysicsManagerService));
-            physics.Dispose();
-            IClientNetworking net = (IClientNetworking)this.Services.GetService(typeof(INetworkingService));
-            net.quitGame();
         }
 
         #region Event Handlers

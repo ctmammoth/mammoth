@@ -21,6 +21,8 @@ namespace Mammoth
             : base(game)
         {
             this.Components = new GameComponentCollection();
+
+            this.Exiting += new EventHandler(GameScreen_Exiting);
         }
 
         public override void Initialize()
@@ -68,15 +70,12 @@ namespace Mammoth
             };
             this.Components.Add(modelDB);
 
-            // Only uncomment one of the following two lines, depending on whether you
-            // want to test with networking or not.
-            // Create client networking.
-            //Mammoth.Engine.Networking.NetworkComponent.CreateClientNetworking(this.Game);
-            // Create dummy networking.
-            Mammoth.Engine.Networking.NetworkComponent.CreateDummyClient(this.Game);
-
-            // Create the local player, set its client ID, and add it to the ModelDB.
+            // TODO: Change this to use a server lobby.
+            // Join a game.
             IClientNetworking net = (IClientNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            net.joinGame();
+
+            // Create the local player and add it to the ModelDB.
             this.LocalPlayer = new LocalInputPlayer(this.Game, net.ClientID);
             modelDB.registerObject(this.LocalPlayer);
 
@@ -88,9 +87,6 @@ namespace Mammoth
             };
             this.Components.Add(cam);
 
-            // TEST
-            ICameraService c = (ICameraService)this.Game.Services.GetService(typeof(ICameraService));
-
             // Now, we want to initialize all of the components we just added.
             foreach (GameComponent component in this.Components)
                 component.Initialize();
@@ -98,48 +94,53 @@ namespace Mammoth
 
         public override void Update(GameTime gameTime, bool hasFocus, bool visible)
         {
+            // If we press escape, kill off the game screen.  Later, we'll want to open up a popup menu.
+            if (hasFocus && Keyboard.GetState().IsKeyDown(Keys.Escape))
+                this.IsExiting = true;
+
             // Update the screen (visibility and transition state and the like).
             base.Update(gameTime, hasFocus, visible);
 
-            // (Stuff to set up if we're handling input events - i.e. if the game window is on top.)
-            if (hasFocus)
+            // Don't do any of the updating if we're exiting.
+            if (!this.IsExiting)
             {
-                // If we press escape, kill off the game screen.  Later, we'll want to open up a popup menu.
-                if(Keyboard.GetState().IsKeyDown(Keys.Escape))
-                    this.IsExiting = true;
+                // (Stuff to set up if we're handling input events - i.e. if the game window is on top.)
+                if (hasFocus)
+                {
+                    // Make the mouse invisible - we only want it to appear if we're in a menu.
+                    this.Game.IsMouseVisible = false;
 
-                // Make the mouse invisible - we only want it to appear if we're in a menu.
-                this.Game.IsMouseVisible = false;
+                    // This is where we should reset the cursor's position to the middle of the screen.  We can also
+                    // send the local input state to the server in this block (for now, though, this gets handled
+                    // after all screens are run in the network component's update call).
+                    // TODO: Call CenterCursor as soon as the game screen gets focus.
+                    // If we don't, we'll end up sending very incorrect input states (especially mouse deltas) whenever
+                    // we switch back "down" to the game screen from a popup.
+                    CenterCursor();
+                }
 
-                // This is where we should reset the cursor's position to the middle of the screen.  We can also
-                // send the local input state to the server in this block (for now, though, this gets handled
-                // after all screens are run in the network component's update call).
-                // TODO: Call CenterCursor as soon as the game screen gets focus.
-                // If we don't, we'll end up sending very incorrect input states (especially mouse deltas) whenever
-                // we switch back "down" to the game screen from a popup.
-                CenterCursor();
+
+                // Update all of the game components that are part of the game (in the logical sense, not the XNA sense).
+                // TODO: IMPORTANT: We need to make sure that input events are only handled if the game has focus.
+                // I might have fixed the above already, not sure.  There might be a "block" on giving out input events
+                // that is set properly by the screen manager - can't be sure though.
+
+                // Get the list of game components in the component collection (as IUpdateables).
+                var updateList = from c in this.Components
+                                 where c is IUpdateable
+                                 select c as IUpdateable;
+
+                // Update them according to their UpdateOrder.  Yes, this doesn't need to sort every time.
+                foreach (IUpdateable component in updateList.OrderBy((comp) => comp.UpdateOrder))
+                    component.Update(gameTime);
+
+                // Let's have PhysX update itself.
+                // This might need to be changed/optimized a bit if things are getting slow because they have
+                // to wait for the physics calculations.
+                IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+                physics.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds);
+                physics.FetchResults();
             }
-
-            // Update all of the game components that are part of the game (in the logical sense, not the XNA sense).
-            // TODO: IMPORTANT: We need to make sure that input events are only handled if the game has focus.
-            // I might have fixed the above already, not sure.  There might be a "block" on giving out input events
-            // that is set properly by the screen manager - can't be sure though.
-
-            // Get the list of game components in the component collection (as IUpdateables).
-            var updateList = from c in this.Components
-                             where c is IUpdateable
-                             select c as IUpdateable;
-
-            // Update them according to their UpdateOrder.  Yes, this doesn't need to sort every time.
-            foreach (IUpdateable component in updateList.OrderBy((comp) => comp.UpdateOrder))
-                component.Update(gameTime);
-
-            // Let's have PhysX update itself.
-            // This might need to be changed/optimized a bit if things are getting slow because they have
-            // to wait for the physics calculations.
-            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
-            physics.Simulate((float)gameTime.ElapsedGameTime.TotalSeconds);
-            physics.FetchResults();
         }
 
         public override void Draw(GameTime gameTime)
@@ -176,6 +177,29 @@ namespace Mammoth
 
             Mouse.SetPosition(window.ClientBounds.Width / 2, window.ClientBounds.Height / 2);
         }
+
+        #region Event Handlers
+
+        /// <summary>
+        /// An event handler for cleaning up the game screen before it exits.  This needs to delete all information
+        /// related to this specific match (game screen instance), like objects, physics information, etc.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        void GameScreen_Exiting(object sender, EventArgs e)
+        {
+            // Disconnect from the server.
+            IClientNetworking net = (IClientNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            net.quitGame();
+
+            // Remove the scene from the physics subsystem.
+            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            physics.RemoveScene();
+
+            // TODO: Clear/delete/dispose of the model database.
+        }
+
+        #endregion
 
         #region Properties
 

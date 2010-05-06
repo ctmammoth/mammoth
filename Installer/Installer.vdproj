@@ -94,13 +94,13 @@
         "Entry"
         {
         "MsmKey" = "8:_A66EF809922C5233BAC1A1C49B518D31"
-        "OwnerKey" = "8:_57D7C6CF14CE4E91971CDE023C8520A8"
+        "OwnerKey" = "8:_6D7BA5E643A5FBC5903E3194E74184F7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_A66EF809922C5233BAC1A1C49B518D31"
-        "OwnerKey" = "8:_6D7BA5E643A5FBC5903E3194E74184F7"
+        "OwnerKey" = "8:_57D7C6CF14CE4E91971CDE023C8520A8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -124,12 +124,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6A54CA6CF7F97717C7DA9EE963945776"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_57D7C6CF14CE4E91971CDE023C8520A8"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -143,6 +137,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_A66EF809922C5233BAC1A1C49B518D31"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_6A54CA6CF7F97717C7DA9EE963945776"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -205,6 +205,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -704,11 +712,11 @@
         "PackageCode" = "8:{C6EDCF7D-5E2B-407B-B31F-C076915678DA}"
         "UpgradeCode" = "8:{73649DF4-78BD-4078-8D08-C6F4D46A9E66}"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
         "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:Microsoft"
+        "Manufacturer" = "8:MammothTeam"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
         "Title" = "8:Mammoth Installer"

@@ -66,8 +66,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="models\Crate.FBX">
-      <Name>Crate</Name>
+    <Compile Include="models\crate.fbx">
+      <Name>crate</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
