@@ -15,9 +15,23 @@ namespace Mammoth.Engine
     public interface IDamageable
     {
         /// <summary>
+        /// The quantified health of the object.
+        /// </summary>
+        protected int Health
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Deals damage to this damageable.
         /// </summary>
         /// <param name="damage">The amount of damage to deal: negative damage adds health to the damageable.</param>
         void TakeDamage(float damage);
+
+        /// <summary>
+        /// Defines the action of an object once Health reaches 0.
+        /// </summary>
+        void Die();
     }
 }

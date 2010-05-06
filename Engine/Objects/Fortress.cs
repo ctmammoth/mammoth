@@ -16,7 +16,7 @@ namespace Mammoth.Engine
         
 
 
-        public override void InitializeDefault(int id)
+        public void InitializeDefault(int id)
         {
             // TODO: Implement this
             throw new NotImplementedException();

@@ -11,51 +11,58 @@ using Mammoth.Engine.Physics;
 
 namespace Mammoth.Engine
 {
+    /// <summary>
+    /// A client-side representation of other players connected to the same server.
+    /// </summary>
     class RemotePlayer : Player
     {
+        /// <summary>
+        /// Loads Models for these players and initializes PhysX for them.
+        /// </summary>
+        /// <param name="game">The game.</param>
         public RemotePlayer(Game game) : base(game)
         {
+            //Load their model
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
-
             this.Model3D = r.LoadModel("soldier-low-poly");
-            this.Height = 6.0f;
 
+
+            //Initialize PhysX for the RemotePlayer so it can be interacted with (collision, etc.)
             InitializePhysX();
-
-            this.Spawn(Vector3.Zero, Quaternion.Identity);
         }
 
-        // TODO: There has to be a better way to do this.
+        /// <summary>
+        /// Sets up the PhysX of a player and "syncs" with model.
+        /// </summary>
         public void InitializePhysX()
         {
+            //Gives the player a bounding box and a physical description
+            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             ControllerDescription desc = new CapsuleControllerDescription(1, this.Height - 2.0f)
             {
                 UpDirection = Axis.Y,
                 Position = Vector3.UnitY * (this.Height - 1.0f) / 2.0f
             };
+
+            //Describe the offset of the model to sync model center with PhysX Controller center
             this.PositionOffset = -1.0f * desc.Position;
 
-            IPhysicsManagerService physics = (IPhysicsManagerService) this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            //Set controllet to one defined above
             this.Controller = physics.CreateController(desc, this);
         }
 
+
+        /// <summary>
+        /// Draws the remote player.
+        /// </summary>
+        /// <param name="gameTime">The game time.</param>
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
 
+            //Render the RemotePlayer
             IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
-
             r.DrawRenderable(this);
-        }
-
-        public override string getObjectType()
-        {
-            return typeof(RemotePlayer).ToString();
-        }
-
-        public override void CollideWith(PhysicalObject obj)
-        {
-
         }
     }
 }

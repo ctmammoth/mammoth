@@ -49,7 +49,7 @@ namespace Mammoth.Engine
 
         #endregion
 
-        public override void InitializeDefault(int id)
+        public void InitializeDefault(int id)
         {
             AmmoLeft = 0;
             MaxAmmo = 0;

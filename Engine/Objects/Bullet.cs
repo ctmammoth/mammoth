@@ -91,7 +91,7 @@ namespace Mammoth.Engine
             r.DrawRenderable(this);
         }
 
-        public override void InitializeDefault(int id)
+        public void InitializeDefault(int id)
         {
             InitialVelocityMagnitude = 10.0f;
         }
