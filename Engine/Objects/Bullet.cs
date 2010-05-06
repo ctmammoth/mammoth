@@ -67,6 +67,7 @@ namespace Mammoth.Engine
 
             e.AddElement("InitialPosition", InitialPosition);
             e.AddElement("InitialDirection", InitialDirection);
+            e.AddElement("Creator", Creator);
 
             return e.Serialize();
         }
@@ -81,6 +82,8 @@ namespace Mammoth.Engine
 
             InitialPosition = (Vector3)e.GetElement("InitialPosition", InitialPosition);
             InitialDirection = (Vector3)e.GetElement("InitialDirection", InitialDirection);
+            Creator = (int)e.GetElement("Creator", Creator);
+
 
             Console.WriteLine("Bullet InitialPosition received: " + InitialPosition);
             Console.WriteLine("Bullet InitialDirection received: " + InitialDirection);
