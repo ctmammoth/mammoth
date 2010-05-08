@@ -108,7 +108,7 @@ namespace Mammoth.Engine
                 IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
                 int cid = p.Creator >> 25;
                 g.AwardKill(cid);
-                Console.WriteLine("Player " + myID + " was killed by Player " + p.Creator);
+                Console.WriteLine("Player " + cid + " was killed by Player " + p.Creator);
 
                 //update players kills
                 IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
