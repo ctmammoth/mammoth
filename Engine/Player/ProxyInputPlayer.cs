@@ -96,7 +96,10 @@ namespace Mammoth.Engine
 
         public override void TakeDamage(float damage, IDamager inflicter)
         {
-            Console.WriteLine("Proxy player took damage");
+            base.TakeDamage(damage, inflicter);
+
+            Console.WriteLine("Health: " + this.Health);
+
             if (this.Health <= 0)
             {
                 Projectile p = (Projectile)inflicter;
@@ -105,12 +108,17 @@ namespace Mammoth.Engine
                 IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
                 int cid = p.Creator >> 25;
                 g.AwardKill(cid);
+                Console.WriteLine("Player " + myID + " was killed by Player " + p.Creator);
 
                 //update players kills
                 IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
                 ProxyInputPlayer pip = (ProxyInputPlayer) mdb.getObject(p.Creator);
                 pip.NumKills++;
+
+                //tell player to die
+                Die();
             }
+
             base.TakeDamage(damage, inflicter);
         }
     }

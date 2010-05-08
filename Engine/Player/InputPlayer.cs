@@ -282,20 +282,6 @@ namespace Mammoth.Engine
                 ((BaseObject)CurWeapon).Draw(gameTime);
         }
 
-        public override void TakeDamage(float damage, IDamager inflicter)
-        {
-            base.TakeDamage(damage, inflicter);
-            Console.WriteLine("Health: " + this.Health);
-            if (this.Health <= 0)
-            {
-                Die();
-                //Get your own id
-                int myID = this.ID >> 25;
-                Projectile p = (Projectile)inflicter;
-                Console.WriteLine("Player " + myID + " was killed by Player " + p.Creator);
-            }
-        }
-
         /// <summary>
         /// Respawns the player when the it dies.
         /// </summary>
