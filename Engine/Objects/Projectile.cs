@@ -25,18 +25,6 @@ namespace Mammoth.Engine
             protected set;
         }
 
-        public Vector3 InitialPosition
-        {
-            get;
-            protected set;
-        }
-
-        public Vector3 InitialDirection
-        {
-            get;
-            protected set;
-        }
-
         #endregion
 
         // Default
@@ -46,15 +34,7 @@ namespace Mammoth.Engine
             Creator = creator;
         }
 
-        #region IDamager Members
-
-        // Default
-        float IDamager.GetDamage()
-        {
-            return 0.0f;
-        }
-
-        #endregion
+        public abstract float GetDamage();
 
         public override string getObjectType()
         {

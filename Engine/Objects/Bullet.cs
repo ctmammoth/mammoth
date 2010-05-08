@@ -6,6 +6,7 @@ using Mammoth.Engine.Networking;
 
 using StillDesign.PhysX;
 using StillDesign.PhysX.Utilities;
+
 using Microsoft.Xna.Framework;
 
 using Mammoth.Engine.Physics;
@@ -16,22 +17,38 @@ namespace Mammoth.Engine
     //TODO: Make bullet drawable
     public class Bullet : Projectile, IEncodable, IRenderable
     {
+        #region Variables
+
+        // The magnitude of the bullet's velocity
+        private const float speed = 50.0f;
+
+        #endregion
+
+        public Bullet(Game game)
+            : base(game, 0)
+        {
+        }
+
         /// <summary>
         /// Creates a new bullet at the specified position and gives it the required initial velocity.  It moves in the
         /// direction of the vector obtained by taking Vector3.Transform(Vector3.UnitZ, orientation).
         /// </summary>
         /// <param name="position">The location at which to spawn the bullet.</param>
         /// <param name="forward">A unit vector pointing in the direction in which to shoot the bullet.</param>
-        public Bullet(Game game, Vector3 position, Vector3 direction, int creator)
+        public Bullet(Game game, Vector3 position, Quaternion orient, int creator)
             : base(game, creator)
         {
             Console.WriteLine("Constructing a bullet...");
-            // Set the initial position and direction
-            InitialPosition = position;
-            InitialDirection = direction;
-            InitialDirection.Normalize();
 
-            this.Init();
+            InitializePhysX();
+
+            // Set the initial position and direction
+            this.Position = position;
+            this.Orientation = orient;
+
+            // Load a retarded model
+            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
+            this.Model3D = r.LoadModel("bullet_low");
 
             IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
             this.ID = mdb.getNextOpenID();
@@ -42,17 +59,8 @@ namespace Mammoth.Engine
             network.sendThing(this);
         }
 
-        private void Init()
+        private void InitializePhysX()
         {
-            //Console.WriteLine("Initializing a bullet with position " + InitialPosition + " and direction " + InitialDirection);
-            // Set the velocity to point the same way as direction
-            Velocity = Vector3.Multiply(InitialDirection, VelocityMagnitude);
-            //Console.WriteLine("initial velocity: " + Velocity);
-
-            // Load a retarded model
-            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
-            this.Model3D = r.LoadModel("bullet_low");
-
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
 
             SphereShapeDescription sDesc = new SphereShapeDescription()
@@ -73,15 +81,6 @@ namespace Mammoth.Engine
 
             // Create the bullet's actor
             this.Actor = physics.CreateActor(aDesc, this);
-
-            // Create the actor at the specified location
-            this.Position = InitialPosition;
-            this.Orientation = Quaternion.Identity;
-        }
-
-        public Bullet(Game game)
-            : base(game, 0)
-        {
         }
 
         public override void Update(GameTime gameTime)
@@ -92,19 +91,20 @@ namespace Mammoth.Engine
 
             // Move the position by the amount dictated by its velocity and the elapsed game time
 
-            Vector3 tempPos = Position + Vector3.Multiply(Velocity, (float)gameTime.ElapsedGameTime.TotalSeconds);
+            //Vector3 tempPos = Position + Vector3.Multiply(Velocity, (float)gameTime.ElapsedGameTime.TotalSeconds);
 
             // Perform the raycast
-            RaycastHit rayHit = physics.RaycastClosestShape(Position, InitialDirection);
+            Vector3 dir = Vector3.Transform(Vector3.Forward, this.Orientation);
+            RaycastHit rayHit = physics.RaycastClosestShape(this.Position, dir);
 
             // Get the difference in position
-            float distanceMoved = Vector3.Subtract(tempPos, Position).Length();
+            float distanceMoved = speed * (float) gameTime.ElapsedGameTime.TotalSeconds;
 
             // Make sure the shape that was hit is between the current and previous positions, exists and that 
             // its actor has userdata
-            if (rayHit.Distance <= distanceMoved && rayHit.Shape != null)
+            if (rayHit.Shape != null && rayHit.Distance <= distanceMoved)
             {
-                Console.WriteLine("Raycasting a bullet.");
+                Console.WriteLine("Bullet hit something!");
                 // Get the PhysicalObject that owns the Shape hit by the raycast
                 PhysicalObject objHit = ((PhysicalObject)rayHit.Shape.Actor.UserData);
 
@@ -114,7 +114,7 @@ namespace Mammoth.Engine
                     if (objHit is IDamageable)
                     {
                         Console.WriteLine("Damaging a mofo of type " + objHit.getObjectType());
-                        ((IDamageable)objHit).TakeDamage(GetDamage(), this);
+                        ((IDamageable)objHit).TakeDamage(this.GetDamage(), this);
                     }
                     IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
                     mdb.removeObject(this.ID);
@@ -123,7 +123,7 @@ namespace Mammoth.Engine
             }
             else
             {
-                Position = tempPos;
+                Position += dir * distanceMoved;
             }
         }
 
@@ -138,34 +138,14 @@ namespace Mammoth.Engine
             return "Bullet";
         }
 
-        #region Properties
-        // We will raycast between the bullet's current position and here to determine whether a collision occurred.
-        private Vector3 LastPosition
-        {
-            get;
-            set;
-        }
-
-        // This bullet's velocity vector
-        public Vector3 Velocity
-        {
-            get;
-            protected set;
-        }
-        #endregion
-
-        #region Variables
-        // The magnitude of the bullet's velocity
-        private const float VelocityMagnitude = 50.0f;
-        #endregion
-
         #region IEncodeable members
+
         public byte[] Encode()
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder();
 
-            e.AddElement("InitialPosition", InitialPosition);
-            e.AddElement("InitialDirection", InitialDirection);
+            e.AddElement("Position", Position);
+            e.AddElement("Orientation", Orientation);
             e.AddElement("Creator", Creator);
 
             return e.Serialize();
@@ -179,20 +159,20 @@ namespace Mammoth.Engine
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
 
-            InitialPosition = (Vector3)e.GetElement("InitialPosition", InitialPosition);
-            InitialDirection = (Vector3)e.GetElement("InitialDirection", InitialDirection);
+            InitializePhysX();
+
+            Position = (Vector3)e.GetElement("Position", Position);
+            Orientation = (Quaternion)e.GetElement("Orientation", Orientation);
             Creator = (int)e.GetElement("Creator", Creator);
 
-            Console.WriteLine("Bullet InitialPosition received: " + InitialPosition);
-            Console.WriteLine("Bullet InitialDirection received: " + InitialDirection);
-
-            Init();
+            Console.WriteLine("Bullet Position received: " + Position);
+            Console.WriteLine("Bullet Orientation received: " + Orientation);
         }
         #endregion
 
         #region IDamager Members
 
-        float GetDamage()
+        public override float GetDamage()
         {
             return 10.0f;
         }

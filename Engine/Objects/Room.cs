@@ -162,6 +162,7 @@ namespace Mammoth.Engine
                 itemParameters.AddAttribute("Special_Type", specialType);
 
                 BaseObject item = ObjectFactories.CreateObject(itemType, modelDB.getNextOpenID(), itemParameters, this.Game);
+                //Console.WriteLine(item.Position);
                 modelDB.registerObject(item);
                 handler.GetNextElement();
             }

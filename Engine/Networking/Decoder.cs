@@ -76,7 +76,7 @@ namespace Mammoth.Engine.Networking
                     b.Decode(properties);
                     b.ID = id;
                     ro.registerObject(b);
-                    Console.WriteLine("Bullet received, position: " + b.InitialPosition + ", direction: " + b.InitialDirection + 
+                    Console.WriteLine("Bullet received, position: " + b.Position + ", orientation: " + b.Orientation + 
                         ", ID = " + id);
                 break;
 

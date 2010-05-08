@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 using Mammoth.Engine;
+using Mammoth.Engine.Input;
 using Mammoth.Engine.Physics;
 using Mammoth.Engine.Interface;
 using Mammoth.Engine.Networking;
@@ -63,8 +64,13 @@ namespace Mammoth
             this.LocalPlayer = new LocalInputPlayer(this.Game, net.ClientID);
             modelDB.registerObject(this.LocalPlayer);
 
+            // HACK: change this.
             if (net is DummyNetworking)
                 this.Game.Services.AddService(typeof(InputPlayer), this.LocalPlayer);
+
+            // Clear the current input state.
+            IInputService input = (IInputService)this.Game.Services.GetService(typeof(IInputService));
+            input.InputHandled = true;
 
             // Create the camera.  We want it to update after all of the models (especially the player)
             // have been updated.  Set its target to be the local player.
