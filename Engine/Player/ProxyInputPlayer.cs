@@ -118,8 +118,6 @@ namespace Mammoth.Engine
                 //tell player to die
                 Die();
             }
-
-            base.TakeDamage(damage, inflicter);
         }
     }
 }
