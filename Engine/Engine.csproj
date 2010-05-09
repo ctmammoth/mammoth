@@ -86,6 +86,7 @@
     <Compile Include="Objects\Bullet.cs" />
     <Compile Include="Graphics\Camera.cs" />
     <Compile Include="ClientState.cs" />
+    <Compile Include="Objects\CompoundStaticObject.cs" />
     <Compile Include="Objects\IDamager.cs" />
     <Compile Include="Objects\IDamageable.cs" />
     <Compile Include="IModelDBService.cs" />

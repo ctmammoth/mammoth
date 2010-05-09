@@ -82,5 +82,6 @@ namespace Mammoth.Server
             IServerNetworking net = (IServerNetworking)this.Services.GetService(typeof(INetworkingService));
             net.endGame();
         }
+       
     }
 }
