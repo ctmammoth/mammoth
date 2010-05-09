@@ -289,11 +289,7 @@ namespace Mammoth.Engine
 
         public override void RespondToTrigger(PhysicalObject obj)
         {
-            // If a Flag was triggered, pick it up
-            if (obj is Flag)
-                if (Flag == null)
-                    // TODO: only pick up flags not owned by your team
-                    Flag = (Flag)obj;
+            Console.WriteLine("Responding to trigger.");
         }
 
         public override void TakeDamage(float damage, IDamager inflicter)

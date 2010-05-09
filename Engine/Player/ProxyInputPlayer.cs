@@ -92,6 +92,17 @@ namespace Mammoth.Engine
                 CurWeapon.Reload(time);
         }
 
+        public override void RespondToTrigger(PhysicalObject obj)
+        {
+            Console.WriteLine("Proxyplayer is responding to a trigger.");
+
+            // If a Flag was triggered, pick it up
+            if (obj is Objects.Flag)
+                if (Flag == null)
+                    // TODO: only pick up flags not owned by your team
+                    Flag = (Objects.Flag)obj;
+        }
+
         public override void TakeDamage(float damage, IDamager inflicter)
         {
             base.TakeDamage(damage, inflicter);

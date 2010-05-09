@@ -15,6 +15,7 @@ using Mammoth.Engine.Interface;
 using Mammoth.Engine.Networking;
 using Mammoth.Engine.Graphics;
 using Mammoth.Engine.Audio;
+using Mammoth.Engine.Objects;
 
 namespace Mammoth
 {
@@ -116,6 +117,9 @@ namespace Mammoth
             stairRoom.AddAttribute("Z", "-50");
             stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
             Room room = new Room(modelDB.getNextOpenID(), stairRoom, this.Game);
+
+            // LET'S TRY ADDING A FLAG!!!
+            Flag flag = new Flag(this.Game, new Vector3(10.0f, 2.0f, 10.0f));
         }
 
         public override void Update(GameTime gameTime, bool hasFocus, bool visible)
