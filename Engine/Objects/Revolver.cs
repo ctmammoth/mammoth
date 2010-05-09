@@ -38,7 +38,7 @@ namespace Mammoth.Engine.Objects
 
         protected override int NumMagazines
         {
-            get { return 8; }
+            get { return 50; }
         }
 
         protected override string FireSound

@@ -60,7 +60,7 @@ namespace Mammoth.Engine
 
             toRemove.Clear();*/
 
-            Console.WriteLine("updating...");
+            //Console.WriteLine("updating...");
 
             //var bullets = from obj in _objects.Values
             //              where obj.getObjectType().Equals("Bullet")
@@ -68,9 +68,9 @@ namespace Mammoth.Engine
             //Console.WriteLine("pre count: " + bullets.ToList().Count);
             //foreach (var obj in bullets)
             //    Console.WriteLine("\tID: " + obj.ID);
-            foreach (var pair in _objects)
-                if (pair.Value.getObjectType().Equals("Bullet"))
-                    Console.WriteLine("Bullet with object id: " + pair.Value.ID + " and dict id: " + pair.Key);
+            //foreach (var pair in _objects)
+            //    if (pair.Value.getObjectType().Equals("Bullet"))
+            //        Console.WriteLine("Bullet with object id: " + pair.Value.ID + " and dict id: " + pair.Key);
 
             // Update all objects
             var toUpdate = new List<BaseObject>(_objects.Values);
@@ -80,27 +80,27 @@ namespace Mammoth.Engine
                     obj.Update(gameTime);
                 else
                 {
-                    Console.WriteLine("disposing of object id: " + obj.ID + " , type: " + obj.getObjectType());
-                    Console.WriteLine("pre- has id: " + _objects.ContainsKey(obj.ID));
-                    Console.WriteLine("pre- has obj: " + _objects.ContainsValue(obj));
+                    //Console.WriteLine("disposing of object id: " + obj.ID + " , type: " + obj.getObjectType());
+                    //Console.WriteLine("pre- has id: " + _objects.ContainsKey(obj.ID));
+                    //Console.WriteLine("pre- has obj: " + _objects.ContainsValue(obj));
                     _objects.Remove(obj.ID);
                     obj.Dispose();
-                    Console.WriteLine("post- has id: " + _objects.ContainsKey(obj.ID));
-                    Console.WriteLine("post- has obj: " + _objects.ContainsValue(obj));
+                    //Console.WriteLine("post- has id: " + _objects.ContainsKey(obj.ID));
+                    //Console.WriteLine("post- has obj: " + _objects.ContainsValue(obj));
                 }
             }
 
-            var bullets = from obj in _objects.Values
-                          where obj.getObjectType().Equals("Bullet")
-                          select obj;
-            Console.WriteLine("post count: " + bullets.ToList().Count);
+            //var bullets = from obj in _objects.Values
+            //              where obj.getObjectType().Equals("Bullet")
+            //              select obj;
+            //Console.WriteLine("post count: " + bullets.ToList().Count);
 
             //isUpdating = false;
         }
 
         public override void Draw(GameTime gameTime)
         {
-            Console.WriteLine("drawing...");
+            //Console.WriteLine("drawing...");
             foreach (var obj in _objects.Values)
                 if(obj.IsAlive)
                     obj.Draw(gameTime);

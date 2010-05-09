@@ -271,13 +271,12 @@ namespace Mammoth.Engine.Objects
 
         public void Reload(GameTime time)
         {
-            Console.WriteLine(getObjectType() + " is reloading!");
-            _lastReloadTime = time.TotalRealTime.TotalMilliseconds;
-            IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
-            net.sendEvent("Sound", "Reload", Owner.ID >> 25);
-
             if (MagCount != 0)
             {
+                Console.WriteLine(getObjectType() + " is reloading!");
+                _lastReloadTime = time.TotalRealTime.TotalMilliseconds;
+                IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+                net.sendEvent("Sound", "Reload", Owner.ID >> 25);
                 // Create a new magazine (really just refill the current one)
                 Mag.Refill();
                 MagCount -= 1;
