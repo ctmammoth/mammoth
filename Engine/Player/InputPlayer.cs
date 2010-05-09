@@ -65,6 +65,12 @@ namespace Mammoth.Engine
             get;
             set;
         }
+
+        protected Flag Flag
+        {
+            get;
+            set;
+        }
         #endregion
 
         /// <summary>
@@ -124,7 +130,6 @@ namespace Mammoth.Engine
             //Set controllet to one defined above
             this.Controller = physics.CreateController(desc, this);
         }
-
 
         /// <summary>
         /// On every timestep, checks that player is still alive, checks queued input states and reacts.
@@ -280,6 +285,29 @@ namespace Mammoth.Engine
                 r.DrawRenderable(this);
             if (CurWeapon != null)
                 ((BaseObject)CurWeapon).Draw(gameTime);
+        }
+
+        public override void RespondToTrigger(PhysicalObject obj)
+        {
+            // If a Flag was triggered, pick it up
+            if (obj is Flag)
+                if (Flag == null)
+                    // TODO: only pick up flags not owned by your team
+                    Flag = (Flag)obj;
+        }
+
+        public override void TakeDamage(float damage, IDamager inflicter)
+        {
+            base.TakeDamage(damage, inflicter);
+            Console.WriteLine("Health: " + this.Health);
+            if (this.Health <= 0)
+            {
+                Die();
+                //Get your own id
+                int myID = this.ID >> 25;
+                Projectile p = (Projectile)inflicter;
+                Console.WriteLine("Player " + myID + " was killed by Player " + p.Creator);
+            }
         }
 
         /// <summary>

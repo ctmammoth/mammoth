@@ -60,6 +60,21 @@ namespace Mammoth.Server
             base.Initialize();
         }
 
+        protected override void LoadContent()
+        {
+            base.LoadContent();
+
+            // LET'S TRY ADDING A ROOM!!!
+            // TODO: find a better place for this?
+            ObjectParameters stairRoom = new ObjectParameters();
+            stairRoom.AddAttribute("X", "-50");
+            stairRoom.AddAttribute("Y", "-23");
+            stairRoom.AddAttribute("Z", "-50");
+            stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
+            IModelDBService modelDB = (IModelDBService)this.Services.GetService(typeof(IModelDBService));
+            Room room = new Room(modelDB.getNextOpenID(), stairRoom, this);
+        }
+
         protected override void Update(GameTime gameTime)
         {
             // Now we update all of the GameComponents associated with the engine.

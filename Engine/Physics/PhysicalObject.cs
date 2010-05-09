@@ -27,7 +27,7 @@ namespace Mammoth.Engine
 
 
         /// <summary>
-        /// Defines the position of the object by the position of the object according to PhysX.
+        /// Defines the position of the object by the position of the PhysX Actor.
         /// </summary>
         public virtual Vector3 Position
         {
@@ -69,6 +69,13 @@ namespace Mammoth.Engine
         /// </summary>
         /// <param name="obj">The object with which the collision is occuring.</param>
         public virtual void CollideWith(PhysicalObject obj) { }
+
+        /// <summary>
+        /// Provides a way for objects to react to triggers.  This method is used by the object being triggered
+        /// and the triggerer.
+        /// </summary>
+        /// <param name="obj">The object triggering or being triggered.</param>
+        public virtual void RespondToTrigger(PhysicalObject obj) { }
 
         public override void Dispose()
         {

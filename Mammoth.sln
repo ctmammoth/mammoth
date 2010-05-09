@@ -55,6 +55,7 @@ Global
 		{E80FCA0E-78EC-44C5-B375-894050EEE6CB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E80FCA0E-78EC-44C5-B375-894050EEE6CB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E80FCA0E-78EC-44C5-B375-894050EEE6CB}.Release|x86.ActiveCfg = Release|Any CPU
+		{E80FCA0E-78EC-44C5-B375-894050EEE6CB}.Release|x86.Build.0 = Release|Any CPU
 		{646F9B6A-179C-4FFC-9FB8-45CE144A38B3}.Debug|Any CPU.ActiveCfg = Debug
 		{646F9B6A-179C-4FFC-9FB8-45CE144A38B3}.Debug|Mixed Platforms.ActiveCfg = Debug
 		{646F9B6A-179C-4FFC-9FB8-45CE144A38B3}.Debug|x86.ActiveCfg = Debug

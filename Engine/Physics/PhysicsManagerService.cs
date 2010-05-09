@@ -14,8 +14,6 @@ namespace Mammoth.Engine.Physics
     /// </summary>
     public interface IPhysicsManagerService
     {
-        void CollidePair(Actor ActorA, Actor ActorB);
-
         Actor CreateActor(ActorDescription aDesc);
         Actor CreateActor(ActorDescription aDesc, PhysicalObject owner);
         void RemoveActor(Actor toRemove);
@@ -111,12 +109,39 @@ namespace Mammoth.Engine.Physics
             }
         }
 
+        private class TriggerReporter : UserTriggerReport
+        {
+            private PhysicsManagerService owner;
+
+            public TriggerReporter(PhysicsManagerService owner)
+            {
+                this.owner = owner;
+            }
+
+            public override void OnTrigger(Shape triggerShape, Shape otherShape, TriggerFlag status)
+            {
+                // Make sure the shapes have userdata
+                if (triggerShape.Actor.UserData != null && otherShape.Actor.UserData != null)
+                {
+                    // Call the trigger's response function
+                    ((PhysicalObject)triggerShape.Actor.UserData).RespondToTrigger((PhysicalObject)otherShape.Actor.UserData);
+                }
+
+                // Make sure the shapes have userdata
+                if (otherShape.Actor.UserData != null && triggerShape.Actor.UserData != null)
+                {
+                    // Call the other shape's response function
+                    ((PhysicalObject)otherShape.Actor.UserData).RespondToTrigger((PhysicalObject)triggerShape.Actor.UserData);
+                }
+            }
+        }
+
         /// <summary>
         /// Collides a pair of objects with each other
         /// </summary>
         /// <param name="ActorA"></param>
         /// <param name="ActorB"></param>
-        public void CollidePair(Actor ActorA, Actor ActorB)
+        private void CollidePair(Actor ActorA, Actor ActorB)
         {
             // Collide the objects with each other: make sure ActorA is not null and has userdata
             if (ActorA != null && ActorA.UserData != null)
@@ -161,8 +186,6 @@ namespace Mammoth.Engine.Physics
 
             // Construct the core
             core = new Core(new CoreDescription(), new ConsoleOutputStream());
-            // Turn on CCD (continuous collision detection)
-            core.SetParameter(PhysicsParameter.ContinuousCollisionDetection, true);
 
             // Set debug parameters
             #if PHYSX_DEBUG
@@ -207,18 +230,6 @@ namespace Mammoth.Engine.Physics
         {
             // Return the result of the raycast
             return curScene.RaycastClosestShape(new StillDesign.PhysX.Ray(position, direction), ShapesType.Dynamic);
-            /*
-            // Make sure the shape that was hit exists and that its actor has userdata
-            if (rayHit.Shape != null && rayHit.Shape.Actor.UserData != null)
-            {
-                // Get the PhysicalObject that owns the Shape hit by the raycast
-                PhysicalObject objHit = ((PhysicalObject)rayHit.Shape.Actor.UserData);
-                Console.WriteLine("Raycast hit something of type " + objHit.getObjectType());
-                return objHit;
-            }
-            else
-                return null;
-            */
         }
 
         /// <summary>
