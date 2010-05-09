@@ -114,7 +114,7 @@ namespace Mammoth.Engine
                     if (objHit is IDamageable)
                     {
                         // Make sure the creator isn't the one being hit
-                        if (objHit >> 25 != Creator)
+                        if (objHit.ID >> 25 != Creator)
                         {
                             Console.WriteLine("Damaging a mofo of type " + objHit.getObjectType());
                             ((IDamageable)objHit).TakeDamage(this.GetDamage(), this);
