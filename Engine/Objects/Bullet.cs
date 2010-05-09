@@ -34,10 +34,6 @@ namespace Mammoth.Engine
             // Load a retarded model
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
             this.Model3D = r.LoadModel("bullet_low");
-
-            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            this.ID = mdb.getNextOpenID();
-            mdb.registerObject(this);
         }
 
         /// <summary>
@@ -46,12 +42,21 @@ namespace Mammoth.Engine
         /// </summary>
         /// <param name="position">The location at which to spawn the bullet.</param>
         /// <param name="forward">A unit vector pointing in the direction in which to shoot the bullet.</param>
-        public Bullet(Game game, Vector3 position, Quaternion orient, int creator)
-            : this(game, creator)
+        public Bullet(Game game, Vector3 position, Quaternion orient, int creator) 
+            : base(game, creator)
         {
+            InitializePhysX();
+
             // Set the initial position and direction
             this.Position = position;
             this.Orientation = orient;
+
+            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
+            this.Model3D = r.LoadModel("bullet_low");
+
+            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            this.ID = mdb.getNextOpenID();
+            mdb.registerObject(this);
         }
 
         private void InitializePhysX()
