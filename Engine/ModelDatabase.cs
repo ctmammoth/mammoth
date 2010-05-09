@@ -71,6 +71,7 @@ namespace Mammoth.Engine
                 else
                 {
                     Console.WriteLine("disposing of object id: " + obj.ID + " , type: " + obj.getObjectType());
+                    _objects.Remove(obj.ID);
                     obj.Dispose();
                 }
             }
