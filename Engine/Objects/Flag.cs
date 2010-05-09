@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using StillDesign.PhysX;
 using Mammoth.Engine.Physics;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Mammoth.Engine.Objects
 {
@@ -47,7 +48,8 @@ namespace Mammoth.Engine.Objects
 
             // Load a flag model
             // TODO: get a flag model or something
-            this.Model3D = r.LoadModel("ammocrate");
+            Renderer renderer = (Renderer)this.Game.Services.GetService(typeof(Renderer));
+            this.Model3D = renderer.LoadModel("ammocrate");
 
             IModelDBService modelDB = (IModelDBService)game.Services.GetService(typeof(IModelDBService));
             // Add the flag to the model database
@@ -99,14 +101,10 @@ namespace Mammoth.Engine.Objects
             }
         }
 
-        public Quaternion Orientation
-        {
-            get;
-        }
-
         public Model Model3D
         {
             get;
+            protected set;
         }
 
         public Player Owner
