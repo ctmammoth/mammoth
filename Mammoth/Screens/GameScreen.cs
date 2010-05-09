@@ -238,7 +238,9 @@ namespace Mammoth
 
             // Play the menu music
             IAudioService audio = (IAudioService)Game.Services.GetService(typeof(IAudioService));
-            audio.stopSounds();
+            audio.stopSound("Heartbeat");
+            audio.stopSound("Ambient");
+            audio.playMusic("Main_Menu");
         }
 
         #endregion

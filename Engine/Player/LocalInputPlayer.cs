@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Mammoth.Engine.Networking;
+using Mammoth.Engine.Audio;
 using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine
@@ -24,6 +25,26 @@ namespace Mammoth.Engine
 
             this.ID = clientID << 25;
             this.Model3D = r.LoadModel("soldier-low-poly");
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            if (Health <= 20)
+            {
+                IAudioService audio = (IAudioService)this.Game.Services.GetService(typeof(IAudioService));
+                audio.loopSound("Heartbeat");
+            }
+        }
+
+        public override void Die()
+        {
+            base.Die();
+
+            IAudioService audio = (IAudioService)this.Game.Services.GetService(typeof(IAudioService));
+            audio.stopSound("Heartbeat");
+            audio.playSound("Scream");
         }
     }
 }
