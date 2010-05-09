@@ -81,7 +81,7 @@ namespace Mammoth.Engine
                 switch(attribute) 
                 {
                     case "X":
-                         x = parameters.GetDoubleValue(attribute);
+                        x = parameters.GetDoubleValue(attribute);
                         break;
                     case "Y":
                         y = parameters.GetDoubleValue(attribute);
@@ -194,6 +194,7 @@ namespace Mammoth.Engine
             BuildWall("Z", Z + 0, "X", X + 21, Y);
             BuildCeiling(X,Y,Z);
             this.Actor = physics.CreateActor(boxActorDesc);
+            
             // this.Position = new Vector3((float)X, (float)Y, (float)Z);
         }
 
