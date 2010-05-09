@@ -14,8 +14,6 @@ namespace Mammoth.Engine.Physics
     /// </summary>
     public interface IPhysicsManagerService
     {
-        void CollidePair(Actor ActorA, Actor ActorB);
-
         Actor CreateActor(ActorDescription aDesc);
         Actor CreateActor(ActorDescription aDesc, PhysicalObject owner);
         void RemoveActor(Actor toRemove);
@@ -122,7 +120,19 @@ namespace Mammoth.Engine.Physics
 
             public override void OnTrigger(Shape triggerShape, Shape otherShape, TriggerFlag status)
             {
-                
+                // Make sure the shapes have userdata
+                if (triggerShape.Actor.UserData != null && otherShape.Actor.UserData != null)
+                {
+                    // Call the trigger's response function
+                    ((PhysicalObject)triggerShape.Actor.UserData).RespondToTrigger((PhysicalObject)otherShape.Actor.UserData);
+                }
+
+                // Make sure the shapes have userdata
+                if (otherShape.Actor.UserData != null && triggerShape.Actor.UserData != null)
+                {
+                    // Call the other shape's response function
+                    ((PhysicalObject)otherShape.Actor.UserData).RespondToTrigger((PhysicalObject)triggerShape.Actor.UserData);
+                }
             }
         }
 
