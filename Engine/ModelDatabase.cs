@@ -60,6 +60,8 @@ namespace Mammoth.Engine
 
             toRemove.Clear();*/
 
+            Console.WriteLine("updating...");
+
             // Update all objects
             var toUpdate = new List<BaseObject>(_objects.Values);
             foreach (var obj in toUpdate)
@@ -68,8 +70,8 @@ namespace Mammoth.Engine
                     obj.Update(gameTime);
                 else
                 {
+                    Console.WriteLine("disposing of object id: " + obj.ID + " , type: " + obj.getObjectType());
                     obj.Dispose();
-                    _objects.Remove(obj.ID);
                 }
             }
             
@@ -79,8 +81,10 @@ namespace Mammoth.Engine
 
         public override void Draw(GameTime gameTime)
         {
+            Console.WriteLine("drawing...");
             foreach (var obj in _objects.Values)
-                obj.Draw(gameTime);
+                if(obj.IsAlive)
+                    obj.Draw(gameTime);
         }
 
         #region IModelDBService Members
