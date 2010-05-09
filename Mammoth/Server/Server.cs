@@ -11,6 +11,7 @@ using Mammoth.Engine;
 using Mammoth.Engine.Input;
 using Mammoth.Engine.Networking;
 using Mammoth.Engine.Physics;
+using Mammoth.Engine.Objects;
 
 namespace Mammoth.Server
 {
@@ -73,6 +74,9 @@ namespace Mammoth.Server
             stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
             IModelDBService modelDB = (IModelDBService)this.Services.GetService(typeof(IModelDBService));
             Room room = new Room(modelDB.getNextOpenID(), stairRoom, this);
+
+            // LET'S TRY ADDING A FLAG!!!
+            Flag flag = new Flag(this, new Vector3(-50.0f, 24.0f, -50.0f));
         }
 
         protected override void Update(GameTime gameTime)
