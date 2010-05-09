@@ -64,7 +64,7 @@ namespace Mammoth.Engine
 
             SphereShapeDescription sDesc = new SphereShapeDescription()
             {
-                Radius = 1.0f
+                Radius = 0.3f
             };
 
             ActorDescription aDesc = new ActorDescription()
@@ -115,9 +115,7 @@ namespace Mammoth.Engine
                         Console.WriteLine("Damaging a mofo of type " + objHit.getObjectType());
                         ((IDamageable)objHit).TakeDamage(this.GetDamage(), this);
                     }
-                    IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-                    mdb.removeObject(this.ID);
-                    physics.RemoveActor(this.Actor);
+                    this.Dispose();
                 }
             }
             else
@@ -164,6 +162,17 @@ namespace Mammoth.Engine
             Console.WriteLine("Bullet Orientation received: " + Orientation);
         }
         #endregion
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            mdb.removeObject(this.ID);
+
+            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            //physics.RemoveActor(this.Actor);
+        }
 
         #region IDamager Members
 

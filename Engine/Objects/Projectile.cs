@@ -15,7 +15,7 @@ namespace Mammoth.Engine
     /// <summary>
     /// Represents any projectile in the game.
     /// </summary>
-    public abstract class Projectile : PhysicalObject, IDamager
+    public abstract class Projectile : PhysicalObject, IDamager, System.IDisposable
     {
         #region Properties
 
