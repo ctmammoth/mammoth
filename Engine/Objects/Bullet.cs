@@ -104,7 +104,7 @@ namespace Mammoth.Engine
             // its actor has userdata
             if (rayHit.Shape != null && rayHit.Distance <= distanceMoved)
             {
-                Console.WriteLine("Bullet hit something!");
+                //Console.WriteLine("Bullet hit something!");
                 // Get the PhysicalObject that owns the Shape hit by the raycast
                 PhysicalObject objHit = ((PhysicalObject)rayHit.Shape.Actor.UserData);
 

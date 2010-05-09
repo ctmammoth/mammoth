@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 using Microsoft.Xna.Framework;
 
@@ -62,6 +63,12 @@ namespace Mammoth.Engine
             //Render the RemotePlayer
             IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
             r.DrawRenderable(this);
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            Console.WriteLine("Disposing remote player with id: " + this.ID);
         }
 
         #region Properties
