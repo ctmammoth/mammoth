@@ -1,5 +1,9 @@
 using System;
+
 using StillDesign.PhysX;
+
+using Mammoth.Engine.Physics;
+
 using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine
@@ -66,5 +70,12 @@ namespace Mammoth.Engine
         /// <param name="obj">The object with which the collision is occuring.</param>
         public virtual void CollideWith(PhysicalObject obj) { }
 
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            physics.RemoveActor(this.Actor);
+        }
     }
 }

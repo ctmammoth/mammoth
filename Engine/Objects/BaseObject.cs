@@ -53,7 +53,7 @@ namespace Mammoth.Engine
         public bool IsAlive
         {
             get;
-            protected set;
+            set;
         }
 
         #endregion

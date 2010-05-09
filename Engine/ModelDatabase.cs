@@ -104,9 +104,9 @@ namespace Mammoth.Engine
                 _objects.Add(newObject.ID, newObject);
         }
 
-        public bool removeObject(int objectID)
+        /*public bool removeObject(int objectID)
         {
-            /*if (isUpdating)
+            if (isUpdating)
             {
                 if (_objects.ContainsKey(objectID))
                 {
@@ -115,9 +115,9 @@ namespace Mammoth.Engine
                 }
                 return false;
             }
-            else*/
+            else
                 return _objects.Remove(objectID);
-        }
+        }*/
 
         public int getNextOpenID()
         {

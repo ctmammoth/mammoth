@@ -163,12 +163,6 @@ namespace Mammoth.Engine
         {
             base.Dispose();
 
-            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            mdb.removeObject(this.ID);
-
-            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
-            physics.RemoveActor(this.Actor);
-
             Console.WriteLine("DISPOSE YOU MOTHERFUCKER!!!");
         }
 
