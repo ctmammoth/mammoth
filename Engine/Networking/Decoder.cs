@@ -72,7 +72,7 @@ namespace Mammoth.Engine.Networking
                 break;
 
                 case "Bullet":
-                    Bullet b = new Bullet(game);
+                    Bullet b = new Bullet(game, 0);
                     b.Decode(properties);
                     b.ID = id;
                     ro.registerObject(b);

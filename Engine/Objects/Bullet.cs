@@ -24,9 +24,20 @@ namespace Mammoth.Engine
 
         #endregion
 
-        public Bullet(Game game)
-            : base(game, 0)
+        public Bullet(Game game, int creator)
+            : base(game, creator)
         {
+            Console.WriteLine("Constructing a bullet...");
+
+            InitializePhysX();
+
+            // Load a retarded model
+            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
+            this.Model3D = r.LoadModel("bullet_low");
+
+            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            this.ID = mdb.getNextOpenID();
+            mdb.registerObject(this);
         }
 
         /// <summary>
@@ -36,23 +47,11 @@ namespace Mammoth.Engine
         /// <param name="position">The location at which to spawn the bullet.</param>
         /// <param name="forward">A unit vector pointing in the direction in which to shoot the bullet.</param>
         public Bullet(Game game, Vector3 position, Quaternion orient, int creator)
-            : base(game, creator)
+            : this(game, creator)
         {
-            Console.WriteLine("Constructing a bullet...");
-
-            InitializePhysX();
-
             // Set the initial position and direction
             this.Position = position;
             this.Orientation = orient;
-
-            // Load a retarded model
-            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
-            this.Model3D = r.LoadModel("bullet_low");
-
-            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            this.ID = mdb.getNextOpenID();
-            mdb.registerObject(this);
 
             // Send the bullet
             IServerNetworking network = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
@@ -155,11 +154,7 @@ namespace Mammoth.Engine
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder(serialized);
 
-            Console.WriteLine("Constructing a bullet...");
-
-            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
-
-            InitializePhysX();
+            Console.WriteLine("Decoding a bullet...");
 
             Position = (Vector3)e.GetElement("Position", Position);
             Orientation = (Quaternion)e.GetElement("Orientation", Orientation);
