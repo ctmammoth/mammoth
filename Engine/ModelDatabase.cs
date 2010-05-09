@@ -41,7 +41,7 @@ namespace Mammoth.Engine
         {
             // Kinda hackish (because the name no longer really applies), but can be fixed later if necessary.
             // Done updating
-            isUpdating = true;
+            /*isUpdating = true;
 
             // Add objects that are waiting to be registered
             while (toRegister.Count > 0)
@@ -58,9 +58,10 @@ namespace Mammoth.Engine
                 _objects.Remove(objToRemove);
             }
 
-            toRemove.Clear();
+            toRemove.Clear();*/
 
             // Update all objects
+            var toUpdate = new List<BaseObject>(_objects.Values);
             foreach (var obj in _objects.Values)
                 obj.Update(gameTime);
 
@@ -88,15 +89,15 @@ namespace Mammoth.Engine
 
         public void registerObject(BaseObject newObject)
         {
-            if (isUpdating)
+            /*if (isUpdating)
                 toRegister.Enqueue(newObject);
-            else
+            else*/
                 _objects.Add(newObject.ID, newObject);
         }
 
         public bool removeObject(int objectID)
         {
-            if (isUpdating)
+            /*if (isUpdating)
             {
                 if (_objects.ContainsKey(objectID))
                 {
@@ -105,7 +106,7 @@ namespace Mammoth.Engine
                 }
                 return false;
             }
-            else
+            else*/
                 return _objects.Remove(objectID);
         }
 

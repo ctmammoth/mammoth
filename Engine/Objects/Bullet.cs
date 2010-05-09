@@ -171,7 +171,7 @@ namespace Mammoth.Engine
             mdb.removeObject(this.ID);
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
-            //physics.RemoveActor(this.Actor);
+            physics.RemoveActor(this.Actor);
         }
 
         #region IDamager Members
