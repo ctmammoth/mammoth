@@ -73,17 +73,10 @@ namespace Mammoth.Engine
             // Shoot if the player currently has a weapon
             if (CurWeapon != null)
             {
-                //Calculate initial position of bullet to shoot from
-                /*Vector3 direction = Vector3.Transform(Vector3.Forward, HeadOrient) * 1000.0f;
-                direction.Normalize();
-                Vector3 position = Position + (Vector3.Up * Height / 4.0f);
-                Vector3 offset = Vector3.Multiply(direction, 2.0f);
-                position = Vector3.Add(position, offset);*/
-
                 Vector3 forward = Vector3.Transform(Vector3.Forward, this.HeadOrient);
                 Vector3 position = this.Position + (Vector3.Up * this.Height / 4.0f);
                 // This might not be quite correct?
-                //position += forward;
+                position += forward;
 
                 CurWeapon.Shoot(position, this.Orientation, ID, gameTime);
             }
