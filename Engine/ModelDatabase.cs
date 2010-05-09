@@ -41,7 +41,7 @@ namespace Mammoth.Engine
         {
             // Kinda hackish (because the name no longer really applies), but can be fixed later if necessary.
             // Done updating
-            isUpdating = true;
+            /*isUpdating = true;
 
             // Add objects that are waiting to be registered
             while (toRegister.Count > 0)
@@ -58,19 +58,52 @@ namespace Mammoth.Engine
                 _objects.Remove(objToRemove);
             }
 
-            toRemove.Clear();
+            toRemove.Clear();*/
+
+            Console.WriteLine("updating...");
+
+            //var bullets = from obj in _objects.Values
+            //              where obj.getObjectType().Equals("Bullet")
+            //              select obj;
+            //Console.WriteLine("pre count: " + bullets.ToList().Count);
+            //foreach (var obj in bullets)
+            //    Console.WriteLine("\tID: " + obj.ID);
+            foreach (var pair in _objects)
+                if (pair.Value.getObjectType().Equals("Bullet"))
+                    Console.WriteLine("Bullet with object id: " + pair.Value.ID + " and dict id: " + pair.Key);
 
             // Update all objects
-            foreach (var obj in _objects.Values)
-                obj.Update(gameTime);
+            var toUpdate = new List<BaseObject>(_objects.Values);
+            foreach (var obj in toUpdate)
+            {
+                if (obj.IsAlive)
+                    obj.Update(gameTime);
+                else
+                {
+                    Console.WriteLine("disposing of object id: " + obj.ID + " , type: " + obj.getObjectType());
+                    Console.WriteLine("pre- has id: " + _objects.ContainsKey(obj.ID));
+                    Console.WriteLine("pre- has obj: " + _objects.ContainsValue(obj));
+                    _objects.Remove(obj.ID);
+                    obj.Dispose();
+                    Console.WriteLine("post- has id: " + _objects.ContainsKey(obj.ID));
+                    Console.WriteLine("post- has obj: " + _objects.ContainsValue(obj));
+                }
+            }
 
-            isUpdating = false;
+            var bullets = from obj in _objects.Values
+                          where obj.getObjectType().Equals("Bullet")
+                          select obj;
+            Console.WriteLine("post count: " + bullets.ToList().Count);
+
+            //isUpdating = false;
         }
 
         public override void Draw(GameTime gameTime)
         {
+            Console.WriteLine("drawing...");
             foreach (var obj in _objects.Values)
-                obj.Draw(gameTime);
+                if(obj.IsAlive)
+                    obj.Draw(gameTime);
         }
 
         #region IModelDBService Members
@@ -88,13 +121,15 @@ namespace Mammoth.Engine
 
         public void registerObject(BaseObject newObject)
         {
-            if (isUpdating)
+            /*if (isUpdating)
                 toRegister.Enqueue(newObject);
-            else
+            else*/
+            //HACK: dictionary should handle this itself (also it shouldn't be happening at all)
+            if (!_objects.ContainsKey(newObject.ID))
                 _objects.Add(newObject.ID, newObject);
         }
 
-        public bool removeObject(int objectID)
+        /*public bool removeObject(int objectID)
         {
             if (isUpdating)
             {
@@ -107,7 +142,7 @@ namespace Mammoth.Engine
             }
             else
                 return _objects.Remove(objectID);
-        }
+        }*/
 
         public int getNextOpenID()
         {

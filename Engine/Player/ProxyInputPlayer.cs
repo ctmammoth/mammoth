@@ -74,13 +74,18 @@ namespace Mammoth.Engine
             if (CurWeapon != null)
             {
                 //Calculate initial position of bullet to shoot from
-                Vector3 direction = Vector3.Transform(Vector3.Forward, HeadOrient) * 1000.0f;
+                /*Vector3 direction = Vector3.Transform(Vector3.Forward, HeadOrient) * 1000.0f;
                 direction.Normalize();
                 Vector3 position = Position + (Vector3.Up * Height / 4.0f);
                 Vector3 offset = Vector3.Multiply(direction, 2.0f);
-                position = Vector3.Add(position, offset);
+                position = Vector3.Add(position, offset);*/
 
-                CurWeapon.Shoot(position, direction, ID, gameTime);
+                Vector3 forward = Vector3.Transform(Vector3.Forward, this.HeadOrient);
+                Vector3 position = this.Position + (Vector3.Up * this.Height / 4.0f);
+                // This might not be quite correct?
+                //position += forward;
+
+                CurWeapon.Shoot(position, this.Orientation, ID, gameTime);
             }
         }
 
@@ -96,7 +101,10 @@ namespace Mammoth.Engine
 
         public override void TakeDamage(float damage, IDamager inflicter)
         {
-            Console.WriteLine("Proxy player took damage");
+            base.TakeDamage(damage, inflicter);
+
+            Console.WriteLine("Health: " + this.Health);
+
             if (this.Health <= 0)
             {
                 Projectile p = (Projectile)inflicter;
@@ -105,13 +113,16 @@ namespace Mammoth.Engine
                 IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
                 int cid = p.Creator >> 25;
                 g.AwardKill(cid);
+                Console.WriteLine("Player " + cid + " was killed by Player " + p.Creator);
 
                 //update players kills
                 IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
                 ProxyInputPlayer pip = (ProxyInputPlayer) mdb.getObject(p.Creator);
                 pip.NumKills++;
+
+                //tell player to die
+                Die();
             }
-            base.TakeDamage(damage, inflicter);
         }
     }
 }

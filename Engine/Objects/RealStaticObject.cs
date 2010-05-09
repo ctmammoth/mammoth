@@ -82,12 +82,13 @@ namespace Mammoth.Engine
             boxActorDesc.Shapes.Add(new BoxShapeDescription()
             {
                 Size = new Vector3(dimensions.X, dimensions.Y, dimensions.Z),
-                LocalPosition = localPosition
+                LocalPosition = localPosition                
             });
+            boxActorDesc.GlobalPose = Matrix.CreateTranslation(pos);
 
             
             this.Actor = physics.CreateActor(boxActorDesc);
-            this.Position = pos;            
+            // this.Position = pos;            
             // this.
         }
 

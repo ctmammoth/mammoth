@@ -64,13 +64,13 @@ namespace Mammoth.Engine.Networking
             if (state.KeyPressed(InputType.Fire))
             {
                 IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-                Vector3 forward = Vector3.Transform(Vector3.Forward, player.HeadOrient) * 1000.0f;
+                /*Vector3 forward = Vector3.Transform(Vector3.Forward, player.HeadOrient) * 1000.0f;
                 forward.Normalize();
                 Vector3 position = player.Position + (Vector3.Up * player.Height / 4.0f);
                 Vector3 offset = Vector3.Multiply(forward, 2.0f);
-                position = Vector3.Add(position, offset);
+                position = Vector3.Add(position, offset);*/
 
-                Bullet b = new Bullet(Game, position, forward, player.ID >> 25);
+                Bullet b = new Bullet(Game, player.Position, player.HeadOrient, player.ID >> 25);
 
                 // Give this projectile an ID
                 b.ID = modelDB.getNextOpenID();

@@ -15,7 +15,7 @@ namespace Mammoth.Engine.Audio
         private Dictionary<string, List<Song>> _songs;
         private Dictionary<string, SoundEffect> _sounds;
         private Dictionary<string, float> _volumes;
-        private List<SoundEffectInstance> _loopedSounds;
+        private Dictionary<string, SoundEffectInstance> _loopedSounds;
         private int _currentSong;
         private string _currentPlaylist;
 
@@ -25,7 +25,7 @@ namespace Mammoth.Engine.Audio
             game.Services.AddService(typeof(IAudioService), this);
             _songs = new Dictionary<string, List<Song>>();
             _sounds = new Dictionary<string, SoundEffect>();
-            _loopedSounds = new List<SoundEffectInstance>();
+            _loopedSounds = new Dictionary<string, SoundEffectInstance>();
             _volumes = new Dictionary<string, float>();
             loadSongs();
             loadSounds();
@@ -48,6 +48,9 @@ namespace Mammoth.Engine.Audio
             _sounds.Add("Ambient", manager.Load<SoundEffect>("sounds/ambient"));
             _sounds.Add("Reload", manager.Load<SoundEffect>("sounds/reload"));
             _volumes.Add("Reload", 1.0f);
+            _sounds.Add("Grunt", manager.Load<SoundEffect>("sounds/grunt"));
+            _sounds.Add("Scream", manager.Load<SoundEffect>("sounds/scream"));
+            _sounds.Add("Heartbeat", manager.Load<SoundEffect>("sounds/heartbeat"));
         }
 
         #region IAudioService Members
@@ -69,6 +72,8 @@ namespace Mammoth.Engine.Audio
 
         public void playSound(string toPlay)
         {
+            if (!_sounds.ContainsKey(toPlay))
+                return;
             if (_volumes.ContainsKey(toPlay))
                 _sounds[toPlay].Play(_volumes[toPlay], 0.0f, 0.0f);
             else
@@ -77,8 +82,10 @@ namespace Mammoth.Engine.Audio
 
         public void loopSound(string toPlay)
         {
+            if (_loopedSounds.ContainsKey(toPlay) || !_sounds.ContainsKey(toPlay))
+                return;
             SoundEffectInstance sei = _sounds[toPlay].CreateInstance();
-            _loopedSounds.Add(sei);
+            _loopedSounds.Add(toPlay, sei);
             if (_volumes.ContainsKey(toPlay))
                 sei.Volume = _volumes[toPlay];
             else
@@ -86,10 +93,13 @@ namespace Mammoth.Engine.Audio
             sei.Play();
         }
 
-        public void stopSounds()
+        public void stopSound(string toStop)
         {
-            foreach (SoundEffectInstance sei in _loopedSounds)
-                sei.Stop();
+            if (!_loopedSounds.ContainsKey(toStop))
+                return;
+            SoundEffectInstance sei = _loopedSounds[toStop];
+            _loopedSounds.Remove(toStop);
+            sei.Stop();
         }
 
         #endregion IAudioService Members
@@ -103,7 +113,7 @@ namespace Mammoth.Engine.Audio
                 _currentSong = (_currentSong + 1) % _songs[_currentPlaylist].Count;
                 //MediaPlayer.Play(_songs[_currentPlaylist][_currentSong]);
             }
-            foreach (SoundEffectInstance sei in _loopedSounds)
+            foreach (SoundEffectInstance sei in _loopedSounds.Values)
             {
                 if (sei.State != SoundState.Playing)
                     sei.Play();

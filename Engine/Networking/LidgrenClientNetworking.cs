@@ -195,7 +195,8 @@ namespace Mammoth.Engine.Networking
                             IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
                             phys.RemoveController(((RemotePlayer)mdb.getObject(playerID)).Controller);
                             if (mdb.hasObject(playerID))
-                                mdb.removeObject(playerID);
+                                //mdb.removeObject(playerID);
+                                mdb.getObject(playerID).IsAlive = false;
                             break;
                     }
                     break;

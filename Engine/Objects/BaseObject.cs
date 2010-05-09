@@ -12,6 +12,7 @@ namespace Mammoth.Engine
         public BaseObject(Game game)
         {
             this.Game = game;
+            this.IsAlive = true;
         }
         
         /// <summary>
@@ -48,6 +49,13 @@ namespace Mammoth.Engine
             get;
             protected set;
         }
+
+        public bool IsAlive
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         #region IDisposable Members

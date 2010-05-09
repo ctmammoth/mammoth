@@ -1,5 +1,9 @@
 using System;
+
 using StillDesign.PhysX;
+
+using Mammoth.Engine.Physics;
+
 using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine
@@ -72,5 +76,13 @@ namespace Mammoth.Engine
         /// </summary>
         /// <param name="obj">The object triggering or being triggered.</param>
         public virtual void RespondToTrigger(PhysicalObject obj) { }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            physics.RemoveActor(this.Actor);
+        }
     }
 }

@@ -210,7 +210,7 @@ namespace Mammoth.Engine.Objects
             return MagCount;
         }
 
-        public void Shoot(Vector3 position, Vector3 direction, int shooterID, GameTime time)
+        public void Shoot(Vector3 position, Quaternion orientation, int shooterID, GameTime time)
         {
             // Make sure a shot can be fired
             double curTime = time.TotalRealTime.TotalMilliseconds;
@@ -222,19 +222,22 @@ namespace Mammoth.Engine.Objects
                     _lastFiredTime = curTime;
 
                     // Randomly perturb the bullet
-                    direction = Vector3.Add(direction, new Vector3((float)(directionPerturber.NextDouble() - 0.5) * Inaccuracy,
+                    Quaternion perturbation =
+                        Quaternion.CreateFromYawPitchRoll(((float) directionPerturber.NextDouble() - 0.5f) * Inaccuracy,
+                                                          ((float) directionPerturber.NextDouble() - 0.5f) * Inaccuracy,
+                                                          0.0f);    
+                    /*direction = Vector3.Add(direction, new Vector3((float)(directionPerturber.NextDouble() - 0.5) * Inaccuracy,
                         (float)(directionPerturber.NextDouble() - 0.5) * Inaccuracy,
                         (float)(directionPerturber.NextDouble() - 0.5) * Inaccuracy));
-                    direction.Normalize();
+                    direction.Normalize();*/
 
-                    SpawnBullet(position, direction, shooterID);
+                    SpawnBullet(position, orientation, shooterID);
                 }
             }
             else if (MagCount > 1)
             {
                 _lastReloadTime = curTime;
                 Reload(time);
-                SpawnBullet(position, direction, shooterID);
             }
             else
             {
@@ -248,13 +251,13 @@ namespace Mammoth.Engine.Objects
         /// <param name="position"></param>
         /// <param name="direction"></param>
         /// <param name="shooterID"></param>
-        private void SpawnBullet(Vector3 position, Vector3 direction, int shooterID)
+        private void SpawnBullet(Vector3 position, Quaternion orientation, int shooterID)
         {
             IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
             net.sendEvent("Sound", FireSound);
 
             // Make sure the bullet isn't spawned in the player: shift it by a bit
-            Bullet b = new Bullet(Game, position, direction, shooterID >> 25);
+            Bullet b = new Bullet(Game, position, orientation, shooterID >> 25);
 
             // Give this projectile an ID, but it's not really necessary since it gets shot instantaneously
             //IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
