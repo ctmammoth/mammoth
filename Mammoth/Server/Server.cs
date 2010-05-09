@@ -76,7 +76,7 @@ namespace Mammoth.Server
             Room room = new Room(modelDB.getNextOpenID(), stairRoom, this);
 
             // LET'S TRY ADDING A FLAG!!!
-            Flag flag = new Flag(this, new Vector3(-50.0f, 24.0f, -50.0f));
+            //Flag flag = new Flag(this, new Vector3(-50.0f, 24.0f, -50.0f));
         }
 
         protected override void Update(GameTime gameTime)
