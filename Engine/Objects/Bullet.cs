@@ -102,32 +102,38 @@ namespace Mammoth.Engine
 
             // Make sure the shape that was hit is between the current and previous positions, exists and that 
             // its actor has userdata
-            if (rayHit.Shape != null && rayHit.Distance <= distanceMoved)
+            if (rayHit.Shape != null)
             {
-                //Console.WriteLine("Bullet hit something!");
                 // Get the PhysicalObject that owns the Shape hit by the raycast
                 PhysicalObject objHit = ((PhysicalObject)rayHit.Shape.Actor.UserData);
 
-                // Try damaging the object
                 if (objHit != null)
                 {
-                    if (objHit is IDamageable)
+                    // Make sure the collision is within the distance we've moved during this timestep.
+                    if (rayHit.Distance <= distanceMoved)
                     {
-                        // Make sure the creator isn't the one being hit
-                        if (objHit.ID >> 25 != Creator)
+                        // Make sure the object is damageable.
+                        if (objHit is IDamageable)
                         {
-                            Console.WriteLine("Damaging a mofo of type " + objHit.getObjectType());
-                            ((IDamageable)objHit).TakeDamage(this.GetDamage(), this);
-
-                            this.IsAlive = false;
+                            // Make sure the creator isn't the one being hit.
+                            if (objHit.ID >> 25 != Creator)
+                            {
+                                Console.WriteLine("Damaging a mofo of type " + objHit.getObjectType());
+                                ((IDamageable)objHit).TakeDamage(this.GetDamage(), this);
+                            }
                         }
+
+                        // Have the bullet get removed at the next update step.
+                        this.IsAlive = false;
+
+                        // We collided with something legit, so let's get out of here.
+                        return;
                     }
                 }
             }
-            else
-            {
-                Position += dir * distanceMoved;
-            }
+
+            // We didn't collide with something, so move the bullet.
+            this.Position += dir * distanceMoved;
         }
 
         public override void Draw(GameTime gameTime)
