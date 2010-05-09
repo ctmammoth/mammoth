@@ -113,10 +113,15 @@ namespace Mammoth.Engine
                 {
                     if (objHit is IDamageable)
                     {
-                        Console.WriteLine("Damaging a mofo of type " + objHit.getObjectType());
-                        ((IDamageable)objHit).TakeDamage(this.GetDamage(), this);
+                        // Make sure the creator isn't the one being hit
+                        if (objHit >> 25 != Creator)
+                        {
+                            Console.WriteLine("Damaging a mofo of type " + objHit.getObjectType());
+                            ((IDamageable)objHit).TakeDamage(this.GetDamage(), this);
+
+                            this.IsAlive = false;
+                        }
                     }
-                    this.IsAlive = false;
                 }
             }
             else
