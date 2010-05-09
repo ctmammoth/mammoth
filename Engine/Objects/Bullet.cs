@@ -52,10 +52,6 @@ namespace Mammoth.Engine
             // Set the initial position and direction
             this.Position = position;
             this.Orientation = orient;
-
-            // Send the bullet
-            IServerNetworking network = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
-            network.sendThing(this);
         }
 
         private void InitializePhysX()
@@ -115,7 +111,7 @@ namespace Mammoth.Engine
                         Console.WriteLine("Damaging a mofo of type " + objHit.getObjectType());
                         ((IDamageable)objHit).TakeDamage(this.GetDamage(), this);
                     }
-                    this.Dispose();
+                    this.IsAlive = false;
                 }
             }
             else
@@ -172,6 +168,8 @@ namespace Mammoth.Engine
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             physics.RemoveActor(this.Actor);
+
+            Console.WriteLine("DISPOSE YOU MOTHERFUCKER!!!");
         }
 
         #region IDamager Members

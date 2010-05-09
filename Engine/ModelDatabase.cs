@@ -62,10 +62,19 @@ namespace Mammoth.Engine
 
             // Update all objects
             var toUpdate = new List<BaseObject>(_objects.Values);
-            foreach (var obj in _objects.Values)
-                obj.Update(gameTime);
+            foreach (var obj in toUpdate)
+            {
+                if (obj.IsAlive)
+                    obj.Update(gameTime);
+                else
+                {
+                    obj.Dispose();
+                    _objects.Remove(obj.ID);
+                }
+            }
+            
 
-            isUpdating = false;
+            //isUpdating = false;
         }
 
         public override void Draw(GameTime gameTime)
