@@ -317,8 +317,10 @@
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="sounds\shotgun_load.wav">
-      <Name>shotgunload</Name>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="sounds\shotgun_fireload.wav">
+      <Name>shotgunfireload</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>

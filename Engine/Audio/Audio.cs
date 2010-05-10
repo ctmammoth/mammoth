@@ -56,7 +56,7 @@ namespace Mammoth.Engine.Audio
             _volumes.Add("Heartbeat", 1.0f);
             _sounds.Add("GunEmpty", manager.Load<SoundEffect>("sounds/gunempty"));
             _sounds.Add("ShotgunFire", manager.Load<SoundEffect>("sounds/shotgunfire"));
-            _sounds.Add("ShotgunLoad", manager.Load<SoundEffect>("sounds/shotgunload"));
+            _sounds.Add("ShotgunFireLoad", manager.Load<SoundEffect>("sounds/shotgunfireload"));
         }
 
         #region IAudioService Members

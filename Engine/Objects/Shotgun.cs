@@ -63,11 +63,7 @@ namespace Mammoth.Engine.Objects
         /// <param name="shooterID"></param>
         protected override void SpawnBullet(Vector3 position, Quaternion orientation, int shooterID)
         {
-            //Console.WriteLine("Firing shotgun bullets");
-
             IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
-            net.sendEvent("Sound", FireSound);
-
             for (int i = 0; i < NUM_SHOTS; i++)
             {
                 if (Mag.CanFireShot())
@@ -89,7 +85,9 @@ namespace Mammoth.Engine.Objects
                 }
             }
             if (Mag.CanFireShot())
-                net.sendEvent("Sound", "ShotgunLoad");
+                net.sendEvent("Sound", "ShotgunFireLoad");
+            else
+                net.sendEvent("Sound", FireSound);
         }
 
         protected override Bullet createBullet(Game game, Vector3 position, Quaternion orientation, int shooterID)
