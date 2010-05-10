@@ -48,6 +48,7 @@ namespace Mammoth.Engine.Input
             _keyMappings.Add(InputType.Stats, Keys.Tab);
             _keyMappings.Add(InputType.Weapon1, Keys.D1);
             _keyMappings.Add(InputType.Weapon2, Keys.D2);
+            _keyMappings.Add(InputType.Weapon3, Keys.D3);
         }
 
         public override void Update(GameTime gameTime)
