@@ -116,7 +116,7 @@ namespace Mammoth.Engine
                     {
                         Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something in range");
                         // Make sure the object is damageable.
-                        if (objHit.ID >> 25 != Creator && !objHit.getObjectType().Equals("Bullet"))
+                        if (objHit.ID >> 25 != Creator)
                         {
                             Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something that isn't its creator and isn't a bullet");
                             // Make sure the creator isn't the one being hit.
