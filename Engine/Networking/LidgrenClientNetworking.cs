@@ -153,7 +153,18 @@ namespace Mammoth.Engine.Networking
         {
             // Get the message type
             MessageType type = (MessageType)buffer.ReadVariableInt32();
-            switch (type) 
+            handleData(buffer, type);
+        }
+
+        /// <summary>
+        /// Handles a Data packet with a known type, which could be an encodable or 
+        /// a application-level status change message or an event. Encodables are 
+        /// sent to the decoder, while status changes and events are handled appropriately.
+        /// </summary>
+        /// <param name="buffer"></param>
+        private void handleData(NetBuffer buffer, MessageType type)
+        {
+            switch (type)
             {
                 case MessageType.ENCODABLE:
                     // Encodables are read in and sent to the decoder
@@ -242,11 +253,17 @@ namespace Mammoth.Engine.Networking
                                 case NetMessageType.Data:
                                     MessageType messageType = (MessageType)buffer.ReadVariableInt32();
                                     if (messageType != MessageType.CLIENT_ID)
-                                        break;
-                                    int id = buffer.ReadVariableInt32();
-                                    _clientID = id;
-                                    Console.WriteLine("My ID is: " + _clientID);
-                                    return;
+                                    {
+                                        handleData(buffer, messageType);
+                                    }
+                                    else
+                                    {
+                                        int id = buffer.ReadVariableInt32();
+                                        _clientID = id;
+                                        Console.WriteLine("My ID is: " + _clientID);
+                                        return;
+                                    }
+                                    break;
                             }
                         }
                 }
