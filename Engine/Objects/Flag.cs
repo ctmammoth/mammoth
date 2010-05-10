@@ -22,21 +22,18 @@ namespace Mammoth.Engine.Objects
             SphereShapeDescription sDesc = new SphereShapeDescription()
             {
                 Radius = 10.0f,
-                Flags = ShapeFlag.TriggerEnable
+                Flags = ShapeFlag.TriggerOnEnter
             };
 
             // Make a body: flags should be kinematic since they should get their positions from the player carrying them.
             BodyDescription bDesc = new BodyDescription()
             {
-                Mass = 10.0f,
                 BodyFlags = BodyFlag.Kinematic
             };
 
-            ActorDescription aDesc = new ActorDescription()
-            {
-                Shapes = { sDesc },
-                BodyDescription = bDesc
-            };
+            ActorDescription aDesc = new ActorDescription();
+            aDesc.Shapes.Add(sDesc);
+            aDesc.BodyDescription = bDesc;
 
             IPhysicsManagerService physics = (IPhysicsManagerService)game.Services.GetService(typeof(IPhysicsManagerService));
 
