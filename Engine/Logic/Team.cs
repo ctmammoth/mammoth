@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 
+using Microsoft.Xna.Framework;
+
 namespace Mammoth.Engine
 {
     public class Team
@@ -12,6 +14,7 @@ namespace Mammoth.Engine
         private List<int> MemberIDs;
         private int NumCaptures;
         private int NumKills;
+        private Vector3 SpawnLocation;
 
         /// <summary>
         /// Creates a new team with a unique team number.
@@ -23,6 +26,15 @@ namespace Mammoth.Engine
             MemberIDs = new List<int>();
             NumCaptures = 0;
             NumKills = 0;
+
+            if (id == 1)
+            {
+                SpawnLocation = Vector3.Zero;
+            }
+            else
+            {
+                SpawnLocation = Vector3.Zero;
+            }
         }
 
 
