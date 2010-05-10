@@ -93,12 +93,20 @@ namespace Mammoth.Engine
             if (props.UpdatesFor("z"))
                 parameters.AddAttribute("Z", ((double)props.GetElement("z", z)).ToString());
             if (props.UpdatesFor("roomType"))
-                parameters.AddAttribute("Special_Type", (String)props.GetElement("roomType", roomType));                
-            //if (props.UpdatesFor("items"))
-              //  items = (List<IEncodable>)props.GetElement("items", items); 
+                parameters.AddAttribute("Special_Type", (String)props.GetElement("roomType", roomType));
+            int numItems = 0;
+            if (props.UpdatesFor("numItems"))
+               numItems = (int)props.GetElement("numItems", numItems);
+            for (int i = 0; i < numItems; i++)
+            {
+                BaseObject item = null;
+                item = (BaseObject)props.GetElement("items" + i, item );
+                modelDB.registerObject(item);
+            }
 
 
-            SpawnRoomFromNetwork(parameters);
+
+                SpawnRoomFromNetwork(parameters);
         }
 
         protected void SpawnRoomFromNetwork(ObjectParameters parameters)
