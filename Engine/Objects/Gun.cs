@@ -155,7 +155,7 @@ namespace Mammoth.Engine.Objects
         private Quaternion _orientation;
 
         private double _lastFiredTime;
-        private double _lastReloadTime;
+        private double _reloadStartTime;
 
         // The maximum rate of fire in bullets per second
         protected abstract double FireRate { get; }
@@ -190,7 +190,7 @@ namespace Mammoth.Engine.Objects
             this.Model3D = r.LoadModel("soldier-low-poly");
 
             _lastFiredTime = 0;
-            _lastReloadTime = -1;
+            _reloadStartTime = -1;
             // Set the owner
             Owner = owner;
             // Set location
@@ -219,7 +219,7 @@ namespace Mammoth.Engine.Objects
             if (Mag.CanFireShot())
             {
                 // Check whether it's too soon to fire
-                if ((curTime - _lastFiredTime) >= (1000.0 / FireRate) && _lastReloadTime < 0)
+                if ((curTime - _lastFiredTime) >= (1000.0 / FireRate) && _reloadStartTime < 0)
                 {
                     _lastFiredTime = curTime;
 
@@ -238,7 +238,6 @@ namespace Mammoth.Engine.Objects
             }
             else if (MagCount > 1)
             {
-                _lastReloadTime = curTime;
                 Reload(time);
             }
             else
@@ -284,10 +283,10 @@ namespace Mammoth.Engine.Objects
 
         public void Reload(GameTime time)
         {
-            if (MagCount != 0 && _lastReloadTime >= 0)
+            if (MagCount != 0 && _reloadStartTime < 0)
             {
                 Console.WriteLine(getObjectType() + " is reloading!");
-                _lastReloadTime = time.TotalRealTime.TotalMilliseconds;
+                _reloadStartTime = time.TotalRealTime.TotalMilliseconds;
                 IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
                 net.sendEvent("Sound", "Reload", Owner.ID >> 25);
                 // Create a new magazine (really just refill the current one)
@@ -309,9 +308,9 @@ namespace Mammoth.Engine.Objects
             base.Update(gameTime);
             this.Position = Owner.Position;
             this.Orientation = Owner.HeadOrient;
-            if (_lastReloadTime >= 0 && gameTime.TotalRealTime.TotalMilliseconds - _lastReloadTime >= ReloadTime)
+            if (_reloadStartTime >= 0 && gameTime.TotalRealTime.TotalMilliseconds - _reloadStartTime >= ReloadTime)
             {
-                _lastReloadTime = -1;
+                _reloadStartTime = -1;
                 IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
                 net.sendEvent("Sound", "Reload", Owner.ID >> 25);
             }

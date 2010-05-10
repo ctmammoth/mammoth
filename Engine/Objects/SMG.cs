@@ -22,7 +22,7 @@ namespace Mammoth.Engine.Objects
 
         protected override double FireRate
         {
-            get { return 6.0; }
+            get { return 9.0; }
         }
 
         protected override double ReloadTime
@@ -32,7 +32,7 @@ namespace Mammoth.Engine.Objects
 
         protected override float Inaccuracy
         {
-            get { return 0.10f; }
+            get { return 0.04f; }
         }
 
         protected override int MagazineCapacity

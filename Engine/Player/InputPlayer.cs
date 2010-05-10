@@ -218,7 +218,7 @@ namespace Mammoth.Engine
                     if (input.IsKeyDown(InputType.Jump))
                         this.Velocity += Vector3.Up / 4.0f;
 
-                // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
+                Console.WriteLine("Should shoot?: " + CurWeapon.ShouldShoot(input));
                 if (CurWeapon != null && CurWeapon.ShouldShoot(input))
                     this.Shoot(gameTime);
 
@@ -269,7 +269,7 @@ namespace Mammoth.Engine
         /// </summary>
         protected virtual void SwitchWeapon(int newWeapon)
         {
-            Console.WriteLine("Switching weapon to " + newWeapon);
+            Console.WriteLine("Switching weapon to " + Items[newWeapon].getObjectType());
         }
 
         /// <summary>
