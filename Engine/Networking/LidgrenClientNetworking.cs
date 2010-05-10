@@ -242,11 +242,18 @@ namespace Mammoth.Engine.Networking
                                 case NetMessageType.Data:
                                     MessageType messageType = (MessageType)buffer.ReadVariableInt32();
                                     if (messageType != MessageType.CLIENT_ID)
-                                        break;
-                                    int id = buffer.ReadVariableInt32();
-                                    _clientID = id;
-                                    Console.WriteLine("My ID is: " + _clientID);
-                                    return;
+                                    {
+                                        buffer.Reset();
+                                        handleData(buffer);
+                                    }
+                                    else
+                                    {
+                                        int id = buffer.ReadVariableInt32();
+                                        _clientID = id;
+                                        Console.WriteLine("My ID is: " + _clientID);
+                                        return;
+                                    }
+                                    break;
                             }
                         }
                 }
