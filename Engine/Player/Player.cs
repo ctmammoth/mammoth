@@ -217,6 +217,7 @@ namespace Mammoth.Engine
             set;
         }
 
+        //PLAYER STATS
         public PlayerStats PlayerStats
         {
             get;
