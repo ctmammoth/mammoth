@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 using Mammoth.GameWidgets;
+using Mammoth.Screens;
 using Mammoth.Engine;
 using Mammoth.Engine.Input;
 using Mammoth.Engine.Physics;
@@ -302,7 +303,8 @@ namespace Mammoth
 
         void net_EndGameEvent(object sender, EventArgs e)
         {
-            // TODO: game over screen?
+            GameStats g = (GameStats)this.Game.Services.GetService(typeof(GameStats));
+            this.ScreenManager.AddScreen(new EndScreen(this.Game, g));
             this.IsExiting = true;
         }
 

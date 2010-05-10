@@ -17,7 +17,7 @@ namespace Mammoth.Engine
         public Hashtable Players;
         public DateTime GameStart;
         public bool GameGoing;
-        private const int GameLength = 260; //game length in seconds
+        private const int GameLength = 60; //game length in seconds
         private int SendCounter;
         private const int FreqSent = 60;
 
@@ -266,9 +266,15 @@ namespace Mammoth.Engine
 
             if (GetTimeLeft() <= 0)
             {
+                IServerNetworking sn = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+                sn.sendEvent("Game Over", "");
+
+                //reset Game Logic
+                ResetGame();
+
+                //reset server
                 if (this.ResetServer != null)
                     this.ResetServer(this, new EventArgs());
-                ResetGame();
             }
 
             if (SendCounter == FreqSent)

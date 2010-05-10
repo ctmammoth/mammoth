@@ -42,6 +42,11 @@ namespace Mammoth.Engine
             r.DrawRenderable(this);
         }
 
+        public RealStaticObject(Game game) : base(game)
+        {   
+            
+        }
+
         public RealStaticObject(int id, ObjectParameters parameters, Game game, bool isFromNetwork)
             : base(game)
         {
@@ -146,10 +151,10 @@ namespace Mammoth.Engine
         public byte[] Encode()
         {
             Networking.Encoder tosend = new Networking.Encoder();
-            Console.WriteLine("Encoding a Static Object");
+            Console.WriteLine("Encoding a Static Object"); 
 
             tosend.AddElement("Position", Position);
-            tosend.AddElement("Orientation", Orientation);
+            
             tosend.AddElement("TypeName", TypeName);
             tosend.AddElement("PositionOffset", PositionOffset);
             tosend.AddElement("LocalPosition", LocalPosition);
@@ -164,16 +169,16 @@ namespace Mammoth.Engine
 
             Networking.Encoder props = new Networking.Encoder(serialized);
 
+            Vector3 pos = new Vector3();
             if (props.UpdatesFor("Position"))
-                Position = (Vector3)props.GetElement("Position", Position);
-            if (props.UpdatesFor("Orientation"))
-                Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
+                pos = (Vector3)props.GetElement("Position", pos);
+            
             if (props.UpdatesFor("TypeName"))
-                Position = (Vector3)props.GetElement("TypeName", TypeName);
+                TypeName = (String)props.GetElement("TypeName", TypeName);
             if (props.UpdatesFor("PositionOffset"))
-                Orientation = (Quaternion)props.GetElement("PositionOffset", PositionOffset);
+                PositionOffset = (Vector3)props.GetElement("PositionOffset", PositionOffset);
             if (props.UpdatesFor("LocalPosition"))
-                Position = (Vector3)props.GetElement("LocalPosition", LocalPosition);
+                LocalPosition = (Vector3)props.GetElement("LocalPosition", LocalPosition);
             
         }
 

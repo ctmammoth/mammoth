@@ -100,7 +100,9 @@ namespace Mammoth.Engine
             for (int i = 0; i < numItems; i++)
             {
                 BaseObject item = null;
-                item = (BaseObject)props.GetElement("items" + i, item );
+                item = new RealStaticObject(this.Game);
+                props.GetElement("items" + i, item);
+                ((IEncodable)item).Decode((byte[])props.GetElement("items" + i, item ));                
                 modelDB.registerObject(item);
             }
 
