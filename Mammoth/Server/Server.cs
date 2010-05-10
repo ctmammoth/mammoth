@@ -81,12 +81,14 @@ namespace Mammoth.Server
             Flag flag1 = new Flag(this, new Vector3(-45.0f, -23.0f, -45.0f), 1);
             flag1.ID = modelDB.getNextOpenID();
             modelDB.registerObject(flag1);
-            net.sendThing(flag1);
+            //net.sendThing(flag1);
+            Console.WriteLine("Flag 1 should have been sent.");
             // LET'S TRY ADDING A FLAG!!!
             Flag flag2 = new Flag(this, new Vector3(-65.0f, -23.0f, -45.0f), 2);
             flag2.ID = modelDB.getNextOpenID();
             modelDB.registerObject(flag2);
-            net.sendThing(flag2);
+            //net.sendThing(flag2);
+            Console.WriteLine("Flag 2 should have been sent.");
         }
 
         protected override void Update(GameTime gameTime)

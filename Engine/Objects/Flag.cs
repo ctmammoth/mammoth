@@ -172,7 +172,7 @@ namespace Mammoth.Engine.Objects
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder(serialized);
 
-            Console.WriteLine("Decoding a flag...");
+            //Console.WriteLine("Decoding a flag...");
 
             Position = (Vector3)e.GetElement("Position", Position);
             PositionOffset = (Vector3)e.GetElement("PositionOffset", PositionOffset);
