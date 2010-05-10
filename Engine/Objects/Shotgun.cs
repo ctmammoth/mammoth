@@ -32,7 +32,7 @@ namespace Mammoth.Engine.Objects
 
         protected override float Inaccuracy
         {
-            get { return 0.06f; }
+            get { return 0.075f; }
         }
 
         protected override int MagazineCapacity
