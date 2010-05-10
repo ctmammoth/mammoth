@@ -17,7 +17,7 @@ namespace Mammoth.Engine.Objects
 
         public override string getObjectType()
         {
-            return "RevolverAmmo";
+            return "RevolverBullet";
         }
 
         public override float Speed
