@@ -12,6 +12,8 @@ namespace Mammoth.Engine.Objects
 {
     class Shotgun : Gun
     {
+        private const int NUM_SHOTS = 5;
+
         public Shotgun(Game game, Player player)
             : base(game, player)
         {
@@ -59,27 +61,32 @@ namespace Mammoth.Engine.Objects
         /// <param name="position"></param>
         /// <param name="direction"></param>
         /// <param name="shooterID"></param>
-        protected virtual void SpawnBullet(Vector3 position, Quaternion orientation, int shooterID)
+        protected override void SpawnBullet(Vector3 position, Quaternion orientation, int shooterID)
         {
+            Console.WriteLine("Firing shotgun bullets");
+
             IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
             net.sendEvent("Sound", FireSound);
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < NUM_SHOTS; i++)
             {
-                Mag.FireShot();
+                if (Mag.CanFireShot())
+                {
+                    Mag.FireShot();
 
-                // Randomly perturb the bullet
-                Quaternion perturbation =
-                    Quaternion.CreateFromYawPitchRoll(((float)directionPerturber.NextDouble() - 0.5f) * Inaccuracy,
-                                                      ((float)directionPerturber.NextDouble() - 0.5f) * Inaccuracy,
-                                                      0.0f);
+                    // Randomly perturb the bullet
+                    Quaternion perturbation =
+                        Quaternion.CreateFromYawPitchRoll(((float)directionPerturber.NextDouble() - 0.5f) * Inaccuracy,
+                                                          ((float)directionPerturber.NextDouble() - 0.5f) * Inaccuracy,
+                                                          0.0f);
 
-                Bullet b = createBullet(Game, position, orientation * perturbation, shooterID >> 25);
+                    Bullet b = createBullet(Game, position, orientation * perturbation, shooterID >> 25);
 
-                // Send the bullet after it's created
-                net.sendThing(b);
+                    // Send the bullet after it's created
+                    net.sendThing(b);
 
-                Console.WriteLine("Shot a bullet with a " + getObjectType() + "; " + Mag.AmmoRemaining + " bullets left.");
+                    Console.WriteLine("Shot a bullet with a " + getObjectType() + "; " + Mag.AmmoRemaining + " bullets left.");
+                }
             }
         }
 
