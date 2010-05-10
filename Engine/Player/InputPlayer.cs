@@ -231,6 +231,8 @@ namespace Mammoth.Engine
                     this.SwitchWeapon(1);
                 if (input.KeyPressed(InputType.Weapon2))
                     this.SwitchWeapon(2);
+                if (input.KeyPressed(InputType.Weapon3))
+                    this.SwitchWeapon(3);
 
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
