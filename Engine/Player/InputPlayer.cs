@@ -404,13 +404,13 @@ namespace Mammoth.Engine
 
             if (props.UpdatesFor("FlagID"))
             {
-                int newID = (int)props.GetElement("FlagID", Flag.ID);
+                int newID = (int)props.GetElement("FlagID", -1);
                 if (this.Flag != null && newID < 0)
                 {
                     this.Flag.GetDropped();
                     this.Flag = null;
                 }
-                else if (this.Flag.ID != newID)
+                else if ((this.Flag == null && newID >= 0) || (this.Flag != null && this.Flag.ID != newID))
                 {
                     IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
                     Flag flag = (Flag)mdb.getObject(newID);
