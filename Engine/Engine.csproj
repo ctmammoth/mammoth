@@ -93,7 +93,6 @@
     <Compile Include="IModelDBService.cs" />
     <Compile Include="Input\EmulatedInput.cs" />
     <Compile Include="Objects\IHoldeableItem.cs" />
-    <Compile Include="Objects\IWeapon.cs" />
     <Compile Include="Objects\ObjectFactories.cs" />
     <Compile Include="Interface\TWidgetScreen.cs" />
     <Compile Include="Objects\MinimalPhysicalObject.cs" />

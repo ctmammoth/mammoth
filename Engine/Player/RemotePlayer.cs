@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using StillDesign.PhysX;
 
 using Mammoth.Engine.Physics;
+using Mammoth.Engine.Objects;
 
 namespace Mammoth.Engine
 {
@@ -73,7 +74,7 @@ namespace Mammoth.Engine
         }
 
         #region Properties
-        private IWeapon CurWeapon
+        private Gun CurWeapon
         {
             get;
             set;

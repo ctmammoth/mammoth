@@ -85,7 +85,7 @@ namespace Mammoth.Engine.Objects
     /// <summary>
     /// A simple weapon which shoots Bullets.
     /// </summary>
-    public abstract class Gun : BaseObject, IWeapon, IHoldeableItem, IEncodable
+    public abstract class Gun : BaseObject, IHoldeableItem, IEncodable, IRenderable
     {
         #region Properties
 
@@ -200,8 +200,6 @@ namespace Mammoth.Engine.Objects
             directionPerturber = new Random();
         }
 
-        #region IWeapon Members
-
         public int ShotsLeft()
         {
             return Mag.AmmoRemaining;
@@ -298,8 +296,6 @@ namespace Mammoth.Engine.Objects
                 // Out of magazines
             }
         }
-
-        #endregion
 
         #region BaseObject Members
 

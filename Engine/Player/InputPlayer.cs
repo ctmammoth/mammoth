@@ -47,14 +47,14 @@ namespace Mammoth.Engine
         }
 
         // The armed weapon
-        protected IWeapon CurWeapon
+        protected Gun CurWeapon
         {
             get;
             set;
         }
 
         // The weapons owned by this player
-        protected IWeapon[] Items
+        protected Gun[] Items
         {
             get;
             set;
@@ -84,7 +84,7 @@ namespace Mammoth.Engine
             this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
 
             // Give the player 5 weapons, for now
-            Items = new IWeapon[5];
+            Items = new Gun[5];
             // Give the player a simple gun, for now
             Items[0] = new Revolver(game, this);
             CurWeapon = Items[0];
