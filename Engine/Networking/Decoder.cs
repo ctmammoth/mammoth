@@ -46,6 +46,8 @@ namespace Mammoth.Engine.Networking
         {
             IModelDBService ro = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
 
+            //Console.WriteLine("Receiving item of type " + type + " with id: " + id);
+
             //if (registeredObjects.hasObject(id) && registeredObjects.getObject(id) is IEncodable)
             if (ro.hasObject(id))
                 UpdateObject(id, properties);
@@ -103,7 +105,6 @@ namespace Mammoth.Engine.Networking
                 case "Flag":
                     Flag flag = new Flag(this.Game, Vector3.Zero, 0);
                     flag.Decode(properties);
-                    flag.ID = id;
                     ro.registerObject(flag);
                     Console.WriteLine("Flag received, position: " + flag.Position + ", positionoffset: " + flag.PositionOffset +
                         ", ID = " + id);

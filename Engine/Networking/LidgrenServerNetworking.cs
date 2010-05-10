@@ -231,11 +231,27 @@ namespace Mammoth.Engine.Networking
             // Wait for the client to be fully connected
             while (sender.Status != NetConnectionStatus.Connected) ;
             
-            // Send a ClientID to the new client
+            // Choose a client ID
             int id = _nextID++;
             Console.WriteLine("The value of id: " + id);
             _connections.Add(id, sender);
             _inputStates[id] = new Queue<InputState>();
+
+            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+
+            // Send every encodable in the model database to the new player
+            var encodables = from obj in mdb.AllObjects
+                             where obj is IEncodable
+                             select obj as IEncodable;
+            foreach (IEncodable toSend in encodables)
+            {
+                Console.WriteLine("Initial send of " + ((BaseObject)toSend).getObjectType() + " with ID: " + ((BaseObject)toSend).ID);
+                DataGram message = new DataGram(MessageType.ENCODABLE, ((BaseObject)toSend).getObjectType(),
+                    ((BaseObject)toSend).ID, toSend.Encode(), id, -1, null);
+                sendMessage(message);
+            }
+
+            // Send the client ID to the client
             buffer = _server.CreateBuffer();
             buffer.WriteVariableInt32((int)MessageType.CLIENT_ID);
             buffer.WriteVariableInt32(id);
@@ -243,7 +259,6 @@ namespace Mammoth.Engine.Networking
 
             // Create ProxyInputPlayer to represent the new client and add it to
             // the model database.
-            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
             InputPlayer player = new ProxyInputPlayer(this.Game, id);
             // Give the player object the object ID of the ClientID bitshifted to the front of
             // an integer (i.e. the zero-ith object created by the client).
@@ -252,12 +267,10 @@ namespace Mammoth.Engine.Networking
             player.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
             mdb.registerObject(player);
 
-            // Send every encodable in the model database to the new player
-            var encodables = from obj in mdb.AllObjects
-                                          where obj is IEncodable
-                                          select obj as IEncodable;
-            foreach (IEncodable obj in encodables)
-                sendThing(obj, id);
+            // Send the player to the client
+            DataGram playerMessage = new DataGram(MessageType.ENCODABLE, ((BaseObject)player).getObjectType(),
+                    ((BaseObject)player).ID, player.Encode(), id, -1, null);
+            sendMessage(playerMessage);
         }
 
         /// <summary>
