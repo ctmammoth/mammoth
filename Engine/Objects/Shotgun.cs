@@ -22,7 +22,7 @@ namespace Mammoth.Engine.Objects
 
         protected override double FireRate
         {
-            get { return 0.8; }
+            get { return 0.66667; }
         }
 
         protected override double ReloadTime
@@ -47,7 +47,7 @@ namespace Mammoth.Engine.Objects
 
         protected override string FireSound
         {
-            get { return "ShotgunShot"; }
+            get { return "ShotgunFire"; }
         }
 
         public override string getObjectType()
@@ -63,11 +63,7 @@ namespace Mammoth.Engine.Objects
         /// <param name="shooterID"></param>
         protected override void SpawnBullet(Vector3 position, Quaternion orientation, int shooterID)
         {
-            //Console.WriteLine("Firing shotgun bullets");
-
             IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
-            net.sendEvent("Sound", FireSound);
-
             for (int i = 0; i < NUM_SHOTS; i++)
             {
                 if (Mag.CanFireShot())
@@ -88,6 +84,10 @@ namespace Mammoth.Engine.Objects
                     //Console.WriteLine("Shot a bullet with a " + getObjectType() + "; " + Mag.AmmoRemaining + " bullets left.");
                 }
             }
+            if (Mag.CanFireShot())
+                net.sendEvent("Sound", "ShotgunFireLoad");
+            else
+                net.sendEvent("Sound", FireSound);
         }
 
         protected override Bullet createBullet(Game game, Vector3 position, Quaternion orientation, int shooterID)
