@@ -53,6 +53,7 @@ namespace Mammoth.Engine
             this.ID = id;
             this.Game = game;
             Vector3 pos = new Vector3();
+            this.PositionOffset = new Vector3(0.0f, 0.0f, 0.0f);
             foreach (String attribute in parameters.GetAttributes())
             {
 
@@ -76,18 +77,21 @@ namespace Mammoth.Engine
             }
 
             PhysicsManagerService physics = (PhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
-            this.PositionOffset = new Vector3(0.0f, 0.0f, 0.0f);
+            
 
             ActorDescription boxActorDesc = new ActorDescription();
             boxActorDesc.Shapes.Add(new BoxShapeDescription()
             {
                 Size = new Vector3(dimensions.X, dimensions.Y, dimensions.Z),
-                LocalPosition = localPosition                
+                LocalPosition = localPosition                 
             });
-            boxActorDesc.GlobalPose = Matrix.CreateTranslation(pos);
+            boxActorDesc.GlobalPose = Matrix.CreateTranslation(pos + this.positionOffset);
+            this.positionOffset = new Vector3();
 
             
             this.Actor = physics.CreateActor(boxActorDesc);
+            
+            
             // this.Position = pos;            
             // this.
         }
@@ -118,6 +122,9 @@ namespace Mammoth.Engine
                         break;
                     case "LOCAL_POSITION":
                         HandleLocalPosition(handler);
+                        break;
+                    case "POSITION_OFFSET":
+                        HandlePositionOffset(handler);
                         break;
 
                 }
@@ -207,6 +214,27 @@ namespace Mammoth.Engine
                         break;
                     case "Z":
                         localPosition.Z = (float)parameters.GetDoubleValue(attribute);
+                        break;
+                }
+            }
+        }
+
+        private void HandlePositionOffset(XmlHandler handler)
+        {
+            this.PositionOffset = new Vector3();
+            ObjectParameters parameters = handler.GetAttributes();
+            foreach (String attribute in parameters.GetAttributes())
+            {
+                switch (attribute)
+                {
+                    case "X":
+                        this.positionOffset.X = (float)parameters.GetDoubleValue(attribute);                        
+                        break;
+                    case "Y":
+                        this.positionOffset.Y = (float)parameters.GetDoubleValue(attribute);
+                        break;
+                    case "Z":
+                        this.positionOffset.Z = (float)parameters.GetDoubleValue(attribute);
                         break;
                 }
             }

@@ -25,6 +25,8 @@ namespace Mammoth.Engine
         ActorDescription boxActorDesc;
         PhysicsManagerService physics;
         IModelDBService modelDB;
+        PossibleObjects possible;
+        List<BaseObject> items;
 
         public override string getObjectType()
         {
@@ -34,8 +36,10 @@ namespace Mammoth.Engine
         public Room(int id, Game game)
             : base(game)
         {
+            items = new List<BaseObject>();
             this.ID = id;
             this.Game = game;
+            possible = new PossibleObjects();
             boxActorDesc = new ActorDescription()
             {
                 /*BodyDescription = new BodyDescription()
@@ -49,21 +53,45 @@ namespace Mammoth.Engine
         }
 
 
-        public Byte[] Encode()
+        public byte[] Encode()
         {
-            // TODO: Implement this
-            throw new NotImplementedException();
+            Networking.Encoder tosend = new Networking.Encoder();
+
+            //IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
+            //int myID = ID >> 25;
+            //GameStats = new GameStats(NumKills, NumCaptures, NumDeaths, myID, g);
+
+            //Console.WriteLine("Encoding: " + GameStats.ToString());
+
+            tosend.AddElement("x", x);
+            tosend.AddElement("y", y);
+            tosend.AddElement("z", z);
+            tosend.AddElement("roomType", roomType);
+            tosend.AddElement("items", items);
+            return tosend.Serialize();
         }
 
-        public void Decode (Byte[] data)
+        public void Decode (byte[] data)
         {
-            // TODO: Implement this
-            throw new NotImplementedException();
+            Networking.Encoder props = new Networking.Encoder(data);
+
+            if (props.UpdatesFor("x"))
+                x = (float)props.GetElement("x", x);
+            if (props.UpdatesFor("y"))
+                y = (float)props.GetElement("y", y);
+            if (props.UpdatesFor("z"))
+                z = (float)props.GetElement("z", z);
+            if (props.UpdatesFor("roomType"))
+                roomType = (String)props.GetElement("roomType", roomType);
+            if (props.UpdatesFor("items"))
+                items = (List<BaseObject>)props.GetElement("items", items);
+           
         }
 
         public Room(int id, ObjectParameters parameters, Game game)
             : base(game)
         {
+            possible = new PossibleObjects();
             boxActorDesc = new ActorDescription()
             {
                 /*BodyDescription = new BodyDescription()
@@ -74,6 +102,7 @@ namespace Mammoth.Engine
 
             this.Game = game;
             this.ID = id;
+            items = new List<BaseObject>();
             physics = (PhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
             foreach (String attribute in parameters.GetAttributes()) 
@@ -105,6 +134,7 @@ namespace Mammoth.Engine
             XmlHandler handler = new XmlHandler();
             handler.ChangeFile("rooms.xml");
             handler.GetElement("ROOM", "NAME", attribute);
+            roomType = attribute;
             while (!handler.IsClosingTag("ROOM"))
             {
                 handler.GetNextElement();
@@ -113,6 +143,9 @@ namespace Mammoth.Engine
                 {
                     case "ITEMS":
                         HandleItems(handler);
+                        break;
+                    case "POSSIBLE":
+                        HandlePossible(handler);
                         break;
                     case "PARAMETERS":
                         HandleParameters(handler);
@@ -174,7 +207,55 @@ namespace Mammoth.Engine
 
         private void HandleParameters(XmlHandler handler)
         {
-            // TODO: Handle those parameters
+            handler.GetNextElement();
+            while (!handler.IsClosingTag("PARAMETERS"))
+            {
+                String type = null;
+                ObjectParameters parameters = null;
+                if (handler.GetElementName().Equals("RANGE"))
+                {
+                    parameters = handler.GetAttributes();
+                    type = parameters.GetStringValue("TYPE");
+                    int min = (int) parameters.GetDoubleValue("MIN");
+                    int max = (int)parameters.GetDoubleValue("MAX");
+                    Random random = new Random();
+                    int num = random.Next(max);
+                    //HACK: this is dumb, but it works in practice 
+                    while (num < min)
+                    {
+                        num = random.Next(max);
+                    }
+                    for (int i = 0; i < num; i++)
+                    {
+                        ObjectParameters possibleParams = possible.GetRandomParameter(type);
+                        possibleParams.ReplaceAttribute("X", (possibleParams.GetDoubleValue("X") + this.x).ToString());
+                        possibleParams.ReplaceAttribute("Y", (possibleParams.GetDoubleValue("Y") + this.y).ToString());
+                        possibleParams.ReplaceAttribute("Z", (possibleParams.GetDoubleValue("Z") + this.z).ToString());
+
+                        BaseObject obj = ObjectFactories.CreateObject(possibleParams.GetStringValue("TYPE"), modelDB.getNextOpenID(), possibleParams, this.Game);
+                        items.Add(obj);
+                        modelDB.registerObject(obj);
+
+                    }
+
+                }
+                handler.GetNextElement();
+                
+                
+            }
+        }
+
+        private void HandlePossible(XmlHandler handler)
+        {
+            handler.GetNextElement();
+            while (!handler.IsClosingTag("POSSIBLE"))
+            {                
+                ObjectParameters parameters = handler.GetAttributes();
+                String type = parameters.GetStringValue("Special_Type");
+                possible.AddPossibleObject(type,parameters);
+                handler.GetNextElement();
+            }
+            
         }
 
         public void initialize()
@@ -250,7 +331,7 @@ namespace Mammoth.Engine
                 parameters.AddAttribute("Special_Type", "BRICK");
 
                 
-                if (!(i==0||i==7||i==63||i==56||i==9||i==54||i==53||i==52||i==51))
+                if (!(i==0||i==7||i==63||i==56||i==9||i==54||i==53||i==52||i==51||i==50))
                 {
                     int crateId = modelDB.getNextOpenID();
                     WallBlock crate1 = (WallBlock)ObjectFactories.CreateObject("WallBlock", crateId, parameters, this.Game);
@@ -279,6 +360,47 @@ namespace Mammoth.Engine
             }
 
         }
+
+        private class PossibleObjects
+        {
+            private Dictionary<String, List<ObjectParameters>> typeLists;            
+            List<ObjectParameters> lis = new List<ObjectParameters>();
+
+            public PossibleObjects()
+            {
+                typeLists = new Dictionary<string, List<ObjectParameters>>();
+
+            }
+            
+            public void AddPossibleObject(String type, ObjectParameters parameters) 
+            {
+                if (!typeLists.ContainsKey(type)) 
+                {
+                    typeLists.Add(type,new List<ObjectParameters>());
+                }
+                List<ObjectParameters> parameterList = new List<ObjectParameters>();
+                typeLists.TryGetValue(type, out parameterList);
+                parameterList.Add(parameters); 
+               
+            }
+
+            public ObjectParameters GetRandomParameter(String type)
+            {
+                List<ObjectParameters> parameterList = new List<ObjectParameters>();
+                typeLists.TryGetValue(type, out parameterList);
+                int size = parameterList.Count();
+                Random random = new Random();
+                int index = random.Next(size);
+                ObjectParameters result = parameterList.ElementAt(index);
+                parameterList.RemoveAt(index);
+                return result;
+            }
+
+
+
+
+        }
+
 
 
 
