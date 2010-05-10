@@ -103,12 +103,28 @@ namespace Mammoth
 
             IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
 
+            //create baseWidget
+            baseWidget = new TWidget(this.Game)
+                {
+                    Size = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2),
+                    Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2)
+                };
+
             // Add the crosshairs to the game.
-            baseWidget = new TImage(this.Game, r.LoadTexture("cross"))
+            TImage cross = new TImage(this.Game, r.LoadTexture("cross"))
+             {
+                 Size = new Vector2(50, 50),
+                 Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2)
+             };
+            baseWidget.Add(cross);
+
+            // Add the timer
+            TGameTimeWidget timer = new TGameTimeWidget(this.Game)
             {
                 Size = new Vector2(50, 50),
-                Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2)
+                Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, 25)
             };
+            baseWidget.Add(timer);
 
             // LET'S TRY ADDING A ROOM!!!
             ObjectParameters stairRoom = new ObjectParameters();
