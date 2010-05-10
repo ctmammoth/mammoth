@@ -54,6 +54,7 @@ namespace Mammoth.Engine.Audio
             _sounds.Add("Grunt", manager.Load<SoundEffect>("sounds/grunt"));
             _sounds.Add("Scream", manager.Load<SoundEffect>("sounds/scream"));
             _sounds.Add("Heartbeat", manager.Load<SoundEffect>("sounds/heartbeat"));
+            _volumes.Add("Heartbeat", 1.0f);
             _sounds.Add("GunEmpty", manager.Load<SoundEffect>("sounds/gunempty"));
         }
 

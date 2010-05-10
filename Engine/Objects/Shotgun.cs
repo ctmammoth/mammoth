@@ -12,7 +12,7 @@ namespace Mammoth.Engine.Objects
 {
     class Shotgun : Gun
     {
-        private const int NUM_SHOTS = 5;
+        private const int NUM_SHOTS = 12;
 
         public Shotgun(Game game, Player player)
             : base(game, player)
@@ -22,7 +22,7 @@ namespace Mammoth.Engine.Objects
 
         protected override double FireRate
         {
-            get { return 2.0; }
+            get { return 0.8; }
         }
 
         protected override double ReloadTime
@@ -32,12 +32,12 @@ namespace Mammoth.Engine.Objects
 
         protected override float Inaccuracy
         {
-            get { return 0.025f; }
+            get { return 0.06f; }
         }
 
         protected override int MagazineCapacity
         {
-            get { return 30; }
+            get { return 4 * NUM_SHOTS; }
         }
 
         protected override int NumMagazines
