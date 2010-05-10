@@ -78,7 +78,7 @@ namespace Mammoth.Engine
                 // This might not be quite correct?
                 position += forward;
 
-                CurWeapon.Shoot(position, this.Orientation, ID, gameTime);
+                CurWeapon.Shoot(position, this.HeadOrient, ID, gameTime);
             }
         }
 
