@@ -15,10 +15,16 @@ namespace Mammoth.Engine.Objects
 
         }
 
+        #region BaseObject Properties
+
         public override string getObjectType()
         {
             return "SMGBullet";
         }
+        
+        #endregion
+
+        #region Bullet Properties
 
         public override float Speed
         {
@@ -31,5 +37,7 @@ namespace Mammoth.Engine.Objects
             get { return 4.0f; }
             protected set { }
         }
+        
+        #endregion
     }
 }

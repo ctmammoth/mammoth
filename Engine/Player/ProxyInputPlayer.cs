@@ -68,27 +68,20 @@ namespace Mammoth.Engine
 
             IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
 
-            foreach (InputState state in input.States) 
-            {
-                if ((state.KeyPressed(InputType.SpawnRoom)))
-                {
-                    ObjectParameters stairRoom = new ObjectParameters();
-                    stairRoom.AddAttribute("X", "-50");
-                    stairRoom.AddAttribute("Y", "-2");
-                    stairRoom.AddAttribute("Z", "-50");
-                    stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
-                    Room room = new Room(modelDB.getNextOpenID(), stairRoom, this.Game);
-                    Room.BuildRoomOnServer(stairRoom, this.Game);
-                }
-            }
-
-           
-
-                
-
             //Once the player has been updated server side, send it to clients to display as RemotePlayer's
             IServerNetworking network = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
             network.sendThing(this);
+        }
+
+        protected override void SpawnRoom(Vector3 roomPos)
+        {
+            ObjectParameters stairRoom = new ObjectParameters();
+            stairRoom.AddAttribute("X", "-50");
+            stairRoom.AddAttribute("Y", "-2");
+            stairRoom.AddAttribute("Z", "-50");
+            stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
+            Room room = new Room(modelDB.getNextOpenID(), stairRoom, this.Game);
+            Room.BuildRoomOnServer(stairRoom, this.Game);
         }
 
         /// <summary>

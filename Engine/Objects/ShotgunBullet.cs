@@ -11,14 +11,18 @@ namespace Mammoth.Engine.Objects
     {
         public ShotgunBullet(Game game, Vector3 position, Quaternion orient, int creator)
             : base(game, position, orient, creator)
-        {
+        { }
 
-        }
+        #region BaseObject Properties
 
         public override string getObjectType()
         {
             return "ShotgunBullet";
         }
+
+        #endregion
+
+        #region Bullet Properties
 
         public override float Speed
         {
@@ -31,5 +35,7 @@ namespace Mammoth.Engine.Objects
             get { return 10.0f; }
             protected set { }
         }
+
+        #endregion
     }
 }
