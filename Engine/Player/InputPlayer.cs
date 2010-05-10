@@ -334,7 +334,8 @@ namespace Mammoth.Engine
             base.Die();
             Console.WriteLine("Player " + ID + " died.");
 
-            this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
+            //this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
+            this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), this.Orientation);
         }
 
         #region IEncodable Members
