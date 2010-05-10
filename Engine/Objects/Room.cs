@@ -26,7 +26,7 @@ namespace Mammoth.Engine
         PhysicsManagerService physics;
         IModelDBService modelDB;
         PossibleObjects possible;
-        List<BaseObject> items;
+        List<IEncodable> items;
 
         public override string getObjectType()
         {
@@ -36,7 +36,7 @@ namespace Mammoth.Engine
         public Room(int id, Game game)
             : base(game)
         {
-            items = new List<BaseObject>();
+            items = new List<IEncodable>();
             this.ID = id;
             this.Game = game;
             possible = new PossibleObjects();
@@ -84,7 +84,7 @@ namespace Mammoth.Engine
             if (props.UpdatesFor("roomType"))
                 roomType = (String)props.GetElement("roomType", roomType);
             if (props.UpdatesFor("items"))
-                items = (List<BaseObject>)props.GetElement("items", items);
+                items = (List<IEncodable>)props.GetElement("items", items);
            
         }
 
@@ -102,7 +102,7 @@ namespace Mammoth.Engine
 
             this.Game = game;
             this.ID = id;
-            items = new List<BaseObject>();
+            items = new List<IEncodable>();
             physics = (PhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
             foreach (String attribute in parameters.GetAttributes()) 
@@ -257,9 +257,11 @@ namespace Mammoth.Engine
                         possibleParams.ReplaceAttribute("Y", (possibleParams.GetDoubleValue("Y") + this.y).ToString());
                         possibleParams.ReplaceAttribute("Z", (possibleParams.GetDoubleValue("Z") + this.z).ToString());
 
-                        BaseObject obj = ObjectFactories.CreateObject(possibleParams.GetStringValue("TYPE"), modelDB.getNextOpenID(), possibleParams, this.Game);
+                        
+
+                        IEncodable obj = (IEncodable) ObjectFactories.CreateObject(possibleParams.GetStringValue("TYPE"), modelDB.getNextOpenID(), possibleParams, this.Game);
                         items.Add(obj);
-                        modelDB.registerObject(obj);
+                        modelDB.registerObject((BaseObject)obj);
 
                     }
 
