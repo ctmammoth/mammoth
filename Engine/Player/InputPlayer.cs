@@ -330,6 +330,7 @@ namespace Mammoth.Engine
 
             tosend.AddElement("Position", Position);
             tosend.AddElement("Orientation", Orientation);
+            tosend.AddElement("HeadOrient", HeadOrient);
             tosend.AddElement("Velocity", Velocity);
             tosend.AddElement("Health", Health);
             tosend.AddElement("GameStats", GameStats);
@@ -347,6 +348,8 @@ namespace Mammoth.Engine
                 Position = (Vector3)props.GetElement("Position", Position);
             if (props.UpdatesFor("Orientation"))
                 Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
+            if (props.UpdatesFor("HeadOrient"))
+                HeadOrient = (Quaternion)props.GetElement("HeadOrient", HeadOrient);
             if (props.UpdatesFor("Velocity"))
                 Velocity = (Vector3)props.GetElement("Velocity", Velocity);
             if (props.UpdatesFor("Health"))

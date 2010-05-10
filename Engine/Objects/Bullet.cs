@@ -104,25 +104,25 @@ namespace Mammoth.Engine
             // its actor has userdata
             if (rayHit.Shape != null)
             {
-                Console.WriteLine("Bullet with : " + this.ID + " ray hit something with a shape of type " + rayHit.Shape.ToString());
+                //Console.WriteLine("Bullet with : " + this.ID + " ray hit something with a shape of type " + rayHit.Shape.ToString());
                 // Get the PhysicalObject that owns the Shape hit by the raycast
                 PhysicalObject objHit = ((PhysicalObject)rayHit.Shape.Actor.UserData);
 
                 if (objHit != null)
                 {
-                    Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something with userdata of type: " + objHit.getObjectType());
+                    //Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something with userdata of type: " + objHit.getObjectType());
                     // Make sure the collision is within the distance we've moved during this timestep.
                     if (rayHit.Distance <= distanceMoved)
                     {
-                        Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something in range");
+                        //Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something in range");
                         // Make sure the object is damageable.
                         if (objHit.ID >> 25 != Creator)
                         {
-                            Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something that isn't its creator and isn't a bullet");
+                            //Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something that isn't its creator and isn't a bullet");
                             // Make sure the creator isn't the one being hit.
                             if (objHit is IDamageable)
                             {
-                                Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something damagable in range");
+                                //Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something damagable in range");
                                 Console.WriteLine("Damaging a mofo of type " + objHit.getObjectType());
                                 ((IDamageable)objHit).TakeDamage(this.GetDamage(), this);
                             }

@@ -34,10 +34,12 @@ namespace Mammoth.Engine.Objects
         /// shot when no rounds are remaining.</returns>
         public int FireShot()
         {
+            Console.WriteLine("In FireShot");
             if (AmmoRemaining == 0)
                 return 0;
 
             AmmoRemaining = AmmoRemaining - 1;
+            Console.WriteLine("Remaining ammo: " + AmmoRemaining);
             return AmmoRemaining;
         }
 
@@ -214,7 +216,7 @@ namespace Mammoth.Engine.Objects
         {
             // Make sure a shot can be fired
             double curTime = time.TotalRealTime.TotalMilliseconds;
-            if (Mag.FireShot() > 0)
+            if (Mag.FireShot() >= 0)
             {
                 // Check whether it's too soon to fire
                 if ((curTime - _lastFiredTime) >= (1000.0 / FireRate) && _lastReloadTime < 0)
