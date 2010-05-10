@@ -182,7 +182,7 @@ namespace Mammoth.Engine.Objects
             this.Position = (Vector3)e.GetElement("Position", Position);
             this.PositionOffset = (Vector3)e.GetElement("PositionOffset", PositionOffset);
 
-            Console.WriteLine("Decoding a flag with id: " + this.ID + " and pos: " + this.Position);
+            // Console.WriteLine("Decoding a flag with id: " + this.ID + " and pos: " + this.Position);
         }
 
         #endregion
