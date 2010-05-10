@@ -65,7 +65,6 @@ namespace Mammoth.Engine
 
         public virtual void Die()
         {
-            Console.WriteLine("I died");
             this.NumDeaths++;
         }
 
