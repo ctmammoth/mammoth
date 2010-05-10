@@ -263,11 +263,13 @@ namespace Mammoth.Engine
             base.Update(gameTime);
 
             if (SendCounter == FreqSent)
-                SendCounter = 0;
-            else
             {
                 IServerNetworking sn = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
                 sn.sendThing(new GameStats(this));
+                SendCounter = 0;
+            }
+            else
+            {
                 SendCounter++;
             }
         }
