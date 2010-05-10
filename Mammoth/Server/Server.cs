@@ -78,12 +78,12 @@ namespace Mammoth.Server
             IServerNetworking server = (IServerNetworking)this.Services.GetService(typeof(IServerNetworking));
 
             // LET'S TRY ADDING A FLAG!!!
-            Flag flag1 = new Flag(this.Game, new Vector3(-45.0f, -23.0f, -45.0f), 1);
+            Flag flag1 = new Flag(this, new Vector3(-45.0f, -23.0f, -45.0f), 1);
             flag1.ID = modelDB.getNextOpenID();
             modelDB.registerObject(flag1);
             server.sendThing(flag1);
             // LET'S TRY ADDING A FLAG!!!
-            Flag flag2 = new Flag(this.Game, new Vector3(-65.0f, -23.0f, -45.0f), 2);
+            Flag flag2 = new Flag(this, new Vector3(-65.0f, -23.0f, -45.0f), 2);
             flag2.ID = modelDB.getNextOpenID();
             modelDB.registerObject(flag2);
             server.sendThing(flag2);
