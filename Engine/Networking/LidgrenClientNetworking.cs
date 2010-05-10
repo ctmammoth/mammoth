@@ -9,6 +9,7 @@ using Lidgren.Network;
 
 using Mammoth.Engine.Input;
 using Mammoth.Engine.Audio;
+using Mammoth;
 
 namespace Mammoth.Engine.Networking
 {
@@ -38,6 +39,12 @@ namespace Mammoth.Engine.Networking
             NetConfiguration config = new NetConfiguration("Mammoth");
             _client = new NetClient(config);
         }
+
+        #region Events
+
+        public event EventHandler EndGameEvent;
+
+        #endregion
 
         #region IClientNetworking Members
 
@@ -138,7 +145,8 @@ namespace Mammoth.Engine.Networking
                 case NetConnectionStatus.Disconnecting:
                     // If the server disconnected, shut down the client
                     Console.WriteLine("The server has disconnected.");
-                    _client.Shutdown("The server disconnected.");
+                    if (this.EndGameEvent != null)
+                        this.EndGameEvent(this, new EventArgs());
                     break;
             }
         }
@@ -187,26 +195,39 @@ namespace Mammoth.Engine.Networking
                     }
                     break;
                 case MessageType.EVENT:
-                    switch (buffer.ReadString())
-                    {
-                        case "Sound":
-                            string toPlay = buffer.ReadString();
-                            IAudioService audio = (IAudioService)this.Game.Services.GetService(typeof(IAudioService));
-                            audio.playSound(toPlay);
-                            break;
-                        case "PlayerLeft":
-                            int playerID = int.Parse(buffer.ReadString()) << 25;
-                            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-                            if (mdb.hasObject(playerID))
-                                mdb.getObject(playerID).IsAlive = false;
-                            break;
-                        case "Death":
-                            int playerObjID = int.Parse(buffer.ReadString()) << 25;
-                            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-                            if (modelDB.hasObject(playerObjID))
-                                ((Player)modelDB.getObject(playerObjID)).Die();
-                            break;
-                    }
+                    handleEvent(buffer);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Handles an event sent from the server.
+        /// </summary>
+        /// <param name="buffer"></param>
+        private void handleEvent(NetBuffer buffer)
+        {
+            switch (buffer.ReadString())
+            {
+                case "Sound":
+                    string toPlay = buffer.ReadString();
+                    IAudioService audio = (IAudioService)this.Game.Services.GetService(typeof(IAudioService));
+                    audio.playSound(toPlay);
+                    break;
+                case "PlayerLeft":
+                    int playerID = int.Parse(buffer.ReadString()) << 25;
+                    IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+                    if (mdb.hasObject(playerID))
+                        mdb.getObject(playerID).IsAlive = false;
+                    break;
+                case "Death":
+                    int playerObjID = int.Parse(buffer.ReadString()) << 25;
+                    IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+                    if (modelDB.hasObject(playerObjID))
+                        ((Player)modelDB.getObject(playerObjID)).Die();
+                    break;
+                case "EndGame":
+                    if (this.EndGameEvent != null)
+                        this.EndGameEvent(this, new EventArgs());
                     break;
             }
         }

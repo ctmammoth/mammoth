@@ -61,6 +61,7 @@ namespace Mammoth
             // Join a game.
             IClientNetworking net = (IClientNetworking)this.Game.Services.GetService(typeof(INetworkingService));
             net.joinGame();
+            net.EndGameEvent += new EventHandler(net_EndGameEvent);
 
             // Create the local player and add it to the ModelDB.
             this.LocalPlayer = new LocalInputPlayer(this.Game, net.ClientID);
@@ -289,6 +290,12 @@ namespace Mammoth
             audio.stopSound("Heartbeat");
             audio.stopSound("Ambient");
             audio.playMusic("Main_Menu");
+        }
+
+        void net_EndGameEvent(object sender, EventArgs e)
+        {
+            // TODO: game over screen?
+            this.IsExiting = true;
         }
 
         #endregion

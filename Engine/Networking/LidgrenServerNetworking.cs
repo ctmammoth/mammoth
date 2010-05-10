@@ -224,7 +224,15 @@ namespace Mammoth.Engine.Networking
         /// <param name="sender"></param>
         private void handlePlayerJoin(NetBuffer buffer, NetConnection sender)
         {
-            sender.Approve();
+            try
+            {
+                sender.Approve();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failure to join. Please try again.");
+                return;
+            }
             // Wait for the client to be fully connected
             while (sender.Status != NetConnectionStatus.Connected) ;
             
@@ -363,7 +371,13 @@ namespace Mammoth.Engine.Networking
         /// </summary>
         public void endGame()
         {
-            _server.Shutdown("Game ended.");
+            sendEvent("EndGame", "EndGame");
+            _server.Shutdown("Game ended");
+            _connections.Clear();
+            _inputStates.Clear();
+            _nextID = 1;
+            _toSend.Clear();
+            createSession();
         }
 
         /// <summary>

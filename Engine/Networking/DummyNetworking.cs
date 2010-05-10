@@ -88,6 +88,8 @@ namespace Mammoth.Engine.Networking
         }
 
         #endregion
+
+        public event EventHandler EndGameEvent;
     }
 
     public class DummyServerNetworking : DummyNetworking, IServerNetworking

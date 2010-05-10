@@ -48,6 +48,7 @@ namespace Mammoth.Engine.Networking
     public interface IClientNetworking : INetworkingService
     {
         void sendThing(IEncodable toSend);
+        event EventHandler EndGameEvent;
         void joinGame();
         void quitGame();
     }
