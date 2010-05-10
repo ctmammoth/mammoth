@@ -196,8 +196,6 @@ namespace Mammoth.Engine
             tosend.AddElement("GameStats", GameStats);
             tosend.AddElement("GunType", ((BaseObject)CurWeapon).getObjectType());
             tosend.AddElement("Gun", CurWeapon);
-            if (Flag != null)
-                tosend.AddElement("Flag", Flag);
 
             return tosend.Serialize();
         }

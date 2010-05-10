@@ -160,6 +160,8 @@ namespace Mammoth.Engine.Objects
 
         public byte[] Encode()
         {
+            Console.WriteLine("Encoding a flag.");
+
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder();
 
             e.AddElement("Position", Position);

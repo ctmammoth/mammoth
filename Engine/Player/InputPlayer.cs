@@ -357,6 +357,11 @@ namespace Mammoth.Engine
             //tosend.AddElement("GameStats", GameStats);
             tosend.AddElement("GunType", ((BaseObject)CurWeapon).getObjectType());
             tosend.AddElement("Gun", CurWeapon);
+            if (Flag != null)
+            {
+                Console.WriteLine("Player is encoding a flag.");
+                tosend.AddElement("Flag", Flag);
+            }
 
             return tosend.Serialize();
         }
@@ -375,6 +380,20 @@ namespace Mammoth.Engine
                 Velocity = (Vector3)props.GetElement("Velocity", Velocity);
             if (props.UpdatesFor("Health"))
                 Health = (float)props.GetElement("Health", Health);
+            if (props.UpdatesFor("Flag"))
+            {
+                if (Flag != null)
+                {
+                    Console.WriteLine("Player has a flag and is decoding updates.");
+                    props.UpdateIEncodable("Flag", Flag);
+                }
+                else
+                {
+                    Console.WriteLine("Player doesn't have a flag and is decoding updates.");
+                    Flag = new Flag(this.Game, Vector3.Zero, 0);
+                    props.UpdateIEncodable("Flag", Flag);
+                }
+            }
             //if (props.UpdatesFor("GameStats"))
                 //props.UpdateIEncodable("GameStats", GameStats);
 

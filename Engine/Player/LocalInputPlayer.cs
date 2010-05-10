@@ -67,14 +67,6 @@ namespace Mammoth.Engine
                 Velocity = (Vector3)props.GetElement("Velocity", Velocity);
             if (props.UpdatesFor("Health"))
                 Health = (float)props.GetElement("Health", Health);
-            if (props.UpdatesFor("Flag"))
-                if (Flag != null)
-                    props.UpdateIEncodable("Flag", Flag);
-                else
-                {
-                    Flag = new Flag(this.Game, Vector3.Zero, 0);
-                    props.UpdateIEncodable("Flag", Flag);
-                }
 
             //Reroute GameStats update to IGameStats
             if (props.UpdatesFor("GameStats"))
