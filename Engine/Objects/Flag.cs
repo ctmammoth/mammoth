@@ -4,25 +4,31 @@ using System.Linq;
 using System.Text;
 
 using Microsoft.Xna.Framework;
-using StillDesign.PhysX;
-using Mammoth.Engine.Physics;
 using Microsoft.Xna.Framework.Graphics;
+
+using StillDesign.PhysX;
+
+using Mammoth.Engine.Physics;
+using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine.Objects
 {
     /// <summary>
     /// Represents a flag that can be picked up by a player.
     /// </summary>
-    public class Flag : PhysicalObject, IHoldableItem, IRenderable
+    public class Flag : PhysicalObject, IHoldableItem, IRenderable, IEncodable
     {
-        public Flag(Game game, Vector3 initialPosition)
+        public Flag(Game game, Vector3 initialPosition, int team)
             : base(game)
         {
+            // Set this flag's team
+            this.Team = team;
+
             // Give this a sphere shape trigger
             SphereShapeDescription trigShapeDesc = new SphereShapeDescription()
             {
                 Radius = 7.0f,
-                Flags = ShapeFlag.TriggerEnable,
+                Flags = ShapeFlag.TriggerOnEnter,
                 LocalPosition = Vector3.Zero
             };
 
@@ -56,17 +62,16 @@ namespace Mammoth.Engine.Objects
             // TODO: get a flag model or something
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
             this.Model3D = r.LoadModel("banner01");
-
-            // HACK HACK HACK
-            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            this.ID = mdb.getNextOpenID();
-            mdb.registerObject(this);
         }
 
-        public void GetDropped(Vector3 position)
+        /// <summary>
+        /// Causes the flag to be dropped by the owner at its last position.
+        /// </summary>
+        public void GetDropped()
         {
-            this.Position = position;
             this.Owner = null;
+            // Draw the flag on the ground
+            this.PositionOffset = Vector3.Zero;
         }
 
         public override string getObjectType()
@@ -88,12 +93,8 @@ namespace Mammoth.Engine.Objects
             base.Draw(gameTime);
 
             Renderer renderer = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
-
             // Draw the flag
-            if (Owner == null)
-                renderer.DrawRenderable(this);
-            else
-                Console.WriteLine("I have an owner!");
+            renderer.DrawRenderable(this);
         }
 
         #region Properties
@@ -102,7 +103,11 @@ namespace Mammoth.Engine.Objects
         {
             get
             {
-                return Vector3.Zero;
+                if (Owner == null)
+                    return Vector3.Zero;
+                else
+                    // Draw it above the player's head
+                    return new Vector3(0.0f, Owner.Height + 4.0f, 0.0f);
             }
         }
 
@@ -133,5 +138,28 @@ namespace Mammoth.Engine.Objects
 
         #endregion
 
+        #region IEncodable Members
+
+        public byte[] Encode()
+        {
+            Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder();
+
+            e.AddElement("Position", Position);
+            e.AddElement("PositionOffset", PositionOffset);
+
+            return e.Serialize();
+        }
+
+        public void Decode(byte[] serialized)
+        {
+            Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder(serialized);
+
+            Console.WriteLine("Decoding a flag...");
+
+            Position = (Vector3)e.GetElement("Position", Position);
+            PositionOffset = (Vector3)e.GetElement("PositionOffset", PositionOffset);
+        }
+
+        #endregion
     }
 }

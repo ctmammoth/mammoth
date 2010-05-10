@@ -147,6 +147,48 @@ namespace Mammoth.Engine
             }
         }
 
+        public override void Die()
+        {
+            base.Die();
+
+            // Drop the flag being carried
+            if (Flag != null)
+            {
+                // Keep a reference to the flag that's being dropped
+                Flag droppedFlag = this.Flag;
+
+                // Drop the Flag
+                Flag.GetDropped();
+
+                IServerNetworking server = (IServerNetworking)Game.Services.GetService(typeof(IServerNetworking));
+                // Send the dropped Flag
+                server.sendThing(this.Flag);
+            }
+        }
+
+        public override void RespondToTrigger(PhysicalObject obj)
+        {
+            Console.WriteLine("LocalPlayer is responding to a trigger.");
+            Console.WriteLine("LocalPlayer's position: " + Position);
+            Console.WriteLine("Trigger's position: " + obj.Position);
+
+            // If a Flag was triggered, pick it up
+            if (obj is Objects.Flag)
+                if (Flag == null)
+                {
+                    // TODO: only pick up flags not owned by your team
+                    Flag = (Objects.Flag)obj;
+                    Flag.Owner = this;
+                    Console.WriteLine("LocalPlayer picked up a flag!");
+                }
+                else
+                {
+                    Console.WriteLine("Dropping off a carried flag at another flag!");
+                    Flag.GetDropped();
+                    this.Flag = null;
+                }
+        }
+
         #region IEncodable Members
 
         public override byte[] Encode()
@@ -167,6 +209,8 @@ namespace Mammoth.Engine
             tosend.AddElement("GameStats", GameStats);
             tosend.AddElement("GunType", ((BaseObject)CurWeapon).getObjectType());
             tosend.AddElement("Gun", CurWeapon);
+            if (Flag != null)
+                tosend.AddElement("Flag", Flag);
 
             return tosend.Serialize();
         }

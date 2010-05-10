@@ -100,6 +100,15 @@ namespace Mammoth.Engine.Networking
                         ", ID = " + id);
                 break;
 
+                case "Flag":
+                    Flag flag = new Flag(this.Game, Vector3.Zero, 0);
+                    flag.Decode(properties);
+                    flag.ID = id;
+                    ro.registerObject(flag);
+                    Console.WriteLine("Flag received, position: " + flag.Position + ", positionoffset: " + flag.PositionOffset +
+                        ", ID = " + id);
+                break;
+
                 default:
                 Console.WriteLine("Object type was not recognized");
                 break;
