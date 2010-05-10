@@ -35,7 +35,7 @@ namespace Mammoth.Engine.Objects
             // Placate PhysX by giving it a real shape
             CapsuleShapeDescription cDesc = new CapsuleShapeDescription()
             {
-                Height = 6.0f,
+                Height = 3.0f,
                 Radius = 1.0f,
                 LocalPosition = Vector3.Zero
             };
@@ -166,7 +166,7 @@ namespace Mammoth.Engine.Objects
 
                 if (value == null)
                     // If there is now no owner, the model should be drawn on the ground.
-                    posOffset = Vector3.Zero;
+                    posOffset = new Vector3(0.0f, -2.0f, 0.0f);
                 else
                     // Otherwise draw the flag above the owner's head.
                     posOffset = new Vector3(0.0f, Owner.Height + 4.0f, 0.0f);

@@ -198,6 +198,8 @@ namespace Mammoth.Engine
                         // Otherwise drop the Flag being carried if the Flag just encountered is your team's flag
                         // TODO: make sure the Flag is owned by your team and located at your spawn point
                         Console.WriteLine("Dropping off a carried flag at another flag!");
+                        GameLogic g = (GameLogic)this.Game.Services.GetService(typeof(GameLogic));
+                        g.AwardCapture(this.ClientID);
                         Flag.GetDropped();
                         this.Flag = null;
                     }
