@@ -39,6 +39,11 @@ namespace Mammoth.Engine.Input
 
         #endregion
 
+        public String getObjectType()
+        {
+            return "InputState";
+        }
+
         public InputState()
         {
             _curState = InputType.None;

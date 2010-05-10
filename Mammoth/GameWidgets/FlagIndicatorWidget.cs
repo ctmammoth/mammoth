@@ -50,8 +50,12 @@ namespace Mammoth.GameWidgets
                 UpdateFlagIndicator();
                 if (Old_HasFlag != HasFlag)
                 {
-                    this.BgImage = r.LoadTexture("flag");
+                    if(HasFlag)
+                        this.BgImage = r.LoadTexture("flag");
+                    else
+                        this.BgImage = null;
                 }
+                    
             }
 
 
