@@ -104,11 +104,11 @@ namespace Mammoth.Engine
                             if (objHit is IDamageable)
                             {
                                 //Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something damagable in range");
-                                Console.WriteLine("Damaging a mofo of type " + objHit.getObjectType());
+                                //Console.WriteLine("Damaging a mofo of type " + objHit.getObjectType());
                                 ((IDamageable)objHit).TakeDamage(this.GetDamage(), this);
                             }
 
-                            Console.WriteLine("Bullet with ID: " + this.ID + " being removed");
+                            //Console.WriteLine("Bullet with ID: " + this.ID + " being removed");
 
                             // Have the bullet get removed at the next update step.
                             this.IsAlive = false;
@@ -152,7 +152,7 @@ namespace Mammoth.Engine
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder(serialized);
 
-            Console.WriteLine("Decoding a bullet...");
+            //Console.WriteLine("Decoding a bullet...");
 
             Position = (Vector3)e.GetElement("Position", Position);
             Orientation = (Quaternion)e.GetElement("Orientation", Orientation);
@@ -160,8 +160,8 @@ namespace Mammoth.Engine
             Speed = (float)e.GetElement("Speed", Speed);
             Creator = (int)e.GetElement("Creator", Creator);
 
-            Console.WriteLine("Bullet Position received: " + Position);
-            Console.WriteLine("Bullet Orientation received: " + Orientation);
+            //Console.WriteLine("Bullet Position received: " + Position);
+            //Console.WriteLine("Bullet Orientation received: " + Orientation);
         }
         #endregion
 
