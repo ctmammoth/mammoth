@@ -114,6 +114,7 @@
     <Compile Include="Diagrams\Client Subsystems.cs" />
     <Compile Include="GameWidgets\FlagIndicatorWidget.cs" />
     <Compile Include="GameWidgets\GunWidget.cs" />
+    <Compile Include="Screens\EndScreen.cs" />
     <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="Screens\MainMenuScreen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
