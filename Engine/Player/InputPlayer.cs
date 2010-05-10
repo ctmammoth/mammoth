@@ -234,7 +234,7 @@ namespace Mammoth.Engine
                 if (input.KeyPressed(InputType.Weapon3))
                     this.SwitchWeapon(3);
 
-                if ((state.KeyPressed(InputType.SpawnRoom)))
+                if ((input.KeyPressed(InputType.SpawnRoom)))
                     this.SpawnRoom(Vector3.Zero);
 
                 // Move the player's controller based on its velocity.

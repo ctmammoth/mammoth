@@ -66,8 +66,6 @@ namespace Mammoth.Engine
             // Update player using emulated input state.
             base.Update(gameTime);
 
-            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-
             //Once the player has been updated server side, send it to clients to display as RemotePlayer's
             IServerNetworking network = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
             network.sendThing(this);
@@ -75,6 +73,10 @@ namespace Mammoth.Engine
 
         protected override void SpawnRoom(Vector3 roomPos)
         {
+            Console.WriteLine("ProxyInputPlayer is spawning a room.");
+
+            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+
             ObjectParameters stairRoom = new ObjectParameters();
             stairRoom.AddAttribute("X", "-50");
             stairRoom.AddAttribute("Y", "-2");
