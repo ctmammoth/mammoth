@@ -116,24 +116,25 @@ namespace Mammoth.Engine
                     {
                         Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something in range");
                         // Make sure the object is damageable.
-                        if (objHit is IDamageable)
+                        if (objHit.ID >> 25 != Creator && !objHit.getObjectType().Equals("Bullet"))
                         {
-                            Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something damagable in range");
+                            Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something that isn't its creator and isn't a bullet");
                             // Make sure the creator isn't the one being hit.
-                            if (objHit.ID >> 25 != Creator && !objHit.getObjectType().Equals("Bullet"))
+                            if (objHit is IDamageable)
                             {
-                                Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something that isn't its creator");
+                                Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something damagable in range");
                                 Console.WriteLine("Damaging a mofo of type " + objHit.getObjectType());
                                 ((IDamageable)objHit).TakeDamage(this.GetDamage(), this);
                             }
+
+                            Console.WriteLine("Bullet with ID: " + this.ID + " being removed");
+
+                            // Have the bullet get removed at the next update step.
+                            this.IsAlive = false;
+
+                            // We collided with something legit, so let's get out of here.
+                            return;
                         }
-                        Console.WriteLine("Bullet with ID: " + this.ID + " being removed");
-
-                        // Have the bullet get removed at the next update step.
-                        this.IsAlive = false;
-
-                        // We collided with something legit, so let's get out of here.
-                        return;
                     }
                 }
             }
