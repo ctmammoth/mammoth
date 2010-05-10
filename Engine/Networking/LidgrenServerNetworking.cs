@@ -346,7 +346,7 @@ namespace Mammoth.Engine.Networking
         public Queue<InputState> getInputStateQueue(int playerID)
         {
             if (_inputStates[playerID] == null)
-                return;
+                return null;
             return _inputStates[playerID];
         }
 
