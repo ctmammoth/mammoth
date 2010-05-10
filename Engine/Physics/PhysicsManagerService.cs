@@ -109,6 +109,9 @@ namespace Mammoth.Engine.Physics
             }
         }
 
+        /// <summary>
+        /// This class provides OnTrigger, a method which is called whenever an object triggers another object.
+        /// </summary>
         private class TriggerReporter : UserTriggerReport
         {
             private PhysicsManagerService owner;
@@ -118,6 +121,12 @@ namespace Mammoth.Engine.Physics
                 this.owner = owner;
             }
 
+            /// <summary>
+            /// Called when a trigger event occurs.
+            /// </summary>
+            /// <param name="triggerShape">The shape with the trigger.</param>
+            /// <param name="otherShape">The shape that activated the trigger.</param>
+            /// <param name="status">The trigger flags.</param>
             public override void OnTrigger(Shape triggerShape, Shape otherShape, TriggerFlag status)
             {
                 //Console.WriteLine("Something was triggered!");
@@ -141,8 +150,8 @@ namespace Mammoth.Engine.Physics
         /// <summary>
         /// Collides a pair of objects with each other
         /// </summary>
-        /// <param name="ActorA"></param>
-        /// <param name="ActorB"></param>
+        /// <param name="ActorA">One of the actors.</param>
+        /// <param name="ActorB">The other actor.</param>
         private void CollidePair(Actor ActorA, Actor ActorB)
         {
             // Collide the objects with each other: make sure ActorA is not null and has userdata
@@ -150,28 +159,16 @@ namespace Mammoth.Engine.Physics
             {
                 // Make sure ActorB is not null and has userdata
                 if (ActorB != null && ActorB.UserData != null)
-                {
-                    ((PhysicalObject)ActorA.UserData).CollideWith(
-                        (PhysicalObject)ActorB.UserData);
-                    Console.WriteLine("A = " + ((PhysicalObject)ActorA.UserData).getObjectType());
-                }
+                    ((PhysicalObject)ActorA.UserData).CollideWith((PhysicalObject)ActorB.UserData);
             }
-            else
-                Console.WriteLine("ActorA has no data or is null");
 
             // Make sure ActorB is not null and has userdata
             if (ActorB != null && ActorB.UserData != null)
             {
                 // Make sure ActorA is not null and has userdata
                 if (ActorA != null && ActorA.UserData != null)
-                {
-                    ((PhysicalObject)ActorB.UserData).CollideWith(
-                    (PhysicalObject)ActorA.UserData);
-                    Console.WriteLine("B = " + ((PhysicalObject)ActorB.UserData).getObjectType());
-                }
+                    ((PhysicalObject)ActorB.UserData).CollideWith((PhysicalObject)ActorA.UserData);
             }
-            else
-                Console.WriteLine("ActorB has no data or is null");
         }
 
         /// <summary>
@@ -362,8 +359,6 @@ namespace Mammoth.Engine.Physics
         /// <summary>
         /// Creates a new scene with this PhysicsManagerService's default scene description.  Also creates 
         /// the ground plane.  If a scene already exists, this method has no effect.
-        /// 
-        /// TODO: figure out where to create the terrain using a heightfield.
         /// </summary>
         public void CreateScene()
         {
@@ -402,8 +397,6 @@ namespace Mammoth.Engine.Physics
         /// <summary>
         /// Deletes the current scene immediately (if it exists).  If no scene exists, this method has no 
         /// effect.
-        /// 
-        /// TODO: should this be void and just add the actor to a disposal queue (just to be safe)?
         /// </summary>
         public void RemoveScene()
         {
@@ -455,8 +448,6 @@ namespace Mammoth.Engine.Physics
         /// <summary>
         /// Disposes of this physics manager.  The scene (and therefore all actors in it) are 
         /// dispose()'d.
-        /// 
-        /// TODO: what if this is called during simulate()?
         /// </summary>
         public new void Dispose()
         {

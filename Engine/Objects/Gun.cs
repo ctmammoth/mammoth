@@ -12,15 +12,30 @@ using Mammoth.Engine.Input;
 
 namespace Mammoth.Engine.Objects
 {
+    /// <summary>
+    /// Represents a magazine for a gun.  Acts as a bullet container.
+    /// </summary>
     public class Magazine : BaseObject, IEncodable
     {
+        /// <summary>
+        /// The maximum number of rounds that this magazine can hold.
+        /// </summary>
         public int MaxRounds;
+
+        /// <summary>
+        /// The ammo remaining in this magazine.
+        /// </summary>
         public int AmmoRemaining
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="maxRounds">The maximum number of rounds this magazine should hold.</param>
         public Magazine(Game game, int maxRounds)
             : base(game)
         {

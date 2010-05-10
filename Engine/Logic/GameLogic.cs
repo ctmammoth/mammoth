@@ -75,7 +75,6 @@ namespace Mammoth.Engine
                 return timeleft;
         }
 
-
         #region PlayerStats
         /// <summary>
         /// Load player stats into game logic
@@ -272,7 +271,7 @@ namespace Mammoth.Engine
 
             if (SendCounter == FreqSent)
             {
-                Console.WriteLine("Sending Game Logic!");
+                //Console.WriteLine("Sending Game Logic!");
                 IServerNetworking sn = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
                 sn.sendThing(new GameStats(this));
                 SendCounter = 0;
