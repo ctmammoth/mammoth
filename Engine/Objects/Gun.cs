@@ -259,7 +259,7 @@ namespace Mammoth.Engine.Objects
             net.sendEvent("Sound", FireSound);
 
             // Make sure the bullet isn't spawned in the player: shift it by a bit
-            Bullet b = new Bullet(Game, position, orientation, shooterID >> 25);
+            Bullet b = createBullet(Game, position, orientation, shooterID >> 25);
 
             // Give this projectile an ID, but it's not really necessary since it gets shot instantaneously
             //IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
@@ -270,6 +270,16 @@ namespace Mammoth.Engine.Objects
 
             Console.WriteLine("Shot a bullet with a " + getObjectType() + "; " + Mag.AmmoRemaining + " bullets left.");
         }
+
+        /// <summary>
+        /// Create a bullet of the appropriate type.
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="position"></param>
+        /// <param name="orientation"></param>
+        /// <param name="shooterID"></param>
+        /// <returns></returns>
+        protected abstract Bullet createBullet(Game game, Vector3 position, Quaternion orientation, int shooterID);
 
         public void Reload(GameTime time)
         {

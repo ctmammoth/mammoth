@@ -50,5 +50,10 @@ namespace Mammoth.Engine.Objects
         {
             return "Revolver";
         }
+
+        protected override Bullet createBullet(Game game, Vector3 position, Quaternion orientation, int shooterID)
+        {
+            return new RevolverBullet(game, position, orientation, shooterID);
+        }
     }
 }
