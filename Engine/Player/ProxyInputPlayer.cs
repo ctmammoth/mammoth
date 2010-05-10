@@ -134,7 +134,8 @@ namespace Mammoth.Engine
 
         public override void TakeDamage(float damage, IDamager inflicter)
         {
-            this.Health -= damage;
+            if (this.Health > 0)
+                this.Health -= damage;
 
             if (this.Health <= 0)
             {
