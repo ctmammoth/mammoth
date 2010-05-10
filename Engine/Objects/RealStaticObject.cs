@@ -117,7 +117,7 @@ namespace Mammoth.Engine
             this.ID = id;
         }
 
-        private void Specialize(String attribute)
+        private void SpecializeFromNetwork(String attribute)
         {
             XmlHandler handler = new XmlHandler();
             handler.ChangeFile("static_objects.xml");
@@ -126,7 +126,38 @@ namespace Mammoth.Engine
             {
                 handler.GetNextElement();
                 String name = handler.GetElementName();
-                this.TypeName = name;
+                
+                switch (name)
+                {
+                    case "DIMENSION":
+                        HandleDimension(handler);
+                        break;
+                    case "MODEL":
+                        HandleModel(handler);
+                        break;
+                    case "LOCAL_POSITION":
+                        HandleLocalPosition(handler);
+                        break;
+                    case "POSITION_OFFSET":
+                        HandlePositionOffset(handler);
+                        break;
+                }
+
+            }
+
+        }
+
+        private void Specialize(String attribute)
+        {
+            XmlHandler handler = new XmlHandler();
+            handler.ChangeFile("static_objects.xml");
+            handler.GetElement("VARIANT", "NAME", attribute);
+            this.TypeName = attribute;
+            while (!handler.IsClosingTag("VARIANT"))
+            {
+                handler.GetNextElement();
+                String name = handler.GetElementName();
+                
                 switch (name)
                 {
                     case "DIMENSION":
@@ -158,6 +189,8 @@ namespace Mammoth.Engine
             tosend.AddElement("TypeName", TypeName);
             tosend.AddElement("PositionOffset", PositionOffset);
             tosend.AddElement("LocalPosition", LocalPosition);
+
+            
             
             // tosend.AddElement("Velocity", Velocity);
 
@@ -171,14 +204,33 @@ namespace Mammoth.Engine
 
             Vector3 pos = new Vector3();
             if (props.UpdatesFor("Position"))
-                pos = (Vector3)props.GetElement("Position", pos);
-            
+                pos = (Vector3)props.GetElement("Position", pos);            
             if (props.UpdatesFor("TypeName"))
                 TypeName = (String)props.GetElement("TypeName", TypeName);
             if (props.UpdatesFor("PositionOffset"))
                 PositionOffset = (Vector3)props.GetElement("PositionOffset", PositionOffset);
             if (props.UpdatesFor("LocalPosition"))
                 LocalPosition = (Vector3)props.GetElement("LocalPosition", LocalPosition);
+
+            SpecializeFromNetwork(TypeName);
+
+
+            PhysicsManagerService physics = (PhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+
+
+            ActorDescription boxActorDesc = new ActorDescription();
+            boxActorDesc.Shapes.Add(new BoxShapeDescription()
+            {
+                Size = new Vector3(dimensions.X, dimensions.Y, dimensions.Z),
+                LocalPosition = localPosition
+            });
+            boxActorDesc.GlobalPose = Matrix.CreateTranslation(pos + this.positionOffset);
+            this.positionOffset = new Vector3();
+
+
+            this.Actor = physics.CreateActor(boxActorDesc);
+
+
             
         }
 

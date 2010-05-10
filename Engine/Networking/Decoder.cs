@@ -111,7 +111,7 @@ namespace Mammoth.Engine.Networking
                 break;
 
                 case "GameStats":
-                    Console.WriteLine("Game stats recieved");
+                    //Console.WriteLine("Game stats recieved");
                     GameStats g = (GameStats)this.Game.Services.GetService(typeof(GameStats));
                     g.Decode(properties);
                 break;
@@ -120,6 +120,14 @@ namespace Mammoth.Engine.Networking
                     Console.WriteLine("Room recieved");
                     Room r = new Room(id, this.Game);
                     r.Decode(properties);
+                break;
+
+                case "RealStaticObject":
+                    Console.WriteLine("Room recieved");
+                    RealStaticObject o = new RealStaticObject(this.Game);
+                    o.Decode(properties);
+                    IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+                    mdb.registerObject(o);
                 break;
 
                 default:
