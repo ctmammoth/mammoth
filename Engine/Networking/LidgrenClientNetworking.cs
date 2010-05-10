@@ -189,6 +189,7 @@ namespace Mammoth.Engine.Networking
                             if (mdb.hasObject(playerID))
                                 mdb.getObject(playerID).IsAlive = false;
                             break;
+
                     }
                     break;
             }

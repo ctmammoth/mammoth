@@ -31,7 +31,6 @@ namespace Mammoth.Engine
 
             //Defines model height which is used by the camera
             this.Height = 6.0f;
-
         }
 
         /// <summary>

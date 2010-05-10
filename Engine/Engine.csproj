@@ -78,6 +78,7 @@
     <Compile Include="GameStats.cs" />
     <Compile Include="Graphics\Skybox.cs" />
     <Compile Include="GameLogic.cs" />
+    <Compile Include="IGameStats.cs" />
     <Compile Include="Interface\TImage.cs" />
     <Compile Include="Interface\TImageButton.cs" />
     <Compile Include="Audio\IAudioService.cs" />
