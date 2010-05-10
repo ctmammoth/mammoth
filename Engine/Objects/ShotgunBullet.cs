@@ -28,7 +28,7 @@ namespace Mammoth.Engine.Objects
 
         public override float Damage
         {
-            get { return 5.0f; }
+            get { return 10.0f; }
             protected set { }
         }
     }

@@ -12,6 +12,8 @@ namespace Mammoth.Engine.Objects
 {
     class Shotgun : Gun
     {
+        private const int NUM_SHOTS = 12;
+
         public Shotgun(Game game, Player player)
             : base(game, player)
         {
@@ -20,7 +22,7 @@ namespace Mammoth.Engine.Objects
 
         protected override double FireRate
         {
-            get { return 2.0; }
+            get { return 0.8; }
         }
 
         protected override double ReloadTime
@@ -30,12 +32,12 @@ namespace Mammoth.Engine.Objects
 
         protected override float Inaccuracy
         {
-            get { return 0.025f; }
+            get { return 0.075f; }
         }
 
         protected override int MagazineCapacity
         {
-            get { return 30; }
+            get { return 4 * NUM_SHOTS; }
         }
 
         protected override int NumMagazines
@@ -59,27 +61,32 @@ namespace Mammoth.Engine.Objects
         /// <param name="position"></param>
         /// <param name="direction"></param>
         /// <param name="shooterID"></param>
-        protected virtual void SpawnBullet(Vector3 position, Quaternion orientation, int shooterID)
+        protected override void SpawnBullet(Vector3 position, Quaternion orientation, int shooterID)
         {
+            //Console.WriteLine("Firing shotgun bullets");
+
             IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
             net.sendEvent("Sound", FireSound);
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < NUM_SHOTS; i++)
             {
-                Mag.FireShot();
+                if (Mag.CanFireShot())
+                {
+                    Mag.FireShot();
 
-                // Randomly perturb the bullet
-                Quaternion perturbation =
-                    Quaternion.CreateFromYawPitchRoll(((float)directionPerturber.NextDouble() - 0.5f) * Inaccuracy,
-                                                      ((float)directionPerturber.NextDouble() - 0.5f) * Inaccuracy,
-                                                      0.0f);
+                    // Randomly perturb the bullet
+                    Quaternion perturbation =
+                        Quaternion.CreateFromYawPitchRoll(((float)directionPerturber.NextDouble() - 0.5f) * Inaccuracy,
+                                                          ((float)directionPerturber.NextDouble() - 0.5f) * Inaccuracy,
+                                                          0.0f);
 
-                Bullet b = createBullet(Game, position, orientation * perturbation, shooterID >> 25);
+                    Bullet b = createBullet(Game, position, orientation * perturbation, shooterID >> 25);
 
-                // Send the bullet after it's created
-                net.sendThing(b);
+                    // Send the bullet after it's created
+                    net.sendThing(b);
 
-                Console.WriteLine("Shot a bullet with a " + getObjectType() + "; " + Mag.AmmoRemaining + " bullets left.");
+                    //Console.WriteLine("Shot a bullet with a " + getObjectType() + "; " + Mag.AmmoRemaining + " bullets left.");
+                }
             }
         }
 

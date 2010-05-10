@@ -253,7 +253,7 @@ namespace Mammoth.Engine.Objects
             // Send the bullet after it's created
             net.sendThing(b);
 
-            Console.WriteLine("Shot a bullet with a " + getObjectType() + "; " + Mag.AmmoRemaining + " bullets left.");
+            //Console.WriteLine("Shot a bullet with a " + getObjectType() + "; " + Mag.AmmoRemaining + " bullets left.");
         }
 
         /// <summary>

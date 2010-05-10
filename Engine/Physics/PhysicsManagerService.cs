@@ -231,7 +231,7 @@ namespace Mammoth.Engine.Physics
         public RaycastHit RaycastClosestShape(Vector3 position, Vector3 direction)
         {
             // Return the result of the raycast
-            return curScene.RaycastClosestShape(new StillDesign.PhysX.Ray(position, direction), ShapesType.Dynamic);
+            return curScene.RaycastClosestShape(new StillDesign.PhysX.Ray(position, direction), ShapesType.All);
         }
 
         /// <summary>
