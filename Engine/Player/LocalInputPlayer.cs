@@ -51,47 +51,5 @@ namespace Mammoth.Engine
             audio.stopSound("Heartbeat");
             audio.playSound("Scream");
         }
-
-        #region IEncodable Members
-
-        public override void Decode(byte[] serialized)
-        {
-            Networking.Encoder props = new Networking.Encoder(serialized);
-
-            if (props.UpdatesFor("Position"))
-                Position = (Vector3)props.GetElement("Position", Position);
-            if (props.UpdatesFor("Orientation"))
-                Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
-            if (props.UpdatesFor("HeadOrient"))
-                HeadOrient = (Quaternion)props.GetElement("HeadOrient", HeadOrient);
-            if (props.UpdatesFor("Velocity"))
-                Velocity = (Vector3)props.GetElement("Velocity", Velocity);
-            if (props.UpdatesFor("Health"))
-                Health = (float)props.GetElement("Health", Health);
-
-            //Reroute GameStats update to IGameStats
-            if (props.UpdatesFor("GameStats"))
-            {
-                GameStats gstatus = (GameStats)this.Game.Services.GetService(typeof(IGameStats));
-                props.UpdateIEncodable("GameStats", gstatus);
-            }
-
-            string gunType = (string)props.GetElement("GunType", "Revolver");
-            if (CurWeapon == null || !((BaseObject)CurWeapon).getObjectType().Equals(gunType))
-            {
-                switch (gunType)
-                {
-                    case "Revolver":
-                        CurWeapon = new Revolver(this.Game, this);
-                        break;
-                }
-            }
-            if (props.UpdatesFor("Gun"))
-                props.UpdateIEncodable("Gun", CurWeapon);
-
-            //Console.WriteLine("Decoding: " + GameStats.ToString());
-        }
-
-        #endregion
     }
 }

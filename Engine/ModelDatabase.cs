@@ -169,5 +169,16 @@ namespace Mammoth.Engine
         }
 
         #endregion
+
+        #region IModelDBService Members
+
+
+        public List<BaseObject> AllObjects
+        {
+            // TODO: Make this a read only list
+            get { return _objects.Values.ToList<BaseObject>(); }
+        }
+
+        #endregion
     }
 }
