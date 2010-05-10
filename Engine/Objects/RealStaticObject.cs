@@ -42,6 +42,11 @@ namespace Mammoth.Engine
             r.DrawRenderable(this);
         }
 
+        public RealStaticObject(Game game) : base(game)
+        {   
+            
+        }
+
         public RealStaticObject(int id, ObjectParameters parameters, Game game, bool isFromNetwork)
             : base(game)
         {
