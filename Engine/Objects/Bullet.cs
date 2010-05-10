@@ -120,6 +120,7 @@ namespace Mammoth.Engine
                 }
             }
 
+
             // We didn't collide with something, so move the bullet.
             //Console.WriteLine("Moving bullet with ID: " + this.ID);
             this.Position += dir * distanceMoved;
