@@ -16,9 +16,9 @@ namespace Mammoth.Screens
     {
         private GameStats GameStats;
 
-        public EndScreen(Game game) : base(game)
+        public EndScreen(Game game, GameStats g) : base(game)
         {
-            GameStats = (GameStats)this.Game.Services.GetService(typeof(GameStats));
+            GameStats = g;
         }
 
         public override void Initialize()
@@ -42,6 +42,16 @@ namespace Mammoth.Screens
                 Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, 100)
             });
 
+            // Add a button to use to join a game.
+            TButton mscreen = new TSimpleButton(this.Game, "Back to Main Menu")
+            {
+                Size = new Vector2(120, 50),
+                Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, 250)
+            };
+            mscreen.OnClick += new EventHandler(ToMMenu);
+            baseWid.Add(mscreen);
+
+
             // Set the base widget for this screen.
             _baseWidget = baseWid;
 
@@ -49,14 +59,13 @@ namespace Mammoth.Screens
             base.Initialize();
         }
 
-        public override void Update(GameTime gameTime, bool hasFocus, bool visible)
+        /// <summary>
+        /// Returns to main menu
+        /// </summary>
+        public void ToMMenu(object sender, EventArgs e)
         {
-            if (hasFocus)
-            {
-                    //this.IsExiting = true;
-            }
-
-            base.Update(gameTime, hasFocus, visible);
+            this.ScreenManager.AddScreen(new PrettyMenuScreen(this.Game));
+            this.IsExiting = true;
         }
     }
 }
