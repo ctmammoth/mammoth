@@ -326,6 +326,20 @@ namespace Mammoth.Engine
             base.Die();
             Console.WriteLine("Player " + ID + " died.");
 
+            // Drop the flag being carried
+            if (Flag != null)
+            {
+                // Keep a reference to the flag that's being dropped
+                Objects.Flag droppedFlag = this.Flag;
+
+                // Drop the Flag
+                Flag.GetDropped();
+
+                // Send the dropped Flag
+                IServerNetworking server = (IServerNetworking)Game.Services.GetService(typeof(INetworkingService));
+                server.sendThing(this.Flag);
+            }
+
             this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
         }
 

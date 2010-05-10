@@ -134,7 +134,8 @@ namespace Mammoth.Engine
 
         public override void TakeDamage(float damage, IDamager inflicter)
         {
-            this.Health -= damage;
+            if (this.Health > 0)
+                this.Health -= damage;
 
             if (this.Health <= 0)
             {
@@ -159,20 +160,6 @@ namespace Mammoth.Engine
             base.Die();
 
             IServerNetworking server = (IServerNetworking)Game.Services.GetService(typeof(INetworkingService));
-
-            // Drop the flag being carried
-            if (Flag != null)
-            {
-                // Keep a reference to the flag that's being dropped
-                Objects.Flag droppedFlag = this.Flag;
-
-                // Drop the Flag
-                Flag.GetDropped();
-                
-                // Send the dropped Flag
-                server.sendThing(this.Flag);
-            }
-
             server.sendEvent("Death", this.ClientID.ToString());
         }
 
