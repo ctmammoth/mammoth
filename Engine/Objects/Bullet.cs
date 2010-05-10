@@ -15,27 +15,8 @@ using Mammoth.Engine.Audio;
 namespace Mammoth.Engine
 {
     //TODO: Make bullet drawable
-    public class Bullet : Projectile, IEncodable, IRenderable
+    public abstract class Bullet : Projectile, IEncodable, IRenderable
     {
-        #region Variables
-
-        // The magnitude of the bullet's velocity
-        private const float speed = 50.0f;
-
-        #endregion
-
-        public Bullet(Game game, int creator)
-            : base(game, creator)
-        {
-            Console.WriteLine("Constructing a bullet...");
-
-            InitializePhysX();
-
-            // Load a retarded model
-            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
-            this.Model3D = r.LoadModel("bullet_low");
-        }
-
         /// <summary>
         /// Creates a new bullet at the specified position and gives it the required initial velocity.  It moves in the
         /// direction of the vector obtained by taking Vector3.Transform(Vector3.UnitZ, orientation).
@@ -53,10 +34,6 @@ namespace Mammoth.Engine
 
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
             this.Model3D = r.LoadModel("bullet_low");
-
-            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            this.ID = mdb.getNextOpenID();
-            mdb.registerObject(this);
         }
 
         private void InitializePhysX()
@@ -89,16 +66,20 @@ namespace Mammoth.Engine
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
 
-            // Move the position by the amount dictated by its velocity and the elapsed game time
-
-            //Vector3 tempPos = Position + Vector3.Multiply(Velocity, (float)gameTime.ElapsedGameTime.TotalSeconds);
+            // If the bullet is really far from the origin, remove it
+            // TODO: make this not hardcoded
+            if (this.Position.Length() > Math.Sqrt(2 * ((256 * 3) * (256 * 3))))
+            {
+                this.IsAlive = false;
+                return;
+            }
 
             // Perform the raycast
             Vector3 dir = Vector3.Transform(Vector3.Forward, this.Orientation);
             RaycastHit rayHit = physics.RaycastClosestShape(this.Position + dir * 0.35f, dir);
 
             // Get the difference in position
-            float distanceMoved = speed * (float) gameTime.ElapsedGameTime.TotalSeconds;
+            float distanceMoved = Speed * (float) gameTime.ElapsedGameTime.TotalSeconds;
 
             // Make sure the shape that was hit is between the current and previous positions, exists and that 
             // its actor has userdata
@@ -150,10 +131,7 @@ namespace Mammoth.Engine
             r.DrawRenderable(this);
         }
 
-        public override string getObjectType()
-        {
-            return "Bullet";
-        }
+        public abstract override string getObjectType();
 
         #region IEncodeable members
 
@@ -163,6 +141,8 @@ namespace Mammoth.Engine
 
             e.AddElement("Position", Position);
             e.AddElement("Orientation", Orientation);
+            e.AddElement("Damage", Damage);
+            e.AddElement("Speed", Speed);
             e.AddElement("Creator", Creator);
 
             return e.Serialize();
@@ -176,6 +156,8 @@ namespace Mammoth.Engine
 
             Position = (Vector3)e.GetElement("Position", Position);
             Orientation = (Quaternion)e.GetElement("Orientation", Orientation);
+            Damage = (float)e.GetElement("Damage", Damage);
+            Speed = (float)e.GetElement("Speed", Speed);
             Creator = (int)e.GetElement("Creator", Creator);
 
             Console.WriteLine("Bullet Position received: " + Position);
@@ -183,18 +165,11 @@ namespace Mammoth.Engine
         }
         #endregion
 
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            Console.WriteLine("DISPOSE YOU MOTHERFUCKER!!!");
-        }
-
         #region IDamager Members
 
         public override float GetDamage()
         {
-            return 10.0f;
+            return Damage;
         }
 
         #endregion
@@ -216,5 +191,11 @@ namespace Mammoth.Engine
         }
 
         #endregion
+
+        // The magnitude of the bullet's velocity
+        public abstract float Speed { get; protected set; }
+
+        // The damage this bullet does
+        public abstract float Damage { get; protected set; }
     }
 }

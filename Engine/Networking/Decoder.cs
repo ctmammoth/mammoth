@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 
 using Mammoth.Engine.Input;
+using Mammoth.Engine.Objects;
 
 namespace Mammoth.Engine.Networking
 {
@@ -71,8 +72,9 @@ namespace Mammoth.Engine.Networking
                     ro.registerObject(p);
                 break;
 
-                case "Bullet":
-                    Bullet b = new Bullet(game, 0);
+                //TODO: make sure any new bullet types are put in here
+                case "RevolverBullet":
+                    Bullet b = new RevolverBullet(this.Game, Vector3.Zero, Quaternion.Identity, 0);
                     b.Decode(properties);
                     b.ID = id;
                     ro.registerObject(b);
