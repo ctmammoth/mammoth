@@ -60,11 +60,6 @@ namespace Mammoth.Engine
             set;
         }
 
-        public Flag Flag
-        {
-            get;
-            protected set;
-        }
         #endregion
 
         /// <summary>
@@ -358,7 +353,6 @@ namespace Mammoth.Engine
             if (Flag != null)
             {
                 tosend.AddElement("FlagID", Flag.ID);
-                tosend.AddElement("Flag", Flag);
             }
             else
             {
@@ -417,7 +411,6 @@ namespace Mammoth.Engine
                     IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
                     Flag flag = (Flag)mdb.getObject(newID);
                     this.Flag = flag;
-                    props.UpdateIEncodable("Flag", flag);
                     flag.Owner = this;
                 }
                 
