@@ -134,26 +134,7 @@ namespace Mammoth
             stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
             Room room = new Room(modelDB.getNextOpenID(), stairRoom, this.Game);
 
-            ObjectParameters stairRoom2 = new ObjectParameters();
-            stairRoom2.AddAttribute("X", "-50");
-            stairRoom2.AddAttribute("Y", "-2");
-            stairRoom2.AddAttribute("Z", "-50");
-            stairRoom2.AddAttribute("Special_Type", "STAIR_ROOM");
-            Room room2 = new Room(modelDB.getNextOpenID(), stairRoom2, this.Game);
-
-            ObjectParameters stairRoom3 = new ObjectParameters();
-            stairRoom3.AddAttribute("X", "-50");
-            stairRoom3.AddAttribute("Y", "19");
-            stairRoom3.AddAttribute("Z", "-50");
-            stairRoom3.AddAttribute("Special_Type", "STAIR_ROOM");
-            Room room3 = new Room(modelDB.getNextOpenID(), stairRoom3, this.Game);
-
-            ObjectParameters stairRoom4 = new ObjectParameters();
-            stairRoom4.AddAttribute("X", "-50");
-            stairRoom4.AddAttribute("Y", "40");
-            stairRoom4.AddAttribute("Z", "-50");
-            stairRoom4.AddAttribute("Special_Type", "STAIR_ROOM");
-            Room room4 = new Room(modelDB.getNextOpenID(), stairRoom4, this.Game);
+            
 
             // LET'S TRY ADDING A FLAG!!!
             Flag flag1 = new Flag(this.Game, new Vector3(-45.0f, -23.0f, -45.0f), 1);
