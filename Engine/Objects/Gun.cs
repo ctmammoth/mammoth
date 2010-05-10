@@ -285,7 +285,7 @@ namespace Mammoth.Engine.Objects
 
         public void Reload(GameTime time)
         {
-            if (MagCount != 0)
+            if (MagCount != 0 && _lastReloadTime >= 0)
             {
                 Console.WriteLine(getObjectType() + " is reloading!");
                 _lastReloadTime = time.TotalRealTime.TotalMilliseconds;
