@@ -110,6 +110,11 @@ namespace Mammoth.Engine.Networking
                         ", ID = " + id);
                 break;
 
+                case "GameStats":
+                    GameStats g = (GameStats)this.Game.Services.GetService(typeof(GameStats));
+                    g.Decode(properties);
+                break;
+
                 default:
                 Console.WriteLine("Object type was not recognized");
                 break;

@@ -47,7 +47,7 @@ namespace Mammoth.Engine
         }
 
         // The armed weapon
-        protected Gun CurWeapon
+        public Gun CurWeapon
         {
             get;
             set;
@@ -60,16 +60,16 @@ namespace Mammoth.Engine
             set;
         }
 
-        protected GameStats GameStats
+        public PlayerStats PlayerStats
         {
             get;
             set;
         }
 
-        protected Flag Flag
+        public Flag Flag
         {
             get;
-            set;
+            protected set;
         }
         #endregion
 
@@ -92,7 +92,7 @@ namespace Mammoth.Engine
             CurWeapon = Items[0];
 
             // Give the player some stats
-            GameStats = new GameStats();
+            PlayerStats = new PlayerStats();
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace Mammoth.Engine
                 {
                     TScreenManager t = (TScreenManager)this.Game.Services.GetService(typeof(TScreenManager));
                     //t.AddScreen(new StatsScreen(this.Game, GameStats));
-                    t.AddScreen(new StatsScreen(this.Game));
+                    t.AddScreen(new StatsScreen(this.Game, this));
                 }
 
                 // Normalize the motion vector (so we don't move at twice the speed when moving diagonally).
@@ -343,9 +343,9 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-            //IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
-            //int myID = ID >> 25;
-            //GameStats = new GameStats(NumKills, NumCaptures, NumDeaths, myID, g);
+            GameLogic g = (GameLogic)this.Game.Services.GetService(typeof(GameLogic));
+            int myID = ID >> 25;
+            PlayerStats = new PlayerStats(NumKills, NumCaptures, NumDeaths, myID, g);
 
             //Console.WriteLine("Encoding: " + GameStats.ToString());
 
@@ -354,9 +354,10 @@ namespace Mammoth.Engine
             tosend.AddElement("HeadOrient", HeadOrient);
             tosend.AddElement("Velocity", Velocity);
             tosend.AddElement("Health", Health);
-            //tosend.AddElement("GameStats", GameStats);
+            tosend.AddElement("PlayerStats", PlayerStats);
             tosend.AddElement("GunType", ((BaseObject)CurWeapon).getObjectType());
             tosend.AddElement("Gun", CurWeapon);
+
             if (Flag != null)
             {
                 Console.WriteLine("Player is encoding a flag.");
@@ -380,22 +381,8 @@ namespace Mammoth.Engine
                 Velocity = (Vector3)props.GetElement("Velocity", Velocity);
             if (props.UpdatesFor("Health"))
                 Health = (float)props.GetElement("Health", Health);
-            if (props.UpdatesFor("Flag"))
-            {
-                if (Flag != null)
-                {
-                    //Console.WriteLine("Player has a flag and is decoding updates.");
-                    props.UpdateIEncodable("Flag", Flag);
-                }
-                else
-                {
-                    Console.WriteLine("Player doesn't have a flag and is decoding updates.");
-                    Flag = new Flag(this.Game, Vector3.Zero, 0);
-                    props.UpdateIEncodable("Flag", Flag);
-                }
-            }
-            //if (props.UpdatesFor("GameStats"))
-                //props.UpdateIEncodable("GameStats", GameStats);
+            if (props.UpdatesFor("PlayerStats"))
+                props.UpdateIEncodable("PlayerStats", PlayerStats);
 
             string gunType = (string)props.GetElement("GunType", "Revolver");
             if (CurWeapon == null || !((BaseObject)CurWeapon).getObjectType().Equals(gunType))
@@ -416,7 +403,16 @@ namespace Mammoth.Engine
             if (props.UpdatesFor("Gun"))
                 props.UpdateIEncodable("Gun", CurWeapon);
 
-            //Console.WriteLine("Decoding: " + GameStats.ToString());
+            if (props.UpdatesFor("Flag"))
+            {
+                if (Flag != null)
+                    props.UpdateIEncodable("Flag", Flag);
+                else
+                {
+                    Flag = new Flag(this.Game, Vector3.Zero, 0);
+                    props.UpdateIEncodable("Flag", Flag);
+                }
+            }
         }
 
         #endregion

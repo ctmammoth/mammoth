@@ -2,35 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
 using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
-    public class GameStats : IEncodable, Mammoth.Engine.IGameStats
+    public class GameStats : IEncodable
     {
-        #region Personal Stats
-        public string YourTeam
+        public String getObjectType()
         {
-            get;
-            set;
+            return "GameStats";
         }
-        public int NumKills
-        {
-            get;
-            set;
-        }
-        public int NumCaptures
-        {
-            get;
-            set;
-        }
-        public int NumDeaths
-        {
-            get;
-            set;
-        }
-        #endregion
 
         #region Teams
         public string LeadingTeam
@@ -76,19 +59,24 @@ namespace Mammoth.Engine
         }
         #endregion
 
+        #region Time
         public int TimeLeft
         {
             get;
             set;
         }
- 
-        public GameStats(int nk, int nc, int nd, int id, IGameLogic g)
-        {
-            YourTeam = g.GetTeamOf(id).ToString();
-            NumKills = nk;
-            NumCaptures = nc;
-            NumDeaths = nd;
+        #endregion
 
+        #region Player Stats
+        private Hashtable Players
+        {
+            get;
+            set;
+        }
+        #endregion
+
+        public GameStats(GameLogic g)
+        {
             LeadingTeam = g.GetLeadingTeam().ToString();
             LeadingTeam_NumKills = g.GetLeadingTeam().GetKills();
             LeadingTeam_NumCaptures = g.GetLeadingTeam().GetCaptures();
@@ -100,15 +88,12 @@ namespace Mammoth.Engine
             TrailingTeam_NumPoints = g.GetTrailingTeam().GetTeamPoints();
 
             TimeLeft = g.GetTimeLeft();
+
+            Players = g.GetPlayerStats();
         }
 
         public GameStats()
         {
-            YourTeam = "";
-            NumKills = 0;
-            NumCaptures = 0;
-            NumDeaths = 0;
-
             LeadingTeam = "";
             LeadingTeam_NumKills = 0;
             LeadingTeam_NumCaptures = 0;
@@ -122,16 +107,9 @@ namespace Mammoth.Engine
             TimeLeft = 0;
         }
 
-
-
         public byte[] Encode()
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder();
-
-            e.AddElement("YourTeam", YourTeam);
-            e.AddElement("NumKills", NumKills);
-            e.AddElement("NumCaptures", NumCaptures);
-            e.AddElement("NumDeaths", NumDeaths);
 
             e.AddElement("LeadingTeam", LeadingTeam);
             e.AddElement("LeadingTeam_NumKills", LeadingTeam_NumKills);
@@ -145,17 +123,26 @@ namespace Mammoth.Engine
 
             e.AddElement("TimeLeft", TimeLeft);
 
+            //create string to represent Players being sent
+            string plist = "";
+            foreach (int cid in Players.Keys)
+            {
+                plist += ("," + cid);
+
+                //add each player
+                e.AddElement(cid + "", Players[cid]);
+            }
+
+            //add the string representing which players are being sent
+            e.AddElement("Players", plist);
+
+
             return e.Serialize();
         }
 
         public void Decode(byte[] serialized)
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder(serialized);
-
-            YourTeam = (string) e.GetElement("YourTeam", YourTeam);
-            NumKills = (int) e.GetElement("NumKills", NumKills);
-            NumCaptures = (int) e.GetElement("NumCaptures", NumCaptures);
-            NumDeaths = (int) e.GetElement("NumDeaths", NumDeaths);
 
             LeadingTeam = (string) e.GetElement("LeadingTeam", LeadingTeam);
             LeadingTeam_NumKills = (int) e.GetElement("LeadingTeam_NumKills", LeadingTeam_NumKills);
@@ -168,12 +155,29 @@ namespace Mammoth.Engine
             TrailingTeam_NumPoints = (int)e.GetElement("TrailingTeam_NumPoints", TrailingTeam_NumPoints);
 
             TimeLeft = (int) e.GetElement("TimeLeft", TimeLeft);
-        }
 
+            //get string containing player string
+            string plist = (string)e.GetElement("Players", "");
+            //trim leading comma
+            string trimplist = plist.Substring(1);
+            //define split
+            char[] splitat = new char[1];
+            splitat[0] = ',';
+            string[] splitplist = trimplist.Split(splitat);
 
-        public string ToString()
-        {
-            return "Your Team: " + YourTeam + ", NumKills: " + NumKills + ", LeadingTeam: " + LeadingTeam; 
+            //load to Players
+            Players.Clear();
+            foreach (string part in splitplist)
+            {
+                //load dummy player
+                PlayerStats p = new PlayerStats();
+                //update dummy player
+                e.UpdateIEncodable(part, p);
+                //get key
+                int akey = int.Parse(part);
+                //add this to players
+                Players.Add(akey, p);
+            }
         }
     }
 }
