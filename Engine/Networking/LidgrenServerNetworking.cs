@@ -55,9 +55,8 @@ namespace Mammoth.Engine.Networking
         /// <param name="target">the ID of the client to send it to</param>
         public void sendThing(IEncodable toSend, int target)
         {
-            if (toSend is BaseObject)
-                _toSend.Enqueue(new DataGram(MessageType.ENCODABLE, ((BaseObject)toSend).getObjectType(), 
-                    ((BaseObject)toSend).ID, toSend.Encode(), target, -1, null));
+            _toSend.Enqueue(new DataGram(MessageType.ENCODABLE, toSend.getObjectType(), 
+                (toSend is BaseObject) ? ((BaseObject)toSend).ID : -1, toSend.Encode(), target, -1, null));
         }
 
         /// <summary>
@@ -67,9 +66,8 @@ namespace Mammoth.Engine.Networking
         /// <param name="toSend"></param>
         public void sendThing(IEncodable toSend)
         {
-            if (toSend is BaseObject)
-                _toSend.Enqueue(new DataGram(MessageType.ENCODABLE, ((BaseObject)toSend).getObjectType(), 
-                    ((BaseObject)toSend).ID, toSend.Encode(), -1, -1, null));
+            _toSend.Enqueue(new DataGram(MessageType.ENCODABLE, toSend.getObjectType(),
+                (toSend is BaseObject) ? ((BaseObject)toSend).ID : -1, toSend.Encode(), -1, -1, null));
         }
 
         /// <summary>
@@ -80,9 +78,8 @@ namespace Mammoth.Engine.Networking
         /// <param name="excludeTarget">the ID of the client to exclude</param>
         public void sendToAllBut(IEncodable toSend, int excludeTarget)
         {
-            if (toSend is BaseObject)
-                _toSend.Enqueue(new DataGram(MessageType.ENCODABLE, ((BaseObject)toSend).getObjectType(),
-                    ((BaseObject)toSend).ID, toSend.Encode(), -1, excludeTarget, null));
+            _toSend.Enqueue(new DataGram(MessageType.ENCODABLE, toSend.getObjectType(),
+                (toSend is BaseObject) ? ((BaseObject)toSend).ID : -1, toSend.Encode(), -1, excludeTarget, null));
         }
 
         /// <summary>

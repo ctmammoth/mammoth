@@ -55,7 +55,7 @@ namespace Mammoth.GameWidgets
             if (LIP != null)
             {
                 //get ammo information
-                Ammo = "Ammo: " + LIP.CurWeapon.MagCount;
+                Ammo = "Ammo: " + LIP.CurWeapon.ShotsLeft() + "/" + LIP.CurWeapon.MagCount;
             }
         }
 

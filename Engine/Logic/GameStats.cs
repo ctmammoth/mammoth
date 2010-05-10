@@ -77,6 +77,7 @@ namespace Mammoth.Engine
 
         public GameStats(GameLogic g)
         {
+            Console.WriteLine("Constructing game stats");
             LeadingTeam = g.GetLeadingTeam().ToString();
             LeadingTeam_NumKills = g.GetLeadingTeam().GetKills();
             LeadingTeam_NumCaptures = g.GetLeadingTeam().GetCaptures();
@@ -124,7 +125,7 @@ namespace Mammoth.Engine
             e.AddElement("TimeLeft", TimeLeft);
 
             //create string to represent Players being sent
-            string plist = "";
+            /*string plist = "";
             foreach (int cid in Players.Keys)
             {
                 plist += ("," + cid);
@@ -134,8 +135,9 @@ namespace Mammoth.Engine
             }
 
             //add the string representing which players are being sent
-            e.AddElement("Players", plist);
+            e.AddElement("Players", plist);*/
 
+            Console.WriteLine("Encoding gamestats");
 
             return e.Serialize();
         }
@@ -157,7 +159,7 @@ namespace Mammoth.Engine
             TimeLeft = (int) e.GetElement("TimeLeft", TimeLeft);
 
             //get string containing player string
-            string plist = (string)e.GetElement("Players", "");
+            /*string plist = (string)e.GetElement("Players", "");
             //trim leading comma
             string trimplist = plist.Substring(1);
             //define split
@@ -177,7 +179,7 @@ namespace Mammoth.Engine
                 int akey = int.Parse(part);
                 //add this to players
                 Players.Add(akey, p);
-            }
+            }*/
         }
     }
 }
