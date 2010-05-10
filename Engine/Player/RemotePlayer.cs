@@ -77,8 +77,11 @@ namespace Mammoth.Engine
                     teamColor = Color.Red;
                 else if (team == "Team 2")
                     teamColor = Color.Blue;
+
+                Color transTeamColor = teamColor;
+                transTeamColor.A = 255;
                 // Render the name to a texture.
-                nameTexture = r.RenderFont("Noob" + (this.ID >> 25), Vector2.Zero, teamColor, new Vector4(teamColor, 255), r.DefaultFont, SpriteEffects.FlipHorizontally);
+                nameTexture = r.RenderFont("Noob" + (this.ID >> 25), Vector2.Zero, teamColor, transTeamColor, r.DefaultFont, SpriteEffects.FlipHorizontally);
             }
 
             //Render the RemotePlayer

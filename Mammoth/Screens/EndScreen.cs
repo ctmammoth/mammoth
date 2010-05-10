@@ -64,7 +64,6 @@ namespace Mammoth.Screens
         /// </summary>
         public void ToMMenu(object sender, EventArgs e)
         {
-            this.ScreenManager.AddScreen(new PrettyMenuScreen(this.Game));
             this.IsExiting = true;
         }
     }
