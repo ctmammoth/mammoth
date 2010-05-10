@@ -22,7 +22,7 @@ namespace Mammoth.Engine.Objects
 
         protected override double FireRate
         {
-            get { return 0.8; }
+            get { return 0.66667; }
         }
 
         protected override double ReloadTime
