@@ -77,7 +77,7 @@ namespace Mammoth.Engine
 
         public GameStats(GameLogic g)
         {
-            Console.WriteLine("Constructing game stats");
+            //Console.WriteLine("Constructing game stats");
             LeadingTeam = g.GetLeadingTeam().ToString();
             LeadingTeam_NumKills = g.GetLeadingTeam().GetKills();
             LeadingTeam_NumCaptures = g.GetLeadingTeam().GetCaptures();
@@ -137,7 +137,7 @@ namespace Mammoth.Engine
             //add the string representing which players are being sent
             e.AddElement("Players", plist);*/
 
-            Console.WriteLine("Encoding gamestats");
+            //Console.WriteLine("Encoding gamestats");
 
             return e.Serialize();
         }

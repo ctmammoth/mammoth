@@ -83,7 +83,14 @@ namespace Mammoth.Engine
             stairRoom.AddAttribute("Z", "-50");
             stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
             Room room = new Room(modelDB.getNextOpenID(), stairRoom, this.Game);
-            Room.BuildRoomOnServer(stairRoom, this.Game);
+
+            // Register the room in the model DB
+            room.ID = modelDB.getNextOpenID();
+            modelDB.registerObject(room);
+
+            IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            // Send the room
+            net.sendThing(room);
         }
 
         /// <summary>
