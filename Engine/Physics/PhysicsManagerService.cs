@@ -385,7 +385,8 @@ namespace Mammoth.Engine.Physics
                     // rate; may change later.
                     TimestepMethod = TimestepMethod.Variable,
                     // Hardware or software simulation
-                    SimulationType = hworsw
+                    SimulationType = hworsw,
+                    UserTriggerReport = new TriggerReporter(this)
                 });
 
                 // Enable collisions for all objects

@@ -21,19 +21,19 @@ namespace Mammoth.Engine.Objects
             // Give this a sphere shape trigger
             SphereShapeDescription sDesc = new SphereShapeDescription()
             {
-                Radius = 10.0f//,
-                //Flags = ShapeFlag.TriggerOnEnter
+                Radius = 0.3f,
+                Flags = ShapeFlag.TriggerEnable
             };
 
-            // Make a body: flags should be kinematic since they should get their positions from the player carrying them.
-            BodyDescription bDesc = new BodyDescription()
+            ActorDescription aDesc = new ActorDescription()
             {
-                BodyFlags = BodyFlag.Kinematic
+                Shapes = { sDesc },
+                BodyDescription = new BodyDescription()
+                {
+                    Mass = 1.0f,
+                    BodyFlags = BodyFlag.Kinematic
+                }
             };
-
-            ActorDescription aDesc = new ActorDescription();
-            aDesc.Shapes.Add(sDesc);
-            aDesc.BodyDescription = bDesc;
 
             IPhysicsManagerService physics = (IPhysicsManagerService)game.Services.GetService(typeof(IPhysicsManagerService));
 
@@ -45,8 +45,8 @@ namespace Mammoth.Engine.Objects
 
             // Load a flag model
             // TODO: get a flag model or something
-            Renderer renderer = (Renderer)this.Game.Services.GetService(typeof(Renderer));
-            this.Model3D = renderer.LoadModel("ammocrate");
+            IRenderService renderer = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
+            this.Model3D = renderer.LoadModel("soldier-low-poly");
         }
 
         public override string getObjectType()

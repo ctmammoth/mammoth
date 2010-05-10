@@ -88,9 +88,6 @@ namespace Mammoth
 
         protected override void Draw(GameTime gameTime)
         {
-            // Testing flags
-            //Mammoth.Engine.Objects.Flag f = new Mammoth.Engine.Objects.Flag(null, Vector3.Zero);
-
             // Clear the backbuffer - set it to a nice sky blue.
             this.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1.0f, 0);
 
