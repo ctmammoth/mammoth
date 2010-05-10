@@ -104,24 +104,30 @@ namespace Mammoth.Engine
             // its actor has userdata
             if (rayHit.Shape != null)
             {
+                Console.WriteLine("Bullet with : " + this.ID + " ray hit something with a shape");
                 // Get the PhysicalObject that owns the Shape hit by the raycast
                 PhysicalObject objHit = ((PhysicalObject)rayHit.Shape.Actor.UserData);
 
                 if (objHit != null)
                 {
+                    Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something with userdata");
                     // Make sure the collision is within the distance we've moved during this timestep.
                     if (rayHit.Distance <= distanceMoved)
                     {
+                        Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something in range");
                         // Make sure the object is damageable.
                         if (objHit is IDamageable)
                         {
+                            Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something damagable in range");
                             // Make sure the creator isn't the one being hit.
                             if (objHit.ID >> 25 != Creator)
                             {
+                                Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something that isn't its creator");
                                 Console.WriteLine("Damaging a mofo of type " + objHit.getObjectType());
                                 ((IDamageable)objHit).TakeDamage(this.GetDamage(), this);
                             }
                         }
+                        Console.WriteLine("Bullet with ID: " + this.ID + " being removed");
 
                         // Have the bullet get removed at the next update step.
                         this.IsAlive = false;
@@ -133,6 +139,7 @@ namespace Mammoth.Engine
             }
 
             // We didn't collide with something, so move the bullet.
+            Console.WriteLine("Moving bullet with ID: " + this.ID);
             this.Position += dir * distanceMoved;
         }
 

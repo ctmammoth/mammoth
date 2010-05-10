@@ -111,7 +111,7 @@ namespace Mammoth.Engine.Audio
             if (MediaPlayer.State != MediaState.Playing && _currentPlaylist != null)
             {
                 _currentSong = (_currentSong + 1) % _songs[_currentPlaylist].Count;
-                //MediaPlayer.Play(_songs[_currentPlaylist][_currentSong]);
+                MediaPlayer.Play(_songs[_currentPlaylist][_currentSong]);
             }
             foreach (SoundEffectInstance sei in _loopedSounds.Values)
             {

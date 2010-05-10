@@ -61,10 +61,12 @@ namespace Mammoth.Engine
         public virtual void TakeDamage(float damage, IDamager inflicter)
         {
             this.Health -= damage;
+            Console.WriteLine("Health: " + this.Health);
         }
 
         public virtual void Die()
         {
+            Console.WriteLine("I died");
             this.NumDeaths++;
         }
 
@@ -99,7 +101,8 @@ namespace Mammoth.Engine
 
         public override void Dispose()
         {
-            base.Dispose();
+            //HACK: usually bad when you don't call base
+            //base.Dispose();
 
             IPhysicsManagerService phys = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             phys.RemoveController(this.Controller);

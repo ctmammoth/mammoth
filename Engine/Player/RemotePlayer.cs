@@ -67,9 +67,9 @@ namespace Mammoth.Engine
 
         public override void Dispose()
         {
-            base.Dispose();
             Console.WriteLine("Disposing remote player with id: " + this.ID);
             Console.WriteLine(new StackTrace());
+            base.Dispose();
         }
 
         #region Properties

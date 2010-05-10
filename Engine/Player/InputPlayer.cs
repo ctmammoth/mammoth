@@ -244,7 +244,7 @@ namespace Mammoth.Engine
         /// Throws a "bullet" in the current direction of the player. Overridden in ProxyInputPlayer since shooting only happens on server-side.
         /// </summary>
         protected virtual void Shoot(GameTime time) {
-            Console.WriteLine("Throwing.");
+            Console.WriteLine("Throwing, orientation is: " + this.HeadOrient);
         }
 
         /// <summary>
