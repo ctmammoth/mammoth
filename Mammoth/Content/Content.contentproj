@@ -269,11 +269,6 @@
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="sounds\sound fx heartbeat-4413-Free-Loops.com.wav">
-      <Name>heartbeat</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
     <Compile Include="sounds\Wilhelm.wav">
       <Name>scream</Name>
       <Importer>WavImporter</Importer>
@@ -288,6 +283,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="models\banner01.FBX">
+      <Name>banner01</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.01</ProcessorParameters_Scale>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="sounds\Gun_Empty.wav">
       <Name>gunempty</Name>
       <Importer>WavImporter</Importer>
@@ -297,6 +300,27 @@
   <ItemGroup>
     <Compile Include="sounds\Machine_Gun.wav">
       <Name>machinegun</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="sounds\hbeat.wav">
+      <Name>heartbeat</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="sounds\shotgun_fire.wav">
+      <Name>shotgunfire</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="sounds\shotgun_fireload.wav">
+      <Name>shotgunfireload</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>

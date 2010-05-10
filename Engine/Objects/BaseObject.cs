@@ -33,7 +33,7 @@ namespace Mammoth.Engine
         public int ID
         {
             get;
-            internal set;
+            set;
         }
         
         /// <summary>

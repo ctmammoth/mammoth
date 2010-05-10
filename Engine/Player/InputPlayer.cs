@@ -88,6 +88,7 @@ namespace Mammoth.Engine
             // Give the player a simple gun, for now
             Items[0] = new Revolver(game, this);
             Items[1] = new SMG(game, this);
+            Items[2] = new Shotgun(game, this);
             CurWeapon = Items[0];
 
             // Give the player some stats
@@ -230,6 +231,8 @@ namespace Mammoth.Engine
                     this.SwitchWeapon(1);
                 if (input.KeyPressed(InputType.Weapon2))
                     this.SwitchWeapon(2);
+                if (input.KeyPressed(InputType.Weapon3))
+                    this.SwitchWeapon(3);
 
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
@@ -330,6 +333,7 @@ namespace Mammoth.Engine
         {
             base.Die();
             Console.WriteLine("Player " + ID + " died.");
+
             this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
         }
 
@@ -353,6 +357,11 @@ namespace Mammoth.Engine
             //tosend.AddElement("GameStats", GameStats);
             tosend.AddElement("GunType", ((BaseObject)CurWeapon).getObjectType());
             tosend.AddElement("Gun", CurWeapon);
+            if (Flag != null)
+            {
+                Console.WriteLine("Player is encoding a flag.");
+                tosend.AddElement("Flag", Flag);
+            }
 
             return tosend.Serialize();
         }
@@ -371,6 +380,20 @@ namespace Mammoth.Engine
                 Velocity = (Vector3)props.GetElement("Velocity", Velocity);
             if (props.UpdatesFor("Health"))
                 Health = (float)props.GetElement("Health", Health);
+            if (props.UpdatesFor("Flag"))
+            {
+                if (Flag != null)
+                {
+                    Console.WriteLine("Player has a flag and is decoding updates.");
+                    props.UpdateIEncodable("Flag", Flag);
+                }
+                else
+                {
+                    Console.WriteLine("Player doesn't have a flag and is decoding updates.");
+                    Flag = new Flag(this.Game, Vector3.Zero, 0);
+                    props.UpdateIEncodable("Flag", Flag);
+                }
+            }
             //if (props.UpdatesFor("GameStats"))
                 //props.UpdateIEncodable("GameStats", GameStats);
 
@@ -384,6 +407,9 @@ namespace Mammoth.Engine
                         break;
                     case "SMG":
                         CurWeapon = new SMG(this.Game, this);
+                        break;
+                    case "Shotgun":
+                        CurWeapon = new Shotgun(this.Game, this);
                         break;
                 }
             }

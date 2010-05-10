@@ -46,13 +46,18 @@ namespace Mammoth.Engine.Audio
 
             _sounds.Add("Gunshot", manager.Load<SoundEffect>("sounds/gunshot"));
             _sounds.Add("SMGShot", manager.Load<SoundEffect>("sounds/machinegun"));
+            _volumes.Add("SMGShot", 1.0f);
             _sounds.Add("Ambient", manager.Load<SoundEffect>("sounds/ambient"));
+            _volumes.Add("Ambient", 0.3f);
             _sounds.Add("Reload", manager.Load<SoundEffect>("sounds/reload"));
             _volumes.Add("Reload", 1.0f);
             _sounds.Add("Grunt", manager.Load<SoundEffect>("sounds/grunt"));
             _sounds.Add("Scream", manager.Load<SoundEffect>("sounds/scream"));
             _sounds.Add("Heartbeat", manager.Load<SoundEffect>("sounds/heartbeat"));
+            _volumes.Add("Heartbeat", 1.0f);
             _sounds.Add("GunEmpty", manager.Load<SoundEffect>("sounds/gunempty"));
+            _sounds.Add("ShotgunFire", manager.Load<SoundEffect>("sounds/shotgunfire"));
+            _sounds.Add("ShotgunFireLoad", manager.Load<SoundEffect>("sounds/shotgunfireload"));
         }
 
         #region IAudioService Members

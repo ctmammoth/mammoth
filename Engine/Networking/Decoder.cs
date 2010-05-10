@@ -78,8 +78,8 @@ namespace Mammoth.Engine.Networking
                     rb.Decode(properties);
                     rb.ID = id;
                     ro.registerObject(rb);
-                    Console.WriteLine("Bullet received, position: " + rb.Position + ", orientation: " + rb.Orientation + 
-                        ", ID = " + id);
+                    //Console.WriteLine("Bullet received, position: " + rb.Position + ", orientation: " + rb.Orientation + 
+                        //", ID = " + id);
                 break;
 
                 case "SMGBullet":
@@ -87,7 +87,25 @@ namespace Mammoth.Engine.Networking
                     sb.Decode(properties);
                     sb.ID = id;
                     ro.registerObject(sb);
-                    Console.WriteLine("Bullet received, position: " + sb.Position + ", orientation: " + sb.Orientation +
+                    //Console.WriteLine("Bullet received, position: " + sb.Position + ", orientation: " + sb.Orientation +
+                        //", ID = " + id);
+                break;
+
+                case "ShotgunBullet":
+                    Bullet shb = new ShotgunBullet(this.Game, Vector3.Zero, Quaternion.Identity, 0);
+                    shb.Decode(properties);
+                    shb.ID = id;
+                    ro.registerObject(shb);
+                    //Console.WriteLine("Bullet received, position: " + shb.Position + ", orientation: " + shb.Orientation +
+                        //", ID = " + id);
+                break;
+
+                case "Flag":
+                    Flag flag = new Flag(this.Game, Vector3.Zero, 0);
+                    flag.Decode(properties);
+                    flag.ID = id;
+                    ro.registerObject(flag);
+                    Console.WriteLine("Flag received, position: " + flag.Position + ", positionoffset: " + flag.PositionOffset +
                         ", ID = " + id);
                 break;
 

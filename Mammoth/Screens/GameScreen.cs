@@ -156,7 +156,15 @@ namespace Mammoth
             Room room4 = new Room(modelDB.getNextOpenID(), stairRoom4, this.Game);
 
             // LET'S TRY ADDING A FLAG!!!
-            //Flag flag = new Flag(this.Game, new Vector3(-50.0f, 24.0f, -50.0f));
+            Flag flag1 = new Flag(this.Game, new Vector3(-45.0f, -23.0f, -45.0f), 1);
+            flag1.ID = modelDB.getNextOpenID();
+            modelDB.registerObject(flag1);
+            Console.WriteLine("Flag 1 should exist on the client.");
+            // LET'S TRY ADDING A FLAG!!!
+            Flag flag2 = new Flag(this.Game, new Vector3(-65.0f, -23.0f, -45.0f), 2);
+            flag2.ID = modelDB.getNextOpenID();
+            modelDB.registerObject(flag2);
+            Console.WriteLine("Flag 2 should exist on the client.");
         }
 
         public override void Update(GameTime gameTime, bool hasFocus, bool visible)

@@ -127,6 +127,31 @@ namespace Mammoth.Engine
 
 
             BuildWalls(x, y, z);
+
+            // TODO: put something in the corner to shoot you through that hole in the ceiling.
+            /*ForceFieldLinearKernelDescription forceToApply = new ForceFieldLinearKernelDescription()
+            {
+                Constant = new Vector3(0.0f, 10.0f, 0.0f),
+            };
+
+            ForceFieldDescription holeForceField = new ForceFieldDescription()
+            {
+                Kernel = forceToApply,
+                Pose = Matrix.CreateTranslation(new Vector3(3.0f, 0.0f, 3.0f))
+            };
+
+            BoxForceFieldShapeDescription boostBoxShapeDesc = new BoxForceFieldShapeDescription()
+            {
+                Size = new Vector3(0.5f, 0.5f, 0.5f)
+            };
+
+            ForceFieldShape boostShape = new ForceFieldShape()
+            {
+                Pose = Matrix.CreateTranslation(new Vector3(3.0f, 0.0f, 3.0f))
+            };
+            boostShape.ShapeGroup.CreateShape(boostBoxShapeDesc);*/
+
+            this.Actor = physics.CreateActor(boxActorDesc);
         }
 
         private void Specialize(String attribute)
@@ -274,7 +299,6 @@ namespace Mammoth.Engine
             BuildWall("Z", Z + 0, "X", X + 0, Y);
             BuildWall("Z", Z + 0, "X", X + 21, Y);
             BuildCeiling(X,Y,Z);
-            this.Actor = physics.CreateActor(boxActorDesc);
             
             // this.Position = new Vector3((float)X, (float)Y, (float)Z);
         }

@@ -45,6 +45,7 @@ namespace Mammoth.Engine
             this.Orientation = orient;
             this.HeadOrient = orient;
 
+            Console.WriteLine("Resetting health");
             //Revive life
             this.Health = 100;
         }
@@ -59,7 +60,7 @@ namespace Mammoth.Engine
 
         public virtual void TakeDamage(float damage, IDamager inflicter)
         {
-            this.Health -= damage;
+
         }
 
         public virtual void Die()

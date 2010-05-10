@@ -113,17 +113,6 @@ namespace Mammoth.Engine
                 CurWeapon = Items[newWeapon - 1];
         }
 
-        public override void RespondToTrigger(PhysicalObject obj)
-        {
-            Console.WriteLine("Proxyplayer is responding to a trigger.");
-
-            // If a Flag was triggered, pick it up
-            if (obj is Objects.Flag)
-                if (Flag == null)
-                    // TODO: only pick up flags not owned by your team
-                    Flag = (Objects.Flag)obj;
-        }
-
         public override void TakeDamage(float damage, IDamager inflicter)
         {
             this.Health -= damage;
@@ -139,12 +128,55 @@ namespace Mammoth.Engine
 
                 //update players kills
                 IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-                ProxyInputPlayer pip = (ProxyInputPlayer) mdb.getObject(p.Creator);
+                ProxyInputPlayer pip = (ProxyInputPlayer) mdb.getObject(p.Creator << 25);
                 pip.NumKills++;
 
                 //tell player to die
                 Die();
             }
+        }
+
+        public override void Die()
+        {
+            base.Die();
+
+            IServerNetworking server = (IServerNetworking)Game.Services.GetService(typeof(IServerNetworking));
+
+            // Drop the flag being carried
+            if (Flag != null)
+            {
+                // Keep a reference to the flag that's being dropped
+                Objects.Flag droppedFlag = this.Flag;
+
+                // Drop the Flag
+                Flag.GetDropped();
+                
+                // Send the dropped Flag
+                server.sendThing(this.Flag);
+            }
+
+            server.sendEvent("Death", this.ClientID.ToString());
+        }
+
+        public override void RespondToTrigger(PhysicalObject obj)
+        {
+            Console.WriteLine("ProxyPlayer is responding to a trigger.");
+
+            // If a Flag was triggered, pick it up
+            if (obj is Objects.Flag)
+                if (Flag == null)
+                {
+                    // TODO: only pick up flags not owned by your team
+                    Flag = (Objects.Flag)obj;
+                    Flag.Owner = this;
+                    Console.WriteLine("ProxyPlayer picked up a flag!");
+                }
+                else
+                {
+                    Console.WriteLine("Dropping off a carried flag at another flag!");
+                    Flag.GetDropped();
+                    this.Flag = null;
+                }
         }
 
         #region IEncodable Members

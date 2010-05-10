@@ -120,6 +120,8 @@ namespace Mammoth.Engine.Physics
 
             public override void OnTrigger(Shape triggerShape, Shape otherShape, TriggerFlag status)
             {
+                //Console.WriteLine("Something was triggered!");
+
                 // Make sure the shapes have userdata
                 if (triggerShape.Actor.UserData != null && otherShape.Actor.UserData != null)
                 {
@@ -229,7 +231,7 @@ namespace Mammoth.Engine.Physics
         public RaycastHit RaycastClosestShape(Vector3 position, Vector3 direction)
         {
             // Return the result of the raycast
-            return curScene.RaycastClosestShape(new StillDesign.PhysX.Ray(position, direction), ShapesType.Dynamic);
+            return curScene.RaycastClosestShape(new StillDesign.PhysX.Ray(position, direction), ShapesType.All);
         }
 
         /// <summary>
@@ -385,7 +387,8 @@ namespace Mammoth.Engine.Physics
                     // rate; may change later.
                     TimestepMethod = TimestepMethod.Variable,
                     // Hardware or software simulation
-                    SimulationType = hworsw
+                    SimulationType = hworsw,
+                    UserTriggerReport = new TriggerReporter(this)
                 });
 
                 // Enable collisions for all objects

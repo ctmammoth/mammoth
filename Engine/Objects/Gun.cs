@@ -85,16 +85,9 @@ namespace Mammoth.Engine.Objects
     /// <summary>
     /// A simple weapon which shoots Bullets.
     /// </summary>
-    public abstract class Gun : BaseObject, IHoldeableItem, IEncodable, IRenderable
+    public abstract class Gun : BaseObject, IHoldableItem, IEncodable, IRenderable
     {
         #region Properties
-
-        // This gun's owner
-        private Player Owner
-        {
-            get;
-            set;
-        }
 
         // This gun's orientation
         public Quaternion Orientation
@@ -129,7 +122,7 @@ namespace Mammoth.Engine.Objects
         }
 
         // The magazine used by this gun
-        private Magazine Mag
+        protected Magazine Mag
         {
             get;
             set;
@@ -176,7 +169,7 @@ namespace Mammoth.Engine.Objects
         protected abstract string FireSound { get; }
 
         // Perturbs the bullet's direction
-        private Random directionPerturber;
+        protected Random directionPerturber;
 
         public Gun(Game game, Player owner)
             : base(game)
@@ -223,17 +216,7 @@ namespace Mammoth.Engine.Objects
                 {
                     _lastFiredTime = curTime;
 
-                    // Randomly perturb the bullet
-                    Quaternion perturbation =
-                        Quaternion.CreateFromYawPitchRoll(((float) directionPerturber.NextDouble() - 0.5f) * Inaccuracy,
-                                                          ((float) directionPerturber.NextDouble() - 0.5f) * Inaccuracy,
-                                                          0.0f);    
-                    /*direction = Vector3.Add(direction, new Vector3((float)(directionPerturber.NextDouble() - 0.5) * Inaccuracy,
-                        (float)(directionPerturber.NextDouble() - 0.5) * Inaccuracy,
-                        (float)(directionPerturber.NextDouble() - 0.5) * Inaccuracy));
-                    direction.Normalize();*/
-
-                    SpawnBullet(position, orientation * perturbation, shooterID);
+                    SpawnBullet(position, orientation, shooterID);
                 }
             }
             else if (MagCount > 1)
@@ -252,23 +235,25 @@ namespace Mammoth.Engine.Objects
         /// <param name="position"></param>
         /// <param name="direction"></param>
         /// <param name="shooterID"></param>
-        private void SpawnBullet(Vector3 position, Quaternion orientation, int shooterID)
+        protected virtual void SpawnBullet(Vector3 position, Quaternion orientation, int shooterID)
         {
             Mag.FireShot();
 
             IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
             net.sendEvent("Sound", FireSound);
 
-            Bullet b = createBullet(Game, position, orientation, shooterID >> 25);
+            // Randomly perturb the bullet
+            Quaternion perturbation =
+                Quaternion.CreateFromYawPitchRoll(((float)directionPerturber.NextDouble() - 0.5f) * Inaccuracy,
+                                                  ((float)directionPerturber.NextDouble() - 0.5f) * Inaccuracy,
+                                                  0.0f);  
 
-            // Give this projectile an ID, but it's not really necessary since it gets shot instantaneously
-            //IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            //b.ID = modelDB.getNextOpenID();
+            Bullet b = createBullet(Game, position, orientation * perturbation, shooterID >> 25);
 
             // Send the bullet after it's created
             net.sendThing(b);
 
-            Console.WriteLine("Shot a bullet with a " + getObjectType() + "; " + Mag.AmmoRemaining + " bullets left.");
+            //Console.WriteLine("Shot a bullet with a " + getObjectType() + "; " + Mag.AmmoRemaining + " bullets left.");
         }
 
         /// <summary>
@@ -329,11 +314,12 @@ namespace Mammoth.Engine.Objects
 
         #endregion
 
-        #region IHoldeableItem Members
+        #region IHoldableItem Members
 
-        void IHoldeableItem.SetOwner(Player owner)
+        public Player Owner
         {
-            Owner = owner;
+            get;
+            protected set;
         }
 
         #endregion

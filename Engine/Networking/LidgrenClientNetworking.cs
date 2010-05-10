@@ -189,7 +189,12 @@ namespace Mammoth.Engine.Networking
                             if (mdb.hasObject(playerID))
                                 mdb.getObject(playerID).IsAlive = false;
                             break;
-
+                        case "Death":
+                            int playerObjID = int.Parse(buffer.ReadString()) << 25;
+                            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+                            if (modelDB.hasObject(playerObjID))
+                                ((Player)modelDB.getObject(playerObjID)).Die();
+                            break;
                     }
                     break;
             }
