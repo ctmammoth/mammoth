@@ -103,7 +103,7 @@ namespace Mammoth.Engine
                 // Get the PhysicalObject that owns the Shape hit by the raycast
                 PhysicalObject objHit = ((PhysicalObject)rayHit.Shape.Actor.UserData);
 
-                if (objHit != null)
+                if (objHit != null && !(objHit is Mammoth.Engine.Objects.Flag))
                 {
                     //Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something with userdata of type: " + objHit.getObjectType());
                     // Make sure the collision is within the distance we've moved during this timestep.
