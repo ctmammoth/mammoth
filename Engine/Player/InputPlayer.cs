@@ -256,7 +256,7 @@ namespace Mammoth.Engine
         /// </summary>
         protected virtual void Shoot(GameTime time) 
         {
-            Console.WriteLine("Throwing, orientation is: " + this.HeadOrient);
+            //Console.WriteLine("Throwing, orientation is: " + this.HeadOrient);
         }
 
         /// <summary>
@@ -334,8 +334,7 @@ namespace Mammoth.Engine
             base.Die();
             Console.WriteLine("Player " + ID + " died.");
 
-            //this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
-            this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), this.Orientation);
+            this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
         }
 
         #region IEncodable Members
