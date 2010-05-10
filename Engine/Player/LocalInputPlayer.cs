@@ -32,6 +32,8 @@ namespace Mammoth.Engine
 
         public override void Update(GameTime gameTime)
         {
+            //Console.WriteLine("Position: " + this.Position);
+
             base.Update(gameTime);
 
             if (this.Health <= 20.0f)
@@ -43,7 +45,7 @@ namespace Mammoth.Engine
 
         public override void Die()
         {
-            base.Die();
+            Console.WriteLine("I died.");
 
             IAudioService audio = (IAudioService)this.Game.Services.GetService(typeof(IAudioService));
             audio.stopSound("Heartbeat");
