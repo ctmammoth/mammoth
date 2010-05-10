@@ -12,9 +12,7 @@ namespace Mammoth.Engine
     {
         public PhysicalObject(Game game)
             : base(game)
-        {
-
-        }
+        { }
         
         /// <summary>
         /// Supplies an Actor for use by PhysX. Allows interactions with other objects such as collisions.
@@ -27,7 +25,8 @@ namespace Mammoth.Engine
 
 
         /// <summary>
-        /// Defines the position of the object by the position of the PhysX Actor.
+        /// Defines the position of the object by the position of the PhysX Actor.  Note: this should not be called
+        /// on PhysicalObjects with static Actors!
         /// </summary>
         public virtual Vector3 Position
         {
@@ -46,7 +45,8 @@ namespace Mammoth.Engine
         }
 
         /// <summary>
-        /// Defines the orientation of the object by the orientation of the object according to PhysX.
+        /// Defines the orientation of the object by the orientation of the object according to PhysX.  Note: this 
+        /// should not be called on PhysicalObjects with static Actors!
         /// </summary>
         public virtual Quaternion Orientation
         {
@@ -71,8 +71,8 @@ namespace Mammoth.Engine
         public virtual void CollideWith(PhysicalObject obj) { }
 
         /// <summary>
-        /// Provides a way for objects to react to triggers.  This method is used by the object being triggered
-        /// and the triggerer.
+        /// Provides a way for objects to react to triggers.  This method is called whenever an object triggers
+        /// another object.
         /// </summary>
         /// <param name="obj">The object triggering or being triggered.</param>
         public virtual void RespondToTrigger(PhysicalObject obj) { }

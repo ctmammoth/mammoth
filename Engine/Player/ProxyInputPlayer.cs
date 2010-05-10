@@ -66,29 +66,24 @@ namespace Mammoth.Engine
             // Update player using emulated input state.
             base.Update(gameTime);
 
-            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-
-            foreach (InputState state in input.States) 
-            {
-                if ((state.KeyPressed(InputType.SpawnRoom)))
-                {
-                    ObjectParameters stairRoom = new ObjectParameters();
-                    stairRoom.AddAttribute("X", "-50");
-                    stairRoom.AddAttribute("Y", "-2");
-                    stairRoom.AddAttribute("Z", "-50");
-                    stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
-                    Room room = new Room(modelDB.getNextOpenID(), stairRoom, this.Game);
-                    Room.BuildRoomOnServer(stairRoom, this.Game);
-                }
-            }
-
-           
-
-                
-
             //Once the player has been updated server side, send it to clients to display as RemotePlayer's
             IServerNetworking network = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
             network.sendThing(this);
+        }
+
+        protected override void SpawnRoom(Vector3 roomPos)
+        {
+            Console.WriteLine("ProxyInputPlayer is spawning a room.");
+
+            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+
+            ObjectParameters stairRoom = new ObjectParameters();
+            stairRoom.AddAttribute("X", "-50");
+            stairRoom.AddAttribute("Y", "-2");
+            stairRoom.AddAttribute("Z", "-50");
+            stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
+            Room room = new Room(modelDB.getNextOpenID(), stairRoom, this.Game);
+            Room.BuildRoomOnServer(stairRoom, this.Game);
         }
 
         /// <summary>
@@ -178,20 +173,27 @@ namespace Mammoth.Engine
         {
             Console.WriteLine("ProxyPlayer is responding to a trigger.");
 
-            // If a Flag was triggered, pick it up
+            // Check whether a Flag was trigger
             if (obj is Objects.Flag)
-                if (Flag == null)
+                // Check whether the Flag is not being carried
+                if (((Objects.Flag)obj).Owner == null)
                 {
-                    // TODO: only pick up flags not owned by your team
-                    Flag = (Objects.Flag)obj;
-                    Flag.Owner = this;
-                    Console.WriteLine("ProxyPlayer picked up a flag!");
-                }
-                else
-                {
-                    Console.WriteLine("Dropping off a carried flag at another flag!");
-                    Flag.GetDropped();
-                    this.Flag = null;
+                    // If this player is not carrying a Flag
+                    if (Flag == null)
+                    {
+                        // TODO: only pick up flags not owned by your team
+                        Flag = (Objects.Flag)obj;
+                        Flag.Owner = this;
+                        Console.WriteLine("ProxyPlayer picked up a flag!");
+                    }
+                    else
+                    {
+                        // Otherwise drop the Flag being carried if the Flag just encountered is your team's flag
+                        // TODO: make sure the Flag is owned by your team and located at your spawn point
+                        Console.WriteLine("Dropping off a carried flag at another flag!");
+                        Flag.GetDropped();
+                        this.Flag = null;
+                    }
                 }
         }
 

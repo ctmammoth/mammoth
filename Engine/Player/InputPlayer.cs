@@ -234,6 +234,9 @@ namespace Mammoth.Engine
                 if (input.KeyPressed(InputType.Weapon3))
                     this.SwitchWeapon(3);
 
+                if ((input.KeyPressed(InputType.SpawnRoom)))
+                    this.SpawnRoom(Vector3.Zero);
+
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
 
@@ -249,6 +252,11 @@ namespace Mammoth.Engine
                 CurWeapon.Update(gameTime);
 
             //Console.WriteLine("Weapon " + ((BaseObject)CurWeapon).getObjectType() + " has " + CurWeapon.ShotsLeft() + " shots left.");
+        }
+
+        protected virtual void SpawnRoom(Vector3 roomPos)
+        {
+            Console.WriteLine("Spawning a room.");
         }
 
         /// <summary>

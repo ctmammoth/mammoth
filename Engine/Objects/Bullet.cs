@@ -14,7 +14,9 @@ using Mammoth.Engine.Audio;
 
 namespace Mammoth.Engine
 {
-    //TODO: Make bullet drawable
+    /// <summary>
+    /// Represents a bullet, ie a fast-moving, small projectile.
+    /// </summary>
     public abstract class Bullet : Projectile, IEncodable, IRenderable
     {
         /// <summary>
@@ -36,6 +38,9 @@ namespace Mammoth.Engine
             this.Model3D = r.LoadModel("bullet_low");
         }
 
+        /// <summary>
+        /// Gives the bullet an actor with a small sphere shape.
+        /// </summary>
         private void InitializePhysX()
         {
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
@@ -60,6 +65,15 @@ namespace Mammoth.Engine
             this.Actor = physics.CreateActor(aDesc, this);
         }
 
+        #region BaseObject properties
+
+        /// <summary>
+        /// Updates a bullet's position.  This method prevents bullets from warping through walls.  It calculates the bullet's
+        /// new position and shoots a ray in that direction.  If the ray collides with a shape at some point between the current
+        /// and new position, the bullet attempts to damage the object owning the shape.  The bullet is destroyed when it collides
+        /// with anything.  Otherwise the bullet is moved to the new position.
+        /// </summary>
+        /// <param name="gameTime">The game time at which the update occurs.</param>
         public override void Update(GameTime gameTime)
         {
             //Console.WriteLine("I'm here with " + Velocity + " id=" + ID);
@@ -134,6 +148,8 @@ namespace Mammoth.Engine
 
         public abstract override string getObjectType();
 
+        #endregion
+
         #region IEncodeable members
 
         public byte[] Encode()
@@ -164,6 +180,7 @@ namespace Mammoth.Engine
             //Console.WriteLine("Bullet Position received: " + Position);
             //Console.WriteLine("Bullet Orientation received: " + Orientation);
         }
+
         #endregion
 
         #region IDamager Members

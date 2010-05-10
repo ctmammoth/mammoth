@@ -67,7 +67,7 @@ namespace Mammoth.Engine
             tosend.AddElement("y", y);
             tosend.AddElement("z", z);
             tosend.AddElement("roomType", roomType);
-            // tosend.AddElement("items", items);
+            //tosend.AddElement("items", items);
             return tosend.Serialize();
         }
 

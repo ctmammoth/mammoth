@@ -7,18 +7,25 @@ using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine.Objects
 {
+    /// <summary>
+    /// This bullet is fired by the revolver gun.
+    /// </summary>
     class RevolverBullet : Bullet
     {
         public RevolverBullet(Game game, Vector3 position, Quaternion orient, int creator)
             : base(game, position, orient, creator)
-        {
+        { }
 
-        }
+        #region BaseObject Properties
 
         public override string getObjectType()
         {
             return "RevolverBullet";
         }
+
+        #endregion
+
+        #region Bullet Properties
 
         public override float Speed
         {
@@ -31,5 +38,7 @@ namespace Mammoth.Engine.Objects
             get { return 14.0f; }
             protected set { }
         }
+
+        #endregion
     }
 }
