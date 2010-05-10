@@ -257,7 +257,10 @@ namespace Mammoth.Engine.Networking
                                           where obj is IEncodable
                                           select obj as IEncodable;
             foreach (IEncodable obj in encodables)
+            {
+                Console.WriteLine("Initial send of " + ((BaseObject)obj).getObjectType() + " with ID: " + ((BaseObject)obj).ID);
                 sendThing(obj, id);
+            }
         }
 
         /// <summary>
