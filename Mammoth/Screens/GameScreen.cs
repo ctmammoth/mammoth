@@ -149,7 +149,6 @@ namespace Mammoth
                     CenterCursor();
                 }
 
-
                 // Update all of the game components that are part of the game (in the logical sense, not the XNA sense).
                 // TODO: IMPORTANT: We need to make sure that input events are only handled if the game has focus.
                 // I might have fixed the above already, not sure.  There might be a "block" on giving out input events
@@ -163,6 +162,11 @@ namespace Mammoth
                 // Update them according to their UpdateOrder.  Yes, this doesn't need to sort every time.
                 foreach (IUpdateable component in updateList.OrderBy((comp) => comp.UpdateOrder))
                     component.Update(gameTime);
+
+                // Send the current input state to the server.
+                IInputService input = (IInputService)this.Game.Services.GetService(typeof(IInputService));
+                IClientNetworking net = (IClientNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+                net.sendThing(input.States.Peek());
 
                 // TODO: Do this correctly?
                 // Update the HUD.

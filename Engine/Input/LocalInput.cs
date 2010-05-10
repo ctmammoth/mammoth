@@ -113,7 +113,10 @@ namespace Mammoth.Engine.Input
             get
             {
                 Queue<InputState> ret = new Queue<InputState>();
-                ret.Enqueue(_state);
+                if (!this.InputHandled)
+                    ret.Enqueue(_state);
+                else
+                    ret.Enqueue(new InputState());
                 return ret;
             }
         }

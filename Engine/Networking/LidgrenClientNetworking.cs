@@ -74,11 +74,6 @@ namespace Mammoth.Engine.Networking
                 return;
             base.Update(gameTime);
 
-            // Queue up the input state to send
-            IInputService inputServer = (IInputService)this.Game.Services.GetService(typeof(IInputService));
-            InputState state = inputServer.States.Peek();
-            sendThing(state);
-
             // Send everything in the queue
             while (_toSend.Count != 0)
                 sendMessage(_toSend.Dequeue());
