@@ -122,6 +122,14 @@ namespace Mammoth.Engine.Networking
                     r.Decode(properties);
                 break;
 
+                case "RealStaticObject":
+                    Console.WriteLine("Room recieved");
+                    RealStaticObject o = new RealStaticObject(this.Game);
+                    o.Decode(properties);
+                    IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+                    mdb.registerObject(o);
+                break;
+
                 default:
                 Console.WriteLine("Object type was not recognized: " + type);
                 break;
