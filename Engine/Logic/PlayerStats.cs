@@ -32,6 +32,11 @@ namespace Mammoth.Engine
         }
         #endregion
 
+        public String getObjectType()
+        {
+            return "PlayerStats";
+        }
+
        /* 
         #region Teams
         public string LeadingTeam
