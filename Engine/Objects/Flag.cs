@@ -19,10 +19,16 @@ namespace Mammoth.Engine.Objects
             : base(game)
         {
             // Give this a sphere shape trigger
+            //SphereShapeDescription trigShapeDesc = new SphereShapeDescription()
+            //{
+            //    Radius = 0.3f,
+            //    Flags = ShapeFlag.TriggerEnable
+            //};
+
+            // Give this a sphere shape trigger
             SphereShapeDescription sDesc = new SphereShapeDescription()
             {
-                Radius = 0.3f,
-                Flags = ShapeFlag.TriggerEnable
+                Radius = 0.3f
             };
 
             ActorDescription aDesc = new ActorDescription()
@@ -45,8 +51,13 @@ namespace Mammoth.Engine.Objects
 
             // Load a flag model
             // TODO: get a flag model or something
-            IRenderService renderer = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
-            this.Model3D = renderer.LoadModel("soldier-low-poly");
+            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
+            this.Model3D = r.LoadModel("brickbox");
+
+            // HACK HACK HACK
+            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            this.ID = mdb.getNextOpenID();
+            mdb.registerObject(this);
         }
 
         public override string getObjectType()
@@ -67,19 +78,14 @@ namespace Mammoth.Engine.Objects
         {
             base.Draw(gameTime);
 
-            Renderer renderer = (Renderer)this.Game.Services.GetService(typeof(Renderer));
+            Renderer renderer = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
 
             // Draw the flag
-            renderer.DrawRenderable(this);    
+            if (Owner == null)
+                renderer.DrawRenderable(this);    
         }
 
         #region Properties
-
-        public Vector3 Position
-        {
-            get;
-            protected set;
-        }
 
         public Vector3 PositionOffset
         {
