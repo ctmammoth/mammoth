@@ -34,8 +34,8 @@ namespace Mammoth.Engine
         public void ResetGame()
         {
             //clear all objects
-            Team1 = null;
-            Team2 = null;
+            Team1 = new Team(1);
+            Team2 = new Team(2);
             GameStart = DateTime.Now;
             GameGoing = false;
             Players = new Hashtable();
