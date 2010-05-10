@@ -57,6 +57,7 @@ namespace Mammoth.Server
 
             //Add GameLogic
             GameLogic g = new GameLogic(this);
+            this.Components.Add(g);
             this.Services.AddService(typeof(GameLogic), g);
 
             base.Initialize();
