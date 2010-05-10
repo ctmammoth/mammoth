@@ -35,7 +35,7 @@ namespace Mammoth.Engine.Objects
 
         protected override int MagazineCapacity
         {
-            get { return 6; }
+            get { return 30; }
         }
 
         protected override int NumMagazines
