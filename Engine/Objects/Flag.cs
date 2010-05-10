@@ -21,8 +21,8 @@ namespace Mammoth.Engine.Objects
             // Give this a sphere shape trigger
             SphereShapeDescription sDesc = new SphereShapeDescription()
             {
-                Radius = 10.0f,
-                Flags = ShapeFlag.TriggerOnEnter
+                Radius = 10.0f//,
+                //Flags = ShapeFlag.TriggerOnEnter
             };
 
             // Make a body: flags should be kinematic since they should get their positions from the player carrying them.
