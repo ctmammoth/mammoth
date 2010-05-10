@@ -95,7 +95,7 @@ namespace Mammoth.Engine
 
             // Perform the raycast
             Vector3 dir = Vector3.Transform(Vector3.Forward, this.Orientation);
-            RaycastHit rayHit = physics.RaycastClosestShape(this.Position, dir);
+            RaycastHit rayHit = physics.RaycastClosestShape(this.Position + dir * 0.35f, dir);
 
             // Get the difference in position
             float distanceMoved = speed * (float) gameTime.ElapsedGameTime.TotalSeconds;
