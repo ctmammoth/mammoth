@@ -346,7 +346,7 @@ namespace Mammoth.Engine.Networking
         public Queue<InputState> getInputStateQueue(int playerID)
         {
             if (_inputStates[playerID] == null)
-                throw new Exception("Invalid player id: " + playerID);
+                return;
             return _inputStates[playerID];
         }
 
