@@ -117,7 +117,7 @@ namespace Mammoth.Engine.Networking
                 break;
 
                 default:
-                Console.WriteLine("Object type was not recognized: " + type);
+                // Console.WriteLine("Object type was not recognized: " + type);
                 break;
             }
         }
