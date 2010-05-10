@@ -18,11 +18,19 @@ using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
+    /// <summary>
+    /// Represents an object that has a model and single physical Actor
+    /// 
+    /// </summary>
     public class RealStaticObject : PhysicalObject, IEncodable, IRenderable
     {
-        private Vector3 dimensions, localPosition; ///
+        private Vector3 dimensions, localPosition; 
         private String typeName;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="gameTime">The current gameTime</param>
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);

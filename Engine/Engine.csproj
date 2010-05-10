@@ -108,7 +108,6 @@
     <Compile Include="Player\LocalInputPlayer.cs" />
     <Compile Include="ModelDatabase.cs" />
     <Compile Include="Objects\WallBlock.cs" />
-    <Compile Include="Objects\Door.cs" />
     <Compile Include="Networking\Decoder.cs" />
     <Compile Include="Networking\DummyNetworking.cs" />
     <Compile Include="Input\IInputService.cs" />
