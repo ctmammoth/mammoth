@@ -128,11 +128,19 @@ namespace Mammoth
             };
             baseWidget.Add(timer);
 
+            // Add the gun
+            GunWidget gunner = new GunWidget(this.Game, this.LocalPlayer)
+            {
+                Size = new Vector2(50, 50),
+                Center = new Vector2(this.Game.Window.ClientBounds.Width - 100, this.Game.Window.ClientBounds.Height - 150)
+            };
+            baseWidget.Add(gunner);
+
             // Add the ammo counter
             AmmoWidget ammo = new AmmoWidget(this.Game, this.LocalPlayer)
             {
                 Size = new Vector2(50, 50),
-                Center = new Vector2(this.Game.Window.ClientBounds.Width - 100, this.Game.Window.ClientBounds.Height - 50)
+                Center = new Vector2(this.Game.Window.ClientBounds.Width - 100, this.Game.Window.ClientBounds.Height - 100)
             };
             baseWidget.Add(ammo);
 
@@ -140,7 +148,7 @@ namespace Mammoth
             HealthWidget health = new HealthWidget(this.Game, this.LocalPlayer)
             {
                 Size = new Vector2(50, 50),
-                Center = new Vector2(this.Game.Window.ClientBounds.Width - 100, this.Game.Window.ClientBounds.Height - 100)
+                Center = new Vector2(this.Game.Window.ClientBounds.Width - 100, this.Game.Window.ClientBounds.Height - 50)
             };
             baseWidget.Add(health);
 

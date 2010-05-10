@@ -31,6 +31,9 @@ namespace Mammoth.Engine
 
             //Defines model height which is used by the camera
             this.Height = 6.0f;
+
+            // Give the player some stats
+            PlayerStats = new PlayerStats();
         }
 
         /// <summary>
@@ -76,9 +79,14 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
+            GameLogic g = (GameLogic)this.Game.Services.GetService(typeof(GameLogic));
+            int myID = ID >> 25;
+            PlayerStats = new PlayerStats(NumKills, NumCaptures, NumDeaths, myID, g);
+
             tosend.AddElement("Position", Position);
             tosend.AddElement("Orientation", Orientation);
             tosend.AddElement("Velocity", Velocity);
+            tosend.AddElement("PlayerStats", PlayerStats);
 
             return tosend.Serialize();
         }
@@ -93,6 +101,9 @@ namespace Mammoth.Engine
                 Velocity = (Vector3) props.GetElement("Velocity", Velocity);
             if (props.UpdatesFor("Orientation"))
                 Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
+            if (props.UpdatesFor("PlayerStats"))
+                props.UpdateIEncodable("PlayerStats", PlayerStats);
+
         }
 
         #endregion
@@ -206,6 +217,11 @@ namespace Mammoth.Engine
             set;
         }
 
+        public PlayerStats PlayerStats
+        {
+            get;
+            set;
+        }
         #endregion
     }
 }

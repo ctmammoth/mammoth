@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 using StillDesign.PhysX;
 
@@ -10,95 +11,139 @@ using Microsoft.Xna.Framework.Input;
 
 using Mammoth.Engine.Input;
 using Mammoth.Engine.Physics;
+using Mammoth.Engine.Objects;
+using Mammoth.Engine.Networking;
+using Mammoth.Engine.Interface;
+using Mammoth.Engine;
 
 namespace Mammoth.Engine
 {
-    public abstract class InputPlayer : Player, IDestructable
+    /// <summary>
+    /// An InputPlayer is a Player whose properties may be modified by the IInputService.
+    /// </summary>
+    public abstract class InputPlayer : Player
     {
 
-        /*[Flags]
-        public enum EncodableProperties
+        #region Properties
+        
+        //CURRENT COLLISION
+        public ControllerCollisionFlag CurrentCollision
         {
-            None = 0x00,
-            Position = 0x01,
-            Orientation = 0x02,
-            Velocity = 0x04,
-            Health = 0x08
-        }*/
+            get;
+            private set;
+        }
+        //YAW
+        private float Yaw
+        {
+            get;
+            set;
+        }
 
+        //PITCH
+        private float Pitch
+        {
+            get;
+            set;
+        }
 
-        //EncodableProperties dirty;
+        // The armed weapon
+        public Gun CurWeapon
+        {
+            get;
+            set;
+        }
 
+        // The weapons owned by this player
+        protected Gun[] Items
+        {
+            get;
+            set;
+        }
+
+        public PlayerStats PlayerStats
+        {
+            get;
+            set;
+        }
+
+        public Flag Flag
+        {
+            get;
+            protected set;
+        }
+        #endregion
+
+        /// <summary>
+        /// Initialize a new InputPlayer. Does nothing special.
+        /// </summary>
         public InputPlayer(Game game) : base(game)
         {
-            Init();
-            //dirty = EncodableProperties.None;
-        }
-
-        protected void Init()
-        {
-            this.Height = 6.0f;
-
+            // Initializes PhysX of a player.
             InitializePhysX();
 
-            /// TODO: Remove this call - the player will get spawned by the game logic.
             this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
 
-            this.CurrentCollision = 0;
+            // Give the player 5 weapons, for now
+            Items = new Gun[5];
+            // Give the player a simple gun, for now
+            Items[0] = new Revolver(game, this);
+            Items[1] = new SMG(game, this);
+            Items[2] = new Shotgun(game, this);
+            CurWeapon = Items[0];
 
-            this.Health = 100;
+            // Give the player some stats
+            PlayerStats = new PlayerStats();
         }
 
-
+        /// <summary>
+        /// Resets all the properties of an InputPlayer to default values. Spawns the player with passed in position and orientation.
+        /// </summary>
+        /// <param name="pos">Starting position.</param>
+        /// <param name="orient">Starting orientation.</param>
         public override void Spawn(Vector3 pos, Quaternion orient)
         {
+            // Set the spawn properties that are unique to all players.
             base.Spawn(pos, orient);
 
+            // TODO: Fix this stuff.
+            // Set properties specific to an input-based player.
+            this.CurrentCollision = 0;
             this.Yaw = 0.0f;
             this.Pitch = 0.0f;
         }
 
-        // TODO: Clean this up a bit?
+        /// <summary>
+        /// Sets up the PhysX of a player and "syncs" with model.
+        /// </summary>
         public void InitializePhysX()
         {
+            //Gives the player a bounding box and a physical description
             IPhysicsManagerService physics = (IPhysicsManagerService) this.Game.Services.GetService(typeof(IPhysicsManagerService));
-
             ControllerDescription desc = new CapsuleControllerDescription(1, this.Height - 2.0f)
             {
                 UpDirection = Axis.Y,
-                Position = Vector3.UnitY * (this.Height - 1.0f) / 2.0f
+                Position = Vector3.UnitY * (this.Height - 1.0f) / 2.0f,
+                StepOffset = 0.55f
             };
-            this.PositionOffset = -1.0f * desc.Position;
 
+            //Describe the offset of the model to sync model center with PhysX Controller center
+            this.PositionOffset = -1.0f * desc.Position;
+            
+            //Set controllet to one defined above
             this.Controller = physics.CreateController(desc, this);
         }
 
-        public void Die()
-        {
-            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
-            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            this.Dead = true;
-            // Remove the physx controller
-            physics.RemoveController(this.Controller);
-            // Remove the model
-            modelDB.removeObject(this.ID);
-        }
-
+        /// <summary>
+        /// On every timestep, checks that player is still alive, checks queued input states and reacts.
+        /// </summary>
+        /// <param name="gameTime">The Game Time.</param>
         public override void Update(GameTime gameTime)
         {
-            // Check whether the player is dead
-            if (Dead)
-            {
-                Die();
-                return;
-            }
-
+            // Load services for use later.
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             IInputService inputService = (IInputService)this.Game.Services.GetService(typeof(IInputService));
 
-            //Console.WriteLine("Position in update: " + Position);
-            //Console.WriteLine("Position in update (actor): " + Actor.GlobalPosition);
-
+            // Go through queued InputStates and modify Player properties accordingly.
             foreach (var input in inputService.States)
             {
                 // Get a dampened version of the mouse movement.
@@ -107,10 +152,9 @@ namespace Mammoth.Engine
                 this.Yaw = MathHelper.WrapAngle(this.Yaw - delta.X);
                 // Modify the pitch based on vertical mouse movement.
                 const float pitchClamp = 0.9876f;
-
+                //Calculate pitch
                 // TODO: There's probably a better (faster) way of doing this...
                 this.Pitch = (float)Math.Asin(MathHelper.Clamp((float)Math.Sin(this.Pitch - delta.Y), -pitchClamp, pitchClamp));
-
                 // Set the orientation of the player's body.  We only use the yaw, as we don't want the player model
                 // rotating up and down.
                 this.Orientation = Quaternion.CreateFromYawPitchRoll(this.Yaw, 0, 0);
@@ -153,7 +197,14 @@ namespace Mammoth.Engine
 
                 if (input.IsKeyDown(InputType.Right)) // Right?
                     motion += Vector3.Right;
-                //}
+
+                //TODO: Put this somewhere not sucky.
+                if (input.KeyPressed(InputType.Stats) && this is LocalInputPlayer)
+                {
+                    TScreenManager t = (TScreenManager)this.Game.Services.GetService(typeof(TScreenManager));
+                    //t.AddScreen(new StatsScreen(this.Game, GameStats));
+                    t.AddScreen(new StatsScreen(this.Game, this));
+                }
 
                 // Normalize the motion vector (so we don't move at twice the speed when moving diagonally).
                 if (motion != Vector3.Zero)
@@ -168,58 +219,60 @@ namespace Mammoth.Engine
                     if (input.IsKeyDown(InputType.Jump))
                         this.Velocity += Vector3.Up / 4.0f;
 
-                //Console.WriteLine("Position before throw: " + Position);
-                // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
-                if (input.KeyPressed(InputType.Shoot))
-                    this.Throw();
-                //Console.WriteLine("Position after throw: " + Position);
-                //Console.WriteLine("Orientation after throw: " + Orientation);
+                if (CurWeapon != null && CurWeapon.ShouldShoot(input))
+                    this.Shoot(gameTime);
+
+                // Reload the user's gun
+                if (input.KeyPressed(InputType.Reload))
+                    this.Reload(gameTime);
+
+                // Check for weapon switches
+                if (input.KeyPressed(InputType.Weapon1))
+                    this.SwitchWeapon(1);
+                if (input.KeyPressed(InputType.Weapon2))
+                    this.SwitchWeapon(2);
+                if (input.KeyPressed(InputType.Weapon3))
+                    this.SwitchWeapon(3);
 
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
-                //Console.WriteLine("Collision: " + this.CurrentCollision);
 
                 // Now, we need to reset parts of the velocity so that we're not compounding it.
                 if (InCollisionState(ControllerCollisionFlag.Down))
                     this.Velocity = Vector3.Zero;
                 else
                     this.Velocity += physics.Scene.Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds - motion;
-
-                //Console.WriteLine("Velocity: " + Velocity);
-                //Console.WriteLine("Motion: " + motion);
-                //Console.WriteLine("Position before exiting: " + Position);
-                //Console.WriteLine("Orientation before exiting: " + Orientation);
             }
+
+            // Update main weapon
+            if (CurWeapon != null)
+                CurWeapon.Update(gameTime);
+
+            //Console.WriteLine("Weapon " + ((BaseObject)CurWeapon).getObjectType() + " has " + CurWeapon.ShotsLeft() + " shots left.");
         }
 
-        // TODO: MAKE THIS LEGITIMATE
-<<<<<<< HEAD
-        protected virtual Bullet Throw()
+        /// <summary>
+        /// Throws a "bullet" in the current direction of the player. Overridden in ProxyInputPlayer since shooting only happens on server-side.
+        /// </summary>
+        protected virtual void Shoot(GameTime time) 
         {
-            Vector3 forward = Vector3.Transform(Vector3.Forward, HeadOrient) * 1000.0f;
-            forward.Normalize();
-            Vector3 position = Position + (Vector3.Up * Height / 4.0f);
-            position = Vector3.Add(position, forward);
+            Console.WriteLine("Throwing, orientation is: " + this.HeadOrient);
+        }
 
-            // Make sure the bullet isn't spawned in the player: shift it by a bit
-            Bullet b = new Bullet(Game, position, forward);
+        /// <summary>
+        /// Reloads the player's current weapon.  Overridden in ProxyInputPlayer since reloading only happens on server-side.
+        /// </summary>
+        protected virtual void Reload(GameTime time)
+        {
+            Console.WriteLine("Reloading.");
+        }
 
-            // Give this projectile an ID
-            IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            b.ID = modelDB.getNextOpenID();
-            modelDB.registerObject(b);
-            Console.WriteLine("Position vec: " + position);
-            Console.WriteLine("Throwing bullet with position: " + b.Position);
-            Console.WriteLine("Player position: " + Position);
-
-            
-
-            // ObjectFactories.
-            return b;
-=======
-        protected virtual void Throw() {
-            Console.WriteLine("Throwing");
->>>>>>> 876a4ee9d0a4e0d801233e46017c35f49d9fc2b6
+        /// <summary>
+        /// Switches the player's current weapon.  Overridden in ProxyInputPlayer since switching only happens on server-side.
+        /// </summary>
+        protected virtual void SwitchWeapon(int newWeapon)
+        {
+            Console.WriteLine("Switching weapon to " + Items[newWeapon - 1].getObjectType());
         }
 
         /// <summary>
@@ -234,53 +287,81 @@ namespace Mammoth.Engine
             return (this.CurrentCollision & flag) == flag;
         }
 
+        /// <summary>
+        /// Draws the InputPlayer.
+        /// </summary>
+        /// <param name="gameTime">The Game Time.</param>
         public override void Draw(GameTime gameTime)
         {
+            //Call Player's Draw
             base.Draw(gameTime);
 
+            //Load services
             IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
             ICameraService cam = (ICameraService)this.Game.Services.GetService(typeof(ICameraService));
 
-            // If you're using the first-person camera, don't draw your own geometry.
+            //If you're using the first-person camera, don't draw your own geometry.
             if (cam.Type != Camera.CameraType.FIRST_PERSON)
                 r.DrawRenderable(this);
+            if (CurWeapon != null)
+                ((BaseObject)CurWeapon).Draw(gameTime);
         }
 
-        public override string getObjectType()
+        public override void RespondToTrigger(PhysicalObject obj)
         {
-            //return typeof(InputPlayer).ToString();
-            return "Player";
+            Console.WriteLine("Responding to trigger.");
         }
 
-        public override void CollideWith(PhysicalObject obj)
+        public override void TakeDamage(float damage, IDamager inflicter)
         {
-            if (obj is IDamager)
-                TakeDamage(((IDamager)obj).GetDamage());
+            base.TakeDamage(damage, inflicter);
+            Console.WriteLine("Health: " + this.Health);
+            if (this.Health <= 0)
+            {
+                Die();
+                //Get your own id
+                int myID = this.ID >> 25;
+                Projectile p = (Projectile)inflicter;
+                Console.WriteLine("Player " + myID + " was killed by Player " + p.Creator);
+            }
         }
 
-        private void TakeDamage(float damage)
+        /// <summary>
+        /// Respawns the player when the it dies.
+        /// </summary>
+        public override void Die()
         {
-            Health -= damage;
+            base.Die();
+            Console.WriteLine("Player " + ID + " died.");
+
+            this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
         }
+
+        #region IEncodable Members
 
         public override byte[] Encode()
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-            //if ((dirty & EncodableProperties.Position) == EncodableProperties.Position)
-            //{
-                tosend.AddElement("Position", Position);
-                //Console.WriteLine("Sending new pos: " + Position);
-            //}
-            //if ((dirty & EncodableProperties.Orientation) == EncodableProperties.Orientation)
-                tosend.AddElement("Orientation", Orientation);
-            //if ((dirty & EncodableProperties.Velocity) == EncodableProperties.Velocity)
-                tosend.AddElement("Velocity", Velocity);
-            //if ((dirty & EncodableProperties.Health) == EncodableProperties.Health)
-                tosend.AddElement("Health", Velocity);
+            GameLogic g = (GameLogic)this.Game.Services.GetService(typeof(GameLogic));
+            int myID = ID >> 25;
+            PlayerStats = new PlayerStats(NumKills, NumCaptures, NumDeaths, myID, g);
 
-            //reset DIRTY
-            //dirty = EncodableProperties.None;
+            //Console.WriteLine("Encoding: " + GameStats.ToString());
+
+            tosend.AddElement("Position", Position);
+            tosend.AddElement("Orientation", Orientation);
+            tosend.AddElement("HeadOrient", HeadOrient);
+            tosend.AddElement("Velocity", Velocity);
+            tosend.AddElement("Health", Health);
+            tosend.AddElement("PlayerStats", PlayerStats);
+            tosend.AddElement("GunType", ((BaseObject)CurWeapon).getObjectType());
+            tosend.AddElement("Gun", CurWeapon);
+            if (Flag != null)
+            {
+                Console.WriteLine("Player is encoding a flag.");
+                tosend.AddElement("Flag", Flag);
+            }
 
             return tosend.Serialize();
         }
@@ -290,55 +371,60 @@ namespace Mammoth.Engine
             Networking.Encoder props = new Networking.Encoder(serialized);
 
             if (props.UpdatesFor("Position"))
-            {
                 Position = (Vector3)props.GetElement("Position", Position);
-                //Console.WriteLine("Received new pos: " + Position);
-            }
             if (props.UpdatesFor("Orientation"))
-            {
                 Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
-                //Console.WriteLine("Received new orientation: " + Orientation);
-            }
+            if (props.UpdatesFor("HeadOrient"))
+                HeadOrient = (Quaternion)props.GetElement("HeadOrient", HeadOrient);
             if (props.UpdatesFor("Velocity"))
                 Velocity = (Vector3)props.GetElement("Velocity", Velocity);
             if (props.UpdatesFor("Health"))
-                Velocity = (Vector3)props.GetElement("Health", Velocity);
-        }
-
-        #region Properties
-
-        public ControllerCollisionFlag CurrentCollision
-        {
-            get;
-            private set;
-        }
-
-        private float Yaw
-        {
-            get;
-            set;
-        }
-
-        private float Pitch
-        {
-            get;
-            set;
-        }
-
-        float _health;
-        public float Health
-        {
-            get
+                Health = (float)props.GetElement("Health", Health);
+<<<<<<< Updated upstream
+            if (props.UpdatesFor("Flag"))
             {
-                return _health;
+                if (Flag != null)
+                {
+                    //Console.WriteLine("Player has a flag and is decoding updates.");
+                    props.UpdateIEncodable("Flag", Flag);
+                }
+                else
+                {
+                    Console.WriteLine("Player doesn't have a flag and is decoding updates.");
+                    Flag = new Flag(this.Game, Vector3.Zero, 0);
+                    props.UpdateIEncodable("Flag", Flag);
+                }
             }
-            set
+            //if (props.UpdatesFor("GameStats"))
+                //props.UpdateIEncodable("GameStats", GameStats);
+=======
+            if (props.UpdatesFor("PlayerStats"))
+                props.UpdateIEncodable("PlayerStats", PlayerStats);
+>>>>>>> Stashed changes
+
+            string gunType = (string)props.GetElement("GunType", "Revolver");
+            if (CurWeapon == null || !((BaseObject)CurWeapon).getObjectType().Equals(gunType))
             {
-                //dirty |= EncodableProperties.Health;
-                _health = value;
+                switch (gunType)
+                {
+                    case "Revolver":
+                        CurWeapon = new Revolver(this.Game, this);
+                        break;
+                    case "SMG":
+                        CurWeapon = new SMG(this.Game, this);
+                        break;
+                    case "Shotgun":
+                        CurWeapon = new Shotgun(this.Game, this);
+                        break;
+                }
             }
+            if (props.UpdatesFor("Gun"))
+                props.UpdateIEncodable("Gun", CurWeapon);
+
+            //Console.WriteLine("Decoding: " + GameStats.ToString());
         }
 
         #endregion
+
     }
 }

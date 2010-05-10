@@ -52,6 +52,7 @@ namespace Mammoth.GameWidgets
             Old_Time = Time;
 
             //calculate minutes and seconds
+            Console.WriteLine("Time left:" + g.TimeLeft);
             int minutes = g.TimeLeft / 60;
             int seconds = g.TimeLeft % 60;
             Time = MakeTwoDigits(minutes) + ":" + MakeTwoDigits(seconds);
