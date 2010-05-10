@@ -372,6 +372,9 @@ namespace Mammoth.Engine.Networking
         public void endGame()
         {
             sendEvent("EndGame", "EndGame");
+            foreach (NetConnection c in _connections.Values)
+                if (c.Status != NetConnectionStatus.Disconnected || c.Status != NetConnectionStatus.Disconnecting)
+                    c.Disconnect("Game is over", 2);
             bool keepGoing = true;
             while (keepGoing)
             {
