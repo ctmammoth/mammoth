@@ -113,17 +113,6 @@ namespace Mammoth.Engine
                 CurWeapon = Items[newWeapon - 1];
         }
 
-        public override void RespondToTrigger(PhysicalObject obj)
-        {
-            Console.WriteLine("Proxyplayer is responding to a trigger.");
-
-            // If a Flag was triggered, pick it up
-            if (obj is Objects.Flag)
-                if (Flag == null)
-                    // TODO: only pick up flags not owned by your team
-                    Flag = (Objects.Flag)obj;
-        }
-
         public override void TakeDamage(float damage, IDamager inflicter)
         {
             this.Health -= damage;
@@ -155,7 +144,7 @@ namespace Mammoth.Engine
             if (Flag != null)
             {
                 // Keep a reference to the flag that's being dropped
-                Flag droppedFlag = this.Flag;
+                Objects.Flag droppedFlag = this.Flag;
 
                 // Drop the Flag
                 Flag.GetDropped();
@@ -168,9 +157,7 @@ namespace Mammoth.Engine
 
         public override void RespondToTrigger(PhysicalObject obj)
         {
-            Console.WriteLine("LocalPlayer is responding to a trigger.");
-            Console.WriteLine("LocalPlayer's position: " + Position);
-            Console.WriteLine("Trigger's position: " + obj.Position);
+            Console.WriteLine("ProxyPlayer is responding to a trigger.");
 
             // If a Flag was triggered, pick it up
             if (obj is Objects.Flag)
@@ -179,7 +166,7 @@ namespace Mammoth.Engine
                     // TODO: only pick up flags not owned by your team
                     Flag = (Objects.Flag)obj;
                     Flag.Owner = this;
-                    Console.WriteLine("LocalPlayer picked up a flag!");
+                    Console.WriteLine("ProxyPlayer picked up a flag!");
                 }
                 else
                 {

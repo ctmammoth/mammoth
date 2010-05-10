@@ -109,6 +109,10 @@ namespace Mammoth.Engine.Objects
                     // Draw it above the player's head
                     return new Vector3(0.0f, Owner.Height + 4.0f, 0.0f);
             }
+            protected set
+            {
+                this.PositionOffset = value;
+            }
         }
 
         public Model Model3D
