@@ -269,11 +269,6 @@
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="sounds\sound fx heartbeat-4413-Free-Loops.com.wav">
-      <Name>heartbeat</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
     <Compile Include="sounds\Wilhelm.wav">
       <Name>scream</Name>
       <Importer>WavImporter</Importer>
@@ -305,6 +300,25 @@
   <ItemGroup>
     <Compile Include="sounds\Machine_Gun.wav">
       <Name>machinegun</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="sounds\hbeat.wav">
+      <Name>heartbeat</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="sounds\shotgun_fire.wav">
+      <Name>shotgunfire</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="sounds\shotgun_load.wav">
+      <Name>shotgunload</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>

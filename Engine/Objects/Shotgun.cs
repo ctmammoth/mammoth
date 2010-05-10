@@ -47,7 +47,7 @@ namespace Mammoth.Engine.Objects
 
         protected override string FireSound
         {
-            get { return "ShotgunShot"; }
+            get { return "ShotgunFire"; }
         }
 
         public override string getObjectType()
@@ -88,6 +88,8 @@ namespace Mammoth.Engine.Objects
                     //Console.WriteLine("Shot a bullet with a " + getObjectType() + "; " + Mag.AmmoRemaining + " bullets left.");
                 }
             }
+            if (Mag.CanFireShot())
+                net.sendEvent("Sound", "ShotgunLoad");
         }
 
         protected override Bullet createBullet(Game game, Vector3 position, Quaternion orientation, int shooterID)

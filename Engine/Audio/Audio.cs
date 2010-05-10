@@ -45,7 +45,6 @@ namespace Mammoth.Engine.Audio
             ContentManager manager = this.Game.Content;
 
             _sounds.Add("Gunshot", manager.Load<SoundEffect>("sounds/gunshot"));
-            _sounds.Add("ShotgunShot", manager.Load<SoundEffect>("sounds/gunshot"));
             _sounds.Add("SMGShot", manager.Load<SoundEffect>("sounds/machinegun"));
             _volumes.Add("SMGShot", 1.0f);
             _sounds.Add("Ambient", manager.Load<SoundEffect>("sounds/ambient"));
@@ -56,6 +55,8 @@ namespace Mammoth.Engine.Audio
             _sounds.Add("Heartbeat", manager.Load<SoundEffect>("sounds/heartbeat"));
             _volumes.Add("Heartbeat", 1.0f);
             _sounds.Add("GunEmpty", manager.Load<SoundEffect>("sounds/gunempty"));
+            _sounds.Add("ShotgunFire", manager.Load<SoundEffect>("sounds/shotgunfire"));
+            _sounds.Add("ShotgunLoad", manager.Load<SoundEffect>("sounds/shotgunload"));
         }
 
         #region IAudioService Members
