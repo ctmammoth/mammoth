@@ -200,7 +200,8 @@ namespace Mammoth.Engine
                 if (input.KeyPressed(InputType.Stats) && this is LocalInputPlayer)
                 {
                     TScreenManager t = (TScreenManager)this.Game.Services.GetService(typeof(TScreenManager));
-                    t.AddScreen(new StatsScreen(this.Game, GameStats));
+                    //t.AddScreen(new StatsScreen(this.Game, GameStats));
+                    t.AddScreen(new StatsScreen(this.Game));
                 }
 
                 // Normalize the motion vector (so we don't move at twice the speed when moving diagonally).
@@ -322,9 +323,9 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-            IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
-            int myID = ID >> 25;
-            GameStats = new GameStats(NumKills, NumCaptures, NumDeaths, myID, g);
+            //IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
+            //int myID = ID >> 25;
+            //GameStats = new GameStats(NumKills, NumCaptures, NumDeaths, myID, g);
 
             //Console.WriteLine("Encoding: " + GameStats.ToString());
 
@@ -333,11 +334,9 @@ namespace Mammoth.Engine
             tosend.AddElement("HeadOrient", HeadOrient);
             tosend.AddElement("Velocity", Velocity);
             tosend.AddElement("Health", Health);
-            tosend.AddElement("GameStats", GameStats);
+            //tosend.AddElement("GameStats", GameStats);
             tosend.AddElement("GunType", ((BaseObject)CurWeapon).getObjectType());
             tosend.AddElement("Gun", CurWeapon);
-            tosend.AddElement("Yaw", Yaw);
-            tosend.AddElement("Pitch", Pitch);
 
             return tosend.Serialize();
         }
@@ -356,12 +355,8 @@ namespace Mammoth.Engine
                 Velocity = (Vector3)props.GetElement("Velocity", Velocity);
             if (props.UpdatesFor("Health"))
                 Health = (float)props.GetElement("Health", Health);
-            if (props.UpdatesFor("GameStats"))
-                props.UpdateIEncodable("GameStats", GameStats);
-            if (props.UpdatesFor("Yaw"))
-                Yaw = (float)props.GetElement("Yaw", Yaw);
-            if (props.UpdatesFor("Pitch"))
-                Pitch = (float)props.GetElement("Pitch", Pitch);
+            //if (props.UpdatesFor("GameStats"))
+                //props.UpdateIEncodable("GameStats", GameStats);
 
             string gunType = (string)props.GetElement("GunType", "Revolver");
             if (CurWeapon == null || !((BaseObject)CurWeapon).getObjectType().Equals(gunType))

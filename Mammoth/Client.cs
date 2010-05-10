@@ -49,6 +49,10 @@ namespace Mammoth
             Renderer r = new Renderer(this);
             this.Services.AddService(typeof(IRenderService), r);
 
+            //Load game stats
+            GameStats gstatus = new GameStats();
+            this.Services.AddService(typeof(IGameStats), gstatus);
+
             // Next, initialize the PhysX subsystem and create the physics manager.
             PhysicsManagerService physics = new PhysicsManagerService(this);
             this.Components.Add(physics);
@@ -68,8 +72,8 @@ namespace Mammoth
             this.Components.Add(screenManager);
 
             // Create the networking component, and have it update after all of the rest of the code.
-            //DummyClientNetworking net = new DummyClientNetworking(this)
-            LidgrenClientNetworking net = new LidgrenClientNetworking(this)
+            DummyClientNetworking net = new DummyClientNetworking(this)
+            //LidgrenClientNetworking net = new LidgrenClientNetworking(this)
             {
                 UpdateOrder = 3
             };

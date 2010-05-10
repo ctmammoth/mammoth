@@ -69,7 +69,7 @@ namespace Mammoth.Engine.Networking
                 Vector3 position = player.Position + (Vector3.Up * player.Height / 4.0f);
                 Vector3 offset = Vector3.Multiply(forward, 2.0f);
                 position = Vector3.Add(position, offset);*/
-
+            
                 // Bullet b = new Bullet(Game, player.Position, player.HeadOrient, player.ID >> 25);
 
                 // Give this projectile an ID

@@ -7,23 +7,81 @@ using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
-    public class GameStats : IEncodable
+    public class GameStats : IEncodable, Mammoth.Engine.IGameStats
     {
-        public string YourTeam;
-        public int NumKills;
-        public int NumCaptures;
-        public int NumDeaths;
+        #region Personal Stats
+        public string YourTeam
+        {
+            get;
+            set;
+        }
+        public int NumKills
+        {
+            get;
+            set;
+        }
+        public int NumCaptures
+        {
+            get;
+            set;
+        }
+        public int NumDeaths
+        {
+            get;
+            set;
+        }
+        #endregion
 
-        public string LeadingTeam;
-        public int LeadingTeam_NumKills;
-        public int LeadingTeam_NumCaptures;
-        public int LeadingTeam_NumPoints;
+        #region Teams
+        public string LeadingTeam
+        {
+            get;
+            set;
+        }
+        public int LeadingTeam_NumKills
+        {
+            get;
+            set;
+        }
+        public int LeadingTeam_NumCaptures
+        {
+            get;
+            set;
+        }
+        public int LeadingTeam_NumPoints
+        {
+            get;
+            set;
+        }
 
-        public string TrailingTeam;
-        public int TrailingTeam_NumKills;
-        public int TrailingTeam_NumCaptures;
-        public int TrailingTeam_NumPoints;
+        public string TrailingTeam
+        {
+            get;
+            set;
+        }
+        public int TrailingTeam_NumKills
+        {
+            get;
+            set;
+        }
+        public int TrailingTeam_NumCaptures
+        {
+            get;
+            set;
+        }
+        public int TrailingTeam_NumPoints
+        {
+            get;
+            set;
+        }
+        #endregion
 
+        public int TimeLeft
+        {
+            get;
+            set;
+        }
+ 
         public GameStats(int nk, int nc, int nd, int id, IGameLogic g)
         {
             YourTeam = g.GetTeamOf(id).ToString();
@@ -40,6 +98,8 @@ namespace Mammoth.Engine
             TrailingTeam_NumKills = g.GetTrailingTeam().GetKills();
             TrailingTeam_NumCaptures = g.GetTrailingTeam().GetCaptures();
             TrailingTeam_NumPoints = g.GetTrailingTeam().GetTeamPoints();
+
+            TimeLeft = g.GetTimeLeft();
         }
 
         public GameStats()
@@ -58,6 +118,8 @@ namespace Mammoth.Engine
             TrailingTeam_NumKills = 0;
             TrailingTeam_NumCaptures = 0;
             TrailingTeam_NumPoints = 0;
+
+            TimeLeft = 0;
         }
 
 
@@ -81,6 +143,8 @@ namespace Mammoth.Engine
             e.AddElement("TrailingTeam_NumCaptures", TrailingTeam_NumCaptures);
             e.AddElement("TrailingTeam_NumPoints", TrailingTeam_NumPoints);
 
+            e.AddElement("TimeLeft", TimeLeft);
+
             return e.Serialize();
         }
 
@@ -102,6 +166,8 @@ namespace Mammoth.Engine
             TrailingTeam_NumKills = (int)e.GetElement("TrailingTeam_NumKills", TrailingTeam_NumKills);
             TrailingTeam_NumCaptures = (int)e.GetElement("TrailingTeam_NumCaptures", TrailingTeam_NumCaptures);
             TrailingTeam_NumPoints = (int)e.GetElement("TrailingTeam_NumPoints", TrailingTeam_NumPoints);
+
+            TimeLeft = (int) e.GetElement("TimeLeft", TimeLeft);
         }
 
 

@@ -40,11 +40,21 @@ namespace Mammoth.Engine
         /// <param name="clientID">The ID of the client this player is simulating on the server</param>
         public ProxyInputPlayer(Game game, int clientID): base(game)
         {
+
+            //Initialize game
+            IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
+            g.InitiateGame();
+
             Console.WriteLine("Creating proxy player");
             this.ClientID = clientID;
-            IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
+            //IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
             this.Team = g.AddToTeam(this.ClientID);
             Console.WriteLine("Proxy Player " + this.ClientID + " joined " + this.Team.ToString());
+
+            IServerNetworking sn = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            sn.sendEvent("GameTime", g.GetTimeLeft().ToString(), ClientID);
+
+
         }
 
         /// <summary>
@@ -105,7 +115,7 @@ namespace Mammoth.Engine
 
         public override void TakeDamage(float damage, IDamager inflicter)
         {
-            base.TakeDamage(damage, inflicter);
+            //base.TakeDamage(damage, inflicter);
 
             Console.WriteLine("Health: " + this.Health);
 
@@ -128,5 +138,31 @@ namespace Mammoth.Engine
                 Die();
             }
         }
+
+        #region IEncodable Members
+
+        public override byte[] Encode()
+        {
+            Networking.Encoder tosend = new Networking.Encoder();
+
+            IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
+            int myID = ID >> 25;
+            GameStats = new GameStats(NumKills, NumCaptures, NumDeaths, myID, g);
+
+            //Console.WriteLine("Encoding: " + GameStats.ToString());
+
+            tosend.AddElement("Position", Position);
+            tosend.AddElement("Orientation", Orientation);
+            tosend.AddElement("HeadOrient", HeadOrient);
+            tosend.AddElement("Velocity", Velocity);
+            tosend.AddElement("Health", Health);
+            tosend.AddElement("GameStats", GameStats);
+            tosend.AddElement("GunType", ((BaseObject)CurWeapon).getObjectType());
+            tosend.AddElement("Gun", CurWeapon);
+
+            return tosend.Serialize();
+        }
+
+        #endregion
     }
 }
