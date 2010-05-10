@@ -359,10 +359,9 @@ namespace Mammoth.Engine
             tosend.AddElement("Gun", CurWeapon);
 
             if (Flag != null)
-            {
-                Console.WriteLine("Player is encoding a flag.");
-                tosend.AddElement("Flag", Flag);
-            }
+                tosend.AddElement("FlagID", Flag.ID);
+            else
+                tosend.AddElement("FlagID", -1);
 
             return tosend.Serialize();
         }
@@ -403,15 +402,22 @@ namespace Mammoth.Engine
             if (props.UpdatesFor("Gun"))
                 props.UpdateIEncodable("Gun", CurWeapon);
 
-            if (props.UpdatesFor("Flag"))
+            if (props.UpdatesFor("FlagID"))
             {
-                if (Flag != null)
-                    props.UpdateIEncodable("Flag", Flag);
-                else
+                int newID = (int)props.GetElement("FlagID", Flag.ID);
+                if (this.Flag != null && newID < 0)
                 {
-                    Flag = new Flag(this.Game, Vector3.Zero, 0);
-                    props.UpdateIEncodable("Flag", Flag);
+                    this.Flag.GetDropped();
+                    this.Flag = null;
                 }
+                else if (this.Flag.ID != newID)
+                {
+                    IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+                    Flag flag = (Flag)mdb.getObject(newID);
+                    this.Flag = flag;
+                    flag.Owner = this;
+                }
+                
             }
         }
 
