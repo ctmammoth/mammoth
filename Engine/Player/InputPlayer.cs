@@ -60,12 +60,6 @@ namespace Mammoth.Engine
             set;
         }
 
-        public PlayerStats PlayerStats
-        {
-            get;
-            set;
-        }
-
         public Flag Flag
         {
             get;
@@ -90,9 +84,6 @@ namespace Mammoth.Engine
             Items[1] = new SMG(game, this);
             Items[2] = new Shotgun(game, this);
             CurWeapon = Items[0];
-
-            // Give the player some stats
-            PlayerStats = new PlayerStats();
         }
 
         /// <summary>
@@ -250,8 +241,6 @@ namespace Mammoth.Engine
             // Update main weapon
             if (CurWeapon != null)
                 CurWeapon.Update(gameTime);
-
-            //Console.WriteLine("Weapon " + ((BaseObject)CurWeapon).getObjectType() + " has " + CurWeapon.ShotsLeft() + " shots left.");
         }
 
         protected virtual void SpawnRoom(Vector3 roomPos)

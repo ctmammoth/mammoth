@@ -68,7 +68,7 @@ namespace Mammoth.Engine
         public int GetTimeLeft()
         {
             TimeSpan diff = DateTime.Now.Subtract(GameStart);
-            int timeleft = GameLength - diff.Seconds;
+            int timeleft = GameLength - ((diff.Minutes * 60) + diff.Seconds);
             if (timeleft <= 0)
                 return 0;
             else

@@ -7,8 +7,10 @@ Content\models\crate.xnb
 Content\models\ammocrate.xnb
 Content\models\healthcrate.xnb
 Content\models\staircrate.xnb
+Content\models\banner01.xnb
 Content\fonts\calibri.xnb
 Content\fonts\timer.xnb
+Content\fonts\hud.xnb
 Content\textures\skybox\down.xnb
 Content\textures\skybox\east.xnb
 Content\textures\skybox\north.xnb
@@ -27,11 +29,16 @@ Content\textures\terrain-256.xnb
 Content\textures\cross.xnb
 Content\textures\terrain-256-flattened.xnb
 Content\textures\heightmap-256-flattened.xnb
+Content\textures\flag.xnb
 Content\sounds\gunshot.xnb
 Content\sounds\reload.xnb
 Content\sounds\grunt.xnb
-Content\sounds\heartbeat.xnb
 Content\sounds\scream.xnb
+Content\sounds\gunempty.xnb
+Content\sounds\machinegun.xnb
+Content\sounds\heartbeat.xnb
+Content\sounds\shotgunfire.xnb
+Content\sounds\shotgunfireload.xnb
 Content\songs\onestop.xnb
 Content\sounds\ambient.xnb
 Content\models\bullet_low.xnb
@@ -42,6 +49,8 @@ Content\models\crate_0.xnb
 Content\models\ammocrate_0.xnb
 Content\models\healthcrate_0.xnb
 Content\models\staircrate_0.xnb
+Content\models\b01_0.xnb
+Content\models\ba01_0.xnb
 Content\textures\ground-cracked_0.xnb
 Content\songs\onestop.wma
 rooms.xml
