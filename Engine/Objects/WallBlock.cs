@@ -133,7 +133,7 @@ namespace Mammoth.Engine
 
         public override String getObjectType()
         {
-            return "Crate";
+            return "WallBlock";
         }
 
         private void HandleDimension(XmlHandler handler)

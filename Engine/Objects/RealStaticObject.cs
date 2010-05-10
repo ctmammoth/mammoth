@@ -136,6 +136,7 @@ namespace Mammoth.Engine
         public byte[] Encode()
         {
             Networking.Encoder tosend = new Networking.Encoder();
+            Console.WriteLine("Encoding a Static Object");
 
             tosend.AddElement("Position", Position);
             tosend.AddElement("Orientation", Orientation);
