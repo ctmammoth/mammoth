@@ -51,6 +51,23 @@ namespace Mammoth.Engine
             audio.playSound("Scream");
         }
 
+        public override void RespondToTrigger(PhysicalObject obj)
+        {
+            Console.WriteLine("LocalPlayer is responding to a trigger.");
+            Console.WriteLine("LocalPlayer's position: " + Position);
+            Console.WriteLine("Trigger's position: " + obj.Position);
+
+            // If a Flag was triggered, pick it up
+            if (obj is Objects.Flag)
+                if (Flag == null)
+                {
+                    // TODO: only pick up flags not owned by your team
+                    Flag = (Objects.Flag)obj;
+                    Flag.Owner = this;
+                    Console.WriteLine("LocalPlayer picked up a flag!");
+                }
+        }
+
         #region IEncodable Members
 
         public override void Decode(byte[] serialized)

@@ -99,6 +99,7 @@ namespace Mammoth.Engine
 
             BuildWalls(x, y, z);
 
+            // TODO: put something in the corner to shoot you through that hole in the ceiling.
             /*ForceFieldLinearKernelDescription forceToApply = new ForceFieldLinearKernelDescription()
             {
                 Constant = new Vector3(0.0f, 10.0f, 0.0f),

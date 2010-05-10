@@ -13,7 +13,7 @@ namespace Mammoth.Engine.Objects
     /// <summary>
     /// Represents a flag that can be picked up by a player.
     /// </summary>
-    public class Flag : PhysicalObject, IHoldeableItem, IRenderable
+    public class Flag : PhysicalObject, IHoldableItem, IRenderable
     {
         public Flag(Game game, Vector3 initialPosition)
             : base(game)
@@ -21,14 +21,16 @@ namespace Mammoth.Engine.Objects
             // Give this a sphere shape trigger
             SphereShapeDescription trigShapeDesc = new SphereShapeDescription()
             {
-                Radius = 24.0f,
-                Flags = ShapeFlag.TriggerEnable
+                Radius = 7.0f,
+                Flags = ShapeFlag.TriggerEnable,
+                LocalPosition = Vector3.Zero
             };
 
             // Give this a sphere shape trigger
             SphereShapeDescription sDesc = new SphereShapeDescription()
             {
-                Radius = 0.3f
+                Radius = 0.3f,
+                LocalPosition = Vector3.Zero
             };
 
             ActorDescription aDesc = new ActorDescription()
@@ -37,6 +39,7 @@ namespace Mammoth.Engine.Objects
                 BodyDescription = new BodyDescription()
                 {
                     Mass = 1.0f,
+                    MassSpaceInertia = Vector3.Zero,
                     BodyFlags = BodyFlag.Kinematic
                 }
             };
@@ -46,13 +49,13 @@ namespace Mammoth.Engine.Objects
             // Create the flag's Actor
             this.Actor = physics.CreateActor(aDesc, this);
 
-            // Set the position to whereever the flag should be constructed
+            // Set the position to wherever the flag should be constructed
             this.Position = initialPosition;
 
             // Load a flag model
             // TODO: get a flag model or something
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
-            this.Model3D = r.LoadModel("brickbox");
+            this.Model3D = r.LoadModel("banner01");
 
             // HACK HACK HACK
             IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
@@ -88,7 +91,9 @@ namespace Mammoth.Engine.Objects
 
             // Draw the flag
             if (Owner == null)
-                renderer.DrawRenderable(this);    
+                renderer.DrawRenderable(this);
+            else
+                Console.WriteLine("I have an owner!");
         }
 
         #region Properties
@@ -97,12 +102,7 @@ namespace Mammoth.Engine.Objects
         {
             get
             {
-                if (this.Owner == null)
-                    // If someone owns this flag, put it above them
-                    return new Vector3(0.0f, 10.0f, 0.0f);
-                else
-                    // Otherwise draw it wherever it is
-                    return Vector3.Zero;
+                return Vector3.Zero;
             }
         }
 
@@ -112,7 +112,10 @@ namespace Mammoth.Engine.Objects
             protected set;
         }
 
-        public Player Owner
+        /// <summary>
+        /// The team that owns this flag.
+        /// </summary>
+        public int Team
         {
             get;
             protected set;
@@ -120,11 +123,12 @@ namespace Mammoth.Engine.Objects
 
         #endregion
 
-        #region IHoldeableItem Members
+        #region IHoldableItem Members
 
-        public void SetOwner(Player owner)
+        public Player Owner
         {
-            this.Owner = owner;
+            get;
+            set;
         }
 
         #endregion

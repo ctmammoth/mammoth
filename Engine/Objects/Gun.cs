@@ -84,16 +84,9 @@ namespace Mammoth.Engine.Objects
     /// <summary>
     /// A simple weapon which shoots Bullets.
     /// </summary>
-    public abstract class Gun : BaseObject, IHoldeableItem, IEncodable, IRenderable
+    public abstract class Gun : BaseObject, IHoldableItem, IEncodable, IRenderable
     {
         #region Properties
-
-        // This gun's owner
-        private Player Owner
-        {
-            get;
-            set;
-        }
 
         // This gun's orientation
         public Quaternion Orientation
@@ -328,11 +321,12 @@ namespace Mammoth.Engine.Objects
 
         #endregion
 
-        #region IHoldeableItem Members
+        #region IHoldableItem Members
 
-        void IHoldeableItem.SetOwner(Player owner)
+        public Player Owner
         {
-            Owner = owner;
+            get;
+            protected set;
         }
 
         #endregion
