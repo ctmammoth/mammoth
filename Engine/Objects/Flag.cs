@@ -86,9 +86,12 @@ namespace Mammoth.Engine.Objects
         {
             base.Update(gameTime);
 
-            // Set the position to that of the owner
+            //Console.WriteLine("Flag " + this.ID + " old pos: " + this.Position);
+
             if (this.Owner != null)
                 this.Position = Owner.Position;
+
+            //Console.WriteLine("Flag " + this.ID + " new pos: " + this.Position);
         }
 
         public override void Draw(GameTime gameTime)
@@ -174,10 +177,10 @@ namespace Mammoth.Engine.Objects
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder(serialized);
 
-            //Console.WriteLine("Decoding a flag...");
+            this.Position = (Vector3)e.GetElement("Position", Position);
+            this.PositionOffset = (Vector3)e.GetElement("PositionOffset", PositionOffset);
 
-            Position = (Vector3)e.GetElement("Position", Position);
-            PositionOffset = (Vector3)e.GetElement("PositionOffset", PositionOffset);
+            //Console.WriteLine("Decoding a flag with pos: " + Position);
         }
 
         #endregion

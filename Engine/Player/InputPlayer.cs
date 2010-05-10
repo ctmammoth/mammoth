@@ -384,7 +384,7 @@ namespace Mammoth.Engine
             {
                 if (Flag != null)
                 {
-                    Console.WriteLine("Player has a flag and is decoding updates.");
+                    //Console.WriteLine("Player has a flag and is decoding updates.");
                     props.UpdateIEncodable("Flag", Flag);
                 }
                 else

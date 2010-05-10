@@ -140,7 +140,7 @@ namespace Mammoth.Engine
         {
             base.Die();
 
-            IServerNetworking server = (IServerNetworking)Game.Services.GetService(typeof(IServerNetworking));
+            IServerNetworking server = (IServerNetworking)Game.Services.GetService(typeof(INetworkingService));
 
             // Drop the flag being carried
             if (Flag != null)
@@ -178,31 +178,5 @@ namespace Mammoth.Engine
                     this.Flag = null;
                 }
         }
-
-        #region IEncodable Members
-
-        public override byte[] Encode()
-        {
-            Networking.Encoder tosend = new Networking.Encoder();
-
-            IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
-            int myID = ID >> 25;
-            GameStats = new GameStats(NumKills, NumCaptures, NumDeaths, myID, g);
-
-            //Console.WriteLine("Encoding: " + GameStats.ToString());
-
-            tosend.AddElement("Position", Position);
-            tosend.AddElement("Orientation", Orientation);
-            tosend.AddElement("HeadOrient", HeadOrient);
-            tosend.AddElement("Velocity", Velocity);
-            tosend.AddElement("Health", Health);
-            tosend.AddElement("GameStats", GameStats);
-            tosend.AddElement("GunType", ((BaseObject)CurWeapon).getObjectType());
-            tosend.AddElement("Gun", CurWeapon);
-
-            return tosend.Serialize();
-        }
-
-        #endregion
     }
 }

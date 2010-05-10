@@ -251,6 +251,13 @@ namespace Mammoth.Engine.Networking
             //TODO: change where the player spawns to?
             player.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
             mdb.registerObject(player);
+
+            // Send every encodable in the model database to the new player
+            var encodables = from obj in mdb.AllObjects
+                                          where obj is IEncodable
+                                          select obj as IEncodable;
+            foreach (IEncodable obj in encodables)
+                sendThing(obj, id);
         }
 
         /// <summary>
