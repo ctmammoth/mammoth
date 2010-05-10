@@ -163,12 +163,14 @@ namespace Mammoth.Engine.Objects
 
         public byte[] Encode()
         {
-            Console.WriteLine("Encoding a flag.  Position = " + Position + ", PositionOffset = " + PositionOffset);
+            Console.WriteLine("Encoding a flag.  Position = " + Position + ", PositionOffset = " + PositionOffset +
+                ", ID = " + ID);
 
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder();
 
             e.AddElement("Position", Position);
             e.AddElement("PositionOffset", PositionOffset);
+            e.AddElement("ID", ID);
 
             return e.Serialize();
         }
@@ -179,6 +181,7 @@ namespace Mammoth.Engine.Objects
 
             this.Position = (Vector3)e.GetElement("Position", Position);
             this.PositionOffset = (Vector3)e.GetElement("PositionOffset", PositionOffset);
+            this.ID = (int)e.GetElement("ID", ID);
 
             //Console.WriteLine("Decoding a flag with pos: " + Position);
         }
