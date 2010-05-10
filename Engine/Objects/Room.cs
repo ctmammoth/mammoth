@@ -279,6 +279,18 @@ namespace Mammoth.Engine
             // this.Position = new Vector3((float)X, (float)Y, (float)Z);
         }
 
+        public static void BuildRoomOnServer(ObjectParameters parameters, Game game)
+        {
+            IServerNetworking net = (IServerNetworking)game.Services.GetService(typeof(INetworkingService));
+            IModelDBService modelDB = (IModelDBService)game.Services.GetService(typeof(IModelDBService));
+            Room room = new Room(modelDB.getNextOpenID(), parameters, game);
+           
+
+            // Send the room after it's created
+            net.sendThing(room);
+        }
+
+
 
         public void BuildWall(String alongAxis, double alongOffset, String oppositeAxis, double oppositeOffset, double height)
         { 
