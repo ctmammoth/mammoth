@@ -126,9 +126,7 @@ namespace Mammoth.Engine
 
         public override void TakeDamage(float damage, IDamager inflicter)
         {
-            //base.TakeDamage(damage, inflicter);
-
-            Console.WriteLine("Health: " + this.Health);
+            this.Health -= damage;
 
             if (this.Health <= 0)
             {
@@ -136,9 +134,8 @@ namespace Mammoth.Engine
 
                 //update teams kills
                 IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
-                int cid = p.Creator >> 25;
-                g.AwardKill(cid);
-                Console.WriteLine("Player " + cid + " was killed by Player " + p.Creator);
+                g.AwardKill(p.Creator);
+                Console.WriteLine("Player " + ClientID + " was killed by Player " + p.Creator);
 
                 //update players kills
                 IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));

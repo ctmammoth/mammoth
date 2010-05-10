@@ -60,7 +60,6 @@ namespace Mammoth.Engine
         public virtual void TakeDamage(float damage, IDamager inflicter)
         {
             this.Health -= damage;
-            Console.WriteLine("Health: " + this.Health);
         }
 
         public virtual void Die()
