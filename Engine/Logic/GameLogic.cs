@@ -268,6 +268,7 @@ namespace Mammoth.Engine
             {
                 if (this.ResetServer != null)
                     this.ResetServer(this, new EventArgs());
+                ResetGame();
             }
 
             if (SendCounter == FreqSent)
