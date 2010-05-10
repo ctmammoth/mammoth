@@ -19,12 +19,12 @@ namespace Mammoth.Engine.Objects
 
         protected override double FireRate
         {
-            get { return 2.0; }
+            get { return 3.0; }
         }
 
         protected override double ReloadTime
         {
-            get { return 3000.0; }
+            get { return 2500.0; }
         }
 
         protected override float Inaccuracy

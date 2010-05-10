@@ -91,6 +91,15 @@ namespace Mammoth.Engine.Networking
                         ", ID = " + id);
                 break;
 
+                case "ShotgunBullet":
+                    Bullet shb = new ShotgunBullet(this.Game, Vector3.Zero, Quaternion.Identity, 0);
+                    shb.Decode(properties);
+                    shb.ID = id;
+                    ro.registerObject(shb);
+                    Console.WriteLine("Bullet received, position: " + shb.Position + ", orientation: " + shb.Orientation +
+                        ", ID = " + id);
+                break;
+
                 default:
                 Console.WriteLine("Object type was not recognized");
                 break;

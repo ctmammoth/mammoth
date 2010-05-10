@@ -88,6 +88,7 @@ namespace Mammoth.Engine
             // Give the player a simple gun, for now
             Items[0] = new Revolver(game, this);
             Items[1] = new SMG(game, this);
+            Items[3] = new Shotgun(game, this);
             CurWeapon = Items[0];
 
             // Give the player some stats
@@ -384,6 +385,9 @@ namespace Mammoth.Engine
                         break;
                     case "SMG":
                         CurWeapon = new SMG(this.Game, this);
+                        break;
+                    case "Shotgun":
+                        CurWeapon = new Shotgun(this.Game, this);
                         break;
                 }
             }

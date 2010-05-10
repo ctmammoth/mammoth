@@ -45,7 +45,9 @@ namespace Mammoth.Engine.Audio
             ContentManager manager = this.Game.Content;
 
             _sounds.Add("Gunshot", manager.Load<SoundEffect>("sounds/gunshot"));
+            _sounds.Add("ShotgunShot", manager.Load<SoundEffect>("sounds/gunshot"));
             _sounds.Add("SMGShot", manager.Load<SoundEffect>("sounds/machinegun"));
+            _volumes.Add("SMGShot", 1.0f);
             _sounds.Add("Ambient", manager.Load<SoundEffect>("sounds/ambient"));
             _sounds.Add("Reload", manager.Load<SoundEffect>("sounds/reload"));
             _volumes.Add("Reload", 1.0f);

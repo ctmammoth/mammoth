@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine.Objects
 {
-    class SMGBullet : Bullet
+    class ShotgunBullet : Bullet
     {
-        public SMGBullet(Game game, Vector3 position, Quaternion orient, int creator)
+        public ShotgunBullet(Game game, Vector3 position, Quaternion orient, int creator)
             : base(game, position, orient, creator)
         {
 
@@ -17,18 +17,18 @@ namespace Mammoth.Engine.Objects
 
         public override string getObjectType()
         {
-            return "SMGBullet";
+            return "ShotgunBullet";
         }
 
         public override float Speed
         {
-            get { return 100.0f; }
+            get { return 75.0f; }
             protected set { }
         }
 
         public override float Damage
         {
-            get { return 4.0f; }
+            get { return 5.0f; }
             protected set { }
         }
     }
