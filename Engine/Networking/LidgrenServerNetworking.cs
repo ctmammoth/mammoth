@@ -372,12 +372,20 @@ namespace Mammoth.Engine.Networking
         public void endGame()
         {
             sendEvent("EndGame", "EndGame");
-            _server.Shutdown("Game ended");
+            bool keepGoing = true;
+            while (keepGoing)
+            {
+                Console.WriteLine("Waiting for clients to disconnect");
+                keepGoing = false;
+                foreach (NetConnection c in _connections.Values)
+                    if (c.Status != NetConnectionStatus.Disconnected)
+                        keepGoing = true;
+            }
+            Console.WriteLine("All clients disconnected");
             _connections.Clear();
             _inputStates.Clear();
             _nextID = 1;
             _toSend.Clear();
-            createSession();
         }
 
         /// <summary>

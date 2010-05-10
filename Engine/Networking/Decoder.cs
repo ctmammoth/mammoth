@@ -111,7 +111,7 @@ namespace Mammoth.Engine.Networking
                 break;
 
                 case "GameStats":
-                    Console.WriteLine("Game stats recieved");
+                    //Console.WriteLine("Game stats recieved");
                     GameStats g = (GameStats)this.Game.Services.GetService(typeof(GameStats));
                     g.Decode(properties);
                 break;
