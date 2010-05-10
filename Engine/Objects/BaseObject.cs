@@ -7,8 +7,16 @@ using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine
 {
+    /// <summary>
+    /// Class which all objects in the game inherit from. 
+    /// </summary>
     public abstract class BaseObject : IDisposable
     {
+        /// <summary>
+        /// Sets the BaseObjeect's game field to the current game and 
+        /// sets it to be alive
+        /// </summary>
+        /// <param name="game">The current game</param>
         public BaseObject(Game game)
         {
             this.Game = game;

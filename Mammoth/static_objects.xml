@@ -17,7 +17,8 @@
 		</VARIANT>
 		<VARIANT NAME="STAIR">
 			<DIMENSION WIDTH="0.5" HEIGHT="0.5" LENGTH="0.5" />
-			<LOCAL_POSITION X="0" Y="0" Z="-0.3" />			
+			<LOCAL_POSITION X="0" Y="0" Z="-0.3" />	
+			<POSITION_OFFSET X="0" Y="-1.2" Z="0" />			
 			<MODEL>staircrate</MODEL>
 		</VARIANT>		
 		

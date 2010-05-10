@@ -32,6 +32,10 @@ namespace Mammoth.Engine
 
         public void ReplaceAttribute(String attribute, String value)
         {
+            if (parameters.ContainsKey(attribute))
+            {
+                parameters.Remove(attribute);
+            }            
             parameters.Add(attribute, value);
         }
 

@@ -26,7 +26,8 @@ namespace Mammoth.Engine.Input
         Stats = 0x400,
         Weapon1 = 0x800,
         Weapon2 = 0x1000,
-        Weapon3 = 0x2000
+        Weapon3 = 0x2000,
+        SpawnRoom = 0x4000
     }
 
     public class InputState : IEncodable
