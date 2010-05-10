@@ -27,17 +27,17 @@ namespace Mammoth.Engine.Objects
             // Give this a capsule shape trigger
             SphereShapeDescription trigShapeDesc = new SphereShapeDescription()
             {
-                Radius = 3.5f,
+                Radius = 0.5f,
                 LocalPosition = Vector3.Zero,
-                Flags = ShapeFlag.TriggerOnEnter,
+                Flags = ShapeFlag.DisableCollision
             };
 
             // Placate PhysX by giving it a real shape
-            CapsuleShapeDescription cDesc = new CapsuleShapeDescription()
+            BoxShapeDescription cDesc = new BoxShapeDescription()
             {
-                Height = 4.0f,
-                Radius = 1.0f,
-                LocalPosition = Vector3.Zero
+                Size = new Vector3(0.5f, 4.0f, 0.5f),
+                LocalPosition = Vector3.Zero,
+                Flags = ShapeFlag.TriggerOnEnter
             };
 
             ActorDescription aDesc = new ActorDescription()
