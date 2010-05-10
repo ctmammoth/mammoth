@@ -24,45 +24,45 @@ namespace Mammoth.Engine.Objects
             // Set this flag's team
             this.Team = team;
 
-            // Give this a sphere shape trigger
+            // Give this a capsule shape trigger
             SphereShapeDescription trigShapeDesc = new SphereShapeDescription()
             {
-                Radius = 7.0f,
+                Radius = 3.0f,
+                LocalPosition = Vector3.Zero,
                 Flags = ShapeFlag.TriggerOnEnter,
-                LocalPosition = Vector3.Zero
             };
 
-            // Give this a sphere shape trigger
-            SphereShapeDescription sDesc = new SphereShapeDescription()
+            // Placate PhysX by giving it a real shape
+            CapsuleShapeDescription cDesc = new CapsuleShapeDescription()
             {
-                Radius = 0.3f,
+                Height = 6.0f,
+                Radius = 1.0f,
                 LocalPosition = Vector3.Zero
             };
 
             ActorDescription aDesc = new ActorDescription()
             {
-                Shapes = { sDesc, trigShapeDesc },
+                Shapes = { cDesc, trigShapeDesc },
                 BodyDescription = new BodyDescription()
                 {
                     Mass = 1.0f,
+                    // This tensor shall placate PhysX
                     MassSpaceInertia = Vector3.Zero,
                     BodyFlags = BodyFlag.Kinematic
                 }
             };
 
+            // Create this Flag's Actor
             IPhysicsManagerService physics = (IPhysicsManagerService)game.Services.GetService(typeof(IPhysicsManagerService));
-
-            // Create the flag's Actor
             this.Actor = physics.CreateActor(aDesc, this);
 
             // Set the position to wherever the flag should be constructed
             this.Position = initialPosition;
 
-            // No owner, initially
+            // The Flag initially has no owner
             this.Owner = null;
 
             // Load a flag model
-            // TODO: get a flag model or something
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
             this.Model3D = r.LoadModel("banner01");
         }
@@ -82,18 +82,23 @@ namespace Mammoth.Engine.Objects
             return "Flag";
         }
 
+        /// <summary>
+        /// This flag's update function.  Only performs any actual updates if the flag has an owner.
+        /// </summary>
+        /// <param name="gameTime">The game time at which this update is occurring.</param>
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
-            //Console.WriteLine("Flag " + this.ID + " old pos: " + this.Position);
-
+            // If the flag has an owner, update the flag's position
             if (this.Owner != null)
                 this.Position = Owner.Position;
-
-            //Console.WriteLine("Flag " + this.ID + " new pos: " + this.Position);
         }
 
+        /// <summary>
+        /// The flag's draw method.  Draws the flag's 
+        /// </summary>
+        /// <param name="gameTime">The game time at which this update is occurring.</param>
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
@@ -107,6 +112,9 @@ namespace Mammoth.Engine.Objects
 
         private Vector3 posOffset;
 
+        /// <summary>
+        /// The offset of the model within this PhysicalObject.
+        /// </summary>
         public Vector3 PositionOffset
         {
             get
@@ -119,6 +127,9 @@ namespace Mammoth.Engine.Objects
             }
         }
 
+        /// <summary>
+        /// The Flag's model.
+        /// </summary>
         public Model Model3D
         {
             get;
@@ -140,6 +151,9 @@ namespace Mammoth.Engine.Objects
 
         private Player owner;
 
+        /// <summary>
+        /// This flag's owner.
+        /// </summary>
         public Player Owner
         {
             get
@@ -151,8 +165,10 @@ namespace Mammoth.Engine.Objects
                 this.owner = value;
 
                 if (value == null)
+                    // If there is now no owner, the model should be drawn on the ground.
                     posOffset = Vector3.Zero;
                 else
+                    // Otherwise draw the flag above the owner's head.
                     posOffset = new Vector3(0.0f, Owner.Height + 4.0f, 0.0f);
             }
         }
@@ -161,6 +177,10 @@ namespace Mammoth.Engine.Objects
 
         #region IEncodable Members
 
+        /// <summary>
+        /// Encodes a flag's position, positionoffset and ID.
+        /// </summary>
+        /// <returns>A byte array containing the encoded flag.</returns>
         public byte[] Encode()
         {
             Console.WriteLine("Encoding a flag.  Position = " + Position + ", PositionOffset = " + PositionOffset +
@@ -168,7 +188,6 @@ namespace Mammoth.Engine.Objects
 
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder();
 
-            e.AddElement("ID", ID);
             e.AddElement("Position", Position);
             e.AddElement("PositionOffset", PositionOffset);
             e.AddElement("ID", ID);
@@ -176,11 +195,14 @@ namespace Mammoth.Engine.Objects
             return e.Serialize();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="serialized"></param>
         public void Decode(byte[] serialized)
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder(serialized);
 
-            this.ID = (int)e.GetElement("ID", ID);
             this.Position = (Vector3)e.GetElement("Position", Position);
             this.PositionOffset = (Vector3)e.GetElement("PositionOffset", PositionOffset);
             this.ID = (int)e.GetElement("ID", ID);
