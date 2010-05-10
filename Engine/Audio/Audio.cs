@@ -48,6 +48,7 @@ namespace Mammoth.Engine.Audio
             _sounds.Add("SMGShot", manager.Load<SoundEffect>("sounds/machinegun"));
             _volumes.Add("SMGShot", 1.0f);
             _sounds.Add("Ambient", manager.Load<SoundEffect>("sounds/ambient"));
+            _volumes.Add("Ambient", 0.3f);
             _sounds.Add("Reload", manager.Load<SoundEffect>("sounds/reload"));
             _volumes.Add("Reload", 1.0f);
             _sounds.Add("Grunt", manager.Load<SoundEffect>("sounds/grunt"));
