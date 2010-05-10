@@ -5,6 +5,7 @@ using System.Text;
 using System.Collections;
 
 using Mammoth.Engine.Networking;
+using Mammoth;
 using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine
@@ -67,7 +68,7 @@ namespace Mammoth.Engine
         public int GetTimeLeft()
         {
             TimeSpan diff = DateTime.Now.Subtract(GameStart);
-            int timeleft = 260 - diff.Seconds;
+            int timeleft = GameLength - diff.Seconds;
             if (timeleft <= 0)
                 return 0;
             else
@@ -254,6 +255,8 @@ namespace Mammoth.Engine
         }
         #endregion
 
+        public event EventHandler ResetServer;
+
         /// <summary>
         /// Sends the GameStats every 60 updates.
         /// </summary>
@@ -261,6 +264,11 @@ namespace Mammoth.Engine
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            if (GetTimeLeft() <= 0)
+            {
+                this.ResetServer(this, new EventArgs());
+            }
 
             if (SendCounter == FreqSent)
             {
