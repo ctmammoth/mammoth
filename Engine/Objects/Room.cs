@@ -67,12 +67,13 @@ namespace Mammoth.Engine
             tosend.AddElement("y", y);
             tosend.AddElement("z", z);
             tosend.AddElement("roomType", roomType);
-            tosend.AddElement("items", items);
+            // tosend.AddElement("items", items);
             return tosend.Serialize();
         }
 
         public void Decode (byte[] data)
         {
+            Console.WriteLine("ROOM DECODING");
             Networking.Encoder props = new Networking.Encoder(data);
 
             if (props.UpdatesFor("x"))

@@ -22,6 +22,8 @@ namespace Mammoth.Engine
     /// Represents an object that has a model and single physical Actor
     /// 
     /// </summary>
+    
+    
     public class RealStaticObject : PhysicalObject, IEncodable, IRenderable
     {
         private Vector3 dimensions, localPosition; 
