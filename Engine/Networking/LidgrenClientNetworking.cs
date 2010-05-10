@@ -145,7 +145,8 @@ namespace Mammoth.Engine.Networking
                 case NetConnectionStatus.Disconnecting:
                     // If the server disconnected, shut down the client
                     Console.WriteLine("The server has disconnected.");
-                    _client.Shutdown("The server disconnected.");
+                    if (this.EndGameEvent != null)
+                        this.EndGameEvent(this, new EventArgs());
                     break;
             }
         }
