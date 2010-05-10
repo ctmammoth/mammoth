@@ -218,7 +218,7 @@ namespace Mammoth.Engine
                         this.Velocity += Vector3.Up / 4.0f;
 
                 // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
-                if (input.KeyPressed(InputType.Fire))
+                if (CurWeapon != null && CurWeapon.ShouldShoot(input))
                     this.Shoot(gameTime);
 
                 // Reload the user's gun
@@ -236,7 +236,8 @@ namespace Mammoth.Engine
             }
 
             // Update main weapon
-            ((BaseObject)CurWeapon).Update(gameTime);
+            if (CurWeapon != null)
+                CurWeapon.Update(gameTime);
 
             //Console.WriteLine("Weapon " + ((BaseObject)CurWeapon).getObjectType() + " has " + CurWeapon.ShotsLeft() + " shots left.");
         }

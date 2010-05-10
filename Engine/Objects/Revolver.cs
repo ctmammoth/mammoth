@@ -5,6 +5,7 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 using Mammoth.Engine.Objects;
+using Mammoth.Engine.Input;
 
 namespace Mammoth.Engine.Objects
 {
@@ -58,6 +59,11 @@ namespace Mammoth.Engine.Objects
             b.ID = mdb.getNextOpenID();
             mdb.registerObject(b);
             return b;
+        }
+
+        public override bool ShouldShoot(InputState input)
+        {
+            return input.KeyPressed(InputType.Fire);
         }
     }
 }

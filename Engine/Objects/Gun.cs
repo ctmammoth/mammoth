@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Mammoth.Engine.Physics;
 using Mammoth.Engine.Networking;
 using Mammoth.Engine.Objects;
+using Mammoth.Engine.Input;
 
 namespace Mammoth.Engine.Objects
 {
@@ -208,6 +209,8 @@ namespace Mammoth.Engine.Objects
         {
             return MagCount;
         }
+
+        public abstract bool ShouldShoot(InputState input);
 
         public void Shoot(Vector3 position, Quaternion orientation, int shooterID, GameTime time)
         {
