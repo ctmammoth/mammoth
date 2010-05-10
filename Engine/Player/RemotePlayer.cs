@@ -79,7 +79,7 @@ namespace Mammoth.Engine
                     teamColor = Color.Blue;
 
                 Color transTeamColor = teamColor;
-                transTeamColor.A = 255;
+                transTeamColor.A = 0;
                 // Render the name to a texture.
                 nameTexture = r.RenderFont("Noob" + (this.ID >> 25), Vector2.Zero, teamColor, transTeamColor, r.DefaultFont, SpriteEffects.FlipHorizontally);
             }
