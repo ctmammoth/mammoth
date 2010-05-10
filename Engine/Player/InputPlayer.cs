@@ -336,6 +336,8 @@ namespace Mammoth.Engine
             tosend.AddElement("GameStats", GameStats);
             tosend.AddElement("GunType", ((BaseObject)CurWeapon).getObjectType());
             tosend.AddElement("Gun", CurWeapon);
+            tosend.AddElement("Yaw", Yaw);
+            tosend.AddElement("Pitch", Pitch);
 
             return tosend.Serialize();
         }
@@ -356,6 +358,10 @@ namespace Mammoth.Engine
                 Health = (float)props.GetElement("Health", Health);
             if (props.UpdatesFor("GameStats"))
                 props.UpdateIEncodable("GameStats", GameStats);
+            if (props.UpdatesFor("Yaw"))
+                Yaw = (float)props.GetElement("Yaw", Yaw);
+            if (props.UpdatesFor("Pitch"))
+                Pitch = (float)props.GetElement("Pitch", Pitch);
 
             string gunType = (string)props.GetElement("GunType", "Revolver");
             if (CurWeapon == null || !((BaseObject)CurWeapon).getObjectType().Equals(gunType))
