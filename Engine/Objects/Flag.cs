@@ -33,7 +33,7 @@ namespace Mammoth.Engine.Objects
 
             ActorDescription aDesc = new ActorDescription()
             {
-                Shapes = { sDesc },
+                Shapes = { sDesc, trigShapeDesc },
                 BodyDescription = new BodyDescription()
                 {
                     Mass = 1.0f,
