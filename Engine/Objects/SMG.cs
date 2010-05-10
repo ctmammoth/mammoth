@@ -27,7 +27,7 @@ namespace Mammoth.Engine.Objects
 
         protected override double ReloadTime
         {
-            get { return 3000.0; }
+            get { return 2000.0; }
         }
 
         protected override float Inaccuracy
@@ -47,7 +47,7 @@ namespace Mammoth.Engine.Objects
 
         protected override string FireSound
         {
-            get { return "Gunshot"; }
+            get { return "SMGShot"; }
         }
 
         public override string getObjectType()

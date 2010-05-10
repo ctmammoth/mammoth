@@ -218,7 +218,6 @@ namespace Mammoth.Engine
                     if (input.IsKeyDown(InputType.Jump))
                         this.Velocity += Vector3.Up / 4.0f;
 
-                Console.WriteLine("Should shoot?: " + CurWeapon.ShouldShoot(input));
                 if (CurWeapon != null && CurWeapon.ShouldShoot(input))
                     this.Shoot(gameTime);
 
@@ -252,7 +251,8 @@ namespace Mammoth.Engine
         /// <summary>
         /// Throws a "bullet" in the current direction of the player. Overridden in ProxyInputPlayer since shooting only happens on server-side.
         /// </summary>
-        protected virtual void Shoot(GameTime time) {
+        protected virtual void Shoot(GameTime time) 
+        {
             Console.WriteLine("Throwing, orientation is: " + this.HeadOrient);
         }
 
@@ -269,7 +269,7 @@ namespace Mammoth.Engine
         /// </summary>
         protected virtual void SwitchWeapon(int newWeapon)
         {
-            Console.WriteLine("Switching weapon to " + Items[newWeapon].getObjectType());
+            Console.WriteLine("Switching weapon to " + Items[newWeapon - 1].getObjectType());
         }
 
         /// <summary>
