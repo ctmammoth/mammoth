@@ -15,12 +15,13 @@ namespace Mammoth.Engine
     public class StatsScreen : TWidgetScreen
     {
 
-        private IGameStats GameStats;
+        private GameStats GameStats;
+        private InputPlayer LIP;
 
-
-        public StatsScreen(Game game): base(game)
+        public StatsScreen(Game game, InputPlayer p): base(game)
         {
-            GameStats = (IGameStats)game.Services.GetService(typeof(IGameStats));
+            GameStats = (GameStats)game.Services.GetService(typeof(GameStats));
+            LIP = p;
         }
 
         public override void Initialize()
@@ -94,24 +95,24 @@ namespace Mammoth.Engine
                     Center = new Vector2((this.Game.Window.ClientBounds.Width) / 2, 300)
                 });
 
-                baseWid.Add(new TText(this.Game, "Personal Kills: " + GameStats.NumKills)
+                baseWid.Add(new TText(this.Game, "Personal Kills: " + LIP.PlayerStats.NumKills)
                 {
                     Center = new Vector2((1 * this.Game.Window.ClientBounds.Width) / 6, 350)
                 });
 
-                baseWid.Add(new TText(this.Game, "Personal Captures: " + GameStats.NumCaptures)
+                baseWid.Add(new TText(this.Game, "Personal Captures: " + LIP.PlayerStats.NumCaptures)
                 {
                     Center = new Vector2((3 * this.Game.Window.ClientBounds.Width) / 6, 350)
                 });
 
-                baseWid.Add(new TText(this.Game, "Personal Deaths: " + GameStats.NumDeaths)
+                baseWid.Add(new TText(this.Game, "Personal Deaths: " + LIP.PlayerStats.NumDeaths)
                 {
                     Center = new Vector2((5 * this.Game.Window.ClientBounds.Width) / 6, 350)
                 });
 
 
                 //Your Team
-                baseWid.Add(new TText(this.Game, "Your Team: " + GameStats.YourTeam)
+                baseWid.Add(new TText(this.Game, "Your Team: " + LIP.PlayerStats.YourTeam)
                 {
                     Center = new Vector2((this.Game.Window.ClientBounds.Width) / 2, 400)
                 });

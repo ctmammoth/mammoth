@@ -18,5 +18,12 @@ namespace Mammoth.Engine.Networking
         /// </summary>
         /// <param name="serialized">The byte array describing this object</param>
         void Decode(byte[] serialized);
+
+        /// <summary>
+        /// Returns a string that identifies the object type. Used in sending an IEncodable and reconstructing it to the proper type.
+        /// </summary>
+        /// <returns></returns>
+        String getObjectType();
+
     }
 }

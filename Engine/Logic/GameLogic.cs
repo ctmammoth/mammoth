@@ -2,23 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
+using Mammoth.Engine.Networking;
 using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine
 {
-    public class GameLogic : Mammoth.Engine.IGameLogic
+    public class GameLogic : GameComponent
     {
         public Team Team1;
         public Team Team2;
+        public Hashtable Players;
         public DateTime GameStart;
         public bool GameGoing;
         private const int GameLength = 260; //game length in seconds
+        private int SendCounter;
+        private const int FreqSent = 60;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GameLogic()
+        public GameLogic(Game game): base(game)
         {
             ResetGame();
         }
@@ -29,10 +34,12 @@ namespace Mammoth.Engine
         public void ResetGame()
         {
             //clear all objects
-            Team1 = null;
-            Team2 = null;
+            Team1 = new Team(1);
+            Team2 = new Team(2);
             GameStart = DateTime.Now;
             GameGoing = false;
+            Players = new Hashtable();
+            SendCounter = 0;
         }
 
         /// <summary>
@@ -67,6 +74,38 @@ namespace Mammoth.Engine
                 return timeleft;
         }
 
+
+        #region PlayerStats
+        /// <summary>
+        /// Load player stats into game logic
+        /// </summary>
+        /// <param name="client_id">The id of the client</param>
+        /// <param name="stats">The PlayerStats.</param>
+        public void UpdatePlayerStats(int client_id, PlayerStats stats)
+        {
+            if (Players.ContainsKey(client_id))
+            {
+                Players.Remove(client_id);
+                Players.Add(client_id, stats);
+            }
+            else
+            {
+                Players.Add(client_id, stats);
+            }
+        }
+
+
+        /// <summary>
+        /// Returns the hashtable of player stats.
+        /// </summary>
+        /// <returns>Returns the hashtable of player stats.</returns>
+        public Hashtable GetPlayerStats()
+        {
+            return Players;
+        }
+        #endregion
+
+        #region Add To Teams
         /// <summary>
         /// Adds a client to the smallest team. If teams are same size, adds client to Team 1.
         /// </summary>
@@ -76,13 +115,11 @@ namespace Mammoth.Engine
         {
             if (Team1.GetTeamSize() > Team2.GetTeamSize())
             {
-                Team2.AddTeamMember(client_id);
-                return Team2;
+                return ManuallyAddToTeam(client_id, 2);
             }
             else
             {
-                Team1.AddTeamMember(client_id);
-                return Team1;
+                return ManuallyAddToTeam(client_id, 1);
             }
         }
 
@@ -111,6 +148,9 @@ namespace Mammoth.Engine
             }
         }
 
+        #endregion
+
+        #region Get Teams
         /// <summary>
         /// Get the Team that is currently winning. If teams are equal in rank, returns Team 1.
         /// </summary>
@@ -155,6 +195,25 @@ namespace Mammoth.Engine
         }
 
         /// <summary>
+        /// Returns the team on which the client indicated resigns.
+        /// </summary>
+        /// <param name="client_id">The client ID in query</param>
+        /// <returns>The team on which that client resides</returns>
+        public Team GetTeamOf(int client_id)
+        {
+            if (Team1.GetTeamMemberList().Contains(client_id))
+            {
+                return Team1;
+            }
+            else
+            {
+                return Team2;
+            }
+        }
+        #endregion
+
+        #region Interact Teams
+        /// <summary>
         /// If someone on a team kills another, give that person's team a point.
         /// </summary>
         /// <param name="client_id">The client id of the killer</param>
@@ -174,22 +233,47 @@ namespace Mammoth.Engine
             }
         }
 
-
         /// <summary>
-        /// Returns the team on which the client indicated resigns.
+        /// If someone on a team captures a flag, give that person's team a point.
         /// </summary>
-        /// <param name="client_id">The client ID in query</param>
-        /// <returns>The team on which that client resides</returns>
-        public Team GetTeamOf(int client_id)
+        /// <param name="client_id">The client id of the client that captured</param>
+        public void AwardCapture(int client_id)
         {
+            Console.WriteLine("Awarding capture...");
+
             if (Team1.GetTeamMemberList().Contains(client_id))
             {
-                return Team1;
+                Console.WriteLine("Awarding capture to Team 1. Thanks to Player " + client_id);
+                Team1.AddCapture();
             }
             else
             {
-                return Team2;
+                Console.WriteLine("Awarding capture to Team 2. Thanks to Player " + client_id);
+                Team2.AddCapture();
             }
         }
+        #endregion
+
+        /// <summary>
+        /// Sends the GameStats every 60 updates.
+        /// </summary>
+        /// <param name="gameTime">The game time.</param>
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            if (SendCounter == FreqSent)
+            {
+                Console.WriteLine("Sending Game Logic!");
+                IServerNetworking sn = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+                sn.sendThing(new GameStats(this));
+                SendCounter = 0;
+            }
+            else
+            {
+                SendCounter++;
+            }
+        }
+
     }
 }

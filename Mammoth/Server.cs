@@ -37,6 +37,7 @@ namespace Mammoth.Server
             // TODO: Change this to create a new scene when a game screen is created.
             physics.CreateScene();
 
+
             // Set up the emulated input.
             this.Components.Add(new EmulatedInput(this)
             {
@@ -55,8 +56,9 @@ namespace Mammoth.Server
             NetworkComponent.CreateServerNetworking(this);
 
             //Add GameLogic
-            GameLogic g = new GameLogic();
-            this.Services.AddService(typeof(IGameLogic), g);
+            GameLogic g = new GameLogic(this);
+            this.Components.Add(g);
+            this.Services.AddService(typeof(GameLogic), g);
 
             base.Initialize();
         }

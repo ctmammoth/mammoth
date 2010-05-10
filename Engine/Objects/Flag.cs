@@ -86,7 +86,7 @@ namespace Mammoth.Engine.Objects
         {
             base.Update(gameTime);
 
-            // Console.WriteLine("Flag " + this.ID + " old pos: " + this.Position); // WHY
+            //Console.WriteLine("Flag " + this.ID + " old pos: " + this.Position);
 
             if (this.Owner != null)
                 this.Position = Owner.Position;

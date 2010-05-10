@@ -40,21 +40,17 @@ namespace Mammoth.Engine
         /// <param name="clientID">The ID of the client this player is simulating on the server</param>
         public ProxyInputPlayer(Game game, int clientID): base(game)
         {
-
             //Initialize game
-            IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
+            GameLogic g = (GameLogic)this.Game.Services.GetService(typeof(GameLogic));
             g.InitiateGame();
 
-            Console.WriteLine("Creating proxy player");
+            //add proxy player to team
             this.ClientID = clientID;
-            //IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
             this.Team = g.AddToTeam(this.ClientID);
             Console.WriteLine("Proxy Player " + this.ClientID + " joined " + this.Team.ToString());
 
-            IServerNetworking sn = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
-            sn.sendEvent("GameTime", g.GetTimeLeft().ToString(), ClientID);
-
-
+            //add stats to GameStats
+            g.UpdatePlayerStats(this.ClientID, PlayerStats);
         }
 
         /// <summary>
@@ -133,6 +129,7 @@ namespace Mammoth.Engine
                 CurWeapon = Items[newWeapon - 1];
         }
 
+
         public override void TakeDamage(float damage, IDamager inflicter)
         {
             this.Health -= damage;
@@ -142,7 +139,7 @@ namespace Mammoth.Engine
                 Projectile p = (Projectile)inflicter;
 
                 //update teams kills
-                IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
+                GameLogic g = (GameLogic)this.Game.Services.GetService(typeof(GameLogic));
                 g.AwardKill(p.Creator);
                 Console.WriteLine("Player " + ClientID + " was killed by Player " + p.Creator);
 
@@ -155,7 +152,6 @@ namespace Mammoth.Engine
                 Die();
             }
         }
-
         public override void Die()
         {
             base.Die();
@@ -198,5 +194,7 @@ namespace Mammoth.Engine
                     this.Flag = null;
                 }
         }
+
+
     }
 }

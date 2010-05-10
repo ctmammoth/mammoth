@@ -8,6 +8,7 @@ using StillDesign.PhysX;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
+using Mammoth.GameWidgets;
 using Mammoth.Engine;
 using Mammoth.Engine.Input;
 using Mammoth.Engine.Physics;
@@ -119,12 +120,36 @@ namespace Mammoth
             baseWidget.Add(cross);
 
             // Add the timer
-            TGameTimeWidget timer = new TGameTimeWidget(this.Game)
+            GameTimeWidget timer = new GameTimeWidget(this.Game)
             {
                 Size = new Vector2(50, 50),
                 Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, 25)
             };
             baseWidget.Add(timer);
+
+            // Add the ammo counter
+            AmmoWidget ammo = new AmmoWidget(this.Game, this.LocalPlayer)
+            {
+                Size = new Vector2(50, 50),
+                Center = new Vector2(this.Game.Window.ClientBounds.Width - 100, this.Game.Window.ClientBounds.Height - 50)
+            };
+            baseWidget.Add(ammo);
+
+            // Add the health counter
+            HealthWidget health = new HealthWidget(this.Game, this.LocalPlayer)
+            {
+                Size = new Vector2(50, 50),
+                Center = new Vector2(this.Game.Window.ClientBounds.Width - 100, this.Game.Window.ClientBounds.Height - 100)
+            };
+            baseWidget.Add(health);
+
+            //Add FlagIndicator
+            FlagIndicatorWidget f = new FlagIndicatorWidget(this.Game, this.LocalPlayer)
+            {
+                Size = new Vector2(75, 111),
+                Center = new Vector2(50, this.Game.Window.ClientBounds.Height - 65)
+            };
+            baseWidget.Add(f);
 
             // LET'S TRY ADDING A ROOM!!!
             ObjectParameters stairRoom = new ObjectParameters();
@@ -133,8 +158,8 @@ namespace Mammoth
             stairRoom.AddAttribute("Z", "-50");
             stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
             Room room = new Room(modelDB.getNextOpenID(), stairRoom, this.Game);
-            
-
+            Flag flag1 = new Flag(this.Game, new Vector3(-45.0f, -23.0f, -45.0f), 1);
+            Flag flag2 = new Flag(this.Game, new Vector3(-65.0f, -23.0f, -45.0f), 2);
         }
 
         public override void Update(GameTime gameTime, bool hasFocus, bool visible)

@@ -298,6 +298,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="fonts\hud.spritefont">
+      <Name>hud</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="sounds\Machine_Gun.wav">
       <Name>machinegun</Name>
       <Importer>WavImporter</Importer>
@@ -323,6 +330,13 @@
       <Name>shotgunfireload</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="textures\flag.png">
+      <Name>flag</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
