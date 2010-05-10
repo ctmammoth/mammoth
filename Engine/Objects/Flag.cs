@@ -58,6 +58,9 @@ namespace Mammoth.Engine.Objects
             // Set the position to wherever the flag should be constructed
             this.Position = initialPosition;
 
+            // No owner, initially
+            this.Owner = null;
+
             // Load a flag model
             // TODO: get a flag model or something
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
@@ -99,19 +102,17 @@ namespace Mammoth.Engine.Objects
 
         #region Properties
 
+        private Vector3 posOffset;
+
         public Vector3 PositionOffset
         {
             get
             {
-                if (Owner == null)
-                    return Vector3.Zero;
-                else
-                    // Draw it above the player's head
-                    return new Vector3(0.0f, Owner.Height + 4.0f, 0.0f);
+                return posOffset;
             }
             protected set
             {
-                this.PositionOffset = value;
+                this.posOffset = value;
             }
         }
 
@@ -134,10 +135,23 @@ namespace Mammoth.Engine.Objects
 
         #region IHoldableItem Members
 
+        private Player owner;
+
         public Player Owner
         {
-            get;
-            set;
+            get
+            {
+                return this.owner;
+            }
+            set
+            {
+                this.owner = value;
+
+                if (value == null)
+                    posOffset = Vector3.Zero;
+                else
+                    posOffset = new Vector3(0.0f, Owner.Height + 4.0f, 0.0f);
+            }
         }
 
         #endregion
