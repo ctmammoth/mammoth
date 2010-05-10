@@ -5,6 +5,7 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 using Mammoth.Engine.Objects;
+using Mammoth.Engine.Input;
 
 namespace Mammoth.Engine.Objects
 {
@@ -18,17 +19,17 @@ namespace Mammoth.Engine.Objects
 
         protected override double FireRate
         {
-            get { return 2.0; }
+            get { return 3.0; }
         }
 
         protected override double ReloadTime
         {
-            get { return 3000.0; }
+            get { return 2500.0; }
         }
 
         protected override float Inaccuracy
         {
-            get { return 0.01f; }
+            get { return 0.015f; }
         }
 
         protected override int MagazineCapacity
@@ -58,6 +59,11 @@ namespace Mammoth.Engine.Objects
             b.ID = mdb.getNextOpenID();
             mdb.registerObject(b);
             return b;
+        }
+
+        public override bool ShouldShoot(InputState input)
+        {
+            return input.KeyPressed(InputType.Fire);
         }
     }
 }

@@ -102,6 +102,17 @@ namespace Mammoth.Engine
                 CurWeapon.Reload(time);
         }
 
+        /// <summary>
+        /// Overrides InputPlayer's SwitchWeapon() in order to allow switching.
+        /// </summary>
+        protected override void SwitchWeapon(int newWeapon)
+        {
+            base.SwitchWeapon(newWeapon);
+
+            if (newWeapon - 1 <= Items.Length && Items[newWeapon - 1] != null)
+                CurWeapon = Items[newWeapon - 1];
+        }
+
         public override void RespondToTrigger(PhysicalObject obj)
         {
             Console.WriteLine("Proxyplayer is responding to a trigger.");
@@ -115,9 +126,7 @@ namespace Mammoth.Engine
 
         public override void TakeDamage(float damage, IDamager inflicter)
         {
-            //base.TakeDamage(damage, inflicter);
-
-            Console.WriteLine("Health: " + this.Health);
+            this.Health -= damage;
 
             if (this.Health <= 0)
             {
@@ -125,9 +134,8 @@ namespace Mammoth.Engine
 
                 //update teams kills
                 IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
-                int cid = p.Creator >> 25;
-                g.AwardKill(cid);
-                Console.WriteLine("Player " + cid + " was killed by Player " + p.Creator);
+                g.AwardKill(p.Creator);
+                Console.WriteLine("Player " + ClientID + " was killed by Player " + p.Creator);
 
                 //update players kills
                 IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));

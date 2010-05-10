@@ -87,6 +87,8 @@ namespace Mammoth.Engine
             Items = new Gun[5];
             // Give the player a simple gun, for now
             Items[0] = new Revolver(game, this);
+            Items[1] = new SMG(game, this);
+            Items[3] = new Shotgun(game, this);
             CurWeapon = Items[0];
 
             // Give the player some stats
@@ -217,13 +219,18 @@ namespace Mammoth.Engine
                     if (input.IsKeyDown(InputType.Jump))
                         this.Velocity += Vector3.Up / 4.0f;
 
-                // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
-                if (input.KeyPressed(InputType.Fire))
+                if (CurWeapon != null && CurWeapon.ShouldShoot(input))
                     this.Shoot(gameTime);
 
                 // Reload the user's gun
                 if (input.KeyPressed(InputType.Reload))
                     this.Reload(gameTime);
+
+                // Check for weapon switches
+                if (input.KeyPressed(InputType.Weapon1))
+                    this.SwitchWeapon(1);
+                if (input.KeyPressed(InputType.Weapon2))
+                    this.SwitchWeapon(2);
 
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
@@ -236,7 +243,8 @@ namespace Mammoth.Engine
             }
 
             // Update main weapon
-            ((BaseObject)CurWeapon).Update(gameTime);
+            if (CurWeapon != null)
+                CurWeapon.Update(gameTime);
 
             //Console.WriteLine("Weapon " + ((BaseObject)CurWeapon).getObjectType() + " has " + CurWeapon.ShotsLeft() + " shots left.");
         }
@@ -244,7 +252,8 @@ namespace Mammoth.Engine
         /// <summary>
         /// Throws a "bullet" in the current direction of the player. Overridden in ProxyInputPlayer since shooting only happens on server-side.
         /// </summary>
-        protected virtual void Shoot(GameTime time) {
+        protected virtual void Shoot(GameTime time) 
+        {
             Console.WriteLine("Throwing, orientation is: " + this.HeadOrient);
         }
 
@@ -254,6 +263,14 @@ namespace Mammoth.Engine
         protected virtual void Reload(GameTime time)
         {
             Console.WriteLine("Reloading.");
+        }
+
+        /// <summary>
+        /// Switches the player's current weapon.  Overridden in ProxyInputPlayer since switching only happens on server-side.
+        /// </summary>
+        protected virtual void SwitchWeapon(int newWeapon)
+        {
+            Console.WriteLine("Switching weapon to " + Items[newWeapon - 1].getObjectType());
         }
 
         /// <summary>
@@ -376,6 +393,9 @@ namespace Mammoth.Engine
                         break;
                     case "SMG":
                         CurWeapon = new SMG(this.Game, this);
+                        break;
+                    case "Shotgun":
+                        CurWeapon = new Shotgun(this.Game, this);
                         break;
                 }
             }

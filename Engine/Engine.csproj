@@ -100,7 +100,9 @@
     <Compile Include="Objects\Projectile.cs" />
     <Compile Include="Objects\Revolver.cs" />
     <Compile Include="Objects\RealStaticObject.cs" />
-    <Compile Include="Objects\RevolverAmmo.cs" />
+    <Compile Include="Objects\RevolverBullet.cs" />
+    <Compile Include="Objects\Shotgun.cs" />
+    <Compile Include="Objects\ShotgunBullet.cs" />
     <Compile Include="Objects\SMG.cs" />
     <Compile Include="Objects\SMGBullet.cs" />
     <Compile Include="Player\LocalInputPlayer.cs" />

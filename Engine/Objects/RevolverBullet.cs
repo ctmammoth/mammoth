@@ -22,13 +22,13 @@ namespace Mammoth.Engine.Objects
 
         public override float Speed
         {
-            get { return 100.0f; }
+            get { return 150.0f; }
             protected set { }
         }
 
         public override float Damage
         {
-            get { return 15.0f; }
+            get { return 14.0f; }
             protected set { }
         }
     }
