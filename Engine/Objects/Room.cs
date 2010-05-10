@@ -40,6 +40,7 @@ namespace Mammoth.Engine
             this.ID = id;
             this.Game = game;
             possible = new PossibleObjects();
+
             boxActorDesc = new ActorDescription()
             {
                 /*BodyDescription = new BodyDescription()
@@ -67,7 +68,14 @@ namespace Mammoth.Engine
             tosend.AddElement("y", y);
             tosend.AddElement("z", z);
             tosend.AddElement("roomType", roomType);
-            //tosend.AddElement("items", items);
+            int numItems = items.Count;
+            for (int i = 0; i < numItems; i++)
+            {
+                tosend.AddElement("items" + i, items.ElementAt(i));
+            }
+            tosend.AddElement("numItems", numItems);
+
+            
             return tosend.Serialize();
         }
 
@@ -76,17 +84,59 @@ namespace Mammoth.Engine
             Console.WriteLine("ROOM DECODING");
             Networking.Encoder props = new Networking.Encoder(data);
 
+            ObjectParameters parameters = new ObjectParameters();
+
             if (props.UpdatesFor("x"))
-                x = (float)props.GetElement("x", x);
+                parameters.AddAttribute("X", ((double)props.GetElement("x", x)).ToString());
             if (props.UpdatesFor("y"))
-                y = (float)props.GetElement("y", y);
+                parameters.AddAttribute("Y", ((double)props.GetElement("y", y)).ToString());
             if (props.UpdatesFor("z"))
-                z = (float)props.GetElement("z", z);
+                parameters.AddAttribute("Z", ((double)props.GetElement("z", z)).ToString());
             if (props.UpdatesFor("roomType"))
-                roomType = (String)props.GetElement("roomType", roomType);
-            if (props.UpdatesFor("items"))
-                items = (List<IEncodable>)props.GetElement("items", items);
-           
+                parameters.AddAttribute("Special_Type", (String)props.GetElement("roomType", roomType));                
+            //if (props.UpdatesFor("items"))
+              //  items = (List<IEncodable>)props.GetElement("items", items); 
+
+
+            SpawnRoomFromNetwork(parameters);
+        }
+
+        protected void SpawnRoomFromNetwork(ObjectParameters parameters)
+        {
+            
+            boxActorDesc = new ActorDescription()
+            {
+                /*BodyDescription = new BodyDescription()
+                {
+                    Mass = 1000.0f
+                }*/
+            };
+
+            
+            items = new List<IEncodable>();
+            physics = (PhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            foreach (String attribute in parameters.GetAttributes())
+            {
+                switch (attribute)
+                {
+                    case "X":
+                        x = parameters.GetDoubleValue(attribute);
+                        break;
+                    case "Y":
+                        y = parameters.GetDoubleValue(attribute);
+                        break;
+                    case "Z":
+                        z = parameters.GetDoubleValue(attribute);
+                        break;
+                    case "Special_Type":
+                        SpecializeFromServer(parameters.GetStringValue(attribute));
+                        break;
+                }
+            }
+            BuildWalls(x, y, z);
+            this.Actor = physics.CreateActor(boxActorDesc);
+
         }
 
         public Room(int id, ObjectParameters parameters, Game game)
@@ -176,7 +226,27 @@ namespace Mammoth.Engine
                     case "PARAMETERS":
                         HandleParameters(handler);
                         break;
+                }
 
+            }
+
+        }
+
+        private void SpecializeFromServer(String attribute)
+        {
+            XmlHandler handler = new XmlHandler();
+            handler.ChangeFile("rooms.xml");
+            handler.GetElement("ROOM", "NAME", attribute);
+            roomType = attribute;
+            while (!handler.IsClosingTag("ROOM"))
+            {
+                handler.GetNextElement();
+                String name = handler.GetElementName();
+                switch (name)
+                {
+                    case "ITEMS":
+                        HandleItems(handler);
+                        break;                   
                 }
 
             }
