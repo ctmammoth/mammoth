@@ -87,6 +87,7 @@ namespace Mammoth.Engine
             Items = new Gun[5];
             // Give the player a simple gun, for now
             Items[0] = new Revolver(game, this);
+            Items[1] = new SMG(game, this);
             CurWeapon = Items[0];
 
             // Give the player some stats
@@ -225,6 +226,12 @@ namespace Mammoth.Engine
                 if (input.KeyPressed(InputType.Reload))
                     this.Reload(gameTime);
 
+                // Check for weapon switches
+                if (input.KeyPressed(InputType.Weapon1))
+                    this.SwitchWeapon(1);
+                if (input.KeyPressed(InputType.Weapon2))
+                    this.SwitchWeapon(2);
+
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
 
@@ -255,6 +262,14 @@ namespace Mammoth.Engine
         protected virtual void Reload(GameTime time)
         {
             Console.WriteLine("Reloading.");
+        }
+
+        /// <summary>
+        /// Switches the player's current weapon.  Overridden in ProxyInputPlayer since switching only happens on server-side.
+        /// </summary>
+        protected virtual void SwitchWeapon(int newWeapon)
+        {
+            Console.WriteLine("Switching weapon to " + newWeapon);
         }
 
         /// <summary>

@@ -102,6 +102,17 @@ namespace Mammoth.Engine
                 CurWeapon.Reload(time);
         }
 
+        /// <summary>
+        /// Overrides InputPlayer's SwitchWeapon() in order to allow switching.
+        /// </summary>
+        protected override void SwitchWeapon(int newWeapon)
+        {
+            base.SwitchWeapon(newWeapon);
+
+            if (newWeapon - 1 <= Items.Length && Items[newWeapon - 1] != null)
+                CurWeapon = Items[newWeapon - 1];
+        }
+
         public override void RespondToTrigger(PhysicalObject obj)
         {
             Console.WriteLine("Proxyplayer is responding to a trigger.");

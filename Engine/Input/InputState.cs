@@ -23,7 +23,9 @@ namespace Mammoth.Engine.Input
         Reload = 0x80,
         Fire = 0x100,
         Zoom = 0x200,
-        Stats = 0x400
+        Stats = 0x400,
+        Weapon1 = 0x800,
+        Weapon2 = 0x1000
     }
 
     public class InputState : IEncodable

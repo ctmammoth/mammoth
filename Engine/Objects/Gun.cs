@@ -260,7 +260,6 @@ namespace Mammoth.Engine.Objects
             IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
             net.sendEvent("Sound", FireSound);
 
-            // Make sure the bullet isn't spawned in the player: shift it by a bit
             Bullet b = createBullet(Game, position, orientation, shooterID >> 25);
 
             // Give this projectile an ID, but it's not really necessary since it gets shot instantaneously
