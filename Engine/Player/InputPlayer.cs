@@ -313,6 +313,14 @@ namespace Mammoth.Engine
         {
             base.Die();
             Console.WriteLine("Player " + ID + " died.");
+            
+            // Drop the flag
+            if (this.Flag != null)
+            {
+                this.Flag.GetDropped(this.Position);
+                this.Flag = null;
+            }
+
             this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
         }
 

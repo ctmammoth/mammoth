@@ -120,6 +120,8 @@ namespace Mammoth.Engine.Physics
 
             public override void OnTrigger(Shape triggerShape, Shape otherShape, TriggerFlag status)
             {
+                Console.WriteLine("Something was triggered!");
+
                 // Make sure the shapes have userdata
                 if (triggerShape.Actor.UserData != null && otherShape.Actor.UserData != null)
                 {

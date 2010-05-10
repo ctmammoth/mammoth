@@ -19,11 +19,11 @@ namespace Mammoth.Engine.Objects
             : base(game)
         {
             // Give this a sphere shape trigger
-            //SphereShapeDescription trigShapeDesc = new SphereShapeDescription()
-            //{
-            //    Radius = 0.3f,
-            //    Flags = ShapeFlag.TriggerEnable
-            //};
+            SphereShapeDescription trigShapeDesc = new SphereShapeDescription()
+            {
+                Radius = 24.0f,
+                Flags = ShapeFlag.TriggerEnable
+            };
 
             // Give this a sphere shape trigger
             SphereShapeDescription sDesc = new SphereShapeDescription()
@@ -58,6 +58,12 @@ namespace Mammoth.Engine.Objects
             IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
             this.ID = mdb.getNextOpenID();
             mdb.registerObject(this);
+        }
+
+        public void GetDropped(Vector3 position)
+        {
+            this.Position = position;
+            this.Owner = null;
         }
 
         public override string getObjectType()

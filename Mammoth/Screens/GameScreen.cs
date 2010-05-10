@@ -119,7 +119,7 @@ namespace Mammoth
             Room room = new Room(modelDB.getNextOpenID(), stairRoom, this.Game);
 
             // LET'S TRY ADDING A FLAG!!!
-            Flag flag = new Flag(this.Game, new Vector3(-3.0f, 10.0f, 0.0f));
+            Flag flag = new Flag(this.Game, new Vector3(-3.0f, 2.0f, 0.0f));
         }
 
         public override void Update(GameTime gameTime, bool hasFocus, bool visible)
