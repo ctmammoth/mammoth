@@ -29,6 +29,16 @@ namespace Mammoth.Engine
         {
             get;
         }
+
+        Vector3 Position
+        {
+            get;
+        }
+
+        Vector3 Forward
+        {
+            get;
+        }
     }
 
     public abstract class Camera : GameComponent, ICameraService
@@ -92,6 +102,18 @@ namespace Mammoth.Engine
             protected set;
         }
 
+        public Vector3 Position
+        {
+            get;
+            protected set;
+        }
+
+        public Vector3 Forward
+        {
+            get;
+            protected set;
+        }
+
         // We might want to change this from Player to some other class, as we might want
         // the camera to target something other than the player.  Sadly, C# 3.0 doesn't support
         // variant return types, so there's no clean way to do this.
@@ -120,12 +142,12 @@ namespace Mammoth.Engine
 
         public override void Update(GameTime gameTime)
         {
-            Vector3 forward = Vector3.Transform(Vector3.Forward, this.Target.HeadOrient) * 1000.0f;
+            this.Forward = Vector3.Transform(Vector3.Forward, this.Target.HeadOrient) * 1000.0f;
 
-            Vector3 position = this.Target.Position + (Vector3.Up * this.Target.Height / 4.0f);
-            Vector3 look = position + forward;
+            this.Position = this.Target.Position + (Vector3.Up * this.Target.Height / 4.0f);
+            Vector3 look = this.Position + this.Forward;
 
-            this.View = Matrix.CreateLookAt(position, look, Vector3.Up);
+            this.View = Matrix.CreateLookAt(this.Position, look, Vector3.Up);
         }
 
         #region Properties
@@ -155,12 +177,12 @@ namespace Mammoth.Engine
 
         public override void Update(GameTime gameTime)
         {
-            Vector3 forward = Vector3.Transform(Vector3.Forward, this.Target.HeadOrient) * 1000.0f;
+            this.Forward = Vector3.Transform(Vector3.Forward, this.Target.HeadOrient) * 1000.0f;
 
-            Vector3 position = this.Target.Position - forward * 15 + Vector3.Up * 5;
+            this.Position = this.Target.Position - this.Forward * 15 + Vector3.Up * 5;
             Vector3 look = this.Target.Position + Vector3.Up * this.Target.Height * 3 / 4;
 
-            this.View = Matrix.CreateLookAt(position, look, Vector3.Up);
+            this.View = Matrix.CreateLookAt(this.Position, look, Vector3.Up);
         }
 
         #region Properties
