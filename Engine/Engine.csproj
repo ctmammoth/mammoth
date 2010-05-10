@@ -100,6 +100,8 @@
     <Compile Include="Objects\Revolver.cs" />
     <Compile Include="Objects\RealStaticObject.cs" />
     <Compile Include="Objects\RevolverAmmo.cs" />
+    <Compile Include="Objects\SMG.cs" />
+    <Compile Include="Objects\SMGBullet.cs" />
     <Compile Include="Player\LocalInputPlayer.cs" />
     <Compile Include="ModelDatabase.cs" />
     <Compile Include="Objects\WallBlock.cs" />

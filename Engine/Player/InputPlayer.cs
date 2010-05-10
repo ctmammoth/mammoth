@@ -371,6 +371,9 @@ namespace Mammoth.Engine
                     case "Revolver":
                         CurWeapon = new Revolver(this.Game, this);
                         break;
+                    case "SMG":
+                        CurWeapon = new SMG(this.Game, this);
+                        break;
                 }
             }
             if (props.UpdatesFor("Gun"))
