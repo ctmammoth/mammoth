@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using System.Windows.Forms;
 
 namespace Mammoth.Engine
 {
@@ -14,8 +15,7 @@ namespace Mammoth.Engine
         public void ChangeFile(String path)
         {
             currentPath = path;
-            path = "../../../" + path;            
-            reader = new XmlTextReader(path);
+            reader = new XmlTextReader(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\" + path);
         }
         public void GetNextElement()
         {
