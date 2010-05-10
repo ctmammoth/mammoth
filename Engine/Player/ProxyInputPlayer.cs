@@ -158,20 +158,27 @@ namespace Mammoth.Engine
         {
             Console.WriteLine("ProxyPlayer is responding to a trigger.");
 
-            // If a Flag was triggered, pick it up
+            // Check whether a Flag was trigger
             if (obj is Objects.Flag)
-                if (Flag == null)
+                // Check whether the Flag is not being carried
+                if (((Objects.Flag)obj).Owner == null)
                 {
-                    // TODO: only pick up flags not owned by your team
-                    Flag = (Objects.Flag)obj;
-                    Flag.Owner = this;
-                    Console.WriteLine("ProxyPlayer picked up a flag!");
-                }
-                else
-                {
-                    Console.WriteLine("Dropping off a carried flag at another flag!");
-                    Flag.GetDropped();
-                    this.Flag = null;
+                    // If this player is not carrying a Flag
+                    if (Flag == null)
+                    {
+                        // TODO: only pick up flags not owned by your team
+                        Flag = (Objects.Flag)obj;
+                        Flag.Owner = this;
+                        Console.WriteLine("ProxyPlayer picked up a flag!");
+                    }
+                    else
+                    {
+                        // Otherwise drop the Flag being carried if the Flag just encountered is your team's flag
+                        // TODO: make sure the Flag is owned by your team and located at your spawn point
+                        Console.WriteLine("Dropping off a carried flag at another flag!");
+                        Flag.GetDropped();
+                        this.Flag = null;
+                    }
                 }
         }
 
