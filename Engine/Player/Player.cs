@@ -7,6 +7,7 @@ using StillDesign.PhysX;
 
 using Mammoth.Engine.Networking;
 using Mammoth.Engine.Physics;
+using Mammoth.Engine.Objects;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -71,6 +72,12 @@ namespace Mammoth.Engine
             this.NumDeaths++;
         }
 
+        public Flag Flag
+        {
+            get;
+            protected set;
+        }
+
         #endregion
         
         #region IEncodable Members
@@ -88,6 +95,15 @@ namespace Mammoth.Engine
             tosend.AddElement("Velocity", Velocity);
             tosend.AddElement("PlayerStats", PlayerStats);
 
+            if (Flag != null)
+            {
+                tosend.AddElement("FlagID", Flag.ID);
+            }
+            else
+            {
+                tosend.AddElement("FlagID", -1);
+            }
+
             return tosend.Serialize();
         }
 
@@ -104,6 +120,23 @@ namespace Mammoth.Engine
             if (props.UpdatesFor("PlayerStats"))
                 props.UpdateIEncodable("PlayerStats", PlayerStats);
 
+            if (props.UpdatesFor("FlagID"))
+            {
+                int newID = (int)props.GetElement("FlagID", -1);
+                if (this.Flag != null && newID < 0)
+                {
+                    this.Flag.GetDropped();
+                    this.Flag = null;
+                }
+                else if ((this.Flag == null && newID >= 0) || (this.Flag != null && this.Flag.ID != newID))
+                {
+                    IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+                    Flag flag = (Flag)mdb.getObject(newID);
+                    this.Flag = flag;
+                    flag.Owner = this;
+                }
+
+            }
         }
 
         #endregion
