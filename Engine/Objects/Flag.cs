@@ -27,17 +27,17 @@ namespace Mammoth.Engine.Objects
             // Give this a capsule shape trigger
             SphereShapeDescription trigShapeDesc = new SphereShapeDescription()
             {
-                Radius = 3.0f,
+                Radius = 0.5f,
                 LocalPosition = Vector3.Zero,
-                Flags = ShapeFlag.TriggerOnEnter,
+                Flags = ShapeFlag.DisableCollision
             };
 
             // Placate PhysX by giving it a real shape
-            CapsuleShapeDescription cDesc = new CapsuleShapeDescription()
+            BoxShapeDescription cDesc = new BoxShapeDescription()
             {
-                Height = 3.0f,
-                Radius = 1.0f,
-                LocalPosition = Vector3.Zero
+                Size = new Vector3(0.5f, 4.0f, 0.5f),
+                LocalPosition = Vector3.Zero,
+                Flags = ShapeFlag.TriggerOnEnter
             };
 
             ActorDescription aDesc = new ActorDescription()
@@ -166,7 +166,7 @@ namespace Mammoth.Engine.Objects
 
                 if (value == null)
                     // If there is now no owner, the model should be drawn on the ground.
-                    posOffset = new Vector3(0.0f, -2.0f, 0.0f);
+                    posOffset = Vector3.Zero;
                 else
                     // Otherwise draw the flag above the owner's head.
                     posOffset = new Vector3(0.0f, Owner.Height + 4.0f, 0.0f);

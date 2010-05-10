@@ -92,21 +92,93 @@ namespace Mammoth.Engine
             _spriteBatch.End();
         }
 
+        public void DrawTexturedBillboard(Vector3 pos, Vector2 size, Texture2D tex)
+        {
+            ICameraService cam = (ICameraService)this.Game.Services.GetService(typeof(ICameraService));
+
+            Matrix billboardRot = Matrix.CreateBillboard(pos, cam.Position, Vector3.Up, null);
+
+            using (BasicEffect effect = new BasicEffect(_graphics, null))
+            {
+                effect.World = billboardRot;
+                effect.View = cam.View;
+                effect.Projection = cam.Projection;
+
+                effect.TextureEnabled = true;
+                effect.Texture = tex;
+
+                size /= 2.0f;
+
+                VertexPositionTexture[] points = new VertexPositionTexture[4];
+                int[] triangleIndices = new int[6];
+
+                Vector3 topCenter = (Vector3.Up * size.Y / 2.0f);
+                // Top-left
+                points[1] = new VertexPositionTexture(topCenter + (Vector3.Left * size.X / 2.0f), Vector2.Zero);
+                // Top-right
+                points[3] = new VertexPositionTexture(topCenter + (Vector3.Right * size.X / 2.0f), new Vector2(1.0f, 0.0f));
+                // Bottom-left
+                points[0] = new VertexPositionTexture(points[1].Position + (Vector3.Down * size.Y), new Vector2(0.0f, 1.0f));
+                // Bottom-right
+                points[2] = new VertexPositionTexture(points[3].Position + (Vector3.Down * size.Y), new Vector2(1.0f, 1.0f));
+
+                triangleIndices[0] = 0;
+                triangleIndices[1] = 1;
+                triangleIndices[2] = 2;
+
+                triangleIndices[3] = 2;
+                triangleIndices[4] = 1;
+                triangleIndices[5] = 3;
+
+                CullMode prev = _graphics.RenderState.CullMode;
+                _graphics.RenderState.CullMode = CullMode.None;
+
+                _graphics.RenderState.DepthBufferEnable = true;
+                _graphics.RenderState.AlphaBlendEnable = false;
+
+                _graphics.RenderState.AlphaTestEnable = true;
+
+                _graphics.VertexDeclaration = new VertexDeclaration(_graphics, VertexPositionTexture.VertexElements);
+
+                // Now draw the quad!
+                effect.Begin();
+                foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                {
+                    pass.Begin();
+
+                        _graphics.DrawUserIndexedPrimitives<VertexPositionTexture>(
+                            PrimitiveType.TriangleList, points, 0, 4, triangleIndices, 0, 2);                                                                                 
+
+                    pass.End();
+                }
+                effect.End();
+
+                _graphics.RenderState.AlphaTestEnable = false;
+
+                _graphics.RenderState.CullMode = prev;
+            }
+        }
+
         public Texture2D RenderFont(string text, Vector2 pos, Color textColor, Color bgColor)
         {
-            return this.RenderFont(text, pos, textColor, bgColor, _defaultFont);
+            return this.RenderFont(text, pos, textColor, bgColor, _defaultFont, SpriteEffects.None);
         }
 
         public Texture2D RenderFont(string text, Vector2 pos, Color textColor, Color bgColor, SpriteFont font)
         {
-            Vector2 textSize = font.MeasureString(text);
+            return this.RenderFont(text, pos, textColor, bgColor, font, SpriteEffects.None);
+        }
+
+        public Texture2D RenderFont(string text, Vector2 pos, Color textColor, Color bgColor, SpriteFont font, SpriteEffects effects)
+        {
+            Vector2 textSize = font.MeasureString(text) + Vector2.One;
 
             RenderTarget2D target = new RenderTarget2D(_graphics, (int)textSize.X, (int)textSize.Y, 1, SurfaceFormat.Color);
 
             _graphics.SetRenderTarget(0, target);
             {
                 _graphics.Clear(bgColor);
-                DrawText(text, pos, textColor, bgColor, font);
+                DrawText(text, pos, textColor, bgColor, font, effects);
             }
             _graphics.SetRenderTarget(0, null);
 
@@ -116,13 +188,13 @@ namespace Mammoth.Engine
 
         public void DrawText(string text, Vector2 pos, Color textColor, Color bgColor)
         {
-            this.DrawText(text, pos, textColor, bgColor, _defaultFont);
+            this.DrawText(text, pos, textColor, bgColor, _defaultFont, SpriteEffects.None);
         }
 
-        public void DrawText(string text, Vector2 pos, Color textColor, Color bgColor, SpriteFont font)
+        public void DrawText(string text, Vector2 pos, Color textColor, Color bgColor, SpriteFont font, SpriteEffects effects)
         {
             _spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
-            _spriteBatch.DrawString(font, text, pos, textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 1);
+            _spriteBatch.DrawString(font, text, pos, textColor, 0.0f, Vector2.Zero, 1.0f, effects, 1);
             _spriteBatch.End();
         }
 
@@ -246,6 +318,11 @@ namespace Mammoth.Engine
         {
             get;
             private set;
+        }
+
+        public SpriteFont DefaultFont
+        {
+            get { return _defaultFont; }
         }
 
         #endregion

@@ -5,6 +5,7 @@ using System.Text;
 using System.Diagnostics;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using StillDesign.PhysX;
 
@@ -18,6 +19,12 @@ namespace Mammoth.Engine
     /// </summary>
     class RemotePlayer : Player
     {
+        #region Fields
+
+        Texture2D nameTexture;
+
+        #endregion
+
         /// <summary>
         /// Loads Models for these players and initializes PhysX for them.
         /// </summary>
@@ -52,7 +59,6 @@ namespace Mammoth.Engine
             this.Controller = physics.CreateController(desc, this);
         }
 
-
         /// <summary>
         /// Draws the remote player.
         /// </summary>
@@ -61,9 +67,28 @@ namespace Mammoth.Engine
         {
             base.Draw(gameTime);
 
-            //Render the RemotePlayer
             IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
+
+            if (nameTexture == null)
+            {
+                string team = this.PlayerStats.YourTeam;
+                Color teamColor = Color.Black;
+                if (team == "Team 1")
+                    teamColor = Color.Red;
+                else if (team == "Team 2")
+                    teamColor = Color.Blue;
+                // Render the name to a texture.
+                nameTexture = r.RenderFont("Noob" + (this.ID >> 25), Vector2.Zero, teamColor, new Vector4(teamColor, 255), r.DefaultFont, SpriteEffects.FlipHorizontally);
+            }
+
+            //Render the RemotePlayer
             r.DrawRenderable(this);
+
+            // DRAW NAMES, NOOB!
+            // This could probably be more efficient/better/something.
+            r.DrawTexturedBillboard(this.Position + this.PositionOffset + new Vector3(0.0f, this.Height - 0.5f, 0.0f),
+                                    new Vector2(nameTexture.Width, nameTexture.Height) / 40.0f,
+                                    nameTexture);
         }
 
         public override void Dispose()
