@@ -356,9 +356,14 @@ namespace Mammoth.Engine
             tosend.AddElement("Gun", CurWeapon);
 
             if (Flag != null)
+            {
                 tosend.AddElement("FlagID", Flag.ID);
+                tosend.AddElement("Flag", Flag);
+            }
             else
+            {
                 tosend.AddElement("FlagID", -1);
+            }
 
             return tosend.Serialize();
         }
@@ -412,6 +417,7 @@ namespace Mammoth.Engine
                     IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
                     Flag flag = (Flag)mdb.getObject(newID);
                     this.Flag = flag;
+                    props.UpdateIEncodable("Flag", flag);
                     flag.Owner = this;
                 }
                 
