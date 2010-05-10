@@ -470,6 +470,11 @@
                     "Name" = "8:Windows Installer 3.1"
                     "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
                     }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Xna.Framework.3.1"
+                    {
+                    "Name" = "8:Microsoft XNA Framework Redistributable 3.1"
+                    "ProductCode" = "8:Microsoft.Xna.Framework.3.1"
+                    }
                 }
             }
         }
@@ -1814,7 +1819,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Capture the Mammoth"
         "ProductCode" = "8:{8D693A82-1BAF-4B5B-8B3A-20D2A66B0ADD}"
-        "PackageCode" = "8:{82E72449-A1C3-44FA-A98F-D8F840236A72}"
+        "PackageCode" = "8:{96E79622-0502-4079-94CB-E5899BDDA859}"
         "UpgradeCode" = "8:{73649DF4-78BD-4078-8D08-C6F4D46A9E66}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
