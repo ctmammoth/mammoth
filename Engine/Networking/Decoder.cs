@@ -74,11 +74,20 @@ namespace Mammoth.Engine.Networking
 
                 //TODO: make sure any new bullet types are put in here
                 case "RevolverBullet":
-                    Bullet b = new RevolverBullet(this.Game, Vector3.Zero, Quaternion.Identity, 0);
-                    b.Decode(properties);
-                    b.ID = id;
-                    ro.registerObject(b);
-                    Console.WriteLine("Bullet received, position: " + b.Position + ", orientation: " + b.Orientation + 
+                    Bullet rb = new RevolverBullet(this.Game, Vector3.Zero, Quaternion.Identity, 0);
+                    rb.Decode(properties);
+                    rb.ID = id;
+                    ro.registerObject(rb);
+                    Console.WriteLine("Bullet received, position: " + rb.Position + ", orientation: " + rb.Orientation + 
+                        ", ID = " + id);
+                break;
+
+                case "SMGBullet":
+                    Bullet sb = new SMGBullet(this.Game, Vector3.Zero, Quaternion.Identity, 0);
+                    sb.Decode(properties);
+                    sb.ID = id;
+                    ro.registerObject(sb);
+                    Console.WriteLine("Bullet received, position: " + sb.Position + ", orientation: " + sb.Orientation +
                         ", ID = " + id);
                 break;
 

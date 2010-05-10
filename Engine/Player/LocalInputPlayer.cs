@@ -34,8 +34,9 @@ namespace Mammoth.Engine
         {
             base.Update(gameTime);
 
-            if (Health <= 20)
+            if (this.Health <= 20.0f)
             {
+                Console.WriteLine("Playing heartbeat sound.");
                 IAudioService audio = (IAudioService)this.Game.Services.GetService(typeof(IAudioService));
                 audio.loopSound("Heartbeat");
             }

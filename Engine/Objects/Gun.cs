@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Mammoth.Engine.Physics;
 using Mammoth.Engine.Networking;
 using Mammoth.Engine.Objects;
+using Mammoth.Engine.Input;
 
 namespace Mammoth.Engine.Objects
 {
@@ -32,15 +33,14 @@ namespace Mammoth.Engine.Objects
         /// </summary>
         /// <returns>The number of bullets remain in the magazine after the shot is fired, or zero if a bullet is
         /// shot when no rounds are remaining.</returns>
-        public int FireShot()
+        public bool CanFireShot()
         {
-            Console.WriteLine("In FireShot");
-            if (AmmoRemaining == 0)
-                return 0;
+            return AmmoRemaining > 0;
+        }
 
+        public void FireShot()
+        {
             AmmoRemaining = AmmoRemaining - 1;
-            Console.WriteLine("Remaining ammo: " + AmmoRemaining);
-            return AmmoRemaining;
         }
 
         /// <summary>
@@ -210,11 +210,13 @@ namespace Mammoth.Engine.Objects
             return MagCount;
         }
 
+        public abstract bool ShouldShoot(InputState input);
+
         public void Shoot(Vector3 position, Quaternion orientation, int shooterID, GameTime time)
         {
             // Make sure a shot can be fired
             double curTime = time.TotalRealTime.TotalMilliseconds;
-            if (Mag.FireShot() >= 0)
+            if (Mag.CanFireShot())
             {
                 // Check whether it's too soon to fire
                 if ((curTime - _lastFiredTime) >= (1000.0 / FireRate) && _lastReloadTime < 0)
@@ -231,7 +233,7 @@ namespace Mammoth.Engine.Objects
                         (float)(directionPerturber.NextDouble() - 0.5) * Inaccuracy));
                     direction.Normalize();*/
 
-                    SpawnBullet(position, orientation, shooterID);
+                    SpawnBullet(position, orientation * perturbation, shooterID);
                 }
             }
             else if (MagCount > 1)
@@ -253,6 +255,8 @@ namespace Mammoth.Engine.Objects
         /// <param name="shooterID"></param>
         private void SpawnBullet(Vector3 position, Quaternion orientation, int shooterID)
         {
+            Mag.FireShot();
+
             IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
             net.sendEvent("Sound", FireSound);
 
