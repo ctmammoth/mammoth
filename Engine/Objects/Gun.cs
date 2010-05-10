@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Mammoth.Engine.Physics;
 using Mammoth.Engine.Networking;
 using Mammoth.Engine.Objects;
+using Mammoth.Engine.Input;
 
 namespace Mammoth.Engine.Objects
 {
@@ -32,13 +33,14 @@ namespace Mammoth.Engine.Objects
         /// </summary>
         /// <returns>The number of bullets remain in the magazine after the shot is fired, or zero if a bullet is
         /// shot when no rounds are remaining.</returns>
-        public int FireShot()
+        public bool CanFireShot()
         {
-            if (AmmoRemaining == 0)
-                return 0;
+            return AmmoRemaining > 0;
+        }
 
+        public void FireShot()
+        {
             AmmoRemaining = AmmoRemaining - 1;
-            return AmmoRemaining;
         }
 
         /// <summary>
@@ -83,7 +85,7 @@ namespace Mammoth.Engine.Objects
     /// <summary>
     /// A simple weapon which shoots Bullets.
     /// </summary>
-    public abstract class Gun : BaseObject, IWeapon, IHoldeableItem, IEncodable
+    public abstract class Gun : BaseObject, IHoldeableItem, IEncodable, IRenderable
     {
         #region Properties
 
@@ -153,7 +155,7 @@ namespace Mammoth.Engine.Objects
         private Quaternion _orientation;
 
         private double _lastFiredTime;
-        private double _lastReloadTime;
+        private double _reloadStartTime;
 
         // The maximum rate of fire in bullets per second
         protected abstract double FireRate { get; }
@@ -188,7 +190,7 @@ namespace Mammoth.Engine.Objects
             this.Model3D = r.LoadModel("soldier-low-poly");
 
             _lastFiredTime = 0;
-            _lastReloadTime = -1;
+            _reloadStartTime = -1;
             // Set the owner
             Owner = owner;
             // Set location
@@ -197,8 +199,6 @@ namespace Mammoth.Engine.Objects
             // Make the randomizer
             directionPerturber = new Random();
         }
-
-        #region IWeapon Members
 
         public int ShotsLeft()
         {
@@ -210,14 +210,16 @@ namespace Mammoth.Engine.Objects
             return MagCount;
         }
 
+        public abstract bool ShouldShoot(InputState input);
+
         public void Shoot(Vector3 position, Quaternion orientation, int shooterID, GameTime time)
         {
             // Make sure a shot can be fired
             double curTime = time.TotalRealTime.TotalMilliseconds;
-            if (Mag.FireShot() > 0)
+            if (Mag.CanFireShot())
             {
                 // Check whether it's too soon to fire
-                if ((curTime - _lastFiredTime) >= (1000.0 / FireRate) && _lastReloadTime < 0)
+                if ((curTime - _lastFiredTime) >= (1000.0 / FireRate) && _reloadStartTime < 0)
                 {
                     _lastFiredTime = curTime;
 
@@ -231,12 +233,11 @@ namespace Mammoth.Engine.Objects
                         (float)(directionPerturber.NextDouble() - 0.5) * Inaccuracy));
                     direction.Normalize();*/
 
-                    SpawnBullet(position, orientation, shooterID);
+                    SpawnBullet(position, orientation * perturbation, shooterID);
                 }
             }
             else if (MagCount > 1)
             {
-                _lastReloadTime = curTime;
                 Reload(time);
             }
             else
@@ -253,11 +254,12 @@ namespace Mammoth.Engine.Objects
         /// <param name="shooterID"></param>
         private void SpawnBullet(Vector3 position, Quaternion orientation, int shooterID)
         {
+            Mag.FireShot();
+
             IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
             net.sendEvent("Sound", FireSound);
 
-            // Make sure the bullet isn't spawned in the player: shift it by a bit
-            Bullet b = new Bullet(Game, position, orientation, shooterID >> 25);
+            Bullet b = createBullet(Game, position, orientation, shooterID >> 25);
 
             // Give this projectile an ID, but it's not really necessary since it gets shot instantaneously
             //IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
@@ -269,14 +271,24 @@ namespace Mammoth.Engine.Objects
             Console.WriteLine("Shot a bullet with a " + getObjectType() + "; " + Mag.AmmoRemaining + " bullets left.");
         }
 
+        /// <summary>
+        /// Create a bullet of the appropriate type.
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="position"></param>
+        /// <param name="orientation"></param>
+        /// <param name="shooterID"></param>
+        /// <returns></returns>
+        protected abstract Bullet createBullet(Game game, Vector3 position, Quaternion orientation, int shooterID);
+
         public void Reload(GameTime time)
         {
-            if (MagCount != 0)
+            if (MagCount != 0 && _reloadStartTime < 0)
             {
                 Console.WriteLine(getObjectType() + " is reloading!");
-                _lastReloadTime = time.TotalRealTime.TotalMilliseconds;
+                _reloadStartTime = time.TotalRealTime.TotalMilliseconds;
                 IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
-                net.sendEvent("Sound", "Reload", Owner.ID >> 25);
+                net.sendEvent("Sound", "GunEmpty", Owner.ID >> 25);
                 // Create a new magazine (really just refill the current one)
                 Mag.Refill();
                 MagCount -= 1;
@@ -287,8 +299,6 @@ namespace Mammoth.Engine.Objects
             }
         }
 
-        #endregion
-
         #region BaseObject Members
 
         public abstract override string getObjectType();
@@ -298,9 +308,9 @@ namespace Mammoth.Engine.Objects
             base.Update(gameTime);
             this.Position = Owner.Position;
             this.Orientation = Owner.HeadOrient;
-            if (_lastReloadTime >= 0 && gameTime.TotalRealTime.TotalMilliseconds - _lastReloadTime >= ReloadTime)
+            if (_reloadStartTime >= 0 && gameTime.TotalRealTime.TotalMilliseconds - _reloadStartTime >= ReloadTime)
             {
-                _lastReloadTime = -1;
+                _reloadStartTime = -1;
                 IServerNetworking net = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
                 net.sendEvent("Sound", "Reload", Owner.ID >> 25);
             }

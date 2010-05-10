@@ -80,9 +80,11 @@ namespace Mammoth.Engine
         public override void Dispose()
         {
             base.Dispose();
-
-            IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
-            physics.RemoveActor(this.Actor);
+            if (this.Actor != null)
+            {
+                IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+                physics.RemoveActor(this.Actor);
+            }
         }
     }
 }

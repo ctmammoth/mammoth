@@ -50,10 +50,6 @@ namespace Mammoth.Engine.Objects
             // TODO: get a flag model or something
             Renderer renderer = (Renderer)this.Game.Services.GetService(typeof(Renderer));
             this.Model3D = renderer.LoadModel("ammocrate");
-
-            IModelDBService modelDB = (IModelDBService)game.Services.GetService(typeof(IModelDBService));
-            // Add the flag to the model database
-            modelDB.registerObject(this);
         }
 
         public override string getObjectType()

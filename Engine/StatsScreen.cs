@@ -15,12 +15,12 @@ namespace Mammoth.Engine
     public class StatsScreen : TWidgetScreen
     {
 
-        private GameStats GameStats;
+        private IGameStats GameStats;
 
 
-        public StatsScreen(Game game, GameStats g): base(game)
+        public StatsScreen(Game game): base(game)
         {
-            GameStats = g;
+            GameStats = (IGameStats)game.Services.GetService(typeof(IGameStats));
         }
 
         public override void Initialize()

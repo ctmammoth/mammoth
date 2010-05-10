@@ -15,27 +15,8 @@ using Mammoth.Engine.Audio;
 namespace Mammoth.Engine
 {
     //TODO: Make bullet drawable
-    public class Bullet : Projectile, IEncodable, IRenderable
+    public abstract class Bullet : Projectile, IEncodable, IRenderable
     {
-        #region Variables
-
-        // The magnitude of the bullet's velocity
-        private const float speed = 50.0f;
-
-        #endregion
-
-        public Bullet(Game game, int creator)
-            : base(game, creator)
-        {
-            Console.WriteLine("Constructing a bullet...");
-
-            InitializePhysX();
-
-            // Load a retarded model
-            Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
-            this.Model3D = r.LoadModel("bullet_low");
-        }
-
         /// <summary>
         /// Creates a new bullet at the specified position and gives it the required initial velocity.  It moves in the
         /// direction of the vector obtained by taking Vector3.Transform(Vector3.UnitZ, orientation).
@@ -53,10 +34,6 @@ namespace Mammoth.Engine
 
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
             this.Model3D = r.LoadModel("bullet_low");
-
-            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-            this.ID = mdb.getNextOpenID();
-            mdb.registerObject(this);
         }
 
         private void InitializePhysX()
@@ -89,45 +66,63 @@ namespace Mammoth.Engine
 
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
 
-            // Move the position by the amount dictated by its velocity and the elapsed game time
-
-            //Vector3 tempPos = Position + Vector3.Multiply(Velocity, (float)gameTime.ElapsedGameTime.TotalSeconds);
+            // If the bullet is really far from the origin, remove it
+            // TODO: make this not hardcoded
+            if (this.Position.Length() > Math.Sqrt(2 * ((256 * 3) * (256 * 3))))
+            {
+                this.IsAlive = false;
+                return;
+            }
 
             // Perform the raycast
             Vector3 dir = Vector3.Transform(Vector3.Forward, this.Orientation);
-            RaycastHit rayHit = physics.RaycastClosestShape(this.Position, dir);
+            RaycastHit rayHit = physics.RaycastClosestShape(this.Position + dir * 0.35f, dir);
 
             // Get the difference in position
-            float distanceMoved = speed * (float) gameTime.ElapsedGameTime.TotalSeconds;
+            float distanceMoved = Speed * (float) gameTime.ElapsedGameTime.TotalSeconds;
 
             // Make sure the shape that was hit is between the current and previous positions, exists and that 
             // its actor has userdata
-            if (rayHit.Shape != null && rayHit.Distance <= distanceMoved)
+            if (rayHit.Shape != null)
             {
-                //Console.WriteLine("Bullet hit something!");
+                //Console.WriteLine("Bullet with : " + this.ID + " ray hit something with a shape of type " + rayHit.Shape.ToString());
                 // Get the PhysicalObject that owns the Shape hit by the raycast
                 PhysicalObject objHit = ((PhysicalObject)rayHit.Shape.Actor.UserData);
 
-                // Try damaging the object
                 if (objHit != null)
                 {
-                    if (objHit is IDamageable)
+                    //Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something with userdata of type: " + objHit.getObjectType());
+                    // Make sure the collision is within the distance we've moved during this timestep.
+                    if (rayHit.Distance <= distanceMoved)
                     {
-                        // Make sure the creator isn't the one being hit
+                        //Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something in range");
+                        // Make sure the object is damageable.
                         if (objHit.ID >> 25 != Creator)
                         {
-                            Console.WriteLine("Damaging a mofo of type " + objHit.getObjectType());
-                            ((IDamageable)objHit).TakeDamage(this.GetDamage(), this);
+                            //Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something that isn't its creator and isn't a bullet");
+                            // Make sure the creator isn't the one being hit.
+                            if (objHit is IDamageable)
+                            {
+                                //Console.WriteLine("Bullet with ID: " + this.ID + " ray hit something damagable in range");
+                                Console.WriteLine("Damaging a mofo of type " + objHit.getObjectType());
+                                ((IDamageable)objHit).TakeDamage(this.GetDamage(), this);
+                            }
 
+                            Console.WriteLine("Bullet with ID: " + this.ID + " being removed");
+
+                            // Have the bullet get removed at the next update step.
                             this.IsAlive = false;
+
+                            // We collided with something legit, so let's get out of here.
+                            return;
                         }
                     }
                 }
             }
-            else
-            {
-                Position += dir * distanceMoved;
-            }
+
+            // We didn't collide with something, so move the bullet.
+            //Console.WriteLine("Moving bullet with ID: " + this.ID);
+            this.Position += dir * distanceMoved;
         }
 
         public override void Draw(GameTime gameTime)
@@ -136,10 +131,7 @@ namespace Mammoth.Engine
             r.DrawRenderable(this);
         }
 
-        public override string getObjectType()
-        {
-            return "Bullet";
-        }
+        public abstract override string getObjectType();
 
         #region IEncodeable members
 
@@ -149,6 +141,8 @@ namespace Mammoth.Engine
 
             e.AddElement("Position", Position);
             e.AddElement("Orientation", Orientation);
+            e.AddElement("Damage", Damage);
+            e.AddElement("Speed", Speed);
             e.AddElement("Creator", Creator);
 
             return e.Serialize();
@@ -162,6 +156,8 @@ namespace Mammoth.Engine
 
             Position = (Vector3)e.GetElement("Position", Position);
             Orientation = (Quaternion)e.GetElement("Orientation", Orientation);
+            Damage = (float)e.GetElement("Damage", Damage);
+            Speed = (float)e.GetElement("Speed", Speed);
             Creator = (int)e.GetElement("Creator", Creator);
 
             Console.WriteLine("Bullet Position received: " + Position);
@@ -169,18 +165,11 @@ namespace Mammoth.Engine
         }
         #endregion
 
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            Console.WriteLine("DISPOSE YOU MOTHERFUCKER!!!");
-        }
-
         #region IDamager Members
 
         public override float GetDamage()
         {
-            return 10.0f;
+            return Damage;
         }
 
         #endregion
@@ -202,5 +191,11 @@ namespace Mammoth.Engine
         }
 
         #endregion
+
+        // The magnitude of the bullet's velocity
+        public abstract float Speed { get; protected set; }
+
+        // The damage this bullet does
+        public abstract float Damage { get; protected set; }
     }
 }

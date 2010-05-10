@@ -40,11 +40,21 @@ namespace Mammoth.Engine
         /// <param name="clientID">The ID of the client this player is simulating on the server</param>
         public ProxyInputPlayer(Game game, int clientID): base(game)
         {
+
+            //Initialize game
+            IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
+            g.InitiateGame();
+
             Console.WriteLine("Creating proxy player");
             this.ClientID = clientID;
-            IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
+            //IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
             this.Team = g.AddToTeam(this.ClientID);
             Console.WriteLine("Proxy Player " + this.ClientID + " joined " + this.Team.ToString());
+
+            IServerNetworking sn = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            sn.sendEvent("GameTime", g.GetTimeLeft().ToString(), ClientID);
+
+
         }
 
         /// <summary>
@@ -78,7 +88,7 @@ namespace Mammoth.Engine
                 // This might not be quite correct?
                 position += forward;
 
-                CurWeapon.Shoot(position, this.Orientation, ID, gameTime);
+                CurWeapon.Shoot(position, this.HeadOrient, ID, gameTime);
             }
         }
 
@@ -92,11 +102,31 @@ namespace Mammoth.Engine
                 CurWeapon.Reload(time);
         }
 
+        /// <summary>
+        /// Overrides InputPlayer's SwitchWeapon() in order to allow switching.
+        /// </summary>
+        protected override void SwitchWeapon(int newWeapon)
+        {
+            base.SwitchWeapon(newWeapon);
+
+            if (newWeapon - 1 <= Items.Length && Items[newWeapon - 1] != null)
+                CurWeapon = Items[newWeapon - 1];
+        }
+
+        public override void RespondToTrigger(PhysicalObject obj)
+        {
+            Console.WriteLine("Proxyplayer is responding to a trigger.");
+
+            // If a Flag was triggered, pick it up
+            if (obj is Objects.Flag)
+                if (Flag == null)
+                    // TODO: only pick up flags not owned by your team
+                    Flag = (Objects.Flag)obj;
+        }
+
         public override void TakeDamage(float damage, IDamager inflicter)
         {
-            base.TakeDamage(damage, inflicter);
-
-            Console.WriteLine("Health: " + this.Health);
+            this.Health -= damage;
 
             if (this.Health <= 0)
             {
@@ -104,9 +134,8 @@ namespace Mammoth.Engine
 
                 //update teams kills
                 IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
-                int cid = p.Creator >> 25;
-                g.AwardKill(cid);
-                Console.WriteLine("Player " + cid + " was killed by Player " + p.Creator);
+                g.AwardKill(p.Creator);
+                Console.WriteLine("Player " + ClientID + " was killed by Player " + p.Creator);
 
                 //update players kills
                 IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
@@ -117,5 +146,31 @@ namespace Mammoth.Engine
                 Die();
             }
         }
+
+        #region IEncodable Members
+
+        public override byte[] Encode()
+        {
+            Networking.Encoder tosend = new Networking.Encoder();
+
+            IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
+            int myID = ID >> 25;
+            GameStats = new GameStats(NumKills, NumCaptures, NumDeaths, myID, g);
+
+            //Console.WriteLine("Encoding: " + GameStats.ToString());
+
+            tosend.AddElement("Position", Position);
+            tosend.AddElement("Orientation", Orientation);
+            tosend.AddElement("HeadOrient", HeadOrient);
+            tosend.AddElement("Velocity", Velocity);
+            tosend.AddElement("Health", Health);
+            tosend.AddElement("GameStats", GameStats);
+            tosend.AddElement("GunType", ((BaseObject)CurWeapon).getObjectType());
+            tosend.AddElement("Gun", CurWeapon);
+
+            return tosend.Serialize();
+        }
+
+        #endregion
     }
 }

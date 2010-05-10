@@ -9,14 +9,62 @@ namespace Mammoth.Engine
 {
     public class GameLogic : Mammoth.Engine.IGameLogic
     {
-        public Team team1;
-        public Team team2;
+        public Team Team1;
+        public Team Team2;
+        public DateTime GameStart;
+        public bool GameGoing;
+        private const int GameLength = 260; //game length in seconds
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public GameLogic()
         {
-            Console.WriteLine("Constructing game logic");
-            team1 = new Team(1);
-            team2 = new Team(2);
+            ResetGame();
+        }
+
+        /// <summary>
+        /// Resets game variable such that game has not been initiated.
+        /// </summary>
+        public void ResetGame()
+        {
+            //clear all objects
+            Team1 = null;
+            Team2 = null;
+            GameStart = DateTime.Now;
+            GameGoing = false;
+        }
+
+        /// <summary>
+        /// Initializes game logic teams and gameTime.
+        /// </summary>
+        public void InitiateGame()
+        {
+            if (GameGoing == false)
+            {
+                GameGoing = true;
+
+                //declare teams
+                Team1 = new Team(1);
+                Team2 = new Team(2);
+
+                //initialize gameStart to current time
+                GameStart = DateTime.Now;
+            }
+        }
+
+        /// <summary>
+        /// Gets the time left in the game.
+        /// </summary>
+        /// <returns>The number of seconds left in the game.</returns>
+        public int GetTimeLeft()
+        {
+            TimeSpan diff = DateTime.Now.Subtract(GameStart);
+            int timeleft = 260 - diff.Seconds;
+            if (timeleft <= 0)
+                return 0;
+            else
+                return timeleft;
         }
 
         /// <summary>
@@ -26,15 +74,15 @@ namespace Mammoth.Engine
         /// <returns>The team the client was added to.</returns>
         public Team AddToTeam(int client_id)
         {
-            if (team1.GetTeamSize() > team2.GetTeamSize())
+            if (Team1.GetTeamSize() > Team2.GetTeamSize())
             {
-                team2.AddTeamMember(client_id);
-                return team2;
+                Team2.AddTeamMember(client_id);
+                return Team2;
             }
             else
             {
-                team1.AddTeamMember(client_id);
-                return team1;
+                Team1.AddTeamMember(client_id);
+                return Team1;
             }
         }
 
@@ -48,13 +96,13 @@ namespace Mammoth.Engine
         {
             if (team_id == 1)
             {
-                team1.AddTeamMember(client_id);
-                return team1;
+                Team1.AddTeamMember(client_id);
+                return Team1;
             }
             else if (team_id == 2)
             {
-                team2.AddTeamMember(client_id);
-                return team2;
+                Team2.AddTeamMember(client_id);
+                return Team2;
             }
             else
             {
@@ -69,10 +117,10 @@ namespace Mammoth.Engine
         /// <returns>Team that is winning.</returns>
         public Team GetLeadingTeam()
         {
-            if (team2.GetTeamPoints() <= team1.GetTeamPoints())
-                return team1;
+            if (Team2.GetTeamPoints() <= Team1.GetTeamPoints())
+                return Team1;
             else
-                return team2;
+                return Team2;
         }
 
         /// <summary>
@@ -81,10 +129,10 @@ namespace Mammoth.Engine
         /// <returns>Team that is winning.</returns>
         public Team GetTrailingTeam()
         {
-            if (team2.GetTeamPoints() <= team1.GetTeamPoints())
-                return team2;
+            if (Team2.GetTeamPoints() <= Team1.GetTeamPoints())
+                return Team2;
             else
-                return team1;
+                return Team1;
         }
 
 
@@ -96,9 +144,9 @@ namespace Mammoth.Engine
         public Team GetTeam(int team_id)
         {
             if (team_id == 1)
-                return team1;
+                return Team1;
             else if (team_id == 2)
-                return team2;
+                return Team2;
             else
             {
                 Console.WriteLine("Team " + team_id + " doesn't exist.");
@@ -114,15 +162,15 @@ namespace Mammoth.Engine
         {
             Console.WriteLine("Awarding kill...");
 
-            if (team1.GetTeamMemberList().Contains(client_id))
+            if (Team1.GetTeamMemberList().Contains(client_id))
             {
                 Console.WriteLine("Awarding kill to Team 1. Thanks to Player " + client_id);
-                team1.AddTeamKill();
+                Team1.AddTeamKill();
             }
             else
             {
                 Console.WriteLine("Awarding kill to Team 2. Thanks to Player " + client_id);
-                team2.AddTeamKill();
+                Team2.AddTeamKill();
             }
         }
 
@@ -134,13 +182,13 @@ namespace Mammoth.Engine
         /// <returns>The team on which that client resides</returns>
         public Team GetTeamOf(int client_id)
         {
-            if (team1.GetTeamMemberList().Contains(client_id))
+            if (Team1.GetTeamMemberList().Contains(client_id))
             {
-                return team1;
+                return Team1;
             }
             else
             {
-                return team2;
+                return Team2;
             }
         }
     }

@@ -15,6 +15,7 @@ using Mammoth.Engine.Interface;
 using Mammoth.Engine.Networking;
 using Mammoth.Engine.Graphics;
 using Mammoth.Engine.Audio;
+using Mammoth.Engine.Objects;
 
 namespace Mammoth
 {
@@ -102,12 +103,28 @@ namespace Mammoth
 
             IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
 
+            //create baseWidget
+            baseWidget = new TWidget(this.Game)
+                {
+                    Size = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2),
+                    Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2)
+                };
+
             // Add the crosshairs to the game.
-            baseWidget = new TImage(this.Game, r.LoadTexture("cross"))
+            TImage cross = new TImage(this.Game, r.LoadTexture("cross"))
+             {
+                 Size = new Vector2(50, 50),
+                 Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2)
+             };
+            baseWidget.Add(cross);
+
+            // Add the timer
+            TGameTimeWidget timer = new TGameTimeWidget(this.Game)
             {
                 Size = new Vector2(50, 50),
-                Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2)
+                Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, 25)
             };
+            baseWidget.Add(timer);
 
             // LET'S TRY ADDING A ROOM!!!
             ObjectParameters stairRoom = new ObjectParameters();
@@ -116,6 +133,9 @@ namespace Mammoth
             stairRoom.AddAttribute("Z", "-50");
             stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
             Room room = new Room(modelDB.getNextOpenID(), stairRoom, this.Game);
+
+            // LET'S TRY ADDING A FLAG!!!
+            //Flag flag = new Flag(this.Game, new Vector3(-50.0f, 24.0f, -50.0f));
         }
 
         public override void Update(GameTime gameTime, bool hasFocus, bool visible)
@@ -145,7 +165,6 @@ namespace Mammoth
                     CenterCursor();
                 }
 
-
                 // Update all of the game components that are part of the game (in the logical sense, not the XNA sense).
                 // TODO: IMPORTANT: We need to make sure that input events are only handled if the game has focus.
                 // I might have fixed the above already, not sure.  There might be a "block" on giving out input events
@@ -159,6 +178,11 @@ namespace Mammoth
                 // Update them according to their UpdateOrder.  Yes, this doesn't need to sort every time.
                 foreach (IUpdateable component in updateList.OrderBy((comp) => comp.UpdateOrder))
                     component.Update(gameTime);
+
+                // Send the current input state to the server.
+                IInputService input = (IInputService)this.Game.Services.GetService(typeof(IInputService));
+                IClientNetworking net = (IClientNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+                net.sendThing(input.States.Peek());
 
                 // TODO: Do this correctly?
                 // Update the HUD.

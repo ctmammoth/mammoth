@@ -119,13 +119,20 @@
     <Compile Include="Screens\PrettyMenuScreen.cs" />
     <Compile Include="Server\Server.cs" />
     <Compile Include="Terrain.cs" />
+    <Compile Include="TGameTimeWidget.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
-    <Content Include="rooms.xml" />
-    <Content Include="static_objects.xml" />
-    <Content Include="terrain.xml" />
+    <Content Include="rooms.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="static_objects.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="terrain.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Diagrams\Client Subsystems.cd" />
     <EmbeddedResource Include="NxCharacter.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

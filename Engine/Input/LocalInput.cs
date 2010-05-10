@@ -46,6 +46,8 @@ namespace Mammoth.Engine.Input
             _keyMappings.Add(InputType.Jump, Keys.Space);
             _keyMappings.Add(InputType.Reload, Keys.R);
             _keyMappings.Add(InputType.Stats, Keys.Tab);
+            _keyMappings.Add(InputType.Weapon1, Keys.D1);
+            _keyMappings.Add(InputType.Weapon2, Keys.D2);
         }
 
         public override void Update(GameTime gameTime)
@@ -113,7 +115,10 @@ namespace Mammoth.Engine.Input
             get
             {
                 Queue<InputState> ret = new Queue<InputState>();
-                ret.Enqueue(_state);
+                if (!this.InputHandled)
+                    ret.Enqueue(_state);
+                else
+                    ret.Enqueue(new InputState());
                 return ret;
             }
         }

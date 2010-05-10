@@ -47,14 +47,14 @@ namespace Mammoth.Engine
         }
 
         // The armed weapon
-        protected IWeapon CurWeapon
+        protected Gun CurWeapon
         {
             get;
             set;
         }
 
         // The weapons owned by this player
-        protected IWeapon[] Items
+        protected Gun[] Items
         {
             get;
             set;
@@ -84,9 +84,10 @@ namespace Mammoth.Engine
             this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
 
             // Give the player 5 weapons, for now
-            Items = new IWeapon[5];
+            Items = new Gun[5];
             // Give the player a simple gun, for now
             Items[0] = new Revolver(game, this);
+            Items[1] = new SMG(game, this);
             CurWeapon = Items[0];
 
             // Give the player some stats
@@ -200,7 +201,8 @@ namespace Mammoth.Engine
                 if (input.KeyPressed(InputType.Stats) && this is LocalInputPlayer)
                 {
                     TScreenManager t = (TScreenManager)this.Game.Services.GetService(typeof(TScreenManager));
-                    t.AddScreen(new StatsScreen(this.Game, GameStats));
+                    //t.AddScreen(new StatsScreen(this.Game, GameStats));
+                    t.AddScreen(new StatsScreen(this.Game));
                 }
 
                 // Normalize the motion vector (so we don't move at twice the speed when moving diagonally).
@@ -216,13 +218,18 @@ namespace Mammoth.Engine
                     if (input.IsKeyDown(InputType.Jump))
                         this.Velocity += Vector3.Up / 4.0f;
 
-                // TODO: FIX TO HANDLE THROWING GRENADES vs SHOOTING!
-                if (input.KeyPressed(InputType.Fire))
+                if (CurWeapon != null && CurWeapon.ShouldShoot(input))
                     this.Shoot(gameTime);
 
                 // Reload the user's gun
                 if (input.KeyPressed(InputType.Reload))
                     this.Reload(gameTime);
+
+                // Check for weapon switches
+                if (input.KeyPressed(InputType.Weapon1))
+                    this.SwitchWeapon(1);
+                if (input.KeyPressed(InputType.Weapon2))
+                    this.SwitchWeapon(2);
 
                 // Move the player's controller based on its velocity.
                 this.CurrentCollision = (this.Controller.Move(Vector3.Transform(this.Velocity, this.Orientation))).CollisionFlag;
@@ -235,7 +242,8 @@ namespace Mammoth.Engine
             }
 
             // Update main weapon
-            ((BaseObject)CurWeapon).Update(gameTime);
+            if (CurWeapon != null)
+                CurWeapon.Update(gameTime);
 
             //Console.WriteLine("Weapon " + ((BaseObject)CurWeapon).getObjectType() + " has " + CurWeapon.ShotsLeft() + " shots left.");
         }
@@ -243,8 +251,9 @@ namespace Mammoth.Engine
         /// <summary>
         /// Throws a "bullet" in the current direction of the player. Overridden in ProxyInputPlayer since shooting only happens on server-side.
         /// </summary>
-        protected virtual void Shoot(GameTime time) {
-            Console.WriteLine("Throwing.");
+        protected virtual void Shoot(GameTime time) 
+        {
+            Console.WriteLine("Throwing, orientation is: " + this.HeadOrient);
         }
 
         /// <summary>
@@ -253,6 +262,14 @@ namespace Mammoth.Engine
         protected virtual void Reload(GameTime time)
         {
             Console.WriteLine("Reloading.");
+        }
+
+        /// <summary>
+        /// Switches the player's current weapon.  Overridden in ProxyInputPlayer since switching only happens on server-side.
+        /// </summary>
+        protected virtual void SwitchWeapon(int newWeapon)
+        {
+            Console.WriteLine("Switching weapon to " + Items[newWeapon - 1].getObjectType());
         }
 
         /// <summary>
@@ -289,11 +306,7 @@ namespace Mammoth.Engine
 
         public override void RespondToTrigger(PhysicalObject obj)
         {
-            // If a Flag was triggered, pick it up
-            if (obj is Flag)
-                if (Flag == null)
-                    // TODO: only pick up flags not owned by your team
-                    Flag = (Flag)obj;
+            Console.WriteLine("Responding to trigger.");
         }
 
         public override void TakeDamage(float damage, IDamager inflicter)
@@ -326,17 +339,18 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
 
-            IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
-            int myID = ID >> 25;
-            GameStats = new GameStats(NumKills, NumCaptures, NumDeaths, myID, g);
+            //IGameLogic g = (IGameLogic)this.Game.Services.GetService(typeof(IGameLogic));
+            //int myID = ID >> 25;
+            //GameStats = new GameStats(NumKills, NumCaptures, NumDeaths, myID, g);
 
             //Console.WriteLine("Encoding: " + GameStats.ToString());
 
             tosend.AddElement("Position", Position);
             tosend.AddElement("Orientation", Orientation);
+            tosend.AddElement("HeadOrient", HeadOrient);
             tosend.AddElement("Velocity", Velocity);
             tosend.AddElement("Health", Health);
-            tosend.AddElement("GameStats", GameStats);
+            //tosend.AddElement("GameStats", GameStats);
             tosend.AddElement("GunType", ((BaseObject)CurWeapon).getObjectType());
             tosend.AddElement("Gun", CurWeapon);
 
@@ -351,12 +365,14 @@ namespace Mammoth.Engine
                 Position = (Vector3)props.GetElement("Position", Position);
             if (props.UpdatesFor("Orientation"))
                 Orientation = (Quaternion)props.GetElement("Orientation", Orientation);
+            if (props.UpdatesFor("HeadOrient"))
+                HeadOrient = (Quaternion)props.GetElement("HeadOrient", HeadOrient);
             if (props.UpdatesFor("Velocity"))
                 Velocity = (Vector3)props.GetElement("Velocity", Velocity);
             if (props.UpdatesFor("Health"))
                 Health = (float)props.GetElement("Health", Health);
-            if (props.UpdatesFor("GameStats"))
-                props.UpdateIEncodable("GameStats", GameStats);
+            //if (props.UpdatesFor("GameStats"))
+                //props.UpdateIEncodable("GameStats", GameStats);
 
             string gunType = (string)props.GetElement("GunType", "Revolver");
             if (CurWeapon == null || !((BaseObject)CurWeapon).getObjectType().Equals(gunType))
@@ -365,6 +381,9 @@ namespace Mammoth.Engine
                 {
                     case "Revolver":
                         CurWeapon = new Revolver(this.Game, this);
+                        break;
+                    case "SMG":
+                        CurWeapon = new SMG(this.Game, this);
                         break;
                 }
             }

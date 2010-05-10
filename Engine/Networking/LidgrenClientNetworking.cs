@@ -74,11 +74,6 @@ namespace Mammoth.Engine.Networking
                 return;
             base.Update(gameTime);
 
-            // Queue up the input state to send
-            IInputService inputServer = (IInputService)this.Game.Services.GetService(typeof(IInputService));
-            InputState state = inputServer.States.Peek();
-            sendThing(state);
-
             // Send everything in the queue
             while (_toSend.Count != 0)
                 sendMessage(_toSend.Dequeue());
@@ -190,14 +185,11 @@ namespace Mammoth.Engine.Networking
                             break;
                         case "PlayerLeft":
                             int playerID = int.Parse(buffer.ReadString()) << 25;
-                            Physics.IPhysicsManagerService phys = 
-                                (Physics.IPhysicsManagerService)this.Game.Services.GetService(typeof(Physics.IPhysicsManagerService));
                             IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
-                            phys.RemoveController(((RemotePlayer)mdb.getObject(playerID)).Controller);
                             if (mdb.hasObject(playerID))
-                                //mdb.removeObject(playerID);
                                 mdb.getObject(playerID).IsAlive = false;
                             break;
+
                     }
                     break;
             }

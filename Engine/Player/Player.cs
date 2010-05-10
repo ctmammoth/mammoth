@@ -6,6 +6,7 @@ using System.Text;
 using StillDesign.PhysX;
 
 using Mammoth.Engine.Networking;
+using Mammoth.Engine.Physics;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -30,7 +31,6 @@ namespace Mammoth.Engine
 
             //Defines model height which is used by the camera
             this.Height = 6.0f;
-
         }
 
         /// <summary>
@@ -64,6 +64,7 @@ namespace Mammoth.Engine
 
         public virtual void Die()
         {
+            Console.WriteLine("I died");
             this.NumDeaths++;
         }
 
@@ -95,6 +96,15 @@ namespace Mammoth.Engine
         }
 
         #endregion
+
+        public override void Dispose()
+        {
+            //HACK: usually bad when you don't call base
+            //base.Dispose();
+
+            IPhysicsManagerService phys = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            phys.RemoveController(this.Controller);
+        }
 
         #region Properties
 
