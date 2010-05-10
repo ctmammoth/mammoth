@@ -47,6 +47,8 @@ namespace Mammoth.Engine
         {
             Console.WriteLine("I died.");
 
+            base.Die();
+
             IAudioService audio = (IAudioService)this.Game.Services.GetService(typeof(IAudioService));
             audio.stopSound("Heartbeat");
             audio.playSound("Scream");
