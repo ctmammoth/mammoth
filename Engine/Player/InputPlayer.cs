@@ -251,7 +251,7 @@ namespace Mammoth.Engine
 
         protected virtual void SpawnRoom(Vector3 roomPos)
         {
-            Console.WriteLine("Spawning a room.");
+            //Console.WriteLine("Spawning a room.");
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace Mammoth.Engine
         /// </summary>
         protected virtual void Reload(GameTime time)
         {
-            Console.WriteLine("Reloading.");
+            //Console.WriteLine("Reloading.");
         }
 
         /// <summary>
@@ -275,7 +275,7 @@ namespace Mammoth.Engine
         /// </summary>
         protected virtual void SwitchWeapon(int newWeapon)
         {
-            Console.WriteLine("Switching weapon to " + Items[newWeapon - 1].getObjectType());
+            //Console.WriteLine("Switching weapon to " + Items[newWeapon - 1].getObjectType());
         }
 
         /// <summary>
@@ -312,20 +312,20 @@ namespace Mammoth.Engine
 
         public override void RespondToTrigger(PhysicalObject obj)
         {
-            Console.WriteLine("Responding to trigger.");
+            //Console.WriteLine("Responding to trigger.");
         }
 
         public override void TakeDamage(float damage, IDamager inflicter)
         {
             base.TakeDamage(damage, inflicter);
-            Console.WriteLine("Health: " + this.Health);
+            //Console.WriteLine("Health: " + this.Health);
             if (this.Health <= 0)
             {
                 Die();
                 //Get your own id
                 int myID = this.ID >> 25;
                 Projectile p = (Projectile)inflicter;
-                Console.WriteLine("Player " + myID + " was killed by Player " + p.Creator);
+                //Console.WriteLine("Player " + myID + " was killed by Player " + p.Creator);
             }
         }
 
@@ -335,7 +335,7 @@ namespace Mammoth.Engine
         public override void Die()
         {
             base.Die();
-            Console.WriteLine("Player " + ID + " died.");
+            //Console.WriteLine("Player " + ID + " died.");
 
             switch (this.PlayerStats.YourTeam)
             {
