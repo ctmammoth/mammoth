@@ -89,11 +89,13 @@ namespace Mammoth.Engine
             int numItems = items.Count;
             for (int i = 0; i < numItems; i++)
             {
-                tosend.AddElement("items" + i, items.ElementAt(i));
+                RealStaticObject item = (RealStaticObject)items.ElementAt(i);
+                tosend.AddElement("X" + i, item.Position.X);
+                tosend.AddElement("Y" + i, item.Position.Y);
+                tosend.AddElement("Z" + i, item.Position.Z);
+                tosend.AddElement("Type" + i, item.GetTypeName());
             }
-            tosend.AddElement("numItems", numItems);
-
-            
+            tosend.AddElement("numItems", numItems);            
             return tosend.Serialize();
         }
 
@@ -124,12 +126,16 @@ namespace Mammoth.Engine
             {
                 BaseObject item = null;
                 item = new RealStaticObject(this.Game);
-                props.GetElement("items" + i, item);
-                ((IEncodable)item).Decode((byte[])props.GetElement("items" + i, item ));                
+
+                ObjectParameters parameters2 = new ObjectParameters();
+                parameters2.AddAttribute("X", (String)props.GetElement("X" + i,"0"));
+                parameters2.AddAttribute("Y", (String)props.GetElement("Y" + i, "0"));
+                parameters2.AddAttribute("Z", (String)props.GetElement("Z" + i, "0"));
+                parameters2.AddAttribute("Special_Type", (String)props.GetElement("Type" + i, "Stair_Room"));
+
+                item = ObjectFactories.CreateObject("RealStaticObject",modelDB.getNextOpenID(),parameters2,Game);                              
                 modelDB.registerObject(item);
             }
-
-
 
             SpawnRoomFromNetwork(parameters);
         }
@@ -270,10 +276,10 @@ namespace Mammoth.Engine
                         HandleItems(handler);
                         break;
                     case "POSSIBLE":
-                        // HandlePossible(handler);
+                        HandlePossible(handler);
                         break;
                     case "PARAMETERS":
-                        // HandleParameters(handler);
+                        HandleParameters(handler);
                         break;
                 }
 

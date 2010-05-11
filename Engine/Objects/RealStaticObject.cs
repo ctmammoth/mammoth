@@ -193,15 +193,12 @@ namespace Mammoth.Engine
         {
             Networking.Encoder tosend = new Networking.Encoder();
             Console.WriteLine("Encoding a Static Object"); 
-
-            tosend.AddElement("Position", Position);
-            
-            tosend.AddElement("TypeName", TypeName);
-            tosend.AddElement("PositionOffset", PositionOffset);
-            tosend.AddElement("LocalPosition", LocalPosition);
+            tosend.AddElement("X", Position.X);
+            tosend.AddElement("Y", Position.Y);
+            tosend.AddElement("Z", Position.Z);
+            tosend.AddElement("TypeName", TypeName);            
             
             // tosend.AddElement("Velocity", Velocity);
-
             return tosend.Serialize();
         }
 
