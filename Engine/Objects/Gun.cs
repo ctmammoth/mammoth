@@ -98,7 +98,7 @@ namespace Mammoth.Engine.Objects
     }
 
     /// <summary>
-    /// A simple weapon which shoots Bullets.
+    /// An weapon which shoots Bullets.
     /// </summary>
     public abstract class Gun : BaseObject, IHoldableItem, IEncodable, IRenderable
     {
@@ -299,7 +299,7 @@ namespace Mammoth.Engine.Objects
             }
         }
 
-        #region BaseObject Members
+        #region BaseObject overrides
 
         public abstract override string getObjectType();
 
@@ -316,16 +316,7 @@ namespace Mammoth.Engine.Objects
             }
         }
 
-        public override void Draw(GameTime gameTime)
-        {
-            // TODO: actually draw the gun
-            ////Load services
-            //IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
-            //ICameraService cam = (ICameraService)this.Game.Services.GetService(typeof(ICameraService));
-
-            ////Render the RemotePlayer
-            //r.DrawRenderable(this);
-        }
+        public override void Draw(GameTime gameTime) { }
 
         #endregion
 

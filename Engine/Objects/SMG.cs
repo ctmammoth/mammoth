@@ -12,6 +12,9 @@ using Mammoth.Engine.Input;
 
 namespace Mammoth.Engine.Objects
 {
+    /// <summary>
+    /// A gun with a large clip, high rate of fire, moderate inaccuracy and low damage.
+    /// </summary>
     class SMG : Gun
     {
         public SMG(Game game, Player player)

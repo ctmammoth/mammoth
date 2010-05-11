@@ -9,6 +9,9 @@ using Mammoth.Engine.Input;
 
 namespace Mammoth.Engine.Objects
 {
+    /// <summary>
+    /// An accurate, deadly gun.
+    /// </summary>
     class Revolver : Gun
     {
         public Revolver(Game game, Player player)

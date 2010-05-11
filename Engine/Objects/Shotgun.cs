@@ -10,6 +10,9 @@ using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine.Objects
 {
+    /// <summary>
+    /// The shotgun shoots multiple slower bullets; it has a high inaccuracy and each bullet has low damage.
+    /// </summary>
     class Shotgun : Gun
     {
         private const int NUM_SHOTS = 12;

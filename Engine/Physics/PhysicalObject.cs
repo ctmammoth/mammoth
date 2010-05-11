@@ -77,6 +77,9 @@ namespace Mammoth.Engine
         /// <param name="obj">The object triggering or being triggered.</param>
         public virtual void RespondToTrigger(PhysicalObject obj) { }
 
+        /// <summary>
+        /// Disposes of this object's Actor.
+        /// </summary>
         public override void Dispose()
         {
             base.Dispose();

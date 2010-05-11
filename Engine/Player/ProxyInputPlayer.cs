@@ -197,15 +197,19 @@ namespace Mammoth.Engine
                     // If this player is not carrying a Flag
                     if (Flag == null)
                     {
-                        // TODO: only pick up flags not owned by your team
-                        Flag = (Objects.Flag)obj;
-                        Flag.Owner = this;
-                        //Console.WriteLine("ProxyPlayer picked up a flag!");
+                        // Only pick up flags not owned by your team
+                        if (Flag.Team != this.PlayerStats.YourTeam.TeamID)
+                        {
+                            Flag = (Objects.Flag)obj;
+                            Flag.Owner = this;
+                            //Console.WriteLine("ProxyPlayer picked up a flag!");
+                        }
                     }
                     else
                     {
-                        // Otherwise drop the Flag being carried if the Flag just encountered is your team's flag
-                        // TODO: make sure the Flag is owned by your team and located at your spawn point
+                        // Otherwise drop the Flag being carried: since there are only two flags, we can assume that the flag
+                        // that was triggered is owned by your team.  Note:
+                        // HACK: should check if it's at the spawn point and owned by your team, to be safe.
                         //Console.WriteLine("Dropping off a carried flag at another flag!");
                         GameLogic g = (GameLogic)this.Game.Services.GetService(typeof(GameLogic));
                         g.AwardCapture(this.ClientID);
