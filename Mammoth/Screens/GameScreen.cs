@@ -168,8 +168,8 @@ namespace Mammoth
             stairRoom.AddAttribute("Z", "-50");
             stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
             Room room = new Room(modelDB.getNextOpenID(), stairRoom, this.Game);
-            Flag flag1 = new Flag(this.Game, new Vector3(-45.0f, 1.0f, -45.0f), 1);
-            Flag flag2 = new Flag(this.Game, new Vector3(193.0f, -7.0f, 118.0f), 2);
+            Flag flag1 = new Flag(this.Game, new Vector3(-45.0f, -3.0f, -45.0f), 1);
+            Flag flag2 = new Flag(this.Game, new Vector3(193.0f, -11.0f, 118.0f), 2);
         }
 
         public override void Update(GameTime gameTime, bool hasFocus, bool visible)

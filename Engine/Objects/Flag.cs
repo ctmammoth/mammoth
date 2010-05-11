@@ -74,6 +74,18 @@ namespace Mammoth.Engine.Objects
         {
             this.Owner = null;
             // Draw the flag on the ground
+
+            //HACK: hardcoded locations
+            switch (this.Team)
+            {
+                case 1:
+                    this.Position = new Vector3(-45.0f, -3.0f, -45.0f);
+                    break;
+                case 2:
+                    this.Position = new Vector3(193.0f, -11.0f, 118.0f);
+                    break;
+            }
+
             this.PositionOffset = Vector3.Zero;
         }
 
