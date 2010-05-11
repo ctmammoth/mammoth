@@ -17,7 +17,7 @@ namespace Mammoth.Engine
         public Hashtable Players;
         public DateTime GameStart;
         public bool GameGoing;
-        private const int GameLength = 60; //game length in seconds
+        private const int GameLength = 3600; //game length in seconds
         private int SendCounter;
         private const int FreqSent = 60;
 
