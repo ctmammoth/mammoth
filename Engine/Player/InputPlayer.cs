@@ -413,16 +413,14 @@ namespace Mammoth.Engine
             tosend.AddElement("GunType", ((BaseObject)CurWeapon).getObjectType());
             tosend.AddElement("Gun", CurWeapon);
 
-            //if (Flag != null)
-            //{
-            //    tosend.AddElement("FlagID", Flag.ID);
-            //}
-            //else
-            //{
-            //    tosend.AddElement("FlagID", -1);
-            //}
-
-            tosend.AddElement("FlagID", Flag.ID);
+            if (Flag != null)
+            {
+                tosend.AddElement("FlagID", Flag.ID);
+            }
+            else
+            {
+                tosend.AddElement("FlagID", -1);
+            }
 
             return tosend.Serialize();
         }

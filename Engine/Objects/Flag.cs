@@ -106,10 +106,13 @@ namespace Mammoth.Engine.Objects
             if (this.Owner != null)
             {
                 this.Position = Owner.Position;
+            }
 
-                IServerNetworking server = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+            INetworkingService server = (INetworkingService)this.Game.Services.GetService(typeof(INetworkingService));
+            if (server is IServerNetworking)
+            {
                 //Send over the network
-                server.sendThing(this);
+                ((IServerNetworking)server).sendThing(this);
             }
         }
 
