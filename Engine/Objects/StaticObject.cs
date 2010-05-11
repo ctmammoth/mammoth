@@ -10,6 +10,9 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Mammoth.Engine
 {
+    /// <summary>
+    /// Deprecated, used in the A-level stuff
+    /// </summary>
     class StaticObject : DrawableGameComponent, IRenderable
     {
         public StaticObject(Game game)

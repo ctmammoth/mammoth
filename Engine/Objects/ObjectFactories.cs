@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Mammoth.Engine
 {
     /// <summary>
-    /// Provides a way to create BaseObjects both locally and from the Networksssss
+    /// Provides a way to create BaseObjects both locally and from the Networks
     /// </summary>
     public class ObjectFactories
     {

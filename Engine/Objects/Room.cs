@@ -16,6 +16,9 @@ using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
+    /// <summary>
+    /// Represents a room in a fortress
+    /// </summary>
     public class Room : PhysicalObject, IEncodable, IRenderable
     {
         private double width, height, length;
@@ -28,11 +31,21 @@ namespace Mammoth.Engine
         PossibleObjects possible;
         List<IEncodable> items;
 
+        /// <summary>
+        /// Returns the type of this object. Currently is the 
+        /// TypeOf, but that can be changed later
+        /// </summary>
+        /// <returns>The type of object that this is</returns>
         public override string getObjectType()
         {
             return "Room";
         }
 
+        /// <summary>
+        /// Inititialize a blank room, which can then later be decoded.
+        /// </summary>
+        /// <param name="id">ID # to give this room</param>
+        /// <param name="game">The current game</param>
         public Room(int id, Game game)
             : base(game)
         {
@@ -54,6 +67,11 @@ namespace Mammoth.Engine
         }
 
 
+        /// <summary>
+        /// Send the crucial information about this room over the network so it can later be
+        /// recreated as-is
+        /// </summary>
+        /// <returns>serialized Data to send across the network</returns>
         public byte[] Encode()
         {
             Networking.Encoder tosend = new Networking.Encoder();
@@ -71,14 +89,21 @@ namespace Mammoth.Engine
             int numItems = items.Count;
             for (int i = 0; i < numItems; i++)
             {
-                tosend.AddElement("items" + i, items.ElementAt(i));
+                RealStaticObject item = (RealStaticObject)items.ElementAt(i);
+                tosend.AddElement("X" + i, item.Position.X);
+                tosend.AddElement("Y" + i, item.Position.Y);
+                tosend.AddElement("Z" + i, item.Position.Z);
+                tosend.AddElement("Type" + i, item.GetTypeName());
             }
-            tosend.AddElement("numItems", numItems);
-
-            
+            tosend.AddElement("numItems", numItems);            
             return tosend.Serialize();
         }
 
+
+        /// <summary>
+        /// Takes serialized info from the network and reconstructs a room based on this info
+        /// </summary>
+        /// <param name="data"></param>
         public void Decode (byte[] data)
         {
             Console.WriteLine("ROOM DECODING");
@@ -101,16 +126,24 @@ namespace Mammoth.Engine
             {
                 BaseObject item = null;
                 item = new RealStaticObject(this.Game);
-                props.GetElement("items" + i, item);
-                ((IEncodable)item).Decode((byte[])props.GetElement("items" + i, item ));                
+
+                ObjectParameters parameters2 = new ObjectParameters();
+                parameters2.AddAttribute("X", (String)props.GetElement("X" + i,"0"));
+                parameters2.AddAttribute("Y", (String)props.GetElement("Y" + i, "0"));
+                parameters2.AddAttribute("Z", (String)props.GetElement("Z" + i, "0"));
+                parameters2.AddAttribute("Special_Type", (String)props.GetElement("Type" + i, "Stair_Room"));
+
+                item = ObjectFactories.CreateObject("RealStaticObject",modelDB.getNextOpenID(),parameters2,Game);                              
                 modelDB.registerObject(item);
             }
 
-
-
-                SpawnRoomFromNetwork(parameters);
+            SpawnRoomFromNetwork(parameters);
         }
 
+        /// <summary>
+        /// Takes  decoded room  data from the Network, and fills in the rest of the necessary parameters
+        /// </summary>
+        /// <param name="parameters">Parameters taken from the decode</param>
         protected void SpawnRoomFromNetwork(ObjectParameters parameters)
         {
             
@@ -150,6 +183,12 @@ namespace Mammoth.Engine
 
         }
 
+        /// <summary>
+        /// Contruct a room locally, to the specification of the given parameters
+        /// </summary>
+        /// <param name="id">ID # to give this room</param>
+        /// <param name="parameters">Values to give its fields</param>
+        /// <param name="game">the current game</param>
         public Room(int id, ObjectParameters parameters, Game game)
             : base(game)
         {
@@ -216,6 +255,11 @@ namespace Mammoth.Engine
             this.Actor = physics.CreateActor(boxActorDesc);
         }
 
+        /// <summary>
+        /// Given the special type of room, differentiate this
+        /// room based on that type
+        /// </summary>
+        /// <param name="attribute">The special type of room this is</param>
         private void Specialize(String attribute)
         {
             XmlHandler handler = new XmlHandler();
@@ -232,10 +276,10 @@ namespace Mammoth.Engine
                         HandleItems(handler);
                         break;
                     case "POSSIBLE":
-                        // HandlePossible(handler);
+                        HandlePossible(handler);
                         break;
                     case "PARAMETERS":
-                        // HandleParameters(handler);
+                        HandleParameters(handler);
                         break;
                 }
 
@@ -246,6 +290,15 @@ namespace Mammoth.Engine
         private static int team1height = 1;
         private static int team2height = 1;
 
+
+        /// <summary>
+        /// Creates a room on the tower of rooms that comprises each fortress,
+        /// depending on which team the player is on
+        /// </summary>
+        /// <param name="team">Which teams fortress to augment</param>
+        /// <param name="modelDB">The current modelDB in the game</param>
+        /// <param name="game">the current game</param>
+        /// <returns>a new room on top of the tower</returns>
         public static Room NewTowerRoom(String team, IModelDBService modelDB, Game game)
         {
             ObjectParameters stairRoom = new ObjectParameters();
@@ -274,6 +327,11 @@ namespace Mammoth.Engine
         }
 
 
+        /// <summary>
+        /// Specialize the room based on its type, but skip the 
+        /// dynamic generation step (as we are getting that informaton in the decode)
+        /// </summary>
+        /// <param name="attribute">Type of room that this is</param>
         private void SpecializeFromServer(String attribute)
         {
             XmlHandler handler = new XmlHandler();
@@ -295,6 +353,13 @@ namespace Mammoth.Engine
 
         }
 
+
+        /// <summary>
+        /// Based on the type of room that this is, generate the items
+        /// that must be in this room type, based on the xml
+        /// </summary>
+        /// 
+        /// <param name="handler">XML handler currently  reading the room info</param>
         private void HandleItems(XmlHandler handler)
         {
             handler.GetNextElement();
@@ -340,9 +405,36 @@ namespace Mammoth.Engine
 
             
             
-            // TODO: Handle those items
+            
         }
 
+        /// <summary>
+        /// Based on the type of room that this is, generate information
+        /// to construct all of the items that can potentially be created, but don't actually
+        /// create them yet
+        /// 
+        /// </summary>
+        /// <param name="handler">XML handler currently  reading the room info</param>
+        private void HandlePossible(XmlHandler handler)
+        {
+            handler.GetNextElement();
+            while (!handler.IsClosingTag("POSSIBLE"))
+            {
+                ObjectParameters parameters = handler.GetAttributes();
+                String type = parameters.GetStringValue("Special_Type");
+                possible.AddPossibleObject(type, parameters);
+                handler.GetNextElement();
+            }
+
+        }
+
+        /// <summary>
+        /// Based on the type of room that this is, read the parameters for 
+        /// maximum and minimum of each type, then randomly pick
+        /// a number in this range of those objects and create them
+        /// 
+        /// </summary>
+        /// <param name="handler">XML handler currently  reading the room info</param>
         private void HandleParameters(XmlHandler handler)
         {
             handler.GetNextElement();
@@ -385,28 +477,18 @@ namespace Mammoth.Engine
             }
         }
 
-        private void HandlePossible(XmlHandler handler)
-        {
-            handler.GetNextElement();
-            while (!handler.IsClosingTag("POSSIBLE"))
-            {                
-                ObjectParameters parameters = handler.GetAttributes();
-                String type = parameters.GetStringValue("Special_Type");
-                possible.AddPossibleObject(type,parameters);
-                handler.GetNextElement();
-            }
-            
-        }
-
-        public void initialize()
-        {
-            
-
-            
-
-        }
         
 
+       
+        
+        /// <summary>
+        /// Create the walls and ceiling for the room. This will eventually
+        /// be in XML as to create differently sized rooms, but for now, each 
+        /// room has the same skeleton (but different innards)
+        /// </summary>
+        /// <param name="X">X position of room</param>
+        /// <param name="Y">Y position of room</param>
+        /// <param name="Z">Z position of room</param>
         public void BuildWalls(Double X, Double Y, Double Z)
         {
             BuildWall("X", X + 3, "Z", Z + 18, Y);
@@ -418,6 +500,14 @@ namespace Mammoth.Engine
             // this.Position = new Vector3((float)X, (float)Y, (float)Z);
         }
 
+        /// <summary>
+        /// Build a wall along a certain axis
+        /// </summary>
+        /// <param name="alongAxis">Build along this access</param>
+        /// <param name="alongOffset">Position of the along axis to start </param>
+        /// <param name="oppositeAxis">Opposite of along axis (X or Z)</param>
+        /// <param name="oppositeOffset">POsition on Opposite Axis to start</param>
+        /// <param name="height">height to start building the wall at</param>
         public void BuildWall(String alongAxis, double alongOffset, String oppositeAxis, double oppositeOffset, double height)
         { 
             ObjectParameters parameters;
@@ -453,6 +543,13 @@ namespace Mammoth.Engine
             }
         }
 
+        /// <summary>
+        /// Builds a ceiling of blocks at the proper position (X,Y,Z) is 
+        /// upper left hand corner
+        /// </summary>
+        /// <param name="X">X value</param>
+        /// <param name="Y">Y Value</param>
+        /// <param name="Z">Z value</param>
         public void BuildCeiling(Double X, Double Y, Double Z)
         {
             ObjectParameters parameters = new ObjectParameters();
@@ -499,6 +596,10 @@ namespace Mammoth.Engine
 
         }
 
+        /// <summary>
+        /// Used to store information about objects that can possibly be created, sorted
+        /// by item type, so you can specify parameters for how many of each type
+        /// </summary>
         private class PossibleObjects
         {
             private Dictionary<String, List<ObjectParameters>> typeLists;            
@@ -510,6 +611,11 @@ namespace Mammoth.Engine
 
             }
             
+            /// <summary>
+            /// Add description for a new object of the given type
+            /// </summary>
+            /// <param name="type">Type of object</param>
+            /// <param name="parameters">Object info</param>
             public void AddPossibleObject(String type, ObjectParameters parameters) 
             {
                 if (!typeLists.ContainsKey(type)) 
@@ -522,6 +628,12 @@ namespace Mammoth.Engine
                
             }
 
+            /// <summary>
+            /// Gets a random description from the list of 
+            /// descriptions for that type, and remove it from the list
+            /// </summary>
+            /// <param name="type">Type of object you want</param>
+            /// <returns>Randomly chosen descritpion of this type</returns>
             public ObjectParameters GetRandomParameter(String type)
             {
                 List<ObjectParameters> parameterList = new List<ObjectParameters>();
