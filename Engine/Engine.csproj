@@ -146,9 +146,6 @@
     <Compile Include="XmlHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Engine.cd" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
 </Project>

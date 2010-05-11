@@ -8,6 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mammoth.Engine
 {
+    /// <summary>
+    /// Defines a renderable object that can easily be drawn with IRenderService.DrawRenderable.
+    /// </summary>
     public interface IRenderable
     {
         #region Properties
