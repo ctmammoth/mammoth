@@ -18,6 +18,11 @@ namespace Mammoth.Engine
         private int NumKills;
         private Vector3 SpawnLocation;
 
+        public String getObjectType()
+        {
+            return "Team";
+        }
+
         /// <summary>
         /// Creates a new team with a unique team number.
         /// </summary>

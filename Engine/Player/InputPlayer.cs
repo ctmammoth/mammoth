@@ -130,7 +130,7 @@ namespace Mammoth.Engine
             // HACK: HACK HACK HACK HACK HACK
             if (!_hasSpawned)
             {
-                switch (this.PlayerStats.YourTeam)
+                switch (this.PlayerStats.YourTeam.ToString())
                 {
                     case "Team 1":
                         this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
@@ -362,7 +362,7 @@ namespace Mammoth.Engine
                     ((IServerNetworking)server).sendThing(this.Flag);
             }
 
-            switch (this.PlayerStats.YourTeam)
+            switch (this.PlayerStats.YourTeam.ToString())
             {
                 case "Team 1":
                     this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);

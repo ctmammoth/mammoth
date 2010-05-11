@@ -71,7 +71,7 @@ namespace Mammoth.Engine
 
             if (nameTexture == null)
             {
-                string team = this.PlayerStats.YourTeam;
+                string team = this.PlayerStats.YourTeam.ToString();
                 Color teamColor = Color.Black;
                 if (team == "Team 1")
                     teamColor = Color.Red;
