@@ -229,13 +229,13 @@ namespace Mammoth.Engine
                 {
                     case "ITEMS":
                         HandleItems(handler);
-                        break;
+                        break;/*
                     case "POSSIBLE":
                         HandlePossible(handler);
                         break;
                     case "PARAMETERS":
                         HandleParameters(handler);
-                        break;
+                        break;*/
                 }
 
             }
