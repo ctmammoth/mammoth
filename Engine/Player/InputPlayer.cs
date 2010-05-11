@@ -60,6 +60,7 @@ namespace Mammoth.Engine
             set;
         }
 
+        // True if the player has spawned, false if not
         private bool _hasSpawned;
 
         #endregion
@@ -128,6 +129,7 @@ namespace Mammoth.Engine
         public override void Update(GameTime gameTime)
         {
             // HACK: HACK HACK HACK HACK HACK
+            // The spawn points should be in playerstats or something.
             if (!_hasSpawned)
             {
                 switch (this.PlayerStats.YourTeam)
@@ -258,6 +260,10 @@ namespace Mammoth.Engine
                 CurWeapon.Update(gameTime);
         }
 
+        /// <summary>
+        /// Causes the player to place a room on the map.  Overridden in ProxyInputPlayer since room creation only happens on server-side.
+        /// </summary>
+        /// <param name="roomPos"></param>
         protected virtual void SpawnRoom(Vector3 roomPos)
         {
             //Console.WriteLine("Spawning a room.");
@@ -319,11 +325,21 @@ namespace Mammoth.Engine
                 ((BaseObject)CurWeapon).Draw(gameTime);
         }
 
+        /// <summary>
+        /// Causes the player to respond to a trigger.  Overridden in ProxyInputPlayer since responding to triggers only happens on server-side.
+        /// </summary>
+        /// <param name="obj"></param>
         public override void RespondToTrigger(PhysicalObject obj)
         {
             //Console.WriteLine("Responding to trigger.");
         }
 
+        /// <summary>
+        /// Causes the player to take damage from a damager.
+        /// </summary>
+        /// <param name="damage">The amount of damage the player should take.</param>
+        /// <param name="inflicter">The object causing the player to take damage.  This is used so the player can
+        /// know by whom they were killed.</param>
         public override void TakeDamage(float damage, IDamager inflicter)
         {
             base.TakeDamage(damage, inflicter);
@@ -339,7 +355,7 @@ namespace Mammoth.Engine
         }
 
         /// <summary>
-        /// Respawns the player when the it dies.
+        /// Kills and respawns the player.  Players are spawned at their team's spawn point and drop the flag being carried.
         /// </summary>
         public override void Die()
         {
@@ -362,6 +378,7 @@ namespace Mammoth.Engine
                     ((IServerNetworking)server).sendThing(this.Flag);
             }
 
+            // HACK: don't hard code this shit!  Should be in playerstats.
             switch (this.PlayerStats.YourTeam)
             {
                 case "Team 1":
