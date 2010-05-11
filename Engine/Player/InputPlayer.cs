@@ -129,6 +129,9 @@ namespace Mammoth.Engine
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             IInputService inputService = (IInputService)this.Game.Services.GetService(typeof(IInputService));
 
+            if (inputService.States == null)
+                return;
+
             // Go through queued InputStates and modify Player properties accordingly.
             foreach (var input in inputService.States)
             {
