@@ -21,17 +21,21 @@ namespace Mammoth.GameWidgets
         private SpriteFont _timeFont;
         private Color timeColor;
         private IRenderService r;
+        private InputPlayer LIP;
 
         /// <summary>
         /// Initializes the GameTime widget by declaring services and rendering effects
         /// </summary>
         /// <param name="game">The game.</param>
-        public GameTimeWidget(Game game): base(game)
+        public GameTimeWidget(Game game, InputPlayer p): base(game)
         {
+            //Load InputPlayer
+            LIP = p;
+
             //load render effects
             r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
             _timeFont = r.LoadFont("timer");
-            timeColor = new Color(230, 230, 230, 230);
+            timeColor = new Color(Color.Red, 200);
 
             //Load GameStats to get time
             g = (GameStats)this.Game.Services.GetService(typeof(GameStats));
@@ -78,6 +82,12 @@ namespace Mammoth.GameWidgets
             UpdateTime();
             if (!Old_Time.Equals(Time))
             {
+                //Load GameTime color
+                if (LIP.PlayerStats.YourTeam.ToString() == "Team 1")
+                    timeColor = new Color(Color.Red, 200);
+                else
+                    timeColor = new Color(Color.Blue, 200);
+
                 this.BgImage = r.RenderFont(Time, new Vector2(0.0f, 0.0f), timeColor, Color.TransparentWhite, _timeFont);
             }
 

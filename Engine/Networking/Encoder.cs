@@ -7,6 +7,9 @@ using System.IO;
 
 namespace Mammoth.Engine.Networking
 {
+    /// <summary>
+    /// Can manage and facilitate the Encoding and Decoding of objects
+    /// </summary>
     public class Encoder
     {
         private Hashtable table;
@@ -48,16 +51,6 @@ namespace Mammoth.Engine.Networking
             }
         }
 
-
-
-
-
-
-
-
-
-
-
         /// <summary>
         /// Adds a property to be encoded. Cannot take anything that is not a primitive or doesn't implement Encodable. Will not add null.
         /// </summary>
@@ -71,20 +64,6 @@ namespace Mammoth.Engine.Networking
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         /// <summary>
         /// Adds a property to be encoded. Cannot take anything that is not a primitive or doesn't implement Encodable. Will not add null.
         /// </summary>
@@ -97,9 +76,6 @@ namespace Mammoth.Engine.Networking
                 table.Add(key, theobject.Encode());
             }
         }
-
-
-
 
         /// <summary>
         /// Once a byte array has been deserialized, then elements can be accesed through their String key. Returns null if the key could not be hashed.
@@ -117,9 +93,6 @@ namespace Mammoth.Engine.Networking
                     return (object)orig;
                 }
         }
-
-
-
 
         /// <summary>
         /// Once a byte array has been deserialized, then IEncodable objects can be updated. Note that if the IEncodable is null, it cannot be updated.
@@ -142,9 +115,6 @@ namespace Mammoth.Engine.Networking
             }
         }
 
-
-
-
         /// <summary>
         /// Checks if there is an update for the given key.
         /// </summary>
@@ -154,16 +124,6 @@ namespace Mammoth.Engine.Networking
         {
             return table.ContainsKey(key);
         }
-
-
-
-
-
-
-
-
-
-
 
         /// <summary>
         /// Serializes the properties and their names and outputs to a byte array. This serialization can be deserialized later by an Encoder.

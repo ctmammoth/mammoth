@@ -7,8 +7,16 @@ using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
+    /// <summary>
+    /// Manages the player's statistics in an Encodable manner.
+    /// </summary>
     public class PlayerStats : IEncodable
     {
+        public String getObjectType()
+        {
+            return "PlayerStats";
+        }
+
         #region Personal Stats
         public Team YourTeam
         {
@@ -32,11 +40,14 @@ namespace Mammoth.Engine
         }
         #endregion
 
-        public String getObjectType()
-        {
-            return "PlayerStats";
-        }
- 
+        /// <summary>
+        /// Loads the player's current stats server side to be kept and maintained.
+        /// </summary>
+        /// <param name="nk">Number of kills</param>
+        /// <param name="nc">Number of Faptures</param>
+        /// <param name="nd">Number of Deaths</param>
+        /// <param name="id">Client ID</param>
+        /// <param name="g">The current GameLogic</param>
         public PlayerStats(int nk, int nc, int nd, int id, GameLogic g)
         {
             YourTeam = g.GetTeamOf(id);
@@ -45,6 +56,10 @@ namespace Mammoth.Engine
             NumDeaths = nd;
         }
 
+
+        /// <summary>
+        /// A dummy constructor which sets up PlayerStats to be overwritten by a Decode
+        /// </summary>
         public PlayerStats()
         {
             YourTeam = new Team(1);
@@ -54,7 +69,10 @@ namespace Mammoth.Engine
         }
 
 
-
+        /// <summary>
+        /// Encode.
+        /// </summary>
+        /// <returns>Encoded information</returns>
         public byte[] Encode()
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder();
@@ -67,6 +85,10 @@ namespace Mammoth.Engine
             return e.Serialize();
         }
 
+        /// <summary>
+        /// Decode.
+        /// </summary>
+        /// <param name="serialized">Encoded information.</param>
         public void Decode(byte[] serialized)
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder(serialized);
@@ -78,7 +100,10 @@ namespace Mammoth.Engine
 
         }
 
-
+        /// <summary>
+        /// Used for testing.
+        /// </summary>
+        /// <returns>Any thing you want.</returns>
         public string ToString()
         {
             return "Your Team: " + YourTeam + ", NumKills: " + NumKills;

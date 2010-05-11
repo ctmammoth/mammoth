@@ -10,18 +10,43 @@ using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine
 {
+    /// <summary>
+    /// Manages team properties and a list of the IDs of players on the teams.
+    /// </summary>
     public class Team : IEncodable
     {
-        private int TeamID;
-        private List<int> MemberIDs;
-        private int NumCaptures;
-        private int NumKills;
-        private Vector3 SpawnLocation;
-
         public String getObjectType()
         {
             return "Team";
         }
+
+        #region Properties
+        private int TeamID
+        {
+            get;
+            set;
+        }
+        private List<int> MemberIDs
+        {
+            get;
+            set;
+        }
+        private int NumCaptures
+        {
+            get;
+            set;
+        }
+        private int NumKills
+        {
+            get;
+            set;
+        }
+        private Vector3 SpawnLocation
+        {
+            get;
+            set;
+        }
+        #endregion
 
         /// <summary>
         /// Creates a new team with a unique team number.
@@ -80,11 +105,6 @@ namespace Mammoth.Engine
             NumCaptures++;
         }
 
-        public int GetCaptures()
-        {
-            return NumCaptures;
-        }
-
         /// <summary>
         /// Adds a kill to the team.
         /// </summary>
@@ -93,6 +113,19 @@ namespace Mammoth.Engine
             NumKills++;
         }
 
+        /// <summary>
+        /// Get the number of captures the team currently has
+        /// </summary>
+        /// <returns>The number of captures the team has.</returns>
+        public int GetCaptures()
+        {
+            return NumCaptures;
+        }
+
+        /// <summary>
+        /// Get the number of kills the team currently has
+        /// </summary>
+        /// <returns>The number of kills the team has.</returns>
         public int GetKills()
         {
             return NumKills;
@@ -115,6 +148,10 @@ namespace Mammoth.Engine
             return "Team " + TeamID;
         }
 
+        /// <summary>
+        /// Encode.
+        /// </summary>
+        /// <returns>Encoded information.</returns>
         public byte[] Encode()
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder();
@@ -127,6 +164,10 @@ namespace Mammoth.Engine
             return e.Serialize();
         }
 
+        /// <summary>
+        /// Decode.
+        /// </summary>
+        /// <param name="serialized">Encoded information.</param>
         public void Decode(byte[] serialized)
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder(serialized);
@@ -135,7 +176,6 @@ namespace Mammoth.Engine
             NumKills = (int)e.GetElement("NumKills", NumKills);
             NumCaptures = (int)e.GetElement("NumCaptures", NumCaptures);
             SpawnLocation = (Vector3)e.GetElement("SpawnLocation", SpawnLocation);
-
         }
 
     }
