@@ -21,7 +21,7 @@ namespace Mammoth
         public Terrain(Game game)
             : base(game)
         {
-            this.Model3D = this.Game.Content.Load<Model>("textures\\terrain-256-flattened");
+            this.Model3D = this.Game.Content.Load<Model>("textures\\terrain-256-flattened-new");
 
             InitializePhysX();
 
@@ -34,7 +34,7 @@ namespace Mammoth
         {
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
 
-            Texture2D tex = this.Game.Content.Load<Texture2D>("textures\\heightmap-256-flattened");
+            Texture2D tex = this.Game.Content.Load<Texture2D>("textures\\heightmap-256-flattened-new");
             int width = tex.Width;
             int height = tex.Height;
 
