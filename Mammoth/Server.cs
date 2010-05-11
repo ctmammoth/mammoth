@@ -45,9 +45,8 @@ namespace Mammoth.Server
 
             //Add GameLogic
             GameLogic g = new GameLogic(this);
-            this.Components.Add(g);
-            this.Services.AddService(typeof(GameLogic), g);
             g.ResetServer += new EventHandler(g_ResetServer);
+            this.Components.Add(g);
 
             base.Initialize();
         }
@@ -81,22 +80,22 @@ namespace Mammoth.Server
             stairRoom.AddAttribute("Z", "-50");
             stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
             Room room = new Room(modelDB.getNextOpenID(), stairRoom, this);
+            modelDB.registerObject(room);
 
             ObjectParameters stairRoom2 = new ObjectParameters();
             stairRoom2.AddAttribute("X", "193");
-            stairRoom2.AddAttribute("Y", "-31");
+            stairRoom2.AddAttribute("Y", "-29");
             stairRoom2.AddAttribute("Z", "118");
             stairRoom2.AddAttribute("Special_Type", "STAIR_ROOM");
             Room room2 = new Room(modelDB.getNextOpenID(), stairRoom2, this);
-
-            IServerNetworking net = (IServerNetworking)this.Services.GetService(typeof(INetworkingService));
+            modelDB.registerObject(room2);
 
             // LET'S TRY ADDING A FLAG!!!
             Flag flag1 = new Flag(this, new Vector3(-45.0f, -3.0f, -45.0f), 1);
             flag1.ID = modelDB.getNextOpenID();
             modelDB.registerObject(flag1);
             // LET'S TRY ADDING A FLAG!!!
-            Flag flag2 = new Flag(this, new Vector3(193.0f, -11.0f, 118.0f), 2);
+            Flag flag2 = new Flag(this, new Vector3(199.0f, -11.0f, 121.0f), 2);
             flag2.ID = modelDB.getNextOpenID();
             modelDB.registerObject(flag2);
         }

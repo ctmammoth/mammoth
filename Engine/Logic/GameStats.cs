@@ -8,6 +8,10 @@ using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
+    /// <summary>
+    /// A condensed version of GameLogic that may be sent to clients from the server,
+    /// so client know the statistics of the game.
+    /// </summary>
     public class GameStats : IEncodable
     {
         public String getObjectType()
@@ -75,9 +79,12 @@ namespace Mammoth.Engine
         }
         #endregion
 
+        /// <summary>
+        /// Constructs a GameStats object from the current GameLogic
+        /// </summary>
+        /// <param name="g">The current GameLogic</param>
         public GameStats(GameLogic g)
         {
-            //Console.WriteLine("Constructing game stats");
             LeadingTeam = g.GetLeadingTeam().ToString();
             LeadingTeam_NumKills = g.GetLeadingTeam().GetKills();
             LeadingTeam_NumCaptures = g.GetLeadingTeam().GetCaptures();
@@ -93,6 +100,9 @@ namespace Mammoth.Engine
             Players = g.GetPlayerStats();
         }
 
+        /// <summary>
+        /// Creates a dummy GameStats to be overwritten during decoding
+        /// </summary>
         public GameStats()
         {
             LeadingTeam = "";
@@ -108,6 +118,10 @@ namespace Mammoth.Engine
             TimeLeft = 0;
         }
 
+        /// <summary>
+        /// Encodes.
+        /// </summary>
+        /// <returns>Encoded information.</returns>
         public byte[] Encode()
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder();
@@ -124,24 +138,14 @@ namespace Mammoth.Engine
 
             e.AddElement("TimeLeft", TimeLeft);
 
-            //create string to represent Players being sent
-            /*string plist = "";
-            foreach (int cid in Players.Keys)
-            {
-                plist += ("," + cid);
-
-                //add each player
-                e.AddElement(cid + "", Players[cid]);
-            }
-
-            //add the string representing which players are being sent
-            e.AddElement("Players", plist);*/
-
-            //Console.WriteLine("Encoding gamestats");
-
             return e.Serialize();
         }
 
+
+        /// <summary>
+        /// Decodes.
+        /// </summary>
+        /// <param name="serialized">Encoded information.</param>
         public void Decode(byte[] serialized)
         {
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder(serialized);

@@ -12,25 +12,44 @@ using Mammoth.Engine;
 
 namespace Mammoth.Engine
 {
+    /// <summary>
+    /// The screen to display when the user want to see their current stats
+    /// </summary>
     public class StatsScreen : TWidgetScreen
     {
+        #region Properties
+        private GameStats GameStats
+        {
+            get;
+            set;
+        }
+        private InputPlayer LIP
+        {
+            get;
+            set;
+        }
+        #endregion
 
-        private GameStats GameStats;
-        private InputPlayer LIP;
-
+        /// <summary>
+        /// Initialize a GameScreen with a new InputPlayer to track.
+        /// </summary>
+        /// <param name="game">The Game.</param>
+        /// <param name="p">The InputPlayer whose stats should be displayed</param>
         public StatsScreen(Game game, InputPlayer p): base(game)
         {
             GameStats = (GameStats)game.Services.GetService(typeof(GameStats));
             LIP = p;
         }
 
+        /// <summary>
+        /// Set up the screen.
+        /// </summary>
         public override void Initialize()
         {
             // Create a base widget (kinda like a JFrame or a JPanel that contains everything else).
             TWidget baseWid = new TWidget(this.Game)
             {
                 Bounds = this.Game.Window.ClientBounds,
-                //BgColor = new Color(0.0f, 0.0f, 0.0f, 0.5f)
             };
 
 
@@ -112,7 +131,7 @@ namespace Mammoth.Engine
 
 
                 //Your Team
-                baseWid.Add(new TText(this.Game, "Your Team: " + LIP.PlayerStats.YourTeam)
+                baseWid.Add(new TText(this.Game, "Your Team: " + LIP.PlayerStats.YourTeam.ToString())
                 {
                     Center = new Vector2((this.Game.Window.ClientBounds.Width) / 2, 400)
                 });
@@ -134,10 +153,17 @@ namespace Mammoth.Engine
             base.Initialize();
         }
 
+        /// <summary>
+        /// Updates the screen every timestep
+        /// </summary>
+        /// <param name="gameTime">The GameTime</param>
+        /// <param name="hasFocus">Whether this screen has focus</param>
+        /// <param name="visible">Whether the screen is visible</param>
         public override void Update(GameTime gameTime, bool hasFocus, bool visible)
         {
             if (hasFocus)
             {
+                //check if the screen should be disappearing
                 IInputService input = (IInputService)this.Game.Services.GetService(typeof(IInputService));
                 InputState iState = input.States.Peek();
                 if (iState.KeyReleased(InputType.Stats))
@@ -147,6 +173,9 @@ namespace Mammoth.Engine
             base.Update(gameTime, hasFocus, visible);
         }
 
+        /// <summary>
+        /// Declares this screen as a popup so that background screens continue to update
+        /// </summary>
         public bool IsPopup
         {
             get

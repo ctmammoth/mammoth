@@ -122,7 +122,7 @@ namespace Mammoth
             baseWidget.Add(cross);
 
             // Add the timer
-            GameTimeWidget timer = new GameTimeWidget(this.Game)
+            GameTimeWidget timer = new GameTimeWidget(this.Game, this.LocalPlayer)
             {
                 Size = new Vector2(50, 50),
                 Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, 25)
@@ -160,23 +160,6 @@ namespace Mammoth
                 Center = new Vector2(50, this.Game.Window.ClientBounds.Height - 65)
             };
             baseWidget.Add(f);
-
-            // LET'S TRY ADDING A ROOM!!!
-            // HACK: bad
-            ObjectParameters stairRoom = new ObjectParameters();
-            stairRoom.AddAttribute("X", "-50");
-            stairRoom.AddAttribute("Y", "-23");
-            stairRoom.AddAttribute("Z", "-50");
-            stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
-            ObjectParameters stairRoom2 = new ObjectParameters();
-            stairRoom2.AddAttribute("X", "193");
-            stairRoom2.AddAttribute("Y", "-31");
-            stairRoom2.AddAttribute("Z", "118");
-            stairRoom2.AddAttribute("Special_Type", "STAIR_ROOM");
-            Room room = new Room(modelDB.getNextOpenID(), stairRoom, this.Game);
-            Room room2 = new Room(modelDB.getNextOpenID(), stairRoom2, this.Game);
-            Flag flag1 = new Flag(this.Game, new Vector3(-45.0f, -3.0f, -45.0f), 1);
-            Flag flag2 = new Flag(this.Game, new Vector3(193.0f, -11.0f, 118.0f), 2);
         }
 
         public override void Update(GameTime gameTime, bool hasFocus, bool visible)
