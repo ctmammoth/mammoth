@@ -95,6 +95,7 @@ namespace Mammoth.Engine
             tosend.AddElement("Velocity", Velocity);
             tosend.AddElement("PlayerStats", PlayerStats);
 
+            /*
             if (Flag != null)
             {
                 tosend.AddElement("FlagID", Flag.ID);
@@ -103,6 +104,7 @@ namespace Mammoth.Engine
             {
                 tosend.AddElement("FlagID", -1);
             }
+            */
 
             return tosend.Serialize();
         }
@@ -120,6 +122,7 @@ namespace Mammoth.Engine
             if (props.UpdatesFor("PlayerStats"))
                 props.UpdateIEncodable("PlayerStats", PlayerStats);
 
+            /*
             if (props.UpdatesFor("FlagID"))
             {
                 int newID = (int)props.GetElement("FlagID", -1);
@@ -137,6 +140,7 @@ namespace Mammoth.Engine
                 }
 
             }
+            */
         }
 
         #endregion

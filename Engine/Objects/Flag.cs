@@ -104,7 +104,13 @@ namespace Mammoth.Engine.Objects
 
             // If the flag has an owner, update the flag's position
             if (this.Owner != null)
+            {
                 this.Position = Owner.Position;
+
+                IServerNetworking server = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
+                //Send over the network
+                server.sendThing(this);
+            }
         }
 
         /// <summary>
