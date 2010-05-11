@@ -82,6 +82,13 @@ namespace Mammoth.Server
             stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
             Room room = new Room(modelDB.getNextOpenID(), stairRoom, this);
 
+            ObjectParameters stairRoom2 = new ObjectParameters();
+            stairRoom2.AddAttribute("X", "-193");
+            stairRoom2.AddAttribute("Y", "-31");
+            stairRoom2.AddAttribute("Z", "-118");
+            stairRoom2.AddAttribute("Special_Type", "STAIR_ROOM");
+            Room room2 = new Room(modelDB.getNextOpenID(), stairRoom2, this);
+
             IServerNetworking net = (IServerNetworking)this.Services.GetService(typeof(INetworkingService));
 
             // LET'S TRY ADDING A FLAG!!!
