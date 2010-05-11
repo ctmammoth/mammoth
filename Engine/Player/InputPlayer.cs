@@ -352,6 +352,8 @@ namespace Mammoth.Engine
                 // Keep a reference to the flag that's being dropped
                 Objects.Flag droppedFlag = this.Flag;
 
+
+
                 // Drop the Flag
                 Flag.GetDropped();
 
