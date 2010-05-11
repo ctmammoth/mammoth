@@ -355,9 +355,11 @@ namespace Mammoth.Engine
                 // Drop the Flag
                 Flag.GetDropped();
 
-                IServerNetworking server = (IServerNetworking)Game.Services.GetService(typeof(INetworkingService));
+                // HACK HACK HACK: Let's try this.
+                INetworkingService server = (INetworkingService)Game.Services.GetService(typeof(INetworkingService));
                 // Send the dropped Flag
-                server.sendThing(this.Flag);
+                if(server is IServerNetworking)
+                    ((IServerNetworking)server).sendThing(this.Flag);
             }
 
             switch (this.PlayerStats.YourTeam)
