@@ -128,12 +128,12 @@ namespace Mammoth.Engine
                 item = new RealStaticObject(this.Game);
 
                 ObjectParameters parameters2 = new ObjectParameters();
-                parameters2.AddAttribute("X", (String)props.GetElement("X" + i,"0"));
-                parameters2.AddAttribute("Y", (String)props.GetElement("Y" + i, "0"));
-                parameters2.AddAttribute("Z", (String)props.GetElement("Z" + i, "0"));
+                parameters2.AddAttribute("X", ((float)props.GetElement("X" + i,"0")).ToString() );
+                parameters2.AddAttribute("Y", ((float)props.GetElement("Y" + i, "0")).ToString() );
+                parameters2.AddAttribute("Z", ((float)props.GetElement("Z" + i, "0")).ToString() );
                 parameters2.AddAttribute("Special_Type", (String)props.GetElement("Type" + i, "Stair_Room"));
 
-                item = ObjectFactories.CreateObject("RealStaticObject",modelDB.getNextOpenID(),parameters2,Game);                              
+                item = ObjectFactories.CreateObject("Static_Object",modelDB.getNextOpenID(),parameters2,Game);                              
                 modelDB.registerObject(item);
             }
 

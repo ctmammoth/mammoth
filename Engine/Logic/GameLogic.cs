@@ -12,13 +12,48 @@ namespace Mammoth.Engine
 {
     public class GameLogic : GameComponent
     {
-        public Team Team1;
-        public Team Team2;
-        public Hashtable Players;
-        public DateTime GameStart;
-        public bool GameGoing;
-        private const int GameLength = 3600; //game length in seconds
-        private int SendCounter;
+        #region Properties
+        public Team Team1
+        {
+            get;
+            set;
+        }
+        public Team Team2
+        {
+            get;
+            set;
+        }
+        public Hashtable Players
+        {
+            get;
+            set;
+        }
+        public DateTime GameStart
+        {
+            get;
+            set;
+        }
+        public bool GameGoing
+        {
+            get;
+            set;
+        }
+        private int SendCounter
+        {
+            get;
+            set;
+        }
+        #endregion
+
+
+        /// <summary>
+        /// The total length of the game in seconds.
+        /// </summary>
+        private const int GameLength = 3600;
+
+        /// <summary>
+        /// The frequency with which game stats is sent
+        /// </summary>
         private const int FreqSent = 60;
 
         /// <summary>

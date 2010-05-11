@@ -132,7 +132,7 @@ namespace Mammoth.Engine
             // The spawn points should be in playerstats or something.
             if (!_hasSpawned)
             {
-                switch (this.PlayerStats.YourTeam)
+                switch (this.PlayerStats.YourTeam.ToString())
                 {
                     case "Team 1":
                         this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
@@ -368,6 +368,8 @@ namespace Mammoth.Engine
                 // Keep a reference to the flag that's being dropped
                 Objects.Flag droppedFlag = this.Flag;
 
+
+
                 // Drop the Flag
                 Flag.GetDropped();
 
@@ -379,7 +381,7 @@ namespace Mammoth.Engine
             }
 
             // HACK: don't hard code this shit!  Should be in playerstats.
-            switch (this.PlayerStats.YourTeam)
+            switch (this.PlayerStats.YourTeam.ToString())
             {
                 case "Team 1":
                     this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);

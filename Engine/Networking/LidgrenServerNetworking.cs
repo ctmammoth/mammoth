@@ -83,19 +83,21 @@ namespace Mammoth.Engine.Networking
         }
 
         /// <summary>
-        /// Sends a sound event to all players.
+        /// Sends an event to all players.
         /// </summary>
-        /// <param name="soundToPlay"></param>
+        /// <param name="eventType">The type of event.</param>
+        /// <param name="param">Any additional information for the event.</param>
         public void sendEvent(string eventType, string param)
         {
             _toSend.Enqueue(new DataGram(MessageType.EVENT, eventType, -1, null, -1, -1, param));
         }
 
         /// <summary>
-        /// Sends a sound event to the specified player.
+        /// Sends an event to all players.
         /// </summary>
-        /// <param name="soundToPlay"></param>
-        /// <param name="target"></param>
+        /// <param name="eventType">The type of event.</param>
+        /// <param name="param">Any additional information for the event.</param>
+        /// <param name="target">The client to send the event to.</param>
         public void sendEvent(string eventType, string param, int target)
         {
             _toSend.Enqueue(new DataGram(MessageType.EVENT, eventType, -1, null, target, -1, param));

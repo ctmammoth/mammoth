@@ -4,17 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 
+using Mammoth.Engine.Networking;
+
 using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine
 {
-    public class Team
+    public class Team : IEncodable
     {
         private int TeamID;
         private List<int> MemberIDs;
         private int NumCaptures;
         private int NumKills;
         private Vector3 SpawnLocation;
+
+        public String getObjectType()
+        {
+            return "Team";
+        }
 
         /// <summary>
         /// Creates a new team with a unique team number.
@@ -106,6 +113,29 @@ namespace Mammoth.Engine
         public string ToString()
         {
             return "Team " + TeamID;
+        }
+
+        public byte[] Encode()
+        {
+            Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder();
+
+            e.AddElement("TeamID", TeamID);
+            e.AddElement("NumKills", NumKills);
+            e.AddElement("NumCaptures", NumCaptures);
+            e.AddElement("SpawnLocation", SpawnLocation);
+
+            return e.Serialize();
+        }
+
+        public void Decode(byte[] serialized)
+        {
+            Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder(serialized);
+
+            TeamID = (int)e.GetElement("TeamID", TeamID);
+            NumKills = (int)e.GetElement("NumKills", NumKills);
+            NumCaptures = (int)e.GetElement("NumCaptures", NumCaptures);
+            SpawnLocation = (Vector3)e.GetElement("SpawnLocation", SpawnLocation);
+
         }
 
     }
