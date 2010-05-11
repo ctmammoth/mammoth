@@ -413,16 +413,16 @@ namespace Mammoth.Engine
             tosend.AddElement("GunType", ((BaseObject)CurWeapon).getObjectType());
             tosend.AddElement("Gun", CurWeapon);
 
-            /*
-            if (Flag != null)
-            {
-                tosend.AddElement("FlagID", Flag.ID);
-            }
-            else
-            {
-                tosend.AddElement("FlagID", -1);
-            }
-            */
+            //if (Flag != null)
+            //{
+            //    tosend.AddElement("FlagID", Flag.ID);
+            //}
+            //else
+            //{
+            //    tosend.AddElement("FlagID", -1);
+            //}
+
+            tosend.AddElement("FlagID", Flag.ID);
 
             return tosend.Serialize();
         }
@@ -463,7 +463,6 @@ namespace Mammoth.Engine
             if (props.UpdatesFor("Gun"))
                 props.UpdateIEncodable("Gun", CurWeapon);
 
-            /*
             if (props.UpdatesFor("FlagID"))
             {
                 int newID = (int)props.GetElement("FlagID", -1);
@@ -481,7 +480,6 @@ namespace Mammoth.Engine
                 }
                 
             }
-            */
         }
 
         #endregion

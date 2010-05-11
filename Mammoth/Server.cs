@@ -81,6 +81,7 @@ namespace Mammoth.Server
             stairRoom.AddAttribute("Z", "-50");
             stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
             Room room = new Room(modelDB.getNextOpenID(), stairRoom, this);
+            modelDB.registerObject(room);
 
             ObjectParameters stairRoom2 = new ObjectParameters();
             stairRoom2.AddAttribute("X", "193");
@@ -88,8 +89,7 @@ namespace Mammoth.Server
             stairRoom2.AddAttribute("Z", "118");
             stairRoom2.AddAttribute("Special_Type", "STAIR_ROOM");
             Room room2 = new Room(modelDB.getNextOpenID(), stairRoom2, this);
-
-            IServerNetworking net = (IServerNetworking)this.Services.GetService(typeof(INetworkingService));
+            modelDB.registerObject(room2);
 
             // LET'S TRY ADDING A FLAG!!!
             Flag flag1 = new Flag(this, new Vector3(-45.0f, -3.0f, -45.0f), 1);

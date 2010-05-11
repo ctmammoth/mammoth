@@ -449,12 +449,7 @@ namespace Mammoth.Engine
                     int min = (int) parameters.GetDoubleValue("MIN");
                     int max = (int)parameters.GetDoubleValue("MAX");
                     Random random = new Random();
-                    int num = random.Next(max);
-                    //HACK: this is dumb, but it works in practice 
-                    while (num < min)
-                    {
-                        num = random.Next(max);
-                    }
+                    int num = random.Next(max) + min;
                     for (int i = 0; i < num; i++)
                     {
                         ObjectParameters possibleParams = possible.GetRandomParameter(type);
