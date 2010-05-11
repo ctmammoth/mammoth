@@ -81,8 +81,8 @@ namespace Mammoth.Engine
             stairRoom.AddAttribute("X", "-50");
             stairRoom.AddAttribute("Y", "-2");
             stairRoom.AddAttribute("Z", "-50");
-            stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
-            Room room = new Room(modelDB.getNextOpenID(), stairRoom, this.Game);
+            stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");            
+            Room room = Room.NewTowerRoom(this.PlayerStats.YourTeam, modelDB, Game);
 
             // Register the room in the model DB
             room.ID = modelDB.getNextOpenID();

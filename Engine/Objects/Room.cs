@@ -146,6 +146,7 @@ namespace Mammoth.Engine
             }
             BuildWalls(x, y, z);
             this.Actor = physics.CreateActor(boxActorDesc);
+            
 
         }
 
@@ -229,18 +230,48 @@ namespace Mammoth.Engine
                 {
                     case "ITEMS":
                         HandleItems(handler);
-                        break;/*
+                        break;
                     case "POSSIBLE":
-                        HandlePossible(handler);
+                        // HandlePossible(handler);
                         break;
                     case "PARAMETERS":
-                        HandleParameters(handler);
-                        break;*/
+                        // HandleParameters(handler);
+                        break;
                 }
 
             }
 
         }
+
+        private static int team1height = 1;
+        private static int team2height = 2;
+
+        public static Room NewTowerRoom(String team, IModelDBService modelDB, Game game)
+        {
+            ObjectParameters stairRoom = new ObjectParameters();
+            switch (team)
+            {
+                case ("Team 1"):
+                    stairRoom.AddAttribute("X", "-50");
+                    stairRoom.AddAttribute("Y", (21 * team1height).ToString() );
+                    stairRoom.AddAttribute("Z", "-50");
+                    team1height++;
+                    break;
+                
+                case ("Team 2"):
+                    stairRoom.AddAttribute("X", "193");
+                    stairRoom.AddAttribute("Y", (21 * team2height).ToString() );
+                    stairRoom.AddAttribute("Z", "-118");
+                    team2height++;
+                    break;     
+                    
+
+            }
+            
+            stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
+            return new Room(modelDB.getNextOpenID(), stairRoom, game);
+        }
+
 
         private void SpecializeFromServer(String attribute)
         {
