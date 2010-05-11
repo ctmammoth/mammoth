@@ -70,7 +70,15 @@ namespace Mammoth.Engine
             // Initializes PhysX of a player.
             InitializePhysX();
 
-            this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
+            switch (this.PlayerStats.YourTeam)
+            {
+                case "Team 1":
+                    this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
+                    break;
+                case "Team 2":
+                    this.Spawn(new Vector3(173.0f, -21.0f, -118.0f), Quaternion.Identity);
+                    break;
+            }
 
             // Give the player 5 weapons, for now
             Items = new Gun[5];
@@ -329,7 +337,15 @@ namespace Mammoth.Engine
             base.Die();
             Console.WriteLine("Player " + ID + " died.");
 
-            this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
+            switch (this.PlayerStats.YourTeam)
+            {
+                case "Team 1":
+                    this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
+                    break;
+                case "Team 2":
+                    this.Spawn(new Vector3(173.0f, -21.0f, -118.0f), Quaternion.Identity);
+                    break;
+            }
         }
 
         #region IEncodable Members

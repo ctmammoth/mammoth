@@ -29,11 +29,11 @@ namespace Mammoth.Engine
 
             if (id == 1)
             {
-                SpawnLocation = Vector3.Zero;
+                SpawnLocation = new Vector3(-3.0f, 10.0f, 0f);
             }
             else
             {
-                SpawnLocation = Vector3.Zero;
+                SpawnLocation = new Vector3(173.0f, -21.0f, -118.0f);
             }
         }
 
