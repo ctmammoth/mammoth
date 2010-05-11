@@ -180,6 +180,23 @@ namespace Mammoth.Engine
                 PositionOffset = (Vector3)props.GetElement("PositionOffset", PositionOffset);
             if (props.UpdatesFor("LocalPosition"))
                 LocalPosition = (Vector3)props.GetElement("LocalPosition", LocalPosition);
+            Specialize(TypeName);
+
+            PhysicsManagerService physics = (PhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+
+
+            ActorDescription boxActorDesc = new ActorDescription();
+            boxActorDesc.Shapes.Add(new BoxShapeDescription()
+            {
+                Size = new Vector3(dimensions.X, dimensions.Y, dimensions.Z),
+                LocalPosition = localPosition
+            });
+            boxActorDesc.GlobalPose = Matrix.CreateTranslation(pos + this.positionOffset);
+            this.positionOffset = new Vector3();
+
+
+            this.Actor = physics.CreateActor(boxActorDesc);
+
             
         }
 
