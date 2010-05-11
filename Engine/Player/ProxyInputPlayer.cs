@@ -159,19 +159,6 @@ namespace Mammoth.Engine
         {
             IServerNetworking server = (IServerNetworking)Game.Services.GetService(typeof(INetworkingService));
 
-            // Drop the flag being carried
-            if (Flag != null)
-            {
-                // Keep a reference to the flag that's being dropped
-                Objects.Flag droppedFlag = this.Flag;
-
-                // Drop the Flag
-                Flag.GetDropped();
-
-                // Send the dropped Flag
-                server.sendThing(this.Flag);
-            }
-
             base.Die();
 
             server.sendEvent("Death", this.ClientID.ToString());
