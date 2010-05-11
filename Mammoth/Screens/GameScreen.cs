@@ -168,12 +168,12 @@ namespace Mammoth
             stairRoom.AddAttribute("Y", "-23");
             stairRoom.AddAttribute("Z", "-50");
             stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
-            ObjectParameters stairRoom = new ObjectParameters();
-            stairRoom.AddAttribute("X", "193");
-            stairRoom.AddAttribute("Y", "-31");
-            stairRoom.AddAttribute("Z", "118");
-            stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
-            Room room = new Room(modelDB.getNextOpenID(), stairRoom, this.Game);
+            ObjectParameters stairRoom2 = new ObjectParameters();
+            stairRoom2.AddAttribute("X", "193");
+            stairRoom2.AddAttribute("Y", "-31");
+            stairRoom2.AddAttribute("Z", "118");
+            stairRoom2.AddAttribute("Special_Type", "STAIR_ROOM");
+            Room room = new Room(modelDB.getNextOpenID(), stairRoom2, this.Game);
             Flag flag1 = new Flag(this.Game, new Vector3(-45.0f, -3.0f, -45.0f), 1);
             Flag flag2 = new Flag(this.Game, new Vector3(193.0f, -11.0f, 118.0f), 2);
         }
