@@ -8,6 +8,10 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Mammoth.Engine.Input
 {
+    /// <summary>
+    /// Represents the local input on client, providing methods for
+    /// getting input states based on the mouse and keyboard input.
+    /// </summary>
     public class LocalInput : GameComponent, IInputService
     {
         #region Fields
@@ -18,6 +22,11 @@ namespace Mammoth.Engine.Input
 
         #endregion
 
+        /// <summary>
+        /// Initalizes the local input service by creating the containers and
+        /// adding this to the services.
+        /// </summary>
+        /// <param name="game"></param>
         public LocalInput(Game game)
             : base(game)
         {
@@ -27,6 +36,10 @@ namespace Mammoth.Engine.Input
             game.Services.AddService(typeof(IInputService), this);
         }
 
+        /// <summary>
+        /// Initializes the service by loading the 
+        /// keyboard mappings and resetting the mouse.
+        /// </summary>
         public override void Initialize()
         {
             base.Initialize();
@@ -36,6 +49,9 @@ namespace Mammoth.Engine.Input
             CenterCursor();
         }
 
+        /// <summary>
+        /// Sets the keyboard mappings.
+        /// </summary>
         public void LoadSettings()
         {
             _keyMappings.Add(InputType.Forward, Keys.W);
@@ -52,6 +68,12 @@ namespace Mammoth.Engine.Input
             _keyMappings.Add(InputType.SpawnRoom, Keys.F);
         }
 
+        /// <summary>
+        /// Gets the input from the mouse and keyboard using XNA
+        /// functions and creates an InputState out of them, which
+        /// are added to the queue of unhandled states.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             InputType newState = InputType.None;
@@ -81,6 +103,12 @@ namespace Mammoth.Engine.Input
             this.InputHandled = false;
         }
 
+        /// <summary>
+        /// Uses XNA to check whether the key mapping to the
+        /// input type is down.
+        /// </summary>
+        /// <param name="k"></param>
+        /// <returns></returns>
         private bool IsKeyDown(InputType k)
         {
             return Keyboard.GetState().IsKeyDown(_keyMappings[k]);
@@ -100,11 +128,18 @@ namespace Mammoth.Engine.Input
                 Mouse.SetPosition(window.ClientBounds.Width / 2, window.ClientBounds.Height / 2);
         }
 
+        /// <summary>
+        /// Does nothing, as there aren't multiple local clients.
+        /// </summary>
+        /// <param name="clientID"></param>
         public void SetStateByClientID(int clientID)
         {
             throw new NotSupportedException("You cannot set the state for local input!");
         }
 
+        /// <summary>
+        /// See IInputService for descriptions.
+        /// </summary>
         #region Properties
 
         public bool IsLocal
