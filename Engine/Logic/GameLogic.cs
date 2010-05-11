@@ -219,16 +219,15 @@ namespace Mammoth.Engine
         /// <param name="client_id">The client id of the killer</param>
         public void AwardKill(int client_id)
         {
-            Console.WriteLine("Awarding kill...");
 
             if (Team1.GetTeamMemberList().Contains(client_id))
             {
-                Console.WriteLine("Awarding kill to Team 1. Thanks to Player " + client_id);
+                //Console.WriteLine("Awarding kill to Team 1. Thanks to Player " + client_id);
                 Team1.AddTeamKill();
             }
             else
             {
-                Console.WriteLine("Awarding kill to Team 2. Thanks to Player " + client_id);
+                //Console.WriteLine("Awarding kill to Team 2. Thanks to Player " + client_id);
                 Team2.AddTeamKill();
             }
         }
@@ -239,16 +238,14 @@ namespace Mammoth.Engine
         /// <param name="client_id">The client id of the client that captured</param>
         public void AwardCapture(int client_id)
         {
-            Console.WriteLine("Awarding capture...");
-
             if (Team1.GetTeamMemberList().Contains(client_id))
             {
-                Console.WriteLine("Awarding capture to Team 1. Thanks to Player " + client_id);
+                //Console.WriteLine("Awarding capture to Team 1. Thanks to Player " + client_id);
                 Team1.AddCapture();
             }
             else
             {
-                Console.WriteLine("Awarding capture to Team 2. Thanks to Player " + client_id);
+                //Console.WriteLine("Awarding capture to Team 2. Thanks to Player " + client_id);
                 Team2.AddCapture();
             }
         }

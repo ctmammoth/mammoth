@@ -238,7 +238,7 @@ namespace Mammoth.Engine.Networking
             
             // Choose a client ID
             int id = _nextID++;
-            Console.WriteLine("The value of id: " + id);
+            //Console.WriteLine("The value of id: " + id);
             _connections.Add(id, sender);
             _inputStates[id] = new Queue<InputState>();
 
@@ -250,7 +250,7 @@ namespace Mammoth.Engine.Networking
                              select obj as IEncodable;
             foreach (IEncodable toSend in encodables)
             {
-                Console.WriteLine("Initial send of " + ((BaseObject)toSend).getObjectType() + " with ID: " + ((BaseObject)toSend).ID);
+                //Console.WriteLine("Initial send of " + ((BaseObject)toSend).getObjectType() + " with ID: " + ((BaseObject)toSend).ID);
                 DataGram message = new DataGram(MessageType.ENCODABLE, ((BaseObject)toSend).getObjectType(),
                     ((BaseObject)toSend).ID, toSend.Encode(), id, -1, null);
                 sendMessage(message);

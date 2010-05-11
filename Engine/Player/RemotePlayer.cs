@@ -96,8 +96,8 @@ namespace Mammoth.Engine
 
         public override void Dispose()
         {
-            Console.WriteLine("Disposing remote player with id: " + this.ID);
-            Console.WriteLine(new StackTrace());
+            //Console.WriteLine("Disposing remote player with id: " + this.ID);
+            //Console.WriteLine(new StackTrace());
             base.Dispose();
         }
 

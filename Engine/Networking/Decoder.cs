@@ -106,8 +106,8 @@ namespace Mammoth.Engine.Networking
                     Flag flag = new Flag(this.Game, Vector3.Zero, 0);
                     flag.Decode(properties);
                     ro.registerObject(flag);
-                    Console.WriteLine("Flag received, position: " + flag.Position + ", positionoffset: " + flag.PositionOffset +
-                        ", ID = " + id);
+                    //Console.WriteLine("Flag received, position: " + flag.Position + ", positionoffset: " + flag.PositionOffset +
+                     //   ", ID = " + id);
                 break;
 
                 case "GameStats":
@@ -117,7 +117,7 @@ namespace Mammoth.Engine.Networking
                 break;
 
                 case "Room":
-                    Console.WriteLine("Room recieved");
+                    //Console.WriteLine("Room recieved");
                     Room r = new Room(id, this.Game);
                     r.Decode(properties);
                 break;

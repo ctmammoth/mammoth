@@ -183,8 +183,8 @@ namespace Mammoth.Engine.Objects
         /// <returns>A byte array containing the encoded flag.</returns>
         public byte[] Encode()
         {
-            Console.WriteLine("Encoding a flag.  Position = " + Position + ", PositionOffset = " + PositionOffset +
-                ", ID = " + ID);
+            //Console.WriteLine("Encoding a flag.  Position = " + Position + ", PositionOffset = " + PositionOffset +
+             //   ", ID = " + ID);
 
             Mammoth.Engine.Networking.Encoder e = new Mammoth.Engine.Networking.Encoder();
 

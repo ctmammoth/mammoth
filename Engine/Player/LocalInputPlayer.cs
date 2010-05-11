@@ -45,7 +45,7 @@ namespace Mammoth.Engine
 
         public override void Die()
         {
-            Console.WriteLine("I died.");
+            //Console.WriteLine("I died.");
 
             base.Die();
 

@@ -47,7 +47,7 @@ namespace Mammoth.Engine
             //add proxy player to team
             this.ClientID = clientID;
             this.Team = g.AddToTeam(this.ClientID);
-            Console.WriteLine("Proxy Player " + this.ClientID + " joined " + this.Team.ToString());
+            //Console.WriteLine("Proxy Player " + this.ClientID + " joined " + this.Team.ToString());
 
             //add stats to GameStats
             g.UpdatePlayerStats(this.ClientID, PlayerStats);
@@ -73,7 +73,7 @@ namespace Mammoth.Engine
 
         protected override void SpawnRoom(Vector3 roomPos)
         {
-            Console.WriteLine("ProxyInputPlayer is spawning a room.");
+            //Console.WriteLine("ProxyInputPlayer is spawning a room.");
 
             IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
 
@@ -115,7 +115,7 @@ namespace Mammoth.Engine
         /// </summary>
         protected override void Reload(GameTime time)
         {
-            Console.WriteLine("Proxyplayer is reloading.");
+            //Console.WriteLine("Proxyplayer is reloading.");
             if (CurWeapon != null)
                 CurWeapon.Reload(time);
         }
@@ -144,7 +144,7 @@ namespace Mammoth.Engine
                 //update teams kills
                 GameLogic g = (GameLogic)this.Game.Services.GetService(typeof(GameLogic));
                 g.AwardKill(p.Creator);
-                Console.WriteLine("Player " + ClientID + " was killed by Player " + p.Creator);
+                //Console.WriteLine("Player " + ClientID + " was killed by Player " + p.Creator);
 
                 //update players kills
                 IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
@@ -179,7 +179,7 @@ namespace Mammoth.Engine
 
         public override void RespondToTrigger(PhysicalObject obj)
         {
-            Console.WriteLine("ProxyPlayer is responding to a trigger.");
+            //Console.WriteLine("ProxyPlayer is responding to a trigger.");
 
             // Check whether a Flag was trigger
             if (obj is Objects.Flag)
@@ -192,13 +192,13 @@ namespace Mammoth.Engine
                         // TODO: only pick up flags not owned by your team
                         Flag = (Objects.Flag)obj;
                         Flag.Owner = this;
-                        Console.WriteLine("ProxyPlayer picked up a flag!");
+                        //Console.WriteLine("ProxyPlayer picked up a flag!");
                     }
                     else
                     {
                         // Otherwise drop the Flag being carried if the Flag just encountered is your team's flag
                         // TODO: make sure the Flag is owned by your team and located at your spawn point
-                        Console.WriteLine("Dropping off a carried flag at another flag!");
+                        //Console.WriteLine("Dropping off a carried flag at another flag!");
                         GameLogic g = (GameLogic)this.Game.Services.GetService(typeof(GameLogic));
                         g.AwardCapture(this.ClientID);
                         Flag.GetDropped();

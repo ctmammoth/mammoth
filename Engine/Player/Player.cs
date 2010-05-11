@@ -49,7 +49,7 @@ namespace Mammoth.Engine
             this.Orientation = orient;
             this.HeadOrient = orient;
 
-            Console.WriteLine("Resetting health");
+            //Console.WriteLine("Resetting health");
             //Revive life
             this.Health = 100;
         }
