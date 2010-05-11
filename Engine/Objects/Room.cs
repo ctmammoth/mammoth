@@ -254,14 +254,14 @@ namespace Mammoth.Engine
                     //TODO: Dont hardcode
                 case ("Team 1"):
                     stairRoom.AddAttribute("X", "-50");
-                    stairRoom.AddAttribute("Y", (21 * team1height).ToString() );
+                    stairRoom.AddAttribute("Y", (21 * team1height).ToString() - 23 );
                     stairRoom.AddAttribute("Z", "-50");
                     team1height++;
                     break;
                 
                 case ("Team 2"):
                     stairRoom.AddAttribute("X", "193");
-                    stairRoom.AddAttribute("Y", (21 * team2height).ToString() );
+                    stairRoom.AddAttribute("Y", (21 * team2height).ToString() - 31 );
                     stairRoom.AddAttribute("Z", "118");
                     team2height++;
                     break;     
