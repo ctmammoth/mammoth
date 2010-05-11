@@ -243,14 +243,15 @@ namespace Mammoth.Engine
 
         }
 
-        private static int team1height = 1;
-        private static int team2height = 2;
+        private static int team1height = 0;
+        private static int team2height = 0;
 
         public static Room NewTowerRoom(String team, IModelDBService modelDB, Game game)
         {
             ObjectParameters stairRoom = new ObjectParameters();
             switch (team)
             {
+                    //TODO: Dont hardcode
                 case ("Team 1"):
                     stairRoom.AddAttribute("X", "-50");
                     stairRoom.AddAttribute("Y", (21 * team1height).ToString() );
@@ -261,7 +262,7 @@ namespace Mammoth.Engine
                 case ("Team 2"):
                     stairRoom.AddAttribute("X", "193");
                     stairRoom.AddAttribute("Y", (21 * team2height).ToString() );
-                    stairRoom.AddAttribute("Z", "-118");
+                    stairRoom.AddAttribute("Z", "118");
                     team2height++;
                     break;     
                     

@@ -162,10 +162,16 @@ namespace Mammoth
             baseWidget.Add(f);
 
             // LET'S TRY ADDING A ROOM!!!
+            // HACK: bad
             ObjectParameters stairRoom = new ObjectParameters();
             stairRoom.AddAttribute("X", "-50");
             stairRoom.AddAttribute("Y", "-23");
             stairRoom.AddAttribute("Z", "-50");
+            stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
+            ObjectParameters stairRoom = new ObjectParameters();
+            stairRoom.AddAttribute("X", "193");
+            stairRoom.AddAttribute("Y", "-31");
+            stairRoom.AddAttribute("Z", "118");
             stairRoom.AddAttribute("Special_Type", "STAIR_ROOM");
             Room room = new Room(modelDB.getNextOpenID(), stairRoom, this.Game);
             Flag flag1 = new Flag(this.Game, new Vector3(-45.0f, -3.0f, -45.0f), 1);
