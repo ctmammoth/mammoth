@@ -16,6 +16,10 @@ using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine.Objects
 {
+    /// <summary>
+    /// This class will eventually be used to create objects out of other objects, and have one
+    /// centralized actor to improve efficiency. Currently unused and unimplemented.
+    /// </summary>
     class CompoundStaticObject : PhysicalObject, IEncodable, IRenderable
     {
 

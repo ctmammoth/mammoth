@@ -9,6 +9,10 @@ using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
+    /// <summary>
+    /// Represents a fortress, comprised of many rooms. Currently, the fortresses are
+    /// created using individual and independent rooms, and this class is unused.
+    /// </summary>
     public class Fortress : BaseObject, IEncodable
     {
         #region Fields

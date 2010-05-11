@@ -18,6 +18,10 @@ using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine
 {
+    /// <summary>
+    /// Special object case that has a model and can be drawn, but not an actor
+    /// as it is part of the one actor of a room.
+    /// </summary>
     public class WallBlock : PhysicalObject, IEncodable, IRenderable
     {
         private Vector3 dimensions, localPosition, nonPhysicalPosition; ///
@@ -31,6 +35,12 @@ namespace Mammoth.Engine
             r.DrawRenderable(this);
         }
 
+        /// <summary>
+        /// Create a wallblock with the given parameters and id
+        /// </summary>
+        /// <param name="id">ID # to give this</param>
+        /// <param name="parameters">Describes the fields of the wallblock</param>
+        /// <param name="game">The current gam,e</param>
         public WallBlock(int id, ObjectParameters parameters, Game game)
             : base(game)
         {
@@ -83,6 +93,10 @@ namespace Mammoth.Engine
             this.ID = id;
         }
 
+        /// <summary>
+        /// Populate certain values from an XML file based on type of this object
+        /// </summary>
+        /// <param name="attribute">Type of wallblock</param>
         private void Specialize(String attribute)
         {
             XmlHandler handler = new XmlHandler();

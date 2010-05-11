@@ -26,11 +26,12 @@ namespace Mammoth.Engine
     
     public class RealStaticObject : PhysicalObject, IEncodable, IRenderable
     {
-        private Vector3 dimensions, localPosition; 
+        private Vector3 dimensions, localPosition;         
         private String typeName;
 
         /// <summary>
-        /// 
+        /// These objects are renderable, so they must be drawn. They are drawn in the usual
+        /// way, using the renderer. 
         /// </summary>
         /// <param name="gameTime">The current gameTime</param>
         public override void Draw(GameTime gameTime)
@@ -42,11 +43,25 @@ namespace Mammoth.Engine
             r.DrawRenderable(this);
         }
 
+        /// <summary>
+        /// Constructor used to create an object with blank attributes that
+        /// will be filled in during the encoding/decoding process.
+        /// </summary>
+        /// <param name="game"></param>
         public RealStaticObject(Game game) : base(game)
         {   
             
         }
 
+        /// <summary>
+        /// Main constructor, delegates to methods depending on whether this object is being 
+        /// created locally or from the network
+        /// </summary>
+        /// <param name="id">ID number of this object</param>
+        /// <param name="parameters">list of parameters to distinguish this object
+        /// (null if it from the network)</param>
+        /// <param name="game">the current name</param>
+        /// <param name="isFromNetwork">if this object is from the network or not</param>
         public RealStaticObject(int id, ObjectParameters parameters, Game game, bool isFromNetwork)
             : base(game)
         {
@@ -63,6 +78,13 @@ namespace Mammoth.Engine
         }
 
 
+        /// <summary>
+        /// Create a local object. This takes a list of parameters and initializes the object to,
+        /// as opposed to getting these values from the network
+        /// </summary>
+        /// <param name="id">ID number to give this number</param>
+        /// <param name="parameters">Values to initialize fields</param>
+        /// <param name="game">the current game</param>
         public void CreateFromLocal(int id, ObjectParameters parameters, Game game)
         {
             this.ID = id;
@@ -86,11 +108,11 @@ namespace Mammoth.Engine
                     case "Special_Type":
                         Specialize(parameters.GetStringValue(attribute));
                         break;
-
                 }
 
             }
 
+            // Make the object and register it with the modelDB
             PhysicsManagerService physics = (PhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             
 
@@ -102,21 +124,32 @@ namespace Mammoth.Engine
             });
             boxActorDesc.GlobalPose = Matrix.CreateTranslation(pos + this.positionOffset);
             this.positionOffset = new Vector3();
-
             
             this.Actor = physics.CreateActor(boxActorDesc);
             
             
-            // this.Position = pos;            
-            // this.
+            
+
         }
 
+        /// <summary>
+        /// Creates an object from the network. The values of this object will
+        /// be filled in with the decode, so this just gives it an ID number and
+        /// the current game
+        /// </summary>
+        /// <param name="id">ID number to give the object.</param>
+        /// <param name="game">The current game</param>
         public void CreateFromNetwork(int id, Game game)
         {
             this.Game = game;
             this.ID = id;
         }
 
+        /// <summary>
+        /// Fill in certain fields based on the type of the object by reading them
+        /// in from an XML file
+        /// </summary>
+        /// <param name="attribute">The specialized type of the object</param>
         private void Specialize(String attribute)
         {
             XmlHandler handler = new XmlHandler();
@@ -149,6 +182,13 @@ namespace Mammoth.Engine
 
         }
 
+
+        /// <summary>
+        /// Sends crucial information over the network so that other players/ the server
+        /// can know about it.
+        /// </summary>
+        /// <returns>a byte array with all of the necessary data to send across the 
+        /// network to recreate this object</returns>
         public byte[] Encode()
         {
             Networking.Encoder tosend = new Networking.Encoder();
@@ -165,6 +205,11 @@ namespace Mammoth.Engine
             return tosend.Serialize();
         }
 
+
+        /// <summary>
+        /// Reads data sent across the network and assigns the fields of this object based on that data
+        /// </summary>
+        /// <param name="serialized">data from the network</param>
         public void Decode(byte[] serialized)
         {
 
@@ -205,17 +250,31 @@ namespace Mammoth.Engine
         }
 
 
+        /// <summary>
+        /// Returns the type of this object, as a string. (Currently the same as the TypeOf(), but
+        /// this won't always be the case
+        /// </summary>
+        /// <returns>String of the object type</returns>
         public override String getObjectType()
         {
             return "RealStaticObject";
         }
 
+        /// <summary>
+        /// Returns the specialized type of the object (e.g. Health Crate,, Wall Block, etc.)
+        /// </summary>
+        /// <returns></returns>
         public String GetTypeName()
         {
             return TypeName;
         }
 
 
+        /// <summary>
+        /// Reads the dimension information from an XML file and initializes the object's dimension
+        /// field with this information
+        /// </summary>
+        /// <param name="handler">XML handler working on the current document</param>
         private void HandleDimension(XmlHandler handler)
         {
             ObjectParameters parameters = handler.GetAttributes();
@@ -236,6 +295,11 @@ namespace Mammoth.Engine
             }
         }
 
+        /// <summary>
+        /// Reads the localPosition information from an XML file and initializes the object's dimension
+        /// field with this information
+        /// </summary>
+        /// <param name="handler">XML handler working on the current document</param>
         private void HandleLocalPosition(XmlHandler handler)
         {
             localPosition = new Vector3();
@@ -257,6 +321,11 @@ namespace Mammoth.Engine
             }
         }
 
+        /// <summary>
+        /// Reads the position offset information from an XML file and initializes the object's dimension
+        /// field with this information
+        /// </summary>
+        /// <param name="handler">XML handler working on the current document</param>
         private void HandlePositionOffset(XmlHandler handler)
         {
             this.PositionOffset = new Vector3();
@@ -278,6 +347,11 @@ namespace Mammoth.Engine
             }
         }
 
+        /// <summary>
+        /// Reads the model information from an XML file and initializes the object's dimension
+        /// field with this information
+        /// </summary>
+        /// <param name="handler">XML handler working on the current document</param>
         private void HandleModel(XmlHandler handler)
         {
             String modelPath = handler.reader.ReadElementContentAsString();
