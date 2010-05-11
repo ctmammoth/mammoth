@@ -345,7 +345,7 @@ namespace Mammoth.Engine.Networking
         /// <returns></returns>
         public Queue<InputState> getInputStateQueue(int playerID)
         {
-            if (_inputStates[playerID] == null)
+            if (!_inputStates.ContainsKey(playerID))
                 return null;
             return _inputStates[playerID];
         }
