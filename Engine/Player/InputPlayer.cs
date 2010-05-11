@@ -369,8 +369,6 @@ namespace Mammoth.Engine
                 // Keep a reference to the flag that's being dropped
                 Objects.Flag droppedFlag = this.Flag;
 
-
-
                 // Drop the Flag
                 Flag.GetDropped();
 
@@ -379,6 +377,8 @@ namespace Mammoth.Engine
                 // Send the dropped Flag
                 if(server is IServerNetworking)
                     ((IServerNetworking)server).sendThing(this.Flag);
+
+                this.Flag = null;
             }
 
             // HACK: don't hard code this shit!  Should be in playerstats.

@@ -110,8 +110,9 @@ namespace Mammoth.Engine
             foreach (BaseObject obj in _objects.Values)
                 obj.Dispose();
 
-            // TODO: Remove objects / call base.Dispose() ?
             this.Game.Services.RemoveService(typeof(IModelDBService));
+
+            base.Dispose();
         }
 
         #endregion
