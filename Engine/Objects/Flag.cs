@@ -82,7 +82,7 @@ namespace Mammoth.Engine.Objects
                     this.Position = new Vector3(-45.0f, -3.0f, -45.0f);
                     break;
                 case 2:
-                    this.Position = new Vector3(193.0f, -11.0f, 118.0f);
+                    this.Position = new Vector3(199.0f, -11.0f, 121.0f);
                     break;
             }
 
