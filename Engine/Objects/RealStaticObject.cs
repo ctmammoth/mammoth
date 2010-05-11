@@ -122,11 +122,12 @@ namespace Mammoth.Engine
             XmlHandler handler = new XmlHandler();
             handler.ChangeFile("static_objects.xml");
             handler.GetElement("VARIANT", "NAME", attribute);
+            this.TypeName = attribute;
             while (!handler.IsClosingTag("VARIANT"))
             {
                 handler.GetNextElement();
                 String name = handler.GetElementName();
-                this.TypeName = name;
+                
                 switch (name)
                 {
                     case "DIMENSION":
