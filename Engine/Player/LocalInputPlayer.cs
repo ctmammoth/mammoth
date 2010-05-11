@@ -31,6 +31,10 @@ namespace Mammoth.Engine
             this.Model3D = r.LoadModel("soldier-low-poly");
         }
 
+        /// <summary>
+        /// Updates the player.  Plays a sounds when the player's health is low.
+        /// </summary>
+        /// <param name="gameTime">The game time.</param>
         public override void Update(GameTime gameTime)
         {
             //Console.WriteLine("Position: " + this.Position);
@@ -44,6 +48,9 @@ namespace Mammoth.Engine
             }
         }
 
+        /// <summary>
+        /// Kills the player.  Plays a sound indicating death.
+        /// </summary>
         public override void Die()
         {
             //Console.WriteLine("I died.");

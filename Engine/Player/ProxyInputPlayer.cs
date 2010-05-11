@@ -71,6 +71,10 @@ namespace Mammoth.Engine
             network.sendThing(this);
         }
 
+        /// <summary>
+        /// Causes a room to be spawned for this player's team.  Places it on top of the team's other rooms.
+        /// </summary>
+        /// <param name="roomPos">The position in which to spawn the room.</param>
         protected override void SpawnRoom(Vector3 roomPos)
         {
             //Console.WriteLine("ProxyInputPlayer is spawning a room.");
@@ -94,8 +98,10 @@ namespace Mammoth.Engine
         }
 
         /// <summary>
-        /// Overrides InputPlayer's Throw() in order to allow shooting with respect to player's position and orientation.
+        /// Overrides InputPlayer's Throw() in order to allow shooting with respect to player's position and orientation.  The 
+        /// current gun's Shoot() method is called.
         /// </summary>
+        /// <param name="gameTime">The game time.  Used by the gun to control the rate of fire.</param>
         protected override void Shoot(GameTime gameTime)
         {
             // Shoot if the player currently has a weapon
@@ -113,6 +119,7 @@ namespace Mammoth.Engine
         /// <summary>
         /// Overrides InputPlayer's Reload() in order to allow reloading.
         /// </summary>
+        /// <param name="gameTime">The game time.</param>
         protected override void Reload(GameTime time)
         {
             //Console.WriteLine("Proxyplayer is reloading.");
@@ -123,6 +130,7 @@ namespace Mammoth.Engine
         /// <summary>
         /// Overrides InputPlayer's SwitchWeapon() in order to allow switching.
         /// </summary>
+        /// <param name="newWeapon">The index of the weapon in the player's array of weapons.</param>
         protected override void SwitchWeapon(int newWeapon)
         {
             base.SwitchWeapon(newWeapon);
@@ -131,7 +139,12 @@ namespace Mammoth.Engine
                 CurWeapon = Items[newWeapon - 1];
         }
 
-
+        /// <summary>
+        /// Causes the player to take damage from a damager.
+        /// </summary>
+        /// <param name="damage">The amount of damage the player should take.</param>
+        /// <param name="inflicter">The object causing the player to take damage.  This is used so the player can
+        /// know by whom they were killed.</param>
         public override void TakeDamage(float damage, IDamager inflicter)
         {
             if (this.Health > 0)
@@ -155,6 +168,10 @@ namespace Mammoth.Engine
                 Die();
             }
         }
+
+        /// <summary>
+        /// Kills this player and sends a death event.
+        /// </summary>
         public override void Die()
         {
             IServerNetworking server = (IServerNetworking)Game.Services.GetService(typeof(INetworkingService));
@@ -164,6 +181,10 @@ namespace Mammoth.Engine
             server.sendEvent("Death", this.ClientID.ToString());
         }
 
+        /// <summary>
+        /// Causes the player to respond to a trigger such as walking into a flag.
+        /// </summary>
+        /// <param name="obj">The trigger to which this player should respond.</param>
         public override void RespondToTrigger(PhysicalObject obj)
         {
             //Console.WriteLine("ProxyPlayer is responding to a trigger.");
@@ -176,15 +197,19 @@ namespace Mammoth.Engine
                     // If this player is not carrying a Flag
                     if (Flag == null)
                     {
-                        // TODO: only pick up flags not owned by your team
-                        Flag = (Objects.Flag)obj;
-                        Flag.Owner = this;
-                        //Console.WriteLine("ProxyPlayer picked up a flag!");
+                        // Only pick up flags not owned by your team
+                        if (((Objects.Flag) obj).Team != this.PlayerStats.YourTeam.TeamID)
+                        {
+                            Flag = (Objects.Flag)obj;
+                            Flag.Owner = this;
+                            //Console.WriteLine("ProxyPlayer picked up a flag!");
+                        }
                     }
                     else
                     {
-                        // Otherwise drop the Flag being carried if the Flag just encountered is your team's flag
-                        // TODO: make sure the Flag is owned by your team and located at your spawn point
+                        // Otherwise drop the Flag being carried: since there are only two flags, we can assume that the flag
+                        // that was triggered is owned by your team.  Note:
+                        // HACK: should check if it's at the spawn point and owned by your team, to be safe.
                         //Console.WriteLine("Dropping off a carried flag at another flag!");
                         GameLogic g = (GameLogic)this.Game.Services.GetService(typeof(GameLogic));
                         g.AwardCapture(this.ClientID);

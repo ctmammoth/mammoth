@@ -56,22 +56,34 @@ namespace Mammoth.Engine
 
         #region IDamageable Members
 
+        /// <summary>
+        /// The player's health.
+        /// </summary>
         public float Health
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// Causes the player to take damage from a damager.
+        /// </summary>
+        /// <param name="damage">The amount of damage the player should take.</param>
+        /// <param name="inflicter">The object causing the player to take damage.</param>
         public virtual void TakeDamage(float damage, IDamager inflicter)
-        {
+        { }
 
-        }
-
+        /// <summary>
+        /// Causes the player to die.
+        /// </summary>
         public virtual void Die()
         {
             this.NumDeaths++;
         }
 
+        /// <summary>
+        /// The flag being carried by the player.  A null value indicates that the player is not holding the flag.
+        /// </summary>
         public Flag Flag
         {
             get;
@@ -145,6 +157,9 @@ namespace Mammoth.Engine
 
         #endregion
 
+        /// <summary>
+        /// Removes this player from the Game.
+        /// </summary>
         public override void Dispose()
         {
             //HACK: usually bad when you don't call base

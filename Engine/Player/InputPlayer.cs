@@ -20,7 +20,8 @@ using Mammoth.Engine;
 namespace Mammoth.Engine
 {
     /// <summary>
-    /// An InputPlayer is a Player whose properties may be modified by the IInputService.
+    /// An InputPlayer is a Player whose properties may be modified by the IInputService.  This class has features used by the
+    /// client and server's players.
     /// </summary>
     public abstract class InputPlayer : Player
     {
@@ -369,8 +370,6 @@ namespace Mammoth.Engine
                 // Keep a reference to the flag that's being dropped
                 Objects.Flag droppedFlag = this.Flag;
 
-
-
                 // Drop the Flag
                 Flag.GetDropped();
 
@@ -379,6 +378,8 @@ namespace Mammoth.Engine
                 // Send the dropped Flag
                 if(server is IServerNetworking)
                     ((IServerNetworking)server).sendThing(this.Flag);
+
+                this.Flag = null;
             }
 
             // HACK: don't hard code this shit!  Should be in playerstats.

@@ -21,10 +21,10 @@ namespace Mammoth.Engine
         }
 
         #region Properties
-        private int TeamID
+        public int TeamID
         {
             get;
-            set;
+            protected set;
         }
         private List<int> MemberIDs
         {
