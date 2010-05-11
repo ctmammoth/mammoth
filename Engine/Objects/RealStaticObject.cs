@@ -192,7 +192,7 @@ namespace Mammoth.Engine
         public byte[] Encode()
         {
             Networking.Encoder tosend = new Networking.Encoder();
-            Console.WriteLine("Encoding a Static Object"); 
+            //Console.WriteLine("Encoding a Static Object"); 
             tosend.AddElement("X", Position.X);
             tosend.AddElement("Y", Position.Y);
             tosend.AddElement("Z", Position.Z);
