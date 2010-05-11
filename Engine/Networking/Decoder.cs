@@ -122,11 +122,12 @@ namespace Mammoth.Engine.Networking
                     r.Decode(properties);
                 break;
 
+                /*
                 case "RealStaticObject":
                 Console.WriteLine("RSO recieved");
                 RealStaticObject rso = new RealStaticObject(this.game);
                 rso.Decode(properties);
-                break;
+                break;*/
 
                 default:
                 Console.WriteLine("Object type was not recognized: " + type);
