@@ -182,7 +182,7 @@ namespace Mammoth.Engine
                 LocalPosition = (Vector3)props.GetElement("LocalPosition", LocalPosition);
             Specialize(TypeName);
 
-            PhysicsManagerService physics = (PhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
+            // PhysicsManagerService physics = (PhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
 
 
             ActorDescription boxActorDesc = new ActorDescription();
@@ -195,7 +195,11 @@ namespace Mammoth.Engine
             this.positionOffset = new Vector3();
 
 
-            this.Actor = physics.CreateActor(boxActorDesc);
+            // this.Actor = physics.CreateActor(boxActorDesc);
+
+            IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
+            mdb.registerObject(this);
+            
 
             
         }
