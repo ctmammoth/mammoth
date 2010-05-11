@@ -60,6 +60,8 @@ namespace Mammoth.Engine
             set;
         }
 
+        private bool _hasSpawned;
+
         #endregion
 
         /// <summary>
@@ -70,15 +72,7 @@ namespace Mammoth.Engine
             // Initializes PhysX of a player.
             InitializePhysX();
 
-            switch (this.PlayerStats.YourTeam)
-            {
-                case "Team 1":
-                    this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
-                    break;
-                case "Team 2":
-                    this.Spawn(new Vector3(173.0f, -21.0f, -118.0f), Quaternion.Identity);
-                    break;
-            }
+            _hasSpawned = false;
 
             // Give the player 5 weapons, for now
             Items = new Gun[5];
@@ -133,6 +127,21 @@ namespace Mammoth.Engine
         /// <param name="gameTime">The Game Time.</param>
         public override void Update(GameTime gameTime)
         {
+            // HACK: HACK HACK HACK HACK HACK
+            if (!_hasSpawned)
+            {
+                switch (this.PlayerStats.YourTeam)
+                {
+                    case "Team 1":
+                        this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
+                        break;
+                    case "Team 2":
+                        this.Spawn(new Vector3(173.0f, -21.0f, 118.0f), Quaternion.Identity);
+                        break;
+                }
+                _hasSpawned = true;
+            }
+
             // Load services for use later.
             IPhysicsManagerService physics = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             IInputService inputService = (IInputService)this.Game.Services.GetService(typeof(IInputService));
@@ -343,7 +352,7 @@ namespace Mammoth.Engine
                     this.Spawn(new Vector3(-3.0f, 10.0f, 0.0f), Quaternion.Identity);
                     break;
                 case "Team 2":
-                    this.Spawn(new Vector3(173.0f, -21.0f, -118.0f), Quaternion.Identity);
+                    this.Spawn(new Vector3(173.0f, -21.0f, 118.0f), Quaternion.Identity);
                     break;
             }
         }
