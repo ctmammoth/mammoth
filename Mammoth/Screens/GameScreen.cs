@@ -104,21 +104,26 @@ namespace Mammoth
             IModelDBService modelDB = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
             modelDB.registerObject(new Terrain(this.Game));
 
+            InitializeHUD();
+        }
+
+        private void InitializeHUD()
+        {
             IRenderService r = (IRenderService)this.Game.Services.GetService(typeof(IRenderService));
 
             //create baseWidget
             baseWidget = new TWidget(this.Game)
-                {
-                    Size = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2),
-                    Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2)
-                };
+            {
+                Size = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2),
+                Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2)
+            };
 
             // Add the crosshairs to the game.
             TImage cross = new TImage(this.Game, r.LoadTexture("cross"))
-             {
-                 Size = new Vector2(50, 50),
-                 Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2)
-             };
+            {
+                Size = new Vector2(50, 50),
+                Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, this.Game.Window.ClientBounds.Height / 2)
+            };
             baseWidget.Add(cross);
 
             // Add the timer

@@ -156,7 +156,7 @@ namespace Mammoth.Engine
             foreach (var input in inputService.States)
             {
                 // Get a dampened version of the mouse movement.
-                Vector2 delta = input.MouseDelta * 0.0005f;
+                Vector2 delta = input.MouseDelta * 0.0007f;
                 // Modify the yaw based on horizontal mouse movement.
                 this.Yaw = MathHelper.WrapAngle(this.Yaw - delta.X);
                 // Modify the pitch based on vertical mouse movement.
@@ -171,7 +171,7 @@ namespace Mammoth.Engine
                 this.HeadOrient = Quaternion.CreateFromYawPitchRoll(this.Yaw, this.Pitch, 0);
 
                 // Set the base movement speed.
-                const float baseSpeed = 6.0f;
+                const float baseSpeed = 10.0f;
 
                 // Calculate the speed at which we travel based on speed and elapsed time.
                 float speed = baseSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;  // dx = v*t
@@ -180,7 +180,7 @@ namespace Mammoth.Engine
                 if (InCollisionState(ControllerCollisionFlag.Down))
                 {
                     if (input.IsKeyDown(InputType.Sprint))
-                        speed *= 1.5f;
+                        speed *= 2.0f;
                 }
                 //else
                 //speed *= 0.3f;
@@ -414,16 +414,14 @@ namespace Mammoth.Engine
             tosend.AddElement("GunType", ((BaseObject)CurWeapon).getObjectType());
             tosend.AddElement("Gun", CurWeapon);
 
-            //if (Flag != null)
-            //{
-            //    tosend.AddElement("FlagID", Flag.ID);
-            //}
-            //else
-            //{
-            //    tosend.AddElement("FlagID", -1);
-            //}
-
-            tosend.AddElement("FlagID", Flag.ID);
+            if (Flag != null)
+            {
+                tosend.AddElement("FlagID", Flag.ID);
+            }
+            else
+            {
+                tosend.AddElement("FlagID", -1);
+            }
 
             return tosend.Serialize();
         }
