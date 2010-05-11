@@ -70,11 +70,15 @@ namespace Mammoth.Engine
         #endregion
 
         /// <summary>
-        /// Initialize game start by restarting the game
+        /// Initialize game start by restarting the game and registering it as a service
         /// </summary>
         public GameLogic(Game game): base(game)
         {
+            //Reset the game.
             ResetGame();
+
+            //Add this as a service.
+            game.Services.AddService(typeof(GameLogic), this);
         }
 
         /// <summary>
@@ -326,6 +330,21 @@ namespace Mammoth.Engine
             {
                 SendCounter++;
             }
+        }
+
+        /// <summary>
+        /// Disposes the service.
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            //reset the game.
+            ResetGame();
+
+            //deregister from services
+            this.Game.Services.RemoveService(typeof(GameLogic));
         }
 
     }
