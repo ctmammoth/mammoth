@@ -198,7 +198,7 @@ namespace Mammoth.Engine
                     if (Flag == null)
                     {
                         // Only pick up flags not owned by your team
-                        if (Flag.Team != this.PlayerStats.YourTeam.TeamID)
+                        if (obj.Team != this.PlayerStats.YourTeam.TeamID)
                         {
                             Flag = (Objects.Flag)obj;
                             Flag.Owner = this;
