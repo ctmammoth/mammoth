@@ -28,7 +28,7 @@ namespace Mammoth.Engine.Objects
 
         public override float Speed
         {
-            get { return 100.0f; }
+            get { return 300.0f; }
             protected set { }
         }
 
