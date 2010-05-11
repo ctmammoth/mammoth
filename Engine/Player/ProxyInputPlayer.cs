@@ -157,8 +157,6 @@ namespace Mammoth.Engine
         }
         public override void Die()
         {
-            base.Die();
-
             IServerNetworking server = (IServerNetworking)Game.Services.GetService(typeof(INetworkingService));
 
             // Drop the flag being carried
@@ -173,6 +171,8 @@ namespace Mammoth.Engine
                 // Send the dropped Flag
                 server.sendThing(this.Flag);
             }
+
+            base.Die();
 
             server.sendEvent("Death", this.ClientID.ToString());
         }
