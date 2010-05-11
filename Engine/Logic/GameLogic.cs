@@ -10,6 +10,10 @@ using Microsoft.Xna.Framework;
 
 namespace Mammoth.Engine
 {
+
+    /// <summary>
+    /// Manages and facilitates the game logic on the server side. This mostly includes managaing teams and points.
+    /// </summary>
     public class GameLogic : GameComponent
     {
         #region Properties
@@ -45,6 +49,7 @@ namespace Mammoth.Engine
         }
         #endregion
 
+        #region Constants
 
         /// <summary>
         /// The total length of the game in seconds.
@@ -56,12 +61,24 @@ namespace Mammoth.Engine
         /// </summary>
         private const int FreqSent = 60;
 
+
         /// <summary>
-        /// Constructor
+        /// Event to tell server to reset
+        /// </summary>
+        public event EventHandler ResetServer;
+
+        #endregion
+
+        /// <summary>
+        /// Initialize game start by restarting the game and registering it as a service
         /// </summary>
         public GameLogic(Game game): base(game)
         {
+            //Reset the game.
             ResetGame();
+
+            //Add this as a service.
+            game.Services.AddService(typeof(GameLogic), this);
         }
 
         /// <summary>
@@ -112,10 +129,10 @@ namespace Mammoth.Engine
 
         #region PlayerStats
         /// <summary>
-        /// Load player stats into game logic
+        /// Load player stats into game logic so that PlayerStats are universal.
         /// </summary>
         /// <param name="client_id">The id of the client</param>
-        /// <param name="stats">The PlayerStats.</param>
+        /// <param name="stats">The PlayerStats for the client's player</param>
         public void UpdatePlayerStats(int client_id, PlayerStats stats)
         {
             if (Players.ContainsKey(client_id))
@@ -254,15 +271,12 @@ namespace Mammoth.Engine
         /// <param name="client_id">The client id of the killer</param>
         public void AwardKill(int client_id)
         {
-
             if (Team1.GetTeamMemberList().Contains(client_id))
             {
-                //Console.WriteLine("Awarding kill to Team 1. Thanks to Player " + client_id);
                 Team1.AddTeamKill();
             }
             else
             {
-                //Console.WriteLine("Awarding kill to Team 2. Thanks to Player " + client_id);
                 Team2.AddTeamKill();
             }
         }
@@ -275,28 +289,25 @@ namespace Mammoth.Engine
         {
             if (Team1.GetTeamMemberList().Contains(client_id))
             {
-                //Console.WriteLine("Awarding capture to Team 1. Thanks to Player " + client_id);
                 Team1.AddCapture();
             }
             else
             {
-                //Console.WriteLine("Awarding capture to Team 2. Thanks to Player " + client_id);
                 Team2.AddCapture();
             }
         }
         #endregion
 
-        public event EventHandler ResetServer;
-
         /// <summary>
-        /// Sends the GameStats every 60 updates.
+        /// Checks for the end of the game and sends the GameStats every 60 updates.
         /// </summary>
         /// <param name="gameTime">The game time.</param>
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
-            if (GetTimeLeft() <= 0)
+            //Checks if the game is over
+            if (GetTimeLeft() < 0)
             {
                 IServerNetworking sn = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
                 sn.sendEvent("Game Over", "");
@@ -311,7 +322,6 @@ namespace Mammoth.Engine
 
             if (SendCounter == FreqSent)
             {
-                //Console.WriteLine("Sending Game Logic!");
                 IServerNetworking sn = (IServerNetworking)this.Game.Services.GetService(typeof(INetworkingService));
                 sn.sendThing(new GameStats(this));
                 SendCounter = 0;
@@ -320,6 +330,21 @@ namespace Mammoth.Engine
             {
                 SendCounter++;
             }
+        }
+
+        /// <summary>
+        /// Disposes the service.
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            //reset the game.
+            ResetGame();
+
+            //deregister from services
+            this.Game.Services.RemoveService(typeof(GameLogic));
         }
 
     }

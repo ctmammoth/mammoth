@@ -122,7 +122,7 @@ namespace Mammoth
             baseWidget.Add(cross);
 
             // Add the timer
-            GameTimeWidget timer = new GameTimeWidget(this.Game)
+            GameTimeWidget timer = new GameTimeWidget(this.Game, this.LocalPlayer)
             {
                 Size = new Vector2(50, 50),
                 Center = new Vector2(this.Game.Window.ClientBounds.Width / 2, 25)
