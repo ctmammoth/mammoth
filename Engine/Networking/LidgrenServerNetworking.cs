@@ -89,7 +89,7 @@ namespace Mammoth.Engine.Networking
         /// <param name="param">Any additional information for the event.</param>
         public void sendEvent(string eventType, string param)
         {
-            _toSend.Enqueue(new DataGram(MessageType.EVENT, eventType, -1, null, -1, -1, param));
+            _toSend.Enqueue(new DataGram(MessageType.EVENT, eventType, -1, null, -1, -1, param, NetChannel.ReliableInOrder3));
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Mammoth.Engine.Networking
         /// <param name="target">The client to send the event to.</param>
         public void sendEvent(string eventType, string param, int target)
         {
-            _toSend.Enqueue(new DataGram(MessageType.EVENT, eventType, -1, null, target, -1, param));
+            _toSend.Enqueue(new DataGram(MessageType.EVENT, eventType, -1, null, target, -1, param, NetChannel.ReliableInOrder3));
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace Mammoth.Engine.Networking
             {
                 //Console.WriteLine("Initial send of " + ((BaseObject)toSend).getObjectType() + " with ID: " + ((BaseObject)toSend).ID);
                 DataGram message = new DataGram(MessageType.ENCODABLE, ((BaseObject)toSend).getObjectType(),
-                    ((BaseObject)toSend).ID, toSend.Encode(), id, -1, null);
+                    ((BaseObject)toSend).ID, toSend.Encode(), id, -1, null, NetChannel.ReliableInOrder2);
                 sendMessage(message);
             }
 
@@ -275,7 +275,7 @@ namespace Mammoth.Engine.Networking
 
             // Send the player to the client
             DataGram playerMessage = new DataGram(MessageType.ENCODABLE, ((BaseObject)player).getObjectType(),
-                    ((BaseObject)player).ID, player.Encode(), id, -1, null, NetChannel.ReliableInOrder11);
+                    ((BaseObject)player).ID, player.Encode(), id, -1, null, NetChannel.ReliableInOrder2);
             sendMessage(playerMessage);
         }
 

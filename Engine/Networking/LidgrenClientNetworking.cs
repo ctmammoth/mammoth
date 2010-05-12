@@ -226,6 +226,8 @@ namespace Mammoth.Engine.Networking
                         ((Player)modelDB.getObject(playerObjID)).Die();
                     break;
                 case "EndGame":
+                    Console.WriteLine("EndGame event received");
+                    quitGame();
                     if (this.EndGameEvent != null)
                         this.EndGameEvent(this, new EventArgs());
                     break;
