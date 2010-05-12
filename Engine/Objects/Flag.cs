@@ -80,10 +80,10 @@ namespace Mammoth.Engine.Objects
             switch (this.Team)
             {
                 case 1:
-                    this.Position = new Vector3(-45.0f, -3.0f, -45.0f);
+                    this.Position = new Vector3(-45.0f, 5.0f, -45.0f);
                     break;
                 case 2:
-                    this.Position = new Vector3(199.0f, -11.0f, 121.0f);
+                    this.Position = new Vector3(199.0f, -3.0f, 121.0f);
                     break;
             }
 
