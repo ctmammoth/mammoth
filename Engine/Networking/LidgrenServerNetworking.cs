@@ -89,7 +89,7 @@ namespace Mammoth.Engine.Networking
         /// <param name="param">Any additional information for the event.</param>
         public void sendEvent(string eventType, string param)
         {
-            _toSend.Enqueue(new DataGram(MessageType.EVENT, eventType, -1, null, -1, -1, param));
+            _toSend.Enqueue(new DataGram(MessageType.EVENT, eventType, -1, null, -1, -1, param, NetChannel.ReliableInOrder3));
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Mammoth.Engine.Networking
         /// <param name="target">The client to send the event to.</param>
         public void sendEvent(string eventType, string param, int target)
         {
-            _toSend.Enqueue(new DataGram(MessageType.EVENT, eventType, -1, null, target, -1, param));
+            _toSend.Enqueue(new DataGram(MessageType.EVENT, eventType, -1, null, target, -1, param, NetChannel.ReliableInOrder3));
         }
 
         /// <summary>
