@@ -108,15 +108,15 @@ namespace Mammoth.Server
 
         private void TeardownGame()
         {
+            IServerNetworking net = (IServerNetworking)this.Services.GetService(typeof(INetworkingService));
+            net.endGame();
+
             IModelDBService modelDB = (IModelDBService)this.Services.GetService(typeof(IModelDBService));
             this.Components.Remove((IGameComponent)modelDB);
             modelDB.Dispose();
 
             IPhysicsManagerService phys = (IPhysicsManagerService)this.Services.GetService(typeof(IPhysicsManagerService));
             phys.RemoveScene();
-
-            IServerNetworking net = (IServerNetworking)this.Services.GetService(typeof(INetworkingService));
-            net.endGame();
         }
 
         protected override void Update(GameTime gameTime)
