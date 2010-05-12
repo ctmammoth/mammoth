@@ -81,8 +81,10 @@ namespace Mammoth
             this.Components.Add(net);
 
             // Add the main menu as a screen for the screen manager.
-            //screenManager.AddScreen(new MainMenuScreen(this));
             screenManager.AddScreen(new PrettyMenuScreen(this));
+
+            // Add the nVidia splash screen.
+            screenManager.AddScreen(new NVidiaSplashScreen(this));
 
             // Add the audio system
             this.Components.Add(new Mammoth.Engine.Audio.Audio(this));
