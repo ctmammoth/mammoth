@@ -114,7 +114,8 @@ namespace Mammoth.Engine
             {
                 UpDirection = Axis.Y,
                 Position = Vector3.UnitY * (this.Height - 1.0f) / 2.0f,
-                StepOffset = 0.55f
+                StepOffset = 1.5f,
+                SlopeLimit = Math.Cos(MathHelper.ToRadians(70.0f))
             };
 
             //Describe the offset of the model to sync model center with PhysX Controller center
