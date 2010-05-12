@@ -188,7 +188,7 @@ namespace Mammoth.Engine.Objects
 
                 if (value == null)
                     // If there is now no owner, the model should be drawn on the ground.
-                    posOffset = Vector3.Zero;
+                    posOffset = new Vector3(0.0f, -6.0f, 0.0f);
                 else
                     // Otherwise draw the flag above the owner's head.
                     posOffset = new Vector3(0.0f, Owner.Height + 4.0f, 0.0f);
