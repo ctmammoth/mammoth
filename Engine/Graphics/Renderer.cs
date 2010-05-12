@@ -9,8 +9,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
-namespace Mammoth.Engine
+namespace Mammoth.Engine.Graphics
 {
+    /// <summary>
+    /// A class for rendering graphics.  Allows for rendering IRenderable objects, rendering text to textures
+    /// or to the screen, drawing textures to the screen, etc.
+    /// </summary>
     public class Renderer : IRenderService
     {
         #region Fields
@@ -27,6 +31,10 @@ namespace Mammoth.Engine
 
         #endregion
 
+        /// <summary>
+        /// Create a new instance of the renderer.
+        /// </summary>
+        /// <param name="game">The Game that owns this renderer.</param>
         public Renderer(Game game)
         {
             this.Game = game;
@@ -41,22 +49,42 @@ namespace Mammoth.Engine
             // Load the default font.
             _defaultFont = LoadFont("calibri");
         }
-
+        
+        /// <summary>
+        /// Load a 3D model from a content file.
+        /// </summary>
+        /// <param name="path">The name of the model to load.</param>
+        /// <returns>A Model object containing the data from the model file.</returns>
         public Model LoadModel(string path)
         {
             return _content.Load<Model>("models\\" + path);
         }
 
+        /// <summary>
+        /// Load an image (texture) from a content file.
+        /// </summary>
+        /// <param name="path">The name of the texture to load.</param>
+        /// <returns>A Texture2D object containing the image from the chosen file.</returns>
         public Texture2D LoadTexture(string path)
         {
             return _content.Load<Texture2D>("textures\\" + path);
         }
 
+        /// <summary>
+        /// Loads a font from a spritefont content file.
+        /// </summary>
+        /// <param name="path">The name of the font to load.</param>
+        /// <returns>A SpriteFont object representing the chosen font.</returns>
         public SpriteFont LoadFont(string path)
         {
             return _content.Load<SpriteFont>("fonts\\" + path);
         }
 
+        /// <summary>
+        /// Draw a solid-colored rectangle to the screen.
+        /// </summary>
+        /// <param name="rect">The rectangle to draw.</param>
+        /// <param name="color">The color to fill the rectangle with.</param>
         public void DrawFilledRectangle(Rectangle rect, Color color)
         {
             _spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
@@ -64,13 +92,22 @@ namespace Mammoth.Engine
             _spriteBatch.End();
         }
 
+        /// <summary>
+        /// Overloaded.  Draws a textured rectangle to the screen.
+        /// </summary>
+        /// <param name="pos">The position of the top left corner of the rectangle.</param>
+        /// <param name="tex">The texture to draw.</param>
         public void DrawTexturedRectangle(Vector2 pos, Texture2D tex)
         {
-            _spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
-            _spriteBatch.Draw(tex, pos, Color.White);
-            _spriteBatch.End();
+            this.DrawTexturedRectangle(pos, tex, Color.White);
         }
 
+        /// <summary>
+        /// Overloaded.  Draws a textured rectangle to the screen.
+        /// </summary>
+        /// <param name="pos">The position of the top left corner of the rectangle.</param>
+        /// <param name="tex">The texture to draw.</param>
+        /// <param name="tint">A color to tint the texture with.</param>
         public void DrawTexturedRectangle(Vector2 pos, Texture2D tex, Color tint)
         {
             _spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
@@ -78,13 +115,22 @@ namespace Mammoth.Engine
             _spriteBatch.End();
         }
 
+        /// <summary>
+        /// Overloaded.  Draws a textured rectangle to the screen.
+        /// </summary>
+        /// <param name="rect">The rectangle into which the texture will be drawn.</param>
+        /// <param name="tex">The texture to draw.</param>
         public void DrawTexturedRectangle(Rectangle rect, Texture2D tex)
         {
-            _spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
-            _spriteBatch.Draw(tex, rect, Color.White);
-            _spriteBatch.End();
+            this.DrawTexturedRectangle(rect, tex, Color.White);
         }
 
+        /// <summary>
+        /// Overloaded.  Draws a textured rectangle to the screen.
+        /// </summary>
+        /// <param name="rect">The rectangle into which the texture will be drawn.</param>
+        /// <param name="tex">The texture to draw.</param>
+        /// <param name="tint">A color to tint the texture with.</param>
         public void DrawTexturedRectangle(Rectangle rect, Texture2D tex, Color tint)
         {
             _spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
@@ -92,6 +138,12 @@ namespace Mammoth.Engine
             _spriteBatch.End();
         }
 
+        /// <summary>
+        /// Draw a textured quad that always points towards you.
+        /// </summary>
+        /// <param name="pos">The position of the quad (in 3-space).</param>
+        /// <param name="size">The size of the quad.</param>
+        /// <param name="tex">The texture to draw on the quad.</param>
         public void DrawTexturedBillboard(Vector3 pos, Vector2 size, Texture2D tex)
         {
             ICameraService cam = (ICameraService)this.Game.Services.GetService(typeof(ICameraService));
@@ -100,28 +152,35 @@ namespace Mammoth.Engine
 
             using (BasicEffect effect = new BasicEffect(_graphics, null))
             {
+                // Set the matrices for the effect.
+                // The world matrix is the local transform for the quad.
                 effect.World = billboardRot;
+                // This is the camera's viewing matrix.
                 effect.View = cam.View;
+                // This is the camera's projection matrix.
                 effect.Projection = cam.Projection;
 
+                // Enable texturing and set the texture.
                 effect.TextureEnabled = true;
                 effect.Texture = tex;
 
                 size /= 2.0f;
 
-                VertexPositionTexture[] points = new VertexPositionTexture[4];
+                // Create the vertices for the quad.
+                VertexPositionTexture[] vertices = new VertexPositionTexture[4];
                 int[] triangleIndices = new int[6];
 
                 Vector3 topCenter = (Vector3.Up * size.Y / 2.0f);
                 // Top-left
-                points[1] = new VertexPositionTexture(topCenter + (Vector3.Left * size.X / 2.0f), Vector2.Zero);
+                vertices[1] = new VertexPositionTexture(topCenter + (Vector3.Left * size.X / 2.0f), Vector2.Zero);
                 // Top-right
-                points[3] = new VertexPositionTexture(topCenter + (Vector3.Right * size.X / 2.0f), new Vector2(1.0f, 0.0f));
+                vertices[3] = new VertexPositionTexture(topCenter + (Vector3.Right * size.X / 2.0f), new Vector2(1.0f, 0.0f));
                 // Bottom-left
-                points[0] = new VertexPositionTexture(points[1].Position + (Vector3.Down * size.Y), new Vector2(0.0f, 1.0f));
+                vertices[0] = new VertexPositionTexture(vertices[1].Position + (Vector3.Down * size.Y), new Vector2(0.0f, 1.0f));
                 // Bottom-right
-                points[2] = new VertexPositionTexture(points[3].Position + (Vector3.Down * size.Y), new Vector2(1.0f, 1.0f));
+                vertices[2] = new VertexPositionTexture(vertices[3].Position + (Vector3.Down * size.Y), new Vector2(1.0f, 1.0f));
 
+                // Set the indices for drawing.
                 triangleIndices[0] = 0;
                 triangleIndices[1] = 1;
                 triangleIndices[2] = 2;
@@ -130,14 +189,18 @@ namespace Mammoth.Engine
                 triangleIndices[4] = 1;
                 triangleIndices[5] = 3;
 
+                // Turn off triangle culling (this seems to be necessary due to Matrix.CreateBillboard creating the wrong rotation matrix).
                 CullMode prev = _graphics.RenderState.CullMode;
                 _graphics.RenderState.CullMode = CullMode.None;
 
+                // Set important graphics states (that can be set incorrectly when drawing with SpriteBatches).
                 _graphics.RenderState.DepthBufferEnable = true;
                 _graphics.RenderState.AlphaBlendEnable = false;
 
+                // Turn on simple transparency.
                 _graphics.RenderState.AlphaTestEnable = true;
 
+                // Set the vertex type used for rendering.
                 _graphics.VertexDeclaration = new VertexDeclaration(_graphics, VertexPositionTexture.VertexElements);
 
                 // Now draw the quad!
@@ -147,14 +210,16 @@ namespace Mammoth.Engine
                     pass.Begin();
 
                         _graphics.DrawUserIndexedPrimitives<VertexPositionTexture>(
-                            PrimitiveType.TriangleList, points, 0, 4, triangleIndices, 0, 2);                                                                                 
+                            PrimitiveType.TriangleList, vertices, 0, 4, triangleIndices, 0, 2);                                                                                 
 
                     pass.End();
                 }
                 effect.End();
 
+                // Turn alpha testing off.
                 _graphics.RenderState.AlphaTestEnable = false;
 
+                // Reset the culling mode (to speed up rendering).
                 _graphics.RenderState.CullMode = prev;
             }
         }
@@ -169,6 +234,17 @@ namespace Mammoth.Engine
             return this.RenderFont(text, pos, textColor, bgColor, font, SpriteEffects.None);
         }
 
+        // TODO: Change this so that pos is a margin, not a position.
+        /// <summary>
+        /// Render a string to an image.  This image can later be used to draw the text to the screen.
+        /// </summary>
+        /// <param name="text">The string to render.</param>
+        /// <param name="pos">The position of the string relative to the top-left hand corner of the produced texture.</param>
+        /// <param name="textColor">The text color.</param>
+        /// <param name="bgColor">The background color.</param>
+        /// <param name="font">The font to use to render the text.</param>
+        /// <param name="effects">The SpriteEffects that should be used to render the text.</param>
+        /// <returns>A Texture2D with the text rendered to it.</returns>
         public Texture2D RenderFont(string text, Vector2 pos, Color textColor, Color bgColor, SpriteFont font, SpriteEffects effects)
         {
             Vector2 textSize = font.MeasureString(text) + Vector2.One;
@@ -191,6 +267,15 @@ namespace Mammoth.Engine
             this.DrawText(text, pos, textColor, bgColor, _defaultFont, SpriteEffects.None);
         }
 
+        /// <summary>
+        /// Draw some text directly to the screen.
+        /// </summary>
+        /// <param name="text">The string to render.</param>
+        /// <param name="pos">The position of the string relative to the top-left hand corner of the produced texture.</param>
+        /// <param name="textColor">The text color.</param>
+        /// <param name="bgColor">The background color.</param>
+        /// <param name="font">The font to use to render the text.</param>
+        /// <param name="effects">The SpriteEffects that should be used to render the text.</param>
         public void DrawText(string text, Vector2 pos, Color textColor, Color bgColor, SpriteFont font, SpriteEffects effects)
         {
             _spriteBatch.Begin(SpriteBlendMode.AlphaBlend);
@@ -198,6 +283,12 @@ namespace Mammoth.Engine
             _spriteBatch.End();
         }
 
+        /// <summary>
+        /// Draw an IRenderable to the screen.  This method is used to draw an object whose graphical representation is stored
+        /// in a Model object.  It gets positional and orientation information from the IRenderable and uses them to draw the
+        /// Model.
+        /// </summary>
+        /// <param name="obj"></param>
         public void DrawRenderable(IRenderable obj)
         {
             _graphics.RenderState.DepthBufferEnable = true;

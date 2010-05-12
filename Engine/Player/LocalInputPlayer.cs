@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+
 using Mammoth.Engine.Networking;
 using Mammoth.Engine.Objects;
 using Mammoth.Engine.Audio;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+using Mammoth.Engine.Graphics;
 
 namespace Mammoth.Engine
 {
