@@ -63,6 +63,11 @@ namespace Mammoth.Engine.Objects
             // The Flag initially has no owner
             this.Owner = null;
 
+            // Set the default offset
+            defaultPosOffset = new Vector3(0.0f, -6.0f, 0.0f);
+            // HACK: player's height should be a constant somewhere!
+            defaultHeldPosOffset = new Vector3(0.0f, 6.0 + 4.0f, 0.0f);
+
             // Load a flag model
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
             this.Model3D = r.LoadModel("banner01");
@@ -173,6 +178,11 @@ namespace Mammoth.Engine.Objects
 
         private Player owner;
 
+        // The default model position offset when the flag has no owner
+        private Vector3 defaultPosOffset;
+        // The default model position offset when the flag has an owner
+        private Vector3 defaultHeldPosOffset;
+
         /// <summary>
         /// This flag's owner.
         /// </summary>
@@ -188,10 +198,10 @@ namespace Mammoth.Engine.Objects
 
                 if (value == null)
                     // If there is now no owner, the model should be drawn on the ground.
-                    posOffset = new Vector3(0.0f, -6.0f, 0.0f);
+                    posOffset = defaultPosOffset;
                 else
                     // Otherwise draw the flag above the owner's head.
-                    posOffset = new Vector3(0.0f, Owner.Height + 4.0f, 0.0f);
+                    posOffset = defaultHeldPosOffset;
             }
         }
 
