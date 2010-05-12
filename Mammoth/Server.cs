@@ -12,6 +12,7 @@ using Mammoth.Engine.Input;
 using Mammoth.Engine.Networking;
 using Mammoth.Engine.Physics;
 using Mammoth.Engine.Objects;
+using Mammoth.Engine.Graphics;
 
 namespace Mammoth.Server
 {
@@ -91,11 +92,11 @@ namespace Mammoth.Server
             modelDB.registerObject(room2);
 
             // LET'S TRY ADDING A FLAG!!!
-            Flag flag1 = new Flag(this, new Vector3(-45.0f, -3.0f, -45.0f), 1);
+            Flag flag1 = new Flag(this, new Vector3(-45.0f, 5.0f, -45.0f), 1);
             flag1.ID = modelDB.getNextOpenID();
             modelDB.registerObject(flag1);
             // LET'S TRY ADDING A FLAG!!!
-            Flag flag2 = new Flag(this, new Vector3(199.0f, -11.0f, 121.0f), 2);
+            Flag flag2 = new Flag(this, new Vector3(199.0f, -3.0f, 121.0f), 2);
             flag2.ID = modelDB.getNextOpenID();
             modelDB.registerObject(flag2);
         }

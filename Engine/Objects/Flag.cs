@@ -36,7 +36,7 @@ namespace Mammoth.Engine.Objects
             // Placate PhysX by giving it a real shape
             BoxShapeDescription cDesc = new BoxShapeDescription()
             {
-                Size = new Vector3(3.0f, 4.0f, 3.0f),
+                Size = new Vector3(3.0f, 8.0f, 3.0f),
                 LocalPosition = Vector3.Zero,
                 Flags = ShapeFlag.TriggerOnEnter
             };
@@ -80,10 +80,10 @@ namespace Mammoth.Engine.Objects
             switch (this.Team)
             {
                 case 1:
-                    this.Position = new Vector3(-45.0f, -3.0f, -45.0f);
+                    this.Position = new Vector3(-45.0f, 5.0f, -45.0f);
                     break;
                 case 2:
-                    this.Position = new Vector3(199.0f, -11.0f, 121.0f);
+                    this.Position = new Vector3(199.0f, -3.0f, 121.0f);
                     break;
             }
 
