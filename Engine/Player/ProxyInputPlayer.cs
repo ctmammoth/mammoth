@@ -213,6 +213,7 @@ namespace Mammoth.Engine
                         //Console.WriteLine("Dropping off a carried flag at another flag!");
                         GameLogic g = (GameLogic)this.Game.Services.GetService(typeof(GameLogic));
                         g.AwardCapture(this.ClientID);
+                        this.NumCaptures++;
                         // Keep a reference to the flag so it can be sent
                         Objects.Flag flag = this.Flag;
                         // Drop the flag
