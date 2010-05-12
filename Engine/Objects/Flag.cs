@@ -36,7 +36,7 @@ namespace Mammoth.Engine.Objects
             // Placate PhysX by giving it a real shape
             BoxShapeDescription cDesc = new BoxShapeDescription()
             {
-                Size = new Vector3(3.0f, 4.0f, 3.0f),
+                Size = new Vector3(3.0f, 8.0f, 3.0f),
                 LocalPosition = Vector3.Zero,
                 Flags = ShapeFlag.TriggerOnEnter
             };
