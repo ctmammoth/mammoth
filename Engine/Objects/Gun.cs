@@ -9,6 +9,7 @@ using Mammoth.Engine.Physics;
 using Mammoth.Engine.Networking;
 using Mammoth.Engine.Objects;
 using Mammoth.Engine.Input;
+using Mammoth.Engine.Graphics;
 
 namespace Mammoth.Engine.Objects
 {

@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StillDesign.PhysX;
 
 using Mammoth.Engine.Physics;
+using Mammoth.Engine.Graphics;
 using Mammoth.Engine.Networking;
 
 namespace Mammoth.Engine.Objects

@@ -9,6 +9,7 @@ using StillDesign.PhysX;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
+using Mammoth.Engine.Graphics;
 using Mammoth.Engine.Input;
 using Mammoth.Engine.Physics;
 using Mammoth.Engine.Objects;
@@ -320,7 +321,7 @@ namespace Mammoth.Engine
             ICameraService cam = (ICameraService)this.Game.Services.GetService(typeof(ICameraService));
 
             //If you're using the first-person camera, don't draw your own geometry.
-            if (cam.Type != Camera.CameraType.FIRST_PERSON)
+            if (cam.Type != CameraType.FIRST_PERSON)
                 r.DrawRenderable(this);
             if (CurWeapon != null)
                 ((BaseObject)CurWeapon).Draw(gameTime);

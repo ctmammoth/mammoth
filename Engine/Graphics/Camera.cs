@@ -5,56 +5,70 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-// TODO: Documentation for Camera code.
-
-namespace Mammoth.Engine
+namespace Mammoth.Engine.Graphics
 {
+    /// <summary>
+    /// An enum defining different camera types.
+    /// </summary>
+    public enum CameraType
+    {
+        FIRST_PERSON,
+        THIRD_PERSON
+    }
+
     /// <summary>
     /// This interface encapsulates the idea of a camera service.  This can be used with Game.GetService()
     /// to get the current camera.
     /// </summary>
     public interface ICameraService
     {
+        /// <summary>
+        /// The camera's view matrix.
+        /// </summary>
         Matrix View
         {
             get;
         }
 
+        /// <summary>
+        /// The camera's projection matrix.
+        /// </summary>
         Matrix Projection
         {
             get;
         }
 
-        Camera.CameraType Type
+        /// <summary>
+        /// The type of the camera.
+        /// </summary>
+        CameraType Type
         {
             get;
         }
 
+        /// <summary>
+        /// The camera's position.
+        /// </summary>
         Vector3 Position
         {
             get;
         }
 
+        /// <summary>
+        /// The camera's forward (look) vector.
+        /// </summary>
         Vector3 Forward
         {
             get;
         }
     }
 
+    /// <summary>
+    /// An abstract, partial implementation of ICameraService.  Handles projection matrices, as they
+    /// are independent of camera type.
+    /// </summary>
     public abstract class Camera : GameComponent, ICameraService
     {
-
-        #region Fields
-
-        public enum CameraType
-        {
-            FIRST_PERSON,
-            THIRD_PERSON,
-            MENU
-        }
-
-        #endregion
-
         public Camera(Game game, Player target) : base(game)
         {
             this.Target = target;
