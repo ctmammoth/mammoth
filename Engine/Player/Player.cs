@@ -162,8 +162,7 @@ namespace Mammoth.Engine
         /// </summary>
         public override void Dispose()
         {
-            //HACK: usually bad when you don't call base
-            //base.Dispose();
+            base.Dispose();
 
             IPhysicsManagerService phys = (IPhysicsManagerService)this.Game.Services.GetService(typeof(IPhysicsManagerService));
             phys.RemoveController(this.Controller);

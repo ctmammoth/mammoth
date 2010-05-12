@@ -208,7 +208,6 @@ namespace Mammoth.Engine.Networking
                     _inputStates.Remove(id);
                     IModelDBService mdb = (IModelDBService)this.Game.Services.GetService(typeof(IModelDBService));
                     if (mdb.hasObject(id << 25))
-                        //mdb.removeObject(id << 25);
                         mdb.getObject(id << 25).IsAlive = false;
                     sendEvent("PlayerLeft", id.ToString());
                     return;

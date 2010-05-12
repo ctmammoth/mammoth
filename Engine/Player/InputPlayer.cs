@@ -484,5 +484,28 @@ namespace Mammoth.Engine
 
         #endregion
 
+        public override void Dispose()
+        {
+            // Drop the flag being carried
+            if (Flag != null)
+            {
+                // Keep a reference to the flag that's being dropped
+                Objects.Flag droppedFlag = this.Flag;
+
+                // Drop the Flag
+                Flag.GetDropped();
+
+                // HACK HACK HACK: Let's try this.
+                INetworkingService server = (INetworkingService)Game.Services.GetService(typeof(INetworkingService));
+                // Send the dropped Flag
+                if (server is IServerNetworking)
+                    ((IServerNetworking)server).sendThing(this.Flag);
+
+                this.Flag = null;
+            }
+
+            base.Dispose();
+        }
+
     }
 }
