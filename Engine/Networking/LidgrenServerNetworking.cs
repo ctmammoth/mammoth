@@ -179,14 +179,14 @@ namespace Mammoth.Engine.Networking
             {
                 // If there is no client to exclude, send to all clients
                 if (message.Exclude < 0)
-                    _server.SendToAll(buffer, NetChannel.Unreliable);
+                    _server.SendToAll(buffer, message.Channel);
                 // Else, exclude the client to exclude
                 else
-                    _server.SendToAll(buffer, NetChannel.Unreliable, _connections[message.Exclude]);
+                    _server.SendToAll(buffer, message.Channel, _connections[message.Exclude]);
             }
             // If there is one specified target, send to that target
             else
-                _server.SendMessage(buffer, _connections[message.Recipient], NetChannel.Unreliable);
+                _server.SendMessage(buffer, _connections[message.Recipient], message.Channel);
         }
 
         /// <summary>
@@ -275,7 +275,7 @@ namespace Mammoth.Engine.Networking
 
             // Send the player to the client
             DataGram playerMessage = new DataGram(MessageType.ENCODABLE, ((BaseObject)player).getObjectType(),
-                    ((BaseObject)player).ID, player.Encode(), id, -1, null);
+                    ((BaseObject)player).ID, player.Encode(), id, -1, null, NetChannel.ReliableInOrder11);
             sendMessage(playerMessage);
         }
 
@@ -413,6 +413,7 @@ namespace Mammoth.Engine.Networking
             public byte[] Data;
             public int Recipient;
             public string Params;
+            public NetChannel Channel;
 
             /// <summary>
             /// Creates a DataGram.
@@ -432,6 +433,28 @@ namespace Mammoth.Engine.Networking
                 Recipient = recipient;
                 Exclude = exclude;
                 Params = parameters;
+                Channel = NetChannel.Unreliable;
+            }
+
+            /// <summary>
+            /// Creates a DataGram.
+            /// </summary>
+            /// <param name="objectType">The type of the object to be sent</param>
+            /// <param name="id">The object ID of the object to be sent</param>
+            /// <param name="data">The serialized data to be sent</param>
+            /// <param name="recipient">The recipient of the data, -1 to send to all</param>
+            /// <param name="exclude">A client to exclude from receiving the message, -1 to not exclude any</param>
+            /// <param name="parameters">Any additional string params to send</param>
+            public DataGram(MessageType messageType, string objectType, int id, byte[] data, int recipient, int exclude, string parameters, NetChannel channel)
+            {
+                MessageType = messageType;
+                ObjectType = objectType;
+                ID = id;
+                Data = data;
+                Recipient = recipient;
+                Exclude = exclude;
+                Params = parameters;
+                Channel = channel;
             }
         }
     }
