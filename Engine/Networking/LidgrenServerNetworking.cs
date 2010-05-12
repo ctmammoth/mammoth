@@ -253,7 +253,7 @@ namespace Mammoth.Engine.Networking
             {
                 //Console.WriteLine("Initial send of " + ((BaseObject)toSend).getObjectType() + " with ID: " + ((BaseObject)toSend).ID);
                 DataGram message = new DataGram(MessageType.ENCODABLE, ((BaseObject)toSend).getObjectType(),
-                    ((BaseObject)toSend).ID, toSend.Encode(), id, -1, null);
+                    ((BaseObject)toSend).ID, toSend.Encode(), id, -1, null, NetChannel.ReliableInOrder2);
                 sendMessage(message);
             }
 
@@ -275,7 +275,7 @@ namespace Mammoth.Engine.Networking
 
             // Send the player to the client
             DataGram playerMessage = new DataGram(MessageType.ENCODABLE, ((BaseObject)player).getObjectType(),
-                    ((BaseObject)player).ID, player.Encode(), id, -1, null, NetChannel.ReliableInOrder11);
+                    ((BaseObject)player).ID, player.Encode(), id, -1, null, NetChannel.ReliableInOrder2);
             sendMessage(playerMessage);
         }
 
