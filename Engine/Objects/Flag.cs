@@ -66,7 +66,7 @@ namespace Mammoth.Engine.Objects
             // Set the default offset
             defaultPosOffset = new Vector3(0.0f, -6.0f, 0.0f);
             // HACK: player's height should be a constant somewhere!
-            defaultHeldPosOffset = new Vector3(0.0f, 6.0 + 4.0f, 0.0f);
+            defaultHeldPosOffset = new Vector3(0.0f, 6.0f + 4.0f, 0.0f);
 
             // Load a flag model
             Renderer r = (Renderer)this.Game.Services.GetService(typeof(IRenderService));
